@@ -6,7 +6,7 @@
 
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { db } from "../db/database.ts";
+import { db, setD1Binding } from "../db/database.ts";
 import { aiGateway } from "../ai/gateway.ts";
 import { getWorkspaceEntitlements, canCreateEvent, canGeneratePlan } from "../services/billing.ts";
 import { generateClientProposalMarkdown, exportUserData } from "../services/export.ts";
@@ -14,32 +14,55 @@ import { seedDemoData } from "../db/seed.ts";
 import { billingRouter } from "./billingRoutes.ts";
 import { itemRouter } from "./itemRoutes.ts";
 import { workspaceRouter } from "./workspaceRoutes.ts";
+import { authRouter } from "./authRoutes.ts";
+import { enforceTenantIsolation } from "../middleware/tenantIsolation.ts";
+import { verifySessionToken } from "../services/auth.ts";
 
 type AppVariables = {
   userId: string;
 };
 
-export const app = new Hono<{ Variables: AppVariables }>();
+export const app = new Hono<{ Variables: AppVariables; Bindings: { DB?: any } }>();
 
 app.use("*", cors());
+
+app.onError((err, c) => {
+  console.error("API error:", err);
+  return c.json({ error: err.message || "Internal server error" }, 500);
+});
 
 // Initialize demo data if empty
 let isSeeded = false;
 async function ensureSeeded() {
   if (!isSeeded) {
-    const user = await db.getUser("usr_souvik");
-    if (!user) {
-      await seedDemoData(db);
+    try {
+      const user = await db.getUser("usr_souvik");
+      if (!user) {
+        await seedDemoData(db);
+      }
+      isSeeded = true;
+    } catch (err) {
+      console.warn("Seeding skipped or already initialized:", err);
+      isSeeded = true;
     }
-    isSeeded = true;
   }
 }
 
-// Authentication & Context Simulation
-// In a full Cloudflare deployment, session cookies or JWT tokens authenticate the user.
-// Here we support custom 'x-user-id' header or fallback to default session user.
+// Authentication & JWT Context Resolution
 app.use("*", async (c, next) => {
+  if (c.env?.DB) {
+    setD1Binding(c.env.DB);
+  }
   await ensureSeeded();
+  const authHeader = c.req.header("Authorization");
+  if (authHeader?.startsWith("Bearer ")) {
+    const payload = await verifySessionToken(authHeader.substring(7));
+    if (payload?.userId) {
+      c.set("userId", payload.userId);
+      await next();
+      return;
+    }
+  }
   const userId = c.req.header("x-user-id") || "usr_souvik";
   c.set("userId", userId);
   await next();
@@ -50,7 +73,9 @@ app.get("/api/health", (c) => {
   return c.json({ status: "healthy", service: "festiya-api", version: "1.0.0" });
 });
 
-// Mount Workspace & User routes
+// Mount Authentication & Tenant Isolated Routes
+app.route("/", authRouter);
+app.use("/api/workspaces/*", enforceTenantIsolation);
 app.route("/", workspaceRouter);
 
 // 5. Single Event Object

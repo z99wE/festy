@@ -59,6 +59,7 @@ export function useFestiyaState() {
   const [askFestiyaInitialPrompt, setAskFestiyaInitialPrompt] = useState("");
   const [isBillingModalOpen, setIsBillingModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const eventOps = useEventOperations({
     activeEvent,
@@ -82,13 +83,25 @@ export function useFestiyaState() {
 
   const loadInitialData = async () => {
     try {
-      const meRes = await fetch("/api/me");
+      const token = localStorage.getItem("festiya_token");
+      const headers: Record<string, string> = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const meRes = await fetch("/api/auth/me", { headers });
       if (meRes.ok) {
-        const { user } = await meRes.json();
-        setUser(user);
+        const data = await meRes.json();
+        setUser(data.user);
+        if (data.workspaces && data.workspaces.length > 0) {
+          setWorkspaces(data.workspaces);
+          const defaultWs = data.workspaces[0];
+          setActiveWorkspace(defaultWs);
+          await loadWorkspaceEvents(defaultWs.id);
+          await loadEntitlements(defaultWs.id);
+          return;
+        }
       }
 
-      const wsRes = await fetch("/api/workspaces");
+      const wsRes = await fetch("/api/workspaces", { headers });
       if (wsRes.ok) {
         const { workspaces } = await wsRes.json();
         setWorkspaces(workspaces);
@@ -390,6 +403,23 @@ export function useFestiyaState() {
     setActiveTab("plan");
   };
 
+  const handleAuthSuccess = async (authUser: { id: string; email: string; name: string }) => {
+    setUser({
+      ...authUser,
+      locale: "en-US",
+      timezone: "UTC",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+    await loadInitialData();
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("festiya_token");
+    setUser(null);
+    loadInitialData();
+  };
+
   return {
     currentView,
     setCurrentView,
@@ -427,6 +457,10 @@ export function useFestiyaState() {
     setIsBillingModalOpen,
     isExportModalOpen,
     setIsExportModalOpen,
+    isAuthModalOpen,
+    setIsAuthModalOpen,
+    handleAuthSuccess,
+    handleLogout,
     loadWorkspaceEvents,
     loadEntitlements,
     selectEvent,

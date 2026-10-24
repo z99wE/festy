@@ -1,6 +1,6 @@
 import React from "react";
-import { Sparkles, Calendar, Plus, Building2, UserCircle2, ArrowRight, Lock, Search } from "lucide-react";
-import { Workspace, Event } from "../../types/index.ts";
+import { Sparkles, Calendar, Plus, Building2, UserCircle2, ArrowRight, Lock, Search, LogIn, LogOut } from "lucide-react";
+import { Workspace, Event, User } from "../../types/index.ts";
 
 interface NavbarProps {
   currentView: "landing" | "workspace" | "pricing" | "shared";
@@ -13,6 +13,9 @@ interface NavbarProps {
   onSelectEvent: (event: Event) => void;
   onOpenNewEventModal: () => void;
   onOpenBillingModal: () => void;
+  user: User | null;
+  onOpenAuthModal: () => void;
+  onLogout: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -26,6 +29,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSelectEvent,
   onOpenNewEventModal,
   onOpenBillingModal,
+  user,
+  onOpenAuthModal,
+  onLogout,
 }) => {
   return (
     <header
@@ -281,6 +287,47 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Plus size={16} />
             <span>Plan an event</span>
           </button>
+
+          {/* User Account / Auth CTA */}
+          {user && user.id !== "usr_souvik" ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  padding: "6px 12px",
+                  background: "var(--surface-alt)",
+                  borderRadius: "var(--radius-md)",
+                  border: "1px solid var(--surface-border)",
+                  fontSize: "13px",
+                  fontWeight: 600,
+                }}
+              >
+                <UserCircle2 size={16} color="var(--mint)" />
+                <span>{user.name.split(" ")[0]}</span>
+              </div>
+              <button
+                aria-label="Sign out"
+                onClick={onLogout}
+                title="Sign out"
+                className="btn btn-sm btn-secondary"
+                style={{ padding: "6px 10px" }}
+              >
+                <LogOut size={14} />
+              </button>
+            </div>
+          ) : (
+            <button
+              aria-label="Sign In or Sign Up"
+              onClick={onOpenAuthModal}
+              className="btn btn-sm btn-secondary"
+              style={{ fontWeight: 700, gap: "6px" }}
+            >
+              <LogIn size={14} />
+              <span>Sign In</span>
+            </button>
+          )}
         </div>
       </div>
     </header>

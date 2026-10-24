@@ -15,7 +15,9 @@ import {
 } from "./seedData.ts";
 
 export async function seedDemoData(db: DatabaseAdapter): Promise<void> {
-  await db.reset();
+  const existingUser = await db.getUser("usr_souvik");
+  if (existingUser) return; // Already seeded!
+
   const now = new Date().toISOString();
 
   // 1. Users

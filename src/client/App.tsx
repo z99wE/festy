@@ -11,6 +11,7 @@ import { BillingPortalModal } from "./components/BillingPortalModal.tsx";
 import { AccountExportModal } from "./components/AccountExportModal.tsx";
 import { SharedEventView } from "./components/SharedEventView.tsx";
 import { FestiTamagotchi } from "./components/tamagotchi/FestiTamagotchi.tsx";
+import { AuthModal } from "./components/AuthModal.tsx";
 import { useFestiyaState } from "./hooks/useFestiyaState.ts";
 
 export const App: React.FC = () => {
@@ -19,6 +20,7 @@ export const App: React.FC = () => {
     setCurrentView,
     activeTab,
     setActiveTab,
+    user,
     workspaces,
     activeWorkspace,
     setActiveWorkspace,
@@ -50,6 +52,10 @@ export const App: React.FC = () => {
     setIsBillingModalOpen,
     isExportModalOpen,
     setIsExportModalOpen,
+    isAuthModalOpen,
+    setIsAuthModalOpen,
+    handleAuthSuccess,
+    handleLogout,
     loadWorkspaceEvents,
     loadEntitlements,
     selectEvent,
@@ -122,6 +128,9 @@ export const App: React.FC = () => {
               setIsEventBriefOpen(true);
             }}
             onOpenBillingModal={() => setIsBillingModalOpen(true)}
+            user={user}
+            onOpenAuthModal={() => setIsAuthModalOpen(true)}
+            onLogout={handleLogout}
           />
 
           {currentView === "landing" && (
@@ -258,6 +267,12 @@ export const App: React.FC = () => {
               onUpgradeTier={handleUpgradeTier}
             />
           )}
+
+          <AuthModal
+            isOpen={isAuthModalOpen}
+            onClose={() => setIsAuthModalOpen(false)}
+            onAuthSuccess={handleAuthSuccess}
+          />
 
           {/* Tamagotchi Mascot Companion */}
           <FestiTamagotchi />

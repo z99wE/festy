@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,
   email TEXT NOT NULL UNIQUE,
   name TEXT NOT NULL,
+  password_hash TEXT,
+  password_salt TEXT,
   avatar_url TEXT,
   locale TEXT NOT NULL DEFAULT 'en-US',
   timezone TEXT NOT NULL DEFAULT 'UTC',
