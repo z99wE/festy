@@ -1,22 +1,24 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "festiya",
-  "main": "src/server/worker.ts",
-  "compatibility_date": "2024-11-01",
-  "compatibility_flags": ["nodejs_compat"],
-  "assets": {
-    "directory": "./dist",
-    "binding": "ASSETS"
-  },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "festiya_prod",
-      "database_id": "festiya-d1-prod-id"
-    }
-  ],
-  "vars": {
-    "APP_ENV": "production",
-    "AI_DEFAULT_PROVIDER": "fallback"
-  }
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "festiya",
+	"main": "src/server/worker.ts",
+	"compatibility_date": "2024-11-01",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "festiya_prod",
+			"database_id": "56f6f4c3-9306-4ff8-be0e-7ee489c3718e"
+		}
+	],
+	"vars": {
+		"APP_ENV": "production",
+		"AI_DEFAULT_PROVIDER": "fallback"
+	}
 }
