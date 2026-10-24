@@ -16,7 +16,7 @@ export const TestimonialsSection: React.FC = () => {
       role: "VP of Global Events, Apex Media Group",
       event: "Apex Executive Summit NYC (120 VIPs)",
       quote:
-        "We replaced 4 disconnected spreadsheets with Festiya. The multi-tenant Cloudflare edge architecture gave our security board complete confidence for confidential client NDA rosters. The plan synthesized in 45 seconds.",
+        "We replaced 4 disconnected spreadsheets with Festiya. The strict workspace confidentiality and private client portals gave our board complete confidence for confidential VIP rosters. The plan synthesized in 45 seconds.",
       rating: 5,
     },
     {

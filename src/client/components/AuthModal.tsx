@@ -343,7 +343,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
             }}
           >
             <ShieldCheck size={14} />
-            <span>CLOUDFLARE NATIVE AUTH • ZERO CROSS-TENANT DATA LEAKAGE</span>
+            <span>PRIVATE WORKSPACE ENCRYPTION • CONFIDENTIAL DATA ISOLATION</span>
           </div>
 
           <button

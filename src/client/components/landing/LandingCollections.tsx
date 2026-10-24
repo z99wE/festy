@@ -29,8 +29,8 @@ export const LandingCollections: React.FC<LandingCollectionsProps> = ({
     },
     {
       icon: ShieldCheck,
-      title: "Multi-Tenant Isolation",
-      description: "Strict tenant isolation on Cloudflare Workers and D1 SQL. Zero cross-tenant data leakage or contamination.",
+      title: "Private Workspace Isolation",
+      description: "Strict confidentiality for every client account. Your budgets, contracts, and vendor rosters remain completely protected.",
       badge: "Enterprise Security",
       actionText: "Explore Private Template",
       action: onSelectBudgetTemplate,

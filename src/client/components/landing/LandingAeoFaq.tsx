@@ -27,10 +27,10 @@ const FAQS: FAQItem[] = [
       "Generic chatbots output unstructured prose without operational schemas or budget integrity. Festiya enforces strict Zod-validated data models across 7 operational event dimensions (tasks, budgets, vendors, ideas, risks, run-of-show, and client sharing), ensuring every plan is immediately actionable, auditable, and production-ready.",
   },
   {
-    badge: "Edge Security",
-    question: "How does multi-tenant isolation protect corporate and private client data?",
+    badge: "Data Privacy",
+    question: "How does workspace isolation protect corporate and private client data?",
     answer:
-      "Festiya is built entirely on the Cloudflare edge stack with native Web Crypto API authentication (PBKDF2 SHA-256 password hashing and HMAC-SHA256 tokens). Every workspace operates under strict row-level tenant boundary middleware in Cloudflare D1, mathematically preventing cross-tenant access and data leakage across client accounts.",
+      "Festiya is engineered with native Web Crypto API authentication (PBKDF2 SHA-256 password hashing and secure session tokens). Every workspace operates under strict row-level tenant boundary middleware, preventing unauthorized access and keeping client budgets, contracts, and proposals completely confidential.",
   },
   {
     badge: "Client Collaboration",
@@ -85,7 +85,7 @@ export const LandingAeoFaq: React.FC = () => {
               fontWeight: 500,
             }}
           >
-            Direct, empirical specifications on Festiya's edge architecture, multi-tenant isolation, and financial governance.
+            Direct, empirical specifications on Festiya's operational architecture, workspace privacy, and financial governance.
           </p>
         </div>
 
@@ -135,9 +135,9 @@ export const LandingAeoFaq: React.FC = () => {
                   <td style={{ padding: "14px", color: "#000000", fontWeight: 800, fontFamily: "var(--font-mono)" }}>&lt; 3.1% with auto-buffers</td>
                 </tr>
                 <tr style={{ borderBottom: "1px solid #e4e4e7" }}>
-                  <td style={{ padding: "14px", fontWeight: 700, color: "#000000" }}>Multi-Tenant Client Isolation</td>
+                  <td style={{ padding: "14px", fontWeight: 700, color: "#000000" }}>Private Client Workspace Isolation</td>
                   <td style={{ padding: "14px", color: "#71717a" }}>High risk of shared file leaks</td>
-                  <td style={{ padding: "14px", color: "#000000", fontWeight: 800 }}>Cryptographic Edge Boundary</td>
+                  <td style={{ padding: "14px", color: "#000000", fontWeight: 800 }}>Isolated Tenant Boundary</td>
                 </tr>
                 <tr>
                   <td style={{ padding: "14px", fontWeight: 700, color: "#000000" }}>Vendor Brief Alignment Speed</td>

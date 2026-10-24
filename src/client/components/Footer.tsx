@@ -137,10 +137,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenExportModal, onOpenPricing
                 </button>
               </li>
               <li>
-                <span style={{ color: "#b7c6c2" }}>Cloudflare D1 Ledger</span>
+                <span style={{ color: "#b7c6c2" }}>Enterprise Budget Ledger</span>
               </li>
               <li>
-                <span style={{ color: "#b7c6c2" }}>Edge AI Reasoning Gateway</span>
+                <span style={{ color: "#b7c6c2" }}>AI Planning Engine</span>
               </li>
             </ul>
           </div>
@@ -206,10 +206,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenExportModal, onOpenPricing
                 <span style={{ color: "#b7c6c2" }}>WCAG 2.1 AA Compliance</span>
               </li>
               <li>
-                <span style={{ color: "#b7c6c2" }}>Zero Cross-Tenant Contamination</span>
+                <span style={{ color: "#b7c6c2" }}>Workspace Data Privacy</span>
               </li>
               <li>
-                <span style={{ color: "#b7c6c2" }}>Cloudflare Edge Isolation</span>
+                <span style={{ color: "#b7c6c2" }}>Private Tenant Isolation</span>
               </li>
             </ul>
           </div>
@@ -231,9 +231,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenExportModal, onOpenPricing
         >
           <div>
             © {new Date().getFullYear()} Festiya Operations Inc. All rights reserved.
-          </div>
-          <div style={{ fontFamily: "var(--font-mono)", color: "#ffe17c", fontWeight: 700 }}>
-            CLOUDFLARE EDGE PRODUCTION • MULTI-TENANT ISOLATED
           </div>
         </div>
       </div>

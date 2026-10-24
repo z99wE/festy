@@ -128,7 +128,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                 letterSpacing: "-0.01em",
               }}
             >
-              The modern AI workspace to plan budgets, negotiate vendor agreements, and execute run-of-shows — all with deterministic decimal arithmetic and isolated multi-tenant Cloudflare D1 storage.
+              The modern AI workspace to plan budgets, negotiate vendor agreements, and execute run-of-shows with deterministic accuracy and private workspace confidence.
             </h2>
 
             {/* CTA Group: Primary Black (8px shadow) + Secondary White (4px shadow) */}
@@ -229,7 +229,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                     fontWeight: 700,
                   }}
                 >
-                  festiya.app/production-live
+                  festiya.com/studio
                 </span>
               </div>
 
@@ -282,7 +282,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                 {/* Looping Dancing Mascot Animation & Favicon Logo directly under it */}
                 <DancingMascotHero />
 
-                {/* Internal Live Status */}
+                {/* Live Operations Status */}
                 <div
                   style={{
                     marginTop: "20px",
@@ -300,9 +300,9 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                 >
                   <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
                     <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#28c840", display: "inline-block" }} />
-                    Multi-Tenant Cloudflare D1
+                    Live Event Engine
                   </span>
-                  <span style={{ fontFamily: "var(--font-mono)", color: "#171e19" }}>0% Contamination</span>
+                  <span style={{ fontFamily: "var(--font-mono)", color: "#171e19" }}>Production Ready</span>
                 </div>
               </div>
             </div>

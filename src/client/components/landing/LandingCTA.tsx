@@ -97,7 +97,7 @@ export const LandingCTA: React.FC<LandingCTAProps> = ({ onStartPlanning, onGoToP
             <CheckCircle2 size={16} color="#000000" /> Zero Credit Card
           </span>
           <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <CheckCircle2 size={16} color="#000000" /> Cloudflare D1 Edge Isolation
+            <CheckCircle2 size={16} color="#000000" /> Private Workspace Security
           </span>
           <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <CheckCircle2 size={16} color="#000000" /> Instant Share & Export
