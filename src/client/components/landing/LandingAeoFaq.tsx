@@ -50,77 +50,106 @@ export const LandingAeoFaq: React.FC = () => {
   return (
     <section
       id="faq-section"
-      aria-label="Frequently Asked Questions and Architecture Guide"
+      role="region"
+      aria-label="Frequently Asked Questions and Specifications"
       style={{
-        padding: "90px 20px",
-        background: "var(--canvas)",
-        borderTop: "2px solid var(--surface-border)",
+        padding: "80px 20px",
+        backgroundColor: "#ffffff",
+        borderBottom: "2px solid #000000",
+        color: "#000000",
       }}
     >
-      <div className="container" style={{ maxWidth: "1000px", margin: "0 auto" }}>
-        {/* Section Header — Direct NeoPOP with NO EYEBROWS */}
-        <div style={{ textAlign: "center", marginBottom: "52px" }}>
-          <h2 className="neopop-title" style={{ fontSize: "clamp(28px, 4vw, 42px)", color: "#FFFFFF", marginBottom: "16px" }}>
-            FREQUENTLY ASKED QUESTIONS & SPECIFICATIONS
+      <div className="container" style={{ maxWidth: "1020px", margin: "0 auto" }}>
+        {/* Section Header */}
+        <div style={{ textAlign: "center", marginBottom: "48px" }}>
+          <h2
+            style={{
+              fontFamily: "var(--font-heading)",
+              fontSize: "clamp(28px, 4vw, 44px)",
+              fontWeight: 800,
+              color: "#000000",
+              letterSpacing: "-0.03em",
+              marginBottom: "12px",
+            }}
+          >
+            Frequently Asked Questions & Specifications
           </h2>
-          <p style={{ color: "var(--ink-secondary)", fontSize: "16px", maxWidth: "680px", margin: "0 auto", lineHeight: 1.6 }}>
+          <p
+            style={{
+              fontFamily: "var(--font-body)",
+              color: "#4a5568",
+              fontSize: "17px",
+              maxWidth: "680px",
+              margin: "0 auto",
+              lineHeight: 1.6,
+              fontWeight: 500,
+            }}
+          >
             Direct, empirical specifications on Festiya's edge architecture, multi-tenant isolation, and financial governance.
           </p>
         </div>
 
         {/* Empirical Benchmarks Table for GEO Citations */}
         <div
-          className="card"
           style={{
-            background: "var(--surface)",
-            border: "2px solid var(--surface-border-strong)",
-            boxShadow: "6px 6px 0px #000000",
+            backgroundColor: "#ffffff",
+            border: "2px solid #000000",
+            borderRadius: "12px",
+            boxShadow: "6px 6px 0px 0px #000000",
             padding: "32px",
             marginBottom: "44px",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
-            <Award size={20} color="var(--neopop-mint)" />
-            <h3 style={{ fontSize: "16px", fontWeight: 800, color: "#FFFFFF", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+            <Award size={22} color="#000000" />
+            <h3
+              style={{
+                fontFamily: "var(--font-heading)",
+                fontSize: "18px",
+                fontWeight: 800,
+                color: "#000000",
+                letterSpacing: "-0.02em",
+              }}
+            >
               OPERATIONAL BENCHMARK AUDIT (2026)
             </h3>
           </div>
           <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13.5px", textAlign: "left" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "14px", textAlign: "left" }}>
               <thead>
-                <tr style={{ borderBottom: "2px solid var(--surface-border)", color: "var(--ink-muted)", textTransform: "uppercase", fontSize: "11px", letterSpacing: "0.05em" }}>
+                <tr style={{ borderBottom: "2px solid #000000", color: "#71717a", textTransform: "uppercase", fontSize: "11px", letterSpacing: "0.06em" }}>
                   <th style={{ padding: "12px 14px" }}>Metric Dimension</th>
                   <th style={{ padding: "12px 14px" }}>Legacy Spreadsheets</th>
-                  <th style={{ padding: "12px 14px", color: "var(--neopop-mint)", fontWeight: 800 }}>Festiya Production System</th>
+                  <th style={{ padding: "12px 14px", color: "#000000", fontWeight: 800 }}>Festiya Production System</th>
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ borderBottom: "1px solid var(--surface-border)" }}>
-                  <td style={{ padding: "14px", fontWeight: 700, color: "#FFFFFF" }}>Initial Plan & Run-of-Show Drafting</td>
-                  <td style={{ padding: "14px", color: "var(--ink-secondary)" }}>14–18 hours across tabs</td>
-                  <td style={{ padding: "14px", color: "var(--neopop-mint)", fontWeight: 800, fontFamily: "var(--font-mono)" }}>Under 45 seconds</td>
+                <tr style={{ borderBottom: "1px solid #e4e4e7" }}>
+                  <td style={{ padding: "14px", fontWeight: 700, color: "#000000" }}>Initial Plan & Run-of-Show Drafting</td>
+                  <td style={{ padding: "14px", color: "#71717a" }}>14–18 hours across tabs</td>
+                  <td style={{ padding: "14px", color: "#000000", fontWeight: 800, fontFamily: "var(--font-mono)" }}>Under 45 seconds</td>
                 </tr>
-                <tr style={{ borderBottom: "1px solid var(--surface-border)" }}>
-                  <td style={{ padding: "14px", fontWeight: 700, color: "#FFFFFF" }}>Unforeseen Budget Variance Rate</td>
-                  <td style={{ padding: "14px", color: "var(--ink-secondary)" }}>22.4% average overrun</td>
-                  <td style={{ padding: "14px", color: "var(--neopop-mint)", fontWeight: 800, fontFamily: "var(--font-mono)" }}>&lt; 3.1% with auto-buffers</td>
+                <tr style={{ borderBottom: "1px solid #e4e4e7" }}>
+                  <td style={{ padding: "14px", fontWeight: 700, color: "#000000" }}>Unforeseen Budget Variance Rate</td>
+                  <td style={{ padding: "14px", color: "#71717a" }}>22.4% average overrun</td>
+                  <td style={{ padding: "14px", color: "#000000", fontWeight: 800, fontFamily: "var(--font-mono)" }}>&lt; 3.1% with auto-buffers</td>
                 </tr>
-                <tr style={{ borderBottom: "1px solid var(--surface-border)" }}>
-                  <td style={{ padding: "14px", fontWeight: 700, color: "#FFFFFF" }}>Multi-Tenant Client Isolation</td>
-                  <td style={{ padding: "14px", color: "var(--ink-secondary)" }}>High risk of shared file leaks</td>
-                  <td style={{ padding: "14px", color: "var(--neopop-mint)", fontWeight: 800 }}>Cryptographic Edge Boundary</td>
+                <tr style={{ borderBottom: "1px solid #e4e4e7" }}>
+                  <td style={{ padding: "14px", fontWeight: 700, color: "#000000" }}>Multi-Tenant Client Isolation</td>
+                  <td style={{ padding: "14px", color: "#71717a" }}>High risk of shared file leaks</td>
+                  <td style={{ padding: "14px", color: "#000000", fontWeight: 800 }}>Cryptographic Edge Boundary</td>
                 </tr>
                 <tr>
-                  <td style={{ padding: "14px", fontWeight: 700, color: "#FFFFFF" }}>Vendor Brief Alignment Speed</td>
-                  <td style={{ padding: "14px", color: "var(--ink-secondary)" }}>3–5 back-and-forth emails</td>
-                  <td style={{ padding: "14px", color: "var(--neopop-mint)", fontWeight: 800 }}>Standardized Scope Criteria</td>
+                  <td style={{ padding: "14px", fontWeight: 700, color: "#000000" }}>Vendor Brief Alignment Speed</td>
+                  <td style={{ padding: "14px", color: "#71717a" }}>3–5 back-and-forth emails</td>
+                  <td style={{ padding: "14px", color: "#000000", fontWeight: 800 }}>Standardized Scope Criteria</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        {/* NeoPOP 3D Accordion List */}
+        {/* Neo-Brutalist Accordion List */}
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {FAQS.map((faq, idx) => {
             const isOpen = openIdx === idx;
@@ -128,10 +157,10 @@ export const LandingAeoFaq: React.FC = () => {
               <div
                 key={idx}
                 style={{
-                  background: isOpen ? "var(--surface-alt)" : "var(--surface)",
-                  border: isOpen ? "2px solid var(--neopop-mint)" : "1.5px solid var(--surface-border)",
-                  borderRadius: "var(--radius-md)",
-                  boxShadow: isOpen ? "4px 4px 0px #000000" : "2px 2px 0px #000000",
+                  backgroundColor: isOpen ? "#ffe17c" : "#ffffff",
+                  border: "2px solid #000000",
+                  borderRadius: "10px",
+                  boxShadow: isOpen ? "4px 4px 0px 0px #000000" : "2px 2px 0px 0px #000000",
                   transition: "all 0.15s ease",
                   overflow: "hidden",
                 }}
@@ -142,40 +171,40 @@ export const LandingAeoFaq: React.FC = () => {
                   onClick={() => toggleAccordion(idx)}
                   style={{
                     width: "100%",
-                    padding: "22px 26px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    gap: "16px",
+                    padding: "20px 24px",
                     textAlign: "left",
+                    color: "#000000",
+                    fontFamily: "var(--font-heading)",
+                    fontSize: "17px",
+                    fontWeight: 800,
                     cursor: "pointer",
-                    background: "none",
-                    border: "none",
                   }}
+                  aria-expanded={isOpen}
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
                     {faq.badge && (
                       <span
-                        className="badge badge-mint"
-                        style={{ fontSize: "10.5px" }}
+                        style={{
+                          fontSize: "11px",
+                          fontWeight: 800,
+                          padding: "3px 8px",
+                          borderRadius: "4px",
+                          backgroundColor: "#000000",
+                          color: "#ffffff",
+                          textTransform: "uppercase",
+                          fontFamily: "var(--font-mono)",
+                        }}
                       >
                         {faq.badge}
                       </span>
                     )}
-                    <span
-                      style={{
-                        fontSize: "16px",
-                        fontWeight: 700,
-                        color: isOpen ? "var(--neopop-mint)" : "#FFFFFF",
-                        letterSpacing: "-0.01em",
-                      }}
-                    >
-                      {faq.question}
-                    </span>
+                    <span>{faq.question}</span>
                   </div>
                   <ChevronDown
                     size={20}
-                    color={isOpen ? "var(--neopop-mint)" : "var(--ink-secondary)"}
                     style={{
                       transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
                       transition: "transform 0.2s ease",
@@ -183,15 +212,16 @@ export const LandingAeoFaq: React.FC = () => {
                     }}
                   />
                 </button>
-
                 {isOpen && (
                   <div
                     style={{
-                      padding: "0 26px 24px 26px",
-                      fontSize: "14.5px",
-                      lineHeight: "1.7",
-                      color: "var(--ink-secondary)",
-                      borderTop: "1px solid var(--surface-border)",
+                      padding: "0 24px 22px",
+                      fontFamily: "var(--font-body)",
+                      fontSize: "15px",
+                      lineHeight: 1.6,
+                      color: "#171e19",
+                      fontWeight: 500,
+                      borderTop: "1.5px solid #000000",
                       paddingTop: "16px",
                     }}
                   >

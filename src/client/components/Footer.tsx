@@ -1,5 +1,5 @@
 import React from "react";
-import { Sparkles, Shield } from "lucide-react";
+import { Sparkles, Shield, Globe, Code2, Share2, MessageSquare } from "lucide-react";
 
 interface FooterProps {
   onOpenExportModal: () => void;
@@ -7,122 +7,209 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onOpenExportModal, onOpenPricing }) => {
+  const socialIcons = [
+    { name: "Global Edge", icon: Globe, href: "https://festiya.com" },
+    { name: "Codebase", icon: Code2, href: "https://github.com/z99wE/festy" },
+    { name: "Share Proposal", icon: Share2, href: "https://festiya.com" },
+    { name: "Community", icon: MessageSquare, href: "https://discord.com" },
+  ];
+
   return (
     <footer
       style={{
-        background: "var(--surface)",
-        borderTop: "2px solid var(--surface-border)",
-        padding: "60px 0 36px",
+        backgroundColor: "#171e19",
+        borderTop: "2px solid #000000",
+        padding: "64px 0 40px",
         marginTop: "auto",
-        fontSize: "13px",
-        color: "var(--ink-secondary)",
+        fontSize: "14px",
+        color: "#b7c6c2",
       }}
     >
-      <div className="container" style={{ maxWidth: "1120px" }}>
+      <div className="container" style={{ maxWidth: "1160px" }}>
+        {/* 4 Columns */}
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: "36px",
-            marginBottom: "44px",
+            gap: "40px",
+            marginBottom: "48px",
           }}
         >
-          {/* Brand Col */}
+          {/* Column 1: Brand & Social Squares */}
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
               <div
                 style={{
-                  width: "30px",
-                  height: "30px",
-                  borderRadius: "var(--radius-sm)",
-                  background: "var(--neopop-mint)",
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "8px",
+                  backgroundColor: "#ffe17c",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#000",
-                  border: "1.5px solid #000",
-                  boxShadow: "2px 2px 0px #000",
+                  color: "#000000",
+                  border: "2px solid #000000",
+                  boxShadow: "3px 3px 0px 0px #000000",
+                  fontWeight: 900,
+                  fontSize: "18px",
                 }}
               >
-                <Sparkles size={16} />
+                ⚡
               </div>
-              <span className="neopop-title" style={{ fontSize: "18px", color: "#FFFFFF" }}>FESTIYA</span>
+              <span
+                style={{
+                  fontFamily: "var(--font-heading)",
+                  fontSize: "22px",
+                  fontWeight: 800,
+                  color: "#ffffff",
+                  letterSpacing: "-0.03em",
+                }}
+              >
+                FESTIYA
+              </span>
             </div>
-            <p style={{ fontSize: "13px", lineHeight: 1.6, color: "var(--ink-secondary)" }}>
+            <p style={{ fontSize: "14px", lineHeight: 1.6, color: "#b7c6c2", marginBottom: "20px" }}>
               The high-precision event operations engine. Decimal-safe budgets, minute-by-minute cue sheets, and unified partner logistics.
             </p>
-            <div style={{ marginTop: "16px", display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "var(--neopop-mint)", fontWeight: 700 }}>
-              <Shield size={14} />
-              <span>Edge Deployment • Row-Level Multi-Tenant Isolation</span>
+
+            {/* Social Icons: squares (#272727) with light gray border turning Yellow/Black on hover */}
+            <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+              {socialIcons.map((s, idx) => {
+                const Icon = s.icon;
+                return (
+                  <a
+                    key={idx}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.name}
+                    className="footer-social-square"
+                    style={{
+                      width: "36px",
+                      height: "36px",
+                      backgroundColor: "#272727",
+                      border: "2px solid #71717a",
+                      borderRadius: "6px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#ffffff",
+                      transition: "all 0.2s ease",
+                      boxShadow: "2px 2px 0px 0px #000000",
+                    }}
+                  >
+                    <Icon size={16} />
+                  </a>
+                );
+              })}
             </div>
           </div>
 
-          {/* Product links */}
+          {/* Column 2: Platform */}
           <div>
-            <h4 style={{ fontWeight: 800, color: "#FFFFFF", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "0.05em", fontSize: "12px" }}>
+            <h4
+              style={{
+                fontFamily: "var(--font-heading)",
+                fontWeight: 800,
+                color: "#ffe17c",
+                marginBottom: "16px",
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+                fontSize: "13px",
+              }}
+            >
               Platform
             </h4>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "12px" }}>
               <li>
-                <a href="#main-content" style={{ color: "var(--ink-secondary)" }}>
+                <a href="#main-content" style={{ color: "#b7c6c2" }}>
                   Event Discovery & Planning
                 </a>
               </li>
               <li>
                 <button
-                  aria-label="Open pricing and entitlements"
+                  aria-label="View Tiers and Subscription Limits"
                   type="button"
                   onClick={onOpenPricing}
-                  style={{ color: "var(--ink-secondary)", cursor: "pointer", fontSize: "13px", textAlign: "left", padding: 0 }}
+                  style={{ color: "#b7c6c2", cursor: "pointer", fontSize: "14px", textAlign: "left", padding: 0 }}
                 >
                   Tiers & Subscription Limits
                 </button>
               </li>
               <li>
-                <span style={{ color: "var(--ink-muted)" }}>Edge Reasoning Gateway</span>
+                <span style={{ color: "#b7c6c2" }}>Cloudflare D1 Ledger</span>
+              </li>
+              <li>
+                <span style={{ color: "#b7c6c2" }}>Edge AI Reasoning Gateway</span>
               </li>
             </ul>
           </div>
 
-          {/* Planners & Agencies */}
+          {/* Column 3: Operations */}
           <div>
-            <h4 style={{ fontWeight: 800, color: "#FFFFFF", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "0.05em", fontSize: "12px" }}>
+            <h4
+              style={{
+                fontFamily: "var(--font-heading)",
+                fontWeight: 800,
+                color: "#ffe17c",
+                marginBottom: "16px",
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+                fontSize: "13px",
+              }}
+            >
               Operations
             </h4>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "12px" }}>
               <li>
-                <span style={{ color: "var(--ink-secondary)" }}>Client Proposal Generation</span>
+                <span style={{ color: "#b7c6c2" }}>Client Proposal Generation</span>
               </li>
               <li>
-                <span style={{ color: "var(--ink-secondary)" }}>Vendor Agreement Pipeline</span>
+                <span style={{ color: "#b7c6c2" }}>Vendor Agreement Pipeline</span>
               </li>
               <li>
-                <span style={{ color: "var(--ink-secondary)" }}>Tokenized Client Portals</span>
+                <span style={{ color: "#b7c6c2" }}>Tokenized Client Portals</span>
+              </li>
+              <li>
+                <span style={{ color: "#b7c6c2" }}>Run of Show Live Cues</span>
               </li>
             </ul>
           </div>
 
-          {/* Privacy & GDPR */}
+          {/* Column 4: Governance */}
           <div>
-            <h4 style={{ fontWeight: 800, color: "#FFFFFF", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "0.05em", fontSize: "12px" }}>
-              Governance
+            <h4
+              style={{
+                fontFamily: "var(--font-heading)",
+                fontWeight: 800,
+                color: "#ffe17c",
+                marginBottom: "16px",
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+                fontSize: "13px",
+              }}
+            >
+              Governance & Privacy
             </h4>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "12px" }}>
               <li>
                 <button
-                  aria-label="Download account data export"
+                  aria-label="Export Account Data in JSON format"
                   type="button"
                   onClick={onOpenExportModal}
-                  style={{ color: "var(--ink-secondary)", cursor: "pointer", fontSize: "13px", textAlign: "left", padding: 0 }}
+                  style={{ color: "#b7c6c2", cursor: "pointer", fontSize: "14px", textAlign: "left", padding: 0 }}
                 >
-                  Export Workspace Data (JSON)
+                  Export Account Data (JSON)
                 </button>
               </li>
               <li>
-                <span style={{ color: "var(--ink-secondary)" }}>WCAG 2.1 AA Standard</span>
+                <span style={{ color: "#b7c6c2" }}>WCAG 2.1 AA Compliance</span>
               </li>
               <li>
-                <span style={{ color: "var(--ink-secondary)" }}>Zero External Server Telemetry</span>
+                <span style={{ color: "#b7c6c2" }}>Zero Cross-Tenant Contamination</span>
+              </li>
+              <li>
+                <span style={{ color: "#b7c6c2" }}>Cloudflare Edge Isolation</span>
               </li>
             </ul>
           </div>
@@ -131,22 +218,22 @@ export const Footer: React.FC<FooterProps> = ({ onOpenExportModal, onOpenPricing
         {/* Bottom Bar */}
         <div
           style={{
-            borderTop: "1.5px solid var(--surface-border)",
+            borderTop: "2px solid #272727",
             paddingTop: "24px",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             flexWrap: "wrap",
             gap: "12px",
-            fontSize: "12px",
-            color: "var(--ink-muted)",
+            fontSize: "13px",
+            color: "#71717a",
           }}
         >
           <div>
             © {new Date().getFullYear()} Festiya Operations Inc. All rights reserved.
           </div>
-          <div style={{ fontFamily: "var(--font-mono)", color: "var(--neopop-mint)" }}>
-            CLOUDFLARE EDGE PRODUCTION
+          <div style={{ fontFamily: "var(--font-mono)", color: "#ffe17c", fontWeight: 700 }}>
+            CLOUDFLARE EDGE PRODUCTION • MULTI-TENANT ISOLATED
           </div>
         </div>
       </div>

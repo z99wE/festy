@@ -1,378 +1,300 @@
-import React, { useState } from "react";
-import { MapPin, Calendar, Users, Star, Ticket } from "lucide-react";
-
-interface DistrictScene {
-  id: string;
-  title: string;
-  district: string;
-  tag: string;
-  category: "all" | "raves" | "rooftop" | "indie" | "furry" | "brunch";
-  vibeScore: number;
-  priceEstimate: string;
-  guestCount: string;
-  dateStr: string;
-  imageUrl: string;
-  festiBadge: string;
-}
-
-const DISTRICT_SCENES: DistrictScene[] = [
-  {
-    id: "scene_cyber_rave",
-    title: "Neon Horizon: Underground Synth Rave",
-    district: "Warehouse District • Studio 9",
-    tag: "High Energy",
-    category: "raves",
-    vibeScore: 99,
-    priceEstimate: "$45 - $80 / guest",
-    guestCount: "240 guests",
-    dateStr: "Saturday • 10 PM",
-    imageUrl: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=700&q=80",
-    festiBadge: "SYNTH RAVE",
-  },
-  {
-    id: "scene_sunset_rooftop",
-    title: "Aura Sunset Mixer & Acoustic Lounge",
-    district: "Skyline Promenade • 44th Fl",
-    tag: "Aesthetic Chill",
-    category: "rooftop",
-    vibeScore: 96,
-    priceEstimate: "$65 - $110 / guest",
-    guestCount: "85 guests",
-    dateStr: "Friday • 6 PM",
-    imageUrl: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=700&q=80",
-    festiBadge: "GOLDEN HOUR",
-  },
-  {
-    id: "scene_indie_live",
-    title: "Starlight Garden Indie Band Night",
-    district: "Botanical Amphitheatre",
-    tag: "Live Music",
-    category: "indie",
-    vibeScore: 94,
-    priceEstimate: "$35 - $60 / guest",
-    guestCount: "180 guests",
-    dateStr: "Sunday • 7 PM",
-    imageUrl: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=700&q=80",
-    festiBadge: "LIVE GUITAR",
-  },
-  {
-    id: "scene_furry_social",
-    title: "Paws & Prosecco: Furry Pet Carnival",
-    district: "Greenwood Meadow Park",
-    tag: "Furry Friends",
-    category: "furry",
-    vibeScore: 98,
-    priceEstimate: "$20 - $40 / guest",
-    guestCount: "120 pets & humans",
-    dateStr: "Saturday • 11 AM",
-    imageUrl: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=700&q=80",
-    festiBadge: "PET CARNIVAL",
-  },
-  {
-    id: "scene_matcha_brunch",
-    title: "Pastel Matcha & Vinyl Record Brunch",
-    district: "Old Town Courtyard",
-    tag: "Foodie & Vinyl",
-    category: "brunch",
-    vibeScore: 95,
-    priceEstimate: "$50 - $90 / guest",
-    guestCount: "60 guests",
-    dateStr: "Sunday • 11:30 AM",
-    imageUrl: "https://images.unsplash.com/photo-1525268771113-32d9e9021a97?auto=format&fit=crop&w=700&q=80",
-    festiBadge: "VINYL BRUNCH",
-  },
-];
+import React from "react";
+import { ArrowRight, CheckCircle2, Heart, Briefcase, Sparkles } from "lucide-react";
 
 interface DistrictScenesFeedProps {
   onSelectScene: (sceneTitle: string, guestCount: number) => void;
 }
 
-import { ReactBitsDust } from "../festive/ReactBitsDust.tsx";
-
 export const DistrictScenesFeed: React.FC<DistrictScenesFeedProps> = ({ onSelectScene }) => {
-  const [selectedCategory, setSelectedCategory] = useState<
-    "all" | "raves" | "rooftop" | "indie" | "furry" | "brunch"
-  >("all");
-
-  const filteredScenes =
-    selectedCategory === "all"
-      ? DISTRICT_SCENES
-      : DISTRICT_SCENES.filter((s) => s.category === selectedCategory);
-
-  const categories = [
-    { key: "all" as const, label: "ALL SCENES" },
-    { key: "raves" as const, label: "NEON RAVES" },
-    { key: "rooftop" as const, label: "SUNSET SOIRÉES" },
-    { key: "indie" as const, label: "LIVE GIGS" },
-    { key: "furry" as const, label: "PET CARNIVALS" },
-    { key: "brunch" as const, label: "VINYL BRUNCH" },
-  ];
-
   return (
     <section
-      className="festive-ambient-canvas"
+      role="region"
+      aria-label="Use Case Personas"
       style={{
-        padding: "90px 0",
-        background: "linear-gradient(180deg, var(--canvas) 0%, #10141F 50%, var(--canvas) 100%)",
-        borderBottom: "2px solid var(--surface-border)",
-        color: "#FFFFFF",
-        position: "relative",
+        padding: "80px 0",
+        backgroundColor: "#ffffff",
+        borderBottom: "2px solid #000000",
+        color: "#000000",
       }}
     >
-      <ReactBitsDust />
-
-      <div className="container" style={{ position: "relative", zIndex: 1 }}>
-        {/* District Header with Mascot Host */}
-        <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto 40px" }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-            <img
-              src="/mascot-mint.png"
-              alt="Mascot Host"
-              className="mascot-mint-plush"
-              style={{ width: "48px", height: "48px" }}
-            />
-            <span
-              style={{
-                fontSize: "12px",
-                fontWeight: 800,
-                color: "#00E599",
-                background: "rgba(0, 229, 153, 0.12)",
-                padding: "6px 12px",
-                borderRadius: "4px",
-                border: "1.5px solid var(--neopop-mint)",
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-              }}
-            >
-              🎉 LIVE GIGS & PARTY DISTRICTS
-            </span>
-          </div>
-
+      <div className="container" style={{ maxWidth: "1160px" }}>
+        <div style={{ textAlign: "center", marginBottom: "48px" }}>
           <h2
-            className="neopop-title"
             style={{
-              fontSize: "clamp(30px, 4.5vw, 48px)",
-              color: "#FFFFFF",
-              marginBottom: "16px",
+              fontFamily: "var(--font-heading)",
+              fontSize: "clamp(28px, 4vw, 44px)",
+              fontWeight: 800,
+              color: "#000000",
+              letterSpacing: "-0.03em",
+              marginBottom: "12px",
             }}
           >
-            CURATED DISTRICT PRODUCTIONS
+            Built for High-Stakes Producers
           </h2>
-
-          <p style={{ fontSize: "16px", color: "var(--ink-secondary)", lineHeight: 1.6 }}>
-            Select any production blueprint to load its real vendor budget matrix, timetable, and operational cues.
+          <p
+            style={{
+              fontFamily: "var(--font-body)",
+              color: "#4a5568",
+              fontSize: "17px",
+              maxWidth: "680px",
+              margin: "0 auto",
+              lineHeight: 1.6,
+              fontWeight: 500,
+            }}
+          >
+            Whether executing multi-day destination weddings, executive leadership summits, or indie festivals — Festiya adapts to your operational scale.
           </p>
         </div>
 
-        {/* NeoPOP 3D Category Filter Strip */}
-        <div
-          style={{
-            display: "flex",
-            gap: "10px",
-            overflowX: "auto",
-            paddingBottom: "16px",
-            marginBottom: "36px",
-            justifyContent: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          {categories.map((cat) => (
-            <button
-              key={cat.key}
-              aria-label={`Filter by ${cat.label}`}
-              type="button"
-              onClick={() => setSelectedCategory(cat.key)}
-              className={`district-pill ${selectedCategory === cat.key ? "active" : ""}`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
-
-        {/* NeoPOP 3D Card Grid */}
+        {/* 3-Column Bento-Style Grid */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(330px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
             gap: "28px",
           }}
         >
-          {filteredScenes.map((scene) => (
-            <article
-              key={scene.id}
-              className="card"
-              style={{
-                padding: "0",
-                overflow: "hidden",
-                display: "flex",
-                flexDirection: "column",
-                border: "2px solid var(--surface-border-strong)",
-                boxShadow: "6px 6px 0px #000000",
-              }}
-            >
-              {/* Event Image Banner with Overlay */}
-              <div style={{ height: "210px", position: "relative", overflow: "hidden" }}>
-                <img
-                  src={scene.imageUrl}
-                  alt={scene.title}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    filter: "brightness(0.8)",
-                  }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    background:
-                      "linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(18,21,29,0.95) 100%)",
-                  }}
-                />
-
-                {/* Top Badges */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "14px",
-                    left: "14px",
-                    right: "14px",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <span
-                    className="badge badge-mint"
-                    style={{ fontSize: "10.5px" }}
-                  >
-                    {scene.festiBadge}
-                  </span>
-
-                  <span
-                    style={{
-                      background: "#000000",
-                      padding: "4px 8px",
-                      borderRadius: "var(--radius-sm)",
-                      fontSize: "11px",
-                      fontWeight: 800,
-                      color: "var(--neopop-mint)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "4px",
-                      border: "1px solid var(--neopop-mint)",
-                    }}
-                  >
-                    <Star size={12} fill="var(--neopop-mint)" />
-                    <span>{scene.vibeScore}% VIBE MATCH</span>
-                  </span>
-                </div>
-
-                {/* Title overlay */}
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: "16px",
-                    left: "18px",
-                    right: "18px",
-                  }}
-                >
-                  <h3
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: 800,
-                      color: "#FFFFFF",
-                      letterSpacing: "-0.01em",
-                    }}
-                  >
-                    {scene.title}
-                  </h3>
-                </div>
-              </div>
-
-              {/* Middle Details */}
-              <div style={{ padding: "20px 24px", flexGrow: 1 }}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    color: "var(--ink-secondary)",
-                    fontSize: "13px",
-                    marginBottom: "10px",
-                  }}
-                >
-                  <MapPin size={14} color="var(--neopop-mint)" />
-                  <span>{scene.district}</span>
-                </div>
-
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    fontSize: "13px",
-                    color: "#FFFFFF",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                    <Calendar size={13} color="var(--neopop-gold)" />
-                    <span>{scene.dateStr}</span>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                    <Users size={13} color="var(--neopop-blue)" />
-                    <span>{scene.guestCount}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* NeoPOP Plinth Bottom Bar */}
+          {/* Card 1: Sage (#b7c6c2) */}
+          <div
+            style={{
+              backgroundColor: "#b7c6c2",
+              border: "2px solid #000000",
+              borderRadius: "12px",
+              boxShadow: "4px 4px 0px 0px #000000",
+              padding: "32px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              color: "#000000",
+            }}
+          >
+            <div>
+              {/* White Pill Badge at Top */}
               <div
                 style={{
-                  padding: "18px 24px",
-                  background: "var(--surface-alt)",
-                  borderTop: "2px solid var(--surface-border)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: "16px",
+                  display: "inline-block",
+                  padding: "6px 14px",
+                  borderRadius: "9999px",
+                  backgroundColor: "#ffffff",
+                  border: "2px solid #000000",
+                  fontSize: "11px",
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                  marginBottom: "20px",
                 }}
               >
-                <div>
-                  <div
-                    style={{
-                      fontSize: "10px",
-                      fontWeight: 800,
-                      color: "var(--ink-muted)",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.06em",
-                    }}
-                  >
-                    Budget Target
-                  </div>
-                  <div style={{ fontSize: "14px", fontWeight: 800, color: "var(--neopop-mint)", fontFamily: "var(--font-mono)" }}>
-                    {scene.priceEstimate}
-                  </div>
-                </div>
-
-                {/* Plan This Scene CTA */}
-                <button
-                  aria-label={`Plan event based on ${scene.title}`}
-                  type="button"
-                  onClick={() => onSelectScene(scene.title, parseInt(scene.guestCount) || 80)}
-                  className="btn btn-primary btn-sm"
-                  style={{
-                    padding: "8px 16px",
-                    fontSize: "12px",
-                  }}
-                >
-                  <Ticket size={14} />
-                  <span>LOAD BLUEPRINT</span>
-                </button>
+                WEDDING PLANNERS & DESIGNERS
               </div>
-            </article>
-          ))}
+
+              <h3
+                style={{
+                  fontFamily: "var(--font-heading)",
+                  fontSize: "24px",
+                  fontWeight: 800,
+                  marginBottom: "12px",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Multi-Day Destination Celebrations
+              </h3>
+
+              <p
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: "15px",
+                  color: "#1f2937",
+                  lineHeight: 1.6,
+                  marginBottom: "24px",
+                  fontWeight: 500,
+                }}
+              >
+                Harmonize Sangeet acoustic riders, palace load-ins, and multi-currency vendor deposits without formula drift.
+              </p>
+
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", marginBottom: "28px" }}>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: 700 }}>
+                  <CheckCircle2 size={16} /> Guest dietary & RSVP allocations
+                </li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: 700 }}>
+                  <CheckCircle2 size={16} /> Heritage venue contingency playbooks
+                </li>
+              </ul>
+            </div>
+
+            <button
+              aria-label="Load Wedding Preset"
+              type="button"
+              onClick={() => onSelectScene("Jaipur 3-Day Royal Wedding", 180)}
+              className="btn btn-secondary btn-sm"
+              style={{ width: "100%", justifyContent: "space-between" }}
+            >
+              <span>Load Wedding Preset</span>
+              <ArrowRight size={16} />
+            </button>
+          </div>
+
+          {/* Card 2: Yellow (#ffe17c) with 8px hard shadow */}
+          <div
+            style={{
+              backgroundColor: "#ffe17c",
+              border: "2px solid #000000",
+              borderRadius: "12px",
+              boxShadow: "8px 8px 0px 0px #000000",
+              padding: "32px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              color: "#000000",
+            }}
+          >
+            <div>
+              {/* White Pill Badge at Top */}
+              <div
+                style={{
+                  display: "inline-block",
+                  padding: "6px 14px",
+                  borderRadius: "9999px",
+                  backgroundColor: "#ffffff",
+                  border: "2px solid #000000",
+                  fontSize: "11px",
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                  marginBottom: "20px",
+                }}
+              >
+                CORPORATE SUMMIT DIRECTORS
+              </div>
+
+              <h3
+                style={{
+                  fontFamily: "var(--font-heading)",
+                  fontSize: "24px",
+                  fontWeight: 800,
+                  marginBottom: "12px",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Executive Summits & Dinners
+              </h3>
+
+              <p
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: "15px",
+                  color: "#1f2937",
+                  lineHeight: 1.6,
+                  marginBottom: "24px",
+                  fontWeight: 500,
+                }}
+              >
+                Manage fiber video broadcasts, speaker green rooms, VIP security protocols, and audited vendor contracts.
+              </p>
+
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", marginBottom: "28px" }}>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: 700 }}>
+                  <CheckCircle2 size={16} /> Minute-level stage cue sheets
+                </li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: 700 }}>
+                  <CheckCircle2 size={16} /> NDA-gated badge allocations
+                </li>
+              </ul>
+            </div>
+
+            <button
+              aria-label="Load Summit Preset"
+              type="button"
+              onClick={() => onSelectScene("Apex Global Leadership Summit", 120)}
+              className="btn btn-primary btn-sm"
+              style={{ width: "100%", justifyContent: "space-between" }}
+            >
+              <span>Load Summit Preset</span>
+              <ArrowRight size={16} />
+            </button>
+          </div>
+
+          {/* Card 3: Dark Gray (#272727) with white text */}
+          <div
+            style={{
+              backgroundColor: "#272727",
+              border: "2px solid #000000",
+              borderRadius: "12px",
+              boxShadow: "4px 4px 0px 0px #000000",
+              padding: "32px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              color: "#ffffff",
+            }}
+          >
+            <div>
+              {/* White Pill Badge at Top */}
+              <div
+                style={{
+                  display: "inline-block",
+                  padding: "6px 14px",
+                  borderRadius: "9999px",
+                  backgroundColor: "#ffffff",
+                  color: "#000000",
+                  border: "2px solid #000000",
+                  fontSize: "11px",
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                  marginBottom: "20px",
+                }}
+              >
+                INDEPENDENT PRODUCERS
+              </div>
+
+              <h3
+                style={{
+                  fontFamily: "var(--font-heading)",
+                  fontSize: "24px",
+                  fontWeight: 800,
+                  color: "#ffe17c",
+                  marginBottom: "12px",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Festivals & Curated Popups
+              </h3>
+
+              <p
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: "15px",
+                  color: "#b7c6c2",
+                  lineHeight: 1.6,
+                  marginBottom: "24px",
+                  fontWeight: 500,
+                }}
+              >
+                Synthesize acoustic stage waves, artisanal food truck electrical grids, and crowd safety corridors in 45 seconds.
+              </p>
+
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", marginBottom: "28px" }}>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: 700, color: "#ffffff" }}>
+                  <CheckCircle2 size={16} color="#ffe17c" /> Sound ordinance & curfew guards
+                </li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: 700, color: "#ffffff" }}>
+                  <CheckCircle2 size={16} color="#ffe17c" /> Instant client share proposal links
+                </li>
+              </ul>
+            </div>
+
+            <button
+              aria-label="Load Festival Preset"
+              type="button"
+              onClick={() => onSelectScene("Aura Sunset Music & Tasting Festival", 250)}
+              className="btn btn-secondary btn-sm"
+              style={{ width: "100%", justifyContent: "space-between" }}
+            >
+              <span>Load Festival Preset</span>
+              <ArrowRight size={16} />
+            </button>
+          </div>
         </div>
       </div>
     </section>

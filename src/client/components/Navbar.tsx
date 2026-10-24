@@ -36,75 +36,26 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header
       style={{
-        backgroundColor: "var(--surface)",
-        borderBottom: "2px solid var(--surface-border)",
+        backgroundColor: "#ffe17c",
+        borderBottom: "2px solid #000000",
         position: "sticky",
         top: 0,
         zIndex: 100,
-        boxShadow: "0 4px 0px #000000",
+        boxShadow: "0 4px 0px 0px #000000",
       }}
     >
-      {/* 1. Chromium Browser Window Top Frame — NeoPOP Dark Edition */}
-      <div className="chromium-tab-bar">
-        {/* Window controls (traffic light squares) */}
-        <div style={{ display: "flex", alignItems: "center", gap: "6px", marginRight: "12px" }}>
-          <span className="chromium-dot chromium-dot-red" />
-          <span className="chromium-dot chromium-dot-yellow" />
-          <span className="chromium-dot chromium-dot-green" />
-        </div>
-
-        {/* Chromium Tabs */}
-        <button
-          aria-label="Festiya Scenes Tab"
-          type="button"
-          onClick={() => setCurrentView("landing")}
-          className={`chromium-tab ${currentView === "landing" ? "active" : ""}`}
-        >
-          <span>🎪</span>
-          <span>EXPLORE PRODUCTIONS</span>
-        </button>
-
-        <button
-          aria-label="Workspace Command Center Tab"
-          type="button"
-          onClick={() => setCurrentView("workspace")}
-          className={`chromium-tab ${currentView === "workspace" ? "active" : ""}`}
-        >
-          <span>📋</span>
-          <span>EVENT STUDIO {activeEvent ? `(${activeEvent.name.slice(0, 14)}...)` : ""}</span>
-        </button>
-
-        <button
-          aria-label="Pricing and Plans Tab"
-          type="button"
-          onClick={() => setCurrentView("pricing")}
-          className={`chromium-tab ${currentView === "pricing" ? "active" : ""}`}
-        >
-          <span>⚡</span>
-          <span>TIERS & LIMITS</span>
-        </button>
-
-        {/* Chromium Omnibar URL Capsule */}
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center" }}>
-          <div className="chromium-omnibar">
-            <Lock size={12} color="var(--neopop-mint)" />
-            <span>festiya.app/{currentView}</span>
-          </div>
-        </div>
-      </div>
-
       <div
         className="container"
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          height: "72px",
+          height: "80px",
           gap: "16px",
         }}
       >
-        {/* Brand */}
-        <div style={{ display: "flex", alignItems: "center", gap: "28px" }}>
+        {/* Brand: Logo with black square icon containing yellow bolt */}
+        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
           <button
             aria-label="Festiya Home"
             type="button"
@@ -116,52 +67,62 @@ export const Navbar: React.FC<NavbarProps> = ({
               textAlign: "left",
             }}
           >
-            <img
-              src="/mascot-mint.png"
-              alt="Festiya Mascot Logo"
+            <div
               style={{
-                width: "38px",
-                height: "38px",
-                objectFit: "contain",
-                filter: "drop-shadow(0 2px 8px rgba(0, 229, 153, 0.5))",
+                width: "36px",
+                height: "36px",
+                backgroundColor: "#000000",
+                border: "2px solid #000000",
+                borderRadius: "8px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "3px 3px 0px 0px #000000",
               }}
-            />
+            >
+              <span style={{ color: "#ffe17c", fontSize: "20px", fontWeight: 900 }}>⚡</span>
+            </div>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <span
-                  className="neopop-title"
-                  style={{ fontSize: "22px", color: "#FFFFFF", letterSpacing: "-0.03em" }}
+                  style={{
+                    fontFamily: "var(--font-heading)",
+                    fontSize: "24px",
+                    fontWeight: 800,
+                    color: "#000000",
+                    letterSpacing: "-0.03em",
+                  }}
                 >
                   FESTIYA
                 </span>
                 <span
                   style={{
-                    fontSize: "10px",
+                    fontSize: "11px",
                     fontWeight: 800,
-                    padding: "2px 6px",
-                    borderRadius: "2px",
+                    padding: "2px 8px",
+                    borderRadius: "4px",
                     background: "#000000",
-                    color: "var(--neopop-mint)",
-                    border: "1px solid var(--neopop-mint)",
+                    color: "#ffe17c",
+                    border: "2px solid #000000",
                     fontFamily: "var(--font-mono)",
                   }}
                 >
-                  PRO
+                  2.0
                 </span>
               </div>
             </div>
           </button>
 
-          {/* Navigation Links */}
+          {/* Navigation Links in Bold Satoshi */}
           <nav style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <button
-              aria-label="Explore"
+              aria-label="Explore Productions"
               type="button"
               onClick={() => setCurrentView("landing")}
-              className={`btn btn-sm ${currentView === "landing" ? "btn-secondary" : ""}`}
+              className={`btn btn-sm ${currentView === "landing" ? "btn-primary" : "btn-secondary"}`}
               style={{
-                color: currentView === "landing" ? "var(--neopop-mint)" : "var(--ink-secondary)",
-                borderColor: currentView === "landing" ? "var(--neopop-mint)" : "transparent",
+                fontFamily: "var(--font-body)",
+                fontWeight: 700,
               }}
             >
               EXPLORE
@@ -169,31 +130,31 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {events.length > 0 && (
               <button
-                aria-label="Workspace"
+                aria-label="Workspace Command Center"
                 type="button"
                 onClick={() => setCurrentView("workspace")}
-                className={`btn btn-sm ${currentView === "workspace" ? "btn-secondary" : ""}`}
+                className={`btn btn-sm ${currentView === "workspace" ? "btn-primary" : "btn-secondary"}`}
                 style={{
-                  color: currentView === "workspace" ? "var(--neopop-mint)" : "var(--ink-secondary)",
-                  borderColor: currentView === "workspace" ? "var(--neopop-mint)" : "transparent",
+                  fontFamily: "var(--font-body)",
+                  fontWeight: 700,
                 }}
               >
                 <Calendar size={14} />
-                WORKSPACE
+                STUDIO
               </button>
             )}
 
             <button
-              aria-label="Pricing"
+              aria-label="Pricing and Tiers"
               type="button"
               onClick={() => setCurrentView("pricing")}
-              className={`btn btn-sm ${currentView === "pricing" ? "btn-secondary" : ""}`}
+              className={`btn btn-sm ${currentView === "pricing" ? "btn-primary" : "btn-secondary"}`}
               style={{
-                color: currentView === "pricing" ? "var(--neopop-mint)" : "var(--ink-secondary)",
-                borderColor: currentView === "pricing" ? "var(--neopop-mint)" : "transparent",
+                fontFamily: "var(--font-body)",
+                fontWeight: 700,
               }}
             >
-              PRICING
+              TIERS & PRICING
             </button>
           </nav>
         </div>
@@ -305,15 +266,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           )}
 
-          {/* New Event CTA — NeoPOP Primary Button */}
+          {/* Start Free Trial CTA — Neo-Brutalist Primary Button */}
           <button
-            aria-label="Plan a new event"
+            aria-label="Start Free Trial"
             type="button"
             onClick={onOpenNewEventModal}
             className="btn btn-primary btn-sm"
           >
-            <Plus size={16} />
-            <span>PLAN EVENT</span>
+            <span>START FREE TRIAL</span>
           </button>
 
           {/* User Account / Auth CTA */}

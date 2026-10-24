@@ -1,6 +1,5 @@
 import React from "react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
-import { ReactBitsDust } from "../festive/ReactBitsDust.tsx";
 
 interface LandingCTAProps {
   onStartPlanning: () => void;
@@ -10,92 +9,98 @@ interface LandingCTAProps {
 export const LandingCTA: React.FC<LandingCTAProps> = ({ onStartPlanning, onGoToPricing }) => {
   return (
     <section
-      className="festive-ambient-canvas"
+      role="region"
+      aria-label="Final Call to Action"
       style={{
-        padding: "100px 0 90px",
-        background: "linear-gradient(180deg, #10131E 0%, var(--surface) 100%)",
-        borderTop: "2px solid var(--surface-border)",
+        padding: "90px 20px",
+        backgroundColor: "#ffe17c",
+        borderTop: "2px solid #000000",
+        borderBottom: "2px solid #000000",
         textAlign: "center",
         position: "relative",
+        color: "#000000",
       }}
     >
-      <ReactBitsDust />
+      <div className="container" style={{ maxWidth: "860px", margin: "0 auto" }}>
+        <h2
+          style={{
+            fontFamily: "var(--font-heading)",
+            fontSize: "clamp(34px, 5vw, 56px)",
+            fontWeight: 800,
+            color: "#000000",
+            letterSpacing: "-0.04em",
+            marginBottom: "16px",
+            lineHeight: 1.1,
+          }}
+        >
+          Ready to Deploy Your Next Production?
+        </h2>
 
-      <div className="container" style={{ maxWidth: "840px", position: "relative", zIndex: 1 }}>
-        {/* Celebrating Duo Mascots */}
+        <p
+          style={{
+            fontFamily: "var(--font-body)",
+            color: "#171e19",
+            fontSize: "18px",
+            marginBottom: "36px",
+            lineHeight: 1.6,
+            maxWidth: "660px",
+            margin: "0 auto 36px",
+            fontWeight: 500,
+          }}
+        >
+          Run your milestone on an immutable decimal-safe ledger. Zero credit card required. Free tier includes full workspace access, Festi AI copilot, and PDF exports.
+        </p>
+
         <div
           style={{
             display: "flex",
-            alignItems: "center",
+            gap: "16px",
             justifyContent: "center",
-            gap: "24px",
-            marginBottom: "28px",
+            flexWrap: "wrap",
+            marginBottom: "36px",
           }}
         >
-          <img
-            src="/mascot-pink.png"
-            alt="Fluffy Pink Mascot Celebrating"
-            className="mascot-waving-plush"
-            style={{ width: "95px" }}
-          />
-          <div
-            className="mascot-speech-bubble"
-            style={{
-              background: "#FFD026",
-              borderColor: "#000000",
-              color: "#000000",
-              fontWeight: 900,
-              fontSize: "13px",
-            }}
-          >
-            LET'S MAKE YOUR CELEBRATION UNFORGETTABLE! 🎉
-          </div>
-          <img
-            src="/mascot-mint.png"
-            alt="Bubble Mint Plush Mascot Celebrating"
-            className="mascot-mint-plush"
-            style={{ width: "90px" }}
-          />
-        </div>
-
-        <h2 className="neopop-title" style={{ fontSize: "clamp(30px, 4.8vw, 52px)", color: "#FFFFFF", marginBottom: "16px" }}>
-          READY TO DEPLOY YOUR PRODUCTION?
-        </h2>
-        <p style={{ color: "var(--ink-secondary)", fontSize: "16px", marginBottom: "36px", lineHeight: 1.6 }}>
-          Run your next milestone on an immutable ledger. Zero credit card required. Free tier includes full workspace access, Festi AI copilot, and PDF exports.
-        </p>
-
-        <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap", marginBottom: "36px" }}>
           <button
-            aria-label="Launch Event Workspace Now"
+            aria-label="Start Free Trial Now"
             type="button"
             onClick={onStartPlanning}
             className="btn btn-primary"
-            style={{ padding: "16px 36px", fontSize: "14px" }}
+            style={{ padding: "16px 36px", fontSize: "15px" }}
           >
-            <span>START PLANNING FREE</span>
+            <span>START FREE TRIAL</span>
             <ArrowRight size={18} />
           </button>
+
           <button
-            aria-label="View Pricing and Workspace Entitlements"
+            aria-label="View Pricing and Tiers"
             type="button"
             onClick={onGoToPricing}
             className="btn btn-secondary"
-            style={{ padding: "16px 32px", fontSize: "14px" }}
+            style={{ padding: "16px 32px", fontSize: "15px" }}
           >
-            <span>VIEW PRICING & TIERS</span>
+            <span>VIEW TIERS & PRICING</span>
           </button>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "center", gap: "24px", fontSize: "12px", color: "var(--ink-secondary)", flexWrap: "wrap", textTransform: "uppercase", fontWeight: 700, letterSpacing: "0.04em" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "28px",
+            fontSize: "13px",
+            color: "#171e19",
+            flexWrap: "wrap",
+            fontWeight: 700,
+          }}
+        >
           <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <CheckCircle2 size={15} color="var(--neopop-mint)" /> Zero Credit Card
+            <CheckCircle2 size={16} color="#000000" /> Zero Credit Card
           </span>
           <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <CheckCircle2 size={15} color="var(--neopop-mint)" /> Full D1 Edge Persistence
+            <CheckCircle2 size={16} color="#000000" /> Cloudflare D1 Edge Isolation
           </span>
           <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <CheckCircle2 size={15} color="var(--neopop-mint)" /> Instant Export & Share
+            <CheckCircle2 size={16} color="#000000" /> Instant Share & Export
           </span>
         </div>
       </div>

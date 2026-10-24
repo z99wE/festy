@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { EventCategory, Event } from "../../types/index.ts";
 import { LandingHero } from "./landing/LandingHero.tsx";
-import { DistrictScenesFeed } from "./landing/DistrictScenesFeed.tsx";
+import { SocialProofMarquee } from "./landing/SocialProofMarquee.tsx";
 import { LandingComparison } from "./landing/LandingComparison.tsx";
-import { LandingWorkflow } from "./landing/LandingWorkflow.tsx";
 import { LandingCollections } from "./landing/LandingCollections.tsx";
+import { LandingWorkflow } from "./landing/LandingWorkflow.tsx";
+import { DistrictScenesFeed } from "./landing/DistrictScenesFeed.tsx";
+import { TestimonialsSection } from "./landing/TestimonialsSection.tsx";
 import { LandingAeoFaq } from "./landing/LandingAeoFaq.tsx";
 import { LandingCTA } from "./landing/LandingCTA.tsx";
 
@@ -67,6 +69,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
   return (
     <div>
+      {/* 1. Hero Section with 2-Column Grid, Radial Dots, Browser Mockup & Mascot Loop */}
       <LandingHero
         occasion={occasion}
         setOccasion={setOccasion}
@@ -85,14 +88,32 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         onSubmit={handleSubmit}
         onExploreDemoEvent={onExploreDemoEvent}
       />
-      <DistrictScenesFeed onSelectScene={handleSelectDistrictScene} />
+
+      {/* 2. Social Proof Marquee (Continuous linear marquee on #171e19) */}
+      <SocialProofMarquee />
+
+      {/* 3. Problem vs Solution (Card A #f4f4f5 dashed, Card B #ffe17c 8px shadow) */}
       <LandingComparison />
-      <LandingWorkflow />
+
+      {/* 4. Feature Grid (Background #ffe17c, 3-column white cards, icon box) */}
       <LandingCollections
         onExploreDemoEvent={onExploreDemoEvent}
         onSelectBudgetTemplate={handleSelectBudgetTemplate}
       />
+
+      {/* 5. How It Works (Dark mode #171e19, 3-step colored circle flow) */}
+      <LandingWorkflow />
+
+      {/* 6. Use Case Personas (3-column bento: Sage, Yellow 8px shadow, Dark Gray) */}
+      <DistrictScenesFeed onSelectScene={handleSelectDistrictScene} />
+
+      {/* 7. Testimonials (Background #b7c6c2, 3 white cards with asymmetric rounding) */}
+      <TestimonialsSection />
+
+      {/* 8. AEO / GEO Architecture Specifications & FAQ */}
       <LandingAeoFaq />
+
+      {/* 9. Final CTA on #ffe17c */}
       <LandingCTA
         onStartPlanning={() => window.scrollTo({ top: 120, behavior: "smooth" })}
         onGoToPricing={onGoToPricing}
@@ -100,4 +121,3 @@ export const LandingPage: React.FC<LandingPageProps> = ({
     </div>
   );
 };
-

@@ -10,7 +10,6 @@ import {
   Sparkles,
 } from "lucide-react";
 import { EventCategory } from "../../../types/index.ts";
-import { ReactBitsDust } from "../festive/ReactBitsDust.tsx";
 import { DancingMascotHero } from "../festive/DancingMascotHero.tsx";
 
 interface LandingHeroProps {
@@ -55,133 +54,288 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
     { key: "birthday" as const, label: "Birthday", icon: Cake },
     { key: "gathering" as const, label: "Gathering", icon: Users },
     { key: "work_event" as const, label: "Corporate", icon: Briefcase },
-    { key: "custom" as const, label: "Custom Production", icon: Compass },
+    { key: "custom" as const, label: "Custom", icon: Compass },
   ];
 
   return (
     <section
-      className="festive-ambient-canvas"
+      className="yellow-dot-bg"
       style={{
-        padding: "60px 0 75px",
-        background: "linear-gradient(180deg, #111420 0%, var(--canvas) 100%)",
-        borderBottom: "2px solid var(--surface-border)",
+        padding: "60px 0 80px",
+        borderBottom: "2px solid #000000",
         position: "relative",
+        overflow: "hidden",
       }}
     >
-      {/* ReactBits Radiant Gradient Dust & Stardust Particles */}
-      <ReactBitsDust />
-
-      <div className="container" style={{ textAlign: "center", maxWidth: "980px", position: "relative", zIndex: 1 }}>
-        {/* Animated Dancing Mascot Sequence Loop & Side-by-Side Lineup */}
-        <DancingMascotHero />
-
-        {/* Semantic H1 & H2 Hierarchy — NO ALL CAPS — AEO & GEO Optimized */}
-        <h1
-          style={{
-            fontSize: "clamp(34px, 5.2vw, 56px)",
-            lineHeight: 1.15,
-            color: "#FFFFFF",
-            marginBottom: "12px",
-            letterSpacing: "-0.02em",
-            fontWeight: 800,
-          }}
-        >
-          Production Event Infrastructure & Operations
-        </h1>
-
-        <h2
-          style={{
-            fontSize: "clamp(18px, 2.2vw, 22px)",
-            color: "var(--replit-orange)",
-            fontWeight: 700,
-            marginBottom: "16px",
-            letterSpacing: "-0.01em",
-            lineHeight: 1.4,
-          }}
-        >
-          The modern AI workspace to plan budgets, negotiate vendor agreements, and execute run-of-shows.
-        </h2>
-
-        {/* AEO / GEO Fact-Dense Platform Summary */}
+      <div className="container" style={{ maxWidth: "1200px" }}>
+        {/* Two-Column Neo-Brutalist Grid */}
         <div
-          className="aeo-hero-block"
-          role="region"
-          aria-label="Festiya Platform Overview"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+            gap: "48px",
+            alignItems: "center",
+          }}
         >
-          <p style={{ fontSize: "14.5px", color: "#E2E8F0", lineHeight: 1.6, marginBottom: "12px" }}>
-            <strong>Festiya</strong> is an enterprise-grade AI event operations platform that automates budget synthesis, vendor matrix qualification, and minute-by-minute timelines for weddings, corporate summits, and cultural festivals.
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", fontSize: "12px", color: "var(--ink-secondary)", fontWeight: 700 }}>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-              <CheckCircle2 size={14} color="var(--replit-orange)" /> 100% Decimal-Safe Ledger
-            </span>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-              <CheckCircle2 size={14} color="var(--replit-orange)" /> Zero Cross-Tenant Contamination
-            </span>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-              <CheckCircle2 size={14} color="var(--replit-orange)" /> 45s Generative Synthesis
-            </span>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-              <CheckCircle2 size={14} color="var(--replit-orange)" /> Multi-Currency Support (INR, USD, EUR, GBP)
-            </span>
+          {/* Left Column: Badge, Heading, Subtitle, CTAs, Quick Setup */}
+          <div style={{ textAlign: "left" }}>
+            {/* Pill Badge */}
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "8px 16px",
+                background: "#ffffff",
+                border: "2px solid #000000",
+                borderRadius: "9999px",
+                boxShadow: "4px 4px 0px 0px #000000",
+                fontSize: "13px",
+                fontWeight: 700,
+                color: "#000000",
+                marginBottom: "20px",
+              }}
+            >
+              <span style={{ fontSize: "14px" }}>⚡</span>
+              <span>NEW: AI Event Assistant 2.0</span>
+            </div>
+
+            {/* Heading in Cabinet Grotesk with one stroke keyword */}
+            <h1
+              style={{
+                fontFamily: "var(--font-heading)",
+                fontSize: "clamp(38px, 5.2vw, 64px)",
+                lineHeight: 1.05,
+                color: "#000000",
+                letterSpacing: "-0.04em",
+                fontWeight: 800,
+                marginBottom: "20px",
+              }}
+            >
+              Production Event Infrastructure &{" "}
+              <span className="text-stroke-keyword">Operations</span>
+            </h1>
+
+            {/* Subtitle in Satoshi */}
+            <h2
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "clamp(17px, 2vw, 20px)",
+                color: "#171e19",
+                fontWeight: 600,
+                lineHeight: 1.5,
+                marginBottom: "28px",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              The modern AI workspace to plan budgets, negotiate vendor agreements, and execute run-of-shows — all with deterministic decimal arithmetic and isolated multi-tenant Cloudflare D1 storage.
+            </h2>
+
+            {/* CTA Group: Primary Black (8px shadow) + Secondary White (4px shadow) */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "16px",
+                flexWrap: "wrap",
+                marginBottom: "36px",
+              }}
+            >
+              <button
+                aria-label="Start Free Trial"
+                type="button"
+                onClick={() => {
+                  const formEl = document.getElementById("hero-planning-card");
+                  if (formEl) formEl.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="btn btn-primary"
+              >
+                <span>START FREE TRIAL</span>
+                <ArrowRight size={18} />
+              </button>
+
+              <button
+                aria-label="Explore Live Demo"
+                type="button"
+                onClick={() => onExploreDemoEvent("evt_wedding_jaipur")}
+                className="btn btn-secondary"
+              >
+                <span>EXPLORE LIVE DEMO</span>
+              </button>
+            </div>
+
+            {/* Quick Demo Shortcuts */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                flexWrap: "wrap",
+                fontSize: "12px",
+                color: "#171e19",
+                fontWeight: 700,
+              }}
+            >
+              <span style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Quick Presets:</span>
+              <button
+                aria-label="Explore Jaipur Heritage Wedding Demo"
+                type="button"
+                onClick={() => onExploreDemoEvent("evt_wedding_jaipur")}
+                style={{
+                  padding: "4px 10px",
+                  background: "#ffffff",
+                  border: "2px solid #000000",
+                  borderRadius: "6px",
+                  boxShadow: "2px 2px 0px 0px #000000",
+                  cursor: "pointer",
+                  fontWeight: 700,
+                }}
+              >
+                💍 Jaipur Heritage (₹45L)
+              </button>
+              <button
+                aria-label="Explore Apex Leadership Summit Demo"
+                type="button"
+                onClick={() => onExploreDemoEvent("evt_apex_summit")}
+                style={{
+                  padding: "4px 10px",
+                  background: "#b7c6c2",
+                  border: "2px solid #000000",
+                  borderRadius: "6px",
+                  boxShadow: "2px 2px 0px 0px #000000",
+                  cursor: "pointer",
+                  fontWeight: 700,
+                }}
+              >
+                🏢 Apex Summit ($125K)
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column: Stylized Browser Mockup Dashboard with Dancing Mascot & Under Logo */}
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div className="browser-mockup">
+              {/* Browser Header Bar */}
+              <div className="browser-mockup-header">
+                <span className="mockup-dot mockup-dot-red" />
+                <span className="mockup-dot mockup-dot-yellow" />
+                <span className="mockup-dot mockup-dot-green" />
+                <span
+                  style={{
+                    marginLeft: "auto",
+                    color: "#b7c6c2",
+                    fontSize: "11px",
+                    fontFamily: "var(--font-mono)",
+                    fontWeight: 700,
+                  }}
+                >
+                  festiya.app/production-live
+                </span>
+              </div>
+
+              {/* Mockup Dashboard Content Area */}
+              <div className="browser-mockup-content">
+                {/* Sage and Charcoal Accent Panels */}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: "12px",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <div
+                    style={{
+                      background: "#b7c6c2",
+                      border: "2px solid #000000",
+                      borderRadius: "8px",
+                      padding: "12px",
+                      boxShadow: "4px 4px 0px 0px #000000",
+                    }}
+                  >
+                    <div style={{ fontSize: "11px", fontWeight: 800, textTransform: "uppercase", color: "#171e19" }}>
+                      Ledger Safety
+                    </div>
+                    <div style={{ fontSize: "18px", fontWeight: 900, color: "#000000", marginTop: "2px" }}>
+                      100% Decimal
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      background: "#171e19",
+                      border: "2px solid #000000",
+                      borderRadius: "8px",
+                      padding: "12px",
+                      boxShadow: "4px 4px 0px 0px #000000",
+                    }}
+                  >
+                    <div style={{ fontSize: "11px", fontWeight: 800, textTransform: "uppercase", color: "#b7c6c2" }}>
+                      Synthesis Time
+                    </div>
+                    <div style={{ fontSize: "18px", fontWeight: 900, color: "#ffe17c", marginTop: "2px" }}>
+                      45 Seconds
+                    </div>
+                  </div>
+                </div>
+
+                {/* Looping Dancing Mascot Animation & Favicon Logo directly under it */}
+                <DancingMascotHero />
+
+                {/* Internal Live Status */}
+                <div
+                  style={{
+                    marginTop: "20px",
+                    padding: "12px 14px",
+                    background: "#f4f4f5",
+                    border: "2px solid #000000",
+                    borderRadius: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    color: "#000000",
+                  }}
+                >
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                    <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#28c840", display: "inline-block" }} />
+                    Multi-Tenant Cloudflare D1
+                  </span>
+                  <span style={{ fontFamily: "var(--font-mono)", color: "#171e19" }}>0% Contamination</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Global Access / 1-Click Live Demos — Anyone Worldwide Can Use Instantly */}
+        {/* Interactive Event Brief Synthesis Card */}
         <div
+          id="hero-planning-card"
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "12px",
-            flexWrap: "wrap",
-            marginBottom: "40px",
-          }}
-        >
-          <button
-            aria-label="Explore Jaipur destination wedding demo"
-            type="button"
-            onClick={() => onExploreDemoEvent("evt_wedding_jaipur")}
-            className="btn btn-secondary btn-sm"
-            style={{
-              borderColor: "var(--replit-orange)",
-              color: "var(--replit-orange)",
-            }}
-          >
-            <span>💍 Jaipur Wedding Demo (₹45,00,000)</span>
-          </button>
-
-          <button
-            aria-label="Explore Apex summit leadership dinner demo"
-            type="button"
-            onClick={() => onExploreDemoEvent("evt_apex_summit")}
-            className="btn btn-secondary btn-sm"
-            style={{
-              borderColor: "var(--neopop-gold)",
-              color: "var(--neopop-gold)",
-            }}
-          >
-            <span>🏢 Apex Summit Demo ($125,000)</span>
-          </button>
-        </div>
-
-        {/* NeoPOP 3D Plinth Brief Container — NO SQUISHED BOXES */}
-        <div
-          className="card"
-          style={{
-            maxWidth: "820px",
-            margin: "0 auto",
-            textAlign: "left",
+            maxWidth: "920px",
+            margin: "56px auto 0",
+            background: "#ffffff",
+            border: "2px solid #000000",
+            borderRadius: "12px",
+            boxShadow: "8px 8px 0px 0px #000000",
             padding: "36px",
-            background: "var(--surface)",
-            border: "2px solid var(--surface-border-strong)",
-            boxShadow: "7px 7px 0px #000000",
+            color: "#000000",
           }}
         >
           <form onSubmit={onSubmit}>
-            {/* Category 3D Grid */}
-            <div style={{ marginBottom: "26px" }}>
-              <label className="form-label" style={{ marginBottom: "10px", display: "block" }}>
+            {/* Category Select */}
+            <div style={{ marginBottom: "24px" }}>
+              <label
+                style={{
+                  display: "block",
+                  fontFamily: "var(--font-heading)",
+                  fontSize: "16px",
+                  fontWeight: 800,
+                  marginBottom: "12px",
+                  color: "#000000",
+                }}
+              >
                 1. Select Production Type
               </label>
               <div
@@ -205,17 +359,16 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                         alignItems: "center",
                         gap: "8px",
                         padding: "12px 14px",
-                        borderRadius: "var(--radius-md)",
-                        border: isSelected ? "2px solid var(--replit-orange)" : "1.5px solid var(--surface-border)",
-                        background: isSelected ? "var(--surface-alt)" : "#0C0E14",
-                        color: isSelected ? "var(--replit-orange)" : "var(--ink-secondary)",
+                        borderRadius: "8px",
+                        border: "2px solid #000000",
+                        background: isSelected ? "#ffe17c" : "#ffffff",
+                        color: "#000000",
                         fontWeight: 700,
-                        fontSize: "12.5px",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.04em",
+                        fontSize: "13px",
                         cursor: "pointer",
-                        boxShadow: isSelected ? "3px 3px 0px #000000" : "none",
-                        transition: "all 0.12s ease",
+                        boxShadow: isSelected ? "4px 4px 0px 0px #000000" : "2px 2px 0px 0px #000000",
+                        transform: isSelected ? "translate(-1px, -1px)" : "none",
+                        transition: "all 0.15s ease",
                       }}
                     >
                       <Icon size={16} />
@@ -226,19 +379,35 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
               </div>
             </div>
 
-            {/* Occasion Input */}
-            <div style={{ marginBottom: "26px" }}>
-              <label className="form-label" htmlFor="occasion-input" style={{ marginBottom: "8px", display: "block" }}>
+            {/* Occasion / Event Name */}
+            <div style={{ marginBottom: "24px" }}>
+              <label
+                htmlFor="occasion-input"
+                style={{
+                  display: "block",
+                  fontFamily: "var(--font-heading)",
+                  fontSize: "16px",
+                  fontWeight: 800,
+                  marginBottom: "8px",
+                  color: "#000000",
+                }}
+              >
                 2. Event Scope or Name
               </label>
               <input
                 id="occasion-input"
                 aria-label="What are you celebrating"
-                className="form-input"
                 style={{
+                  width: "100%",
+                  padding: "14px 18px",
+                  border: "2px solid #000000",
+                  borderRadius: "8px",
                   fontSize: "16px",
                   fontWeight: 600,
-                  padding: "14px 18px",
+                  outline: "none",
+                  backgroundColor: "#ffffff",
+                  color: "#000000",
+                  boxShadow: "2px 2px 0px 0px #000000",
                 }}
                 placeholder="e.g. Maya & Arjun 3-Day Heritage Celebration or Annual Tech Summit"
                 value={occasion}
@@ -247,24 +416,26 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
               />
             </div>
 
-            {/* Date, Guests, Budget Grid — Ample Breathing Room */}
+            {/* Date, Scale, Budget Inputs */}
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
                 gap: "20px",
-                marginBottom: "32px",
+                marginBottom: "28px",
               }}
             >
               {/* Date */}
-              <div className="form-group">
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <label htmlFor="landing-event-date" className="form-label">Schedule Date</label>
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                  <label htmlFor="landing-event-date" style={{ fontWeight: 700, fontSize: "14px", color: "#000000" }}>
+                    Schedule Date
+                  </label>
                   <button
-                    aria-label="Toggle event date between decided and undecided"
+                    aria-label="Toggle event schedule date mode"
                     type="button"
                     onClick={() => setDateMode(dateMode === "decided" ? "undecided" : "decided")}
-                    style={{ fontSize: "11px", color: "var(--neopop-mint)", fontWeight: 700, textTransform: "uppercase" }}
+                    style={{ fontSize: "11px", fontWeight: 700, color: "#171e19", textDecoration: "underline", cursor: "pointer" }}
                   >
                     {dateMode === "decided" ? "Undecided?" : "Specify Date"}
                   </button>
@@ -272,22 +443,29 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                 {dateMode === "decided" ? (
                   <input
                     id="landing-event-date"
-                    aria-label="Event date"
                     type="date"
-                    className="form-input"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      border: "2px solid #000000",
+                      borderRadius: "8px",
+                      backgroundColor: "#ffffff",
+                      fontWeight: 600,
+                    }}
                   />
                 ) : (
                   <div
                     style={{
-                      padding: "12px 14px",
-                      background: "#0C0E14",
-                      borderRadius: "var(--radius-md)",
+                      padding: "12px",
+                      background: "#f4f4f5",
+                      border: "2px dashed #000000",
+                      borderRadius: "8px",
                       fontSize: "12px",
-                      color: "var(--ink-secondary)",
-                      border: "1.5px dashed var(--surface-border)",
+                      fontWeight: 700,
                       fontFamily: "var(--font-mono)",
+                      color: "#171e19",
                     }}
                   >
                     RELATIVE DAY-OFFSET TIMELINE
@@ -296,81 +474,94 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
               </div>
 
               {/* Guest Count */}
-              <div className="form-group">
-                <label htmlFor="landing-guest-count" className="form-label">Attendees / Scale</label>
+              <div>
+                <label htmlFor="landing-guest-count" style={{ display: "block", fontWeight: 700, fontSize: "14px", marginBottom: "6px", color: "#000000" }}>
+                  Attendees / Scale
+                </label>
                 <input
                   id="landing-guest-count"
-                  aria-label="Approximate guest count"
                   type="number"
-                  className="form-input"
                   min="2"
                   max="10000"
                   value={guestCount ?? ""}
                   onChange={(e) => setGuestCount(e.target.value ? Number(e.target.value) : undefined)}
                   placeholder="e.g. 150"
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    border: "2px solid #000000",
+                    borderRadius: "8px",
+                    backgroundColor: "#ffffff",
+                    fontWeight: 600,
+                  }}
                 />
               </div>
 
               {/* Target Budget & Currency */}
-              <div className="form-group">
-                <label htmlFor="landing-target-budget" className="form-label">Target Budget</label>
+              <div>
+                <label htmlFor="landing-target-budget" style={{ display: "block", fontWeight: 700, fontSize: "14px", marginBottom: "6px", color: "#000000" }}>
+                  Target Budget
+                </label>
                 <div style={{ display: "flex", gap: "8px" }}>
                   <select
                     id="landing-currency"
-                    aria-label="Currency"
-                    className="form-select"
-                    style={{ width: "105px", fontWeight: 700 }}
                     value={currency}
                     onChange={(e) => setCurrency(e.target.value)}
+                    style={{
+                      padding: "12px",
+                      border: "2px solid #000000",
+                      borderRadius: "8px",
+                      fontWeight: 700,
+                      backgroundColor: "#ffffff",
+                    }}
                   >
                     <option value="INR">INR (₹)</option>
                     <option value="USD">USD ($)</option>
                     <option value="EUR">EUR (€)</option>
                     <option value="GBP">GBP (£)</option>
-                    <option value="AUD">AUD (A$)</option>
-                    <option value="SGD">SGD (S$)</option>
-                    <option value="CAD">CAD (C$)</option>
-                    <option value="JPY">JPY (¥)</option>
                   </select>
                   <input
                     id="landing-target-budget"
-                    aria-label="Target budget"
                     type="number"
-                    className="form-input"
                     value={targetBudget ?? ""}
                     onChange={(e) => setTargetBudget(e.target.value ? Number(e.target.value) : undefined)}
                     placeholder="e.g. 500000"
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      border: "2px solid #000000",
+                      borderRadius: "8px",
+                      backgroundColor: "#ffffff",
+                      fontWeight: 600,
+                    }}
                   />
                 </div>
               </div>
             </div>
 
-            {/* Submit Action Bar */}
+            {/* Submit Action */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
                 flexWrap: "wrap",
-                gap: "18px",
-                paddingTop: "16px",
-                borderTop: "1.5px solid var(--surface-border)",
+                gap: "16px",
+                paddingTop: "20px",
+                borderTop: "2px solid #000000",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "var(--neopop-mint)", fontWeight: 700 }}>
-                <CheckCircle2 size={16} />
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", fontWeight: 700, color: "#171e19" }}>
+                <CheckCircle2 size={18} color="#000000" />
                 <span>Zero login barrier • Instant live workspace generation</span>
               </div>
               <button
-                aria-label="Launch Event Workspace"
                 type="submit"
                 className="btn btn-primary"
-                style={{
-                  padding: "14px 32px",
-                  fontSize: "14px",
-                }}
+                aria-label="Launch Event Studio"
+                style={{ padding: "14px 28px" }}
               >
-                <span>LAUNCH EVENT WORKSPACE</span>
+                <span>LAUNCH EVENT STUDIO</span>
                 <ArrowRight size={18} />
               </button>
             </div>

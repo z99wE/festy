@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, Clock, FileSpreadsheet, Building2, Users } from "lucide-react";
 
 interface LandingCollectionsProps {
   onExploreDemoEvent: (eventId: string) => void;
@@ -10,132 +10,183 @@ export const LandingCollections: React.FC<LandingCollectionsProps> = ({
   onExploreDemoEvent,
   onSelectBudgetTemplate,
 }) => {
+  const features = [
+    {
+      icon: FileSpreadsheet,
+      title: "Decimal Ledger Safety",
+      description: "Deterministic integer-scaled decimal mathematics with 0% floating point errors across low, likely, and high estimates.",
+      badge: "Financial Core",
+      actionText: "Inspect Jaipur Blueprint",
+      action: () => onExploreDemoEvent("evt_wedding_jaipur"),
+    },
+    {
+      icon: Clock,
+      title: "45s Synthesis Engine",
+      description: "Generates minute-by-minute run-of-show cues, stage transitions, catering waves, and contingency playbooks in seconds.",
+      badge: "Real-Time Ops",
+      actionText: "Inspect Summit Blueprint",
+      action: () => onExploreDemoEvent("evt_apex_summit"),
+    },
+    {
+      icon: ShieldCheck,
+      title: "Multi-Tenant Isolation",
+      description: "Strict tenant isolation on Cloudflare Workers and D1 SQL. Zero cross-tenant data leakage or contamination.",
+      badge: "Enterprise Security",
+      actionText: "Explore Private Template",
+      action: onSelectBudgetTemplate,
+    },
+  ];
+
   return (
-    <section style={{ padding: "90px 0", background: "var(--canvas)", borderBottom: "2px solid var(--surface-border)" }}>
-      <div className="container" style={{ maxWidth: "1120px" }}>
-        <div style={{ textAlign: "center", marginBottom: "52px" }}>
-          <h2 className="neopop-title" style={{ fontSize: "clamp(28px, 4vw, 42px)", color: "#FFFFFF", marginBottom: "16px" }}>
-            PRODUCTION ARCHITECTURES & BLUEPRINTS
+    <section
+      role="region"
+      aria-label="Feature Grid"
+      style={{
+        padding: "80px 0",
+        backgroundColor: "#ffe17c",
+        borderTop: "2px solid #000000",
+        borderBottom: "2px solid #000000",
+        color: "#000000",
+      }}
+    >
+      <div className="container" style={{ maxWidth: "1160px" }}>
+        <div style={{ textAlign: "center", marginBottom: "48px" }}>
+          <h2
+            style={{
+              fontFamily: "var(--font-heading)",
+              fontSize: "clamp(28px, 4vw, 44px)",
+              fontWeight: 800,
+              color: "#000000",
+              letterSpacing: "-0.03em",
+              marginBottom: "12px",
+            }}
+          >
+            Production Architectures & Blueprints
           </h2>
-          <p style={{ color: "var(--ink-secondary)", fontSize: "16px", maxWidth: "680px", margin: "0 auto", lineHeight: 1.6 }}>
+          <p
+            style={{
+              fontFamily: "var(--font-body)",
+              color: "#171e19",
+              fontSize: "17px",
+              maxWidth: "680px",
+              margin: "0 auto",
+              lineHeight: 1.6,
+              fontWeight: 500,
+            }}
+          >
             Explore verified event blueprints loaded with real vendor ledgers, cue sheets, and risk mitigation buffers.
           </p>
         </div>
 
+        {/* 3-Column Grid of White Cards with 2px border and 4px hard shadow */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(330px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
             gap: "28px",
           }}
         >
-          {/* Card 1 */}
-          <div
-            className="card"
-            style={{
-              background: "var(--surface)",
-              border: "2px solid var(--surface-border)",
-              boxShadow: "6px 6px 0px #000000",
-              padding: "36px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <div>
-              <span className="badge badge-mint" style={{ marginBottom: "16px", display: "inline-block" }}>
-                Heritage Destination
-              </span>
-              <h3 style={{ fontSize: "20px", marginBottom: "12px", fontWeight: 800, color: "#FFFFFF" }}>
-                Jaipur 3-Day Royal Wedding
-              </h3>
-              <p style={{ fontSize: "14px", color: "var(--ink-secondary)", marginBottom: "24px", lineHeight: 1.6 }}>
-                180 Guests across Jaigarh palace courtyards: live Manganiyar recitals, artisan thali banquets, and sunset ceremony cue sheets (₹45,00,000 ledger).
-              </p>
-            </div>
-            <button
-              aria-label="View Jaipur Wedding Workspace Demo"
-              type="button"
-              onClick={() => onExploreDemoEvent("evt_wedding_jaipur")}
-              className="btn btn-secondary btn-sm"
-              style={{ width: "100%", justifyContent: "space-between" }}
-            >
-              <span>Explore Jaipur Workspace</span>
-              <ArrowRight size={14} />
-            </button>
-          </div>
+          {features.map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={idx}
+                className="feature-card"
+                style={{
+                  backgroundColor: "#ffffff",
+                  border: "2px solid #000000",
+                  borderRadius: "12px",
+                  boxShadow: "4px 4px 0px 0px #000000",
+                  padding: "32px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                }}
+              >
+                <div>
+                  {/* Top: 16x16 icon box in #b7c6c2 that turns #ffe17c on hover */}
+                  <div
+                    className="feature-icon-box"
+                    style={{
+                      width: "48px",
+                      height: "48px",
+                      backgroundColor: "#b7c6c2",
+                      border: "2px solid #000000",
+                      borderRadius: "8px",
+                      boxShadow: "2px 2px 0px 0px #000000",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: "20px",
+                      transition: "background-color 0.2s ease",
+                    }}
+                  >
+                    <Icon size={24} color="#000000" />
+                  </div>
 
-          {/* Card 2 */}
-          <div
-            className="card"
-            style={{
-              background: "var(--surface)",
-              border: "2px solid var(--surface-border)",
-              boxShadow: "6px 6px 0px #000000",
-              padding: "36px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <div>
-              <span className="badge badge-cobalt" style={{ marginBottom: "16px", display: "inline-block" }}>
-                Executive Summit
-              </span>
-              <h3 style={{ fontSize: "20px", marginBottom: "12px", fontWeight: 800, color: "#FFFFFF" }}>
-                Apex Global Leadership Dinner
-              </h3>
-              <p style={{ fontSize: "14px", color: "var(--ink-secondary)", marginBottom: "24px", lineHeight: 1.6 }}>
-                120 VIPs at The Glasshouse NYC: redundant fiber broadcast, encrypted NDA badge control, and keynote audio/video rigging ($125,000 budget).
-              </p>
-            </div>
-            <button
-              aria-label="View Apex Summit Workspace Demo"
-              type="button"
-              onClick={() => onExploreDemoEvent("evt_apex_summit")}
-              className="btn btn-secondary btn-sm"
-              style={{ width: "100%", justifyContent: "space-between" }}
-            >
-              <span>Explore Apex Workspace</span>
-              <ArrowRight size={14} />
-            </button>
-          </div>
+                  <span
+                    style={{
+                      display: "inline-block",
+                      padding: "4px 10px",
+                      backgroundColor: "#f4f4f5",
+                      border: "2px solid #000000",
+                      borderRadius: "9999px",
+                      fontSize: "11px",
+                      fontWeight: 800,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em",
+                      marginBottom: "14px",
+                    }}
+                  >
+                    {item.badge}
+                  </span>
 
-          {/* Card 3 */}
-          <div
-            className="card"
-            style={{
-              background: "var(--surface)",
-              border: "2px solid var(--surface-border)",
-              boxShadow: "6px 6px 0px #000000",
-              padding: "36px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <div>
-              <span className="badge badge-sunshine" style={{ marginBottom: "16px", display: "inline-block" }}>
-                Private Gathering
-              </span>
-              <h3 style={{ fontSize: "20px", marginBottom: "12px", fontWeight: 800, color: "#FFFFFF" }}>
-                Sunset Terrace Social & Dinner
-              </h3>
-              <p style={{ fontSize: "14px", color: "var(--ink-secondary)", marginBottom: "24px", lineHeight: 1.6 }}>
-                50 Guests intimate gathering: acoustic vinyl DJ, craft mixologist bar, and curated zero-waste catering plan ($3,500 target).
-              </p>
-            </div>
-            <button
-              aria-label="Load Sunset Terrace Blueprint Template"
-              type="button"
-              onClick={onSelectBudgetTemplate}
-              className="btn btn-secondary btn-sm"
-              style={{ width: "100%", justifyContent: "space-between" }}
-            >
-              <span>Load Terrace Blueprint</span>
-              <ArrowRight size={14} />
-            </button>
-          </div>
+                  {/* Heading in Cabinet Grotesk 2xl */}
+                  <h3
+                    style={{
+                      fontFamily: "var(--font-heading)",
+                      fontSize: "24px",
+                      fontWeight: 800,
+                      color: "#000000",
+                      marginBottom: "12px",
+                      letterSpacing: "-0.02em",
+                    }}
+                  >
+                    {item.title}
+                  </h3>
+
+                  <p
+                    style={{
+                      fontFamily: "var(--font-body)",
+                      fontSize: "15px",
+                      color: "#4a5568",
+                      lineHeight: 1.6,
+                      marginBottom: "28px",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {item.description}
+                  </p>
+                </div>
+
+                <button
+                  aria-label={item.actionText}
+                  type="button"
+                  onClick={item.action}
+                  className="btn btn-secondary btn-sm"
+                  style={{
+                    width: "100%",
+                    justifyContent: "space-between",
+                    padding: "10px 16px",
+                  }}
+                >
+                  <span>{item.actionText}</span>
+                  <ArrowRight size={16} />
+                </button>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
