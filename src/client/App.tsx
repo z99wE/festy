@@ -246,6 +246,8 @@ export const App: React.FC = () => {
                 initialPrompt={askFestiyaInitialPrompt}
                 onRequestRevision={handleRequestRevision}
                 onApplyPlan={handleApplyProposedPlan}
+                onAddTask={handleAddTask}
+                tabContext={activeTab}
               />
 
               <AccountExportModal

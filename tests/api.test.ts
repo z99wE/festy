@@ -78,4 +78,29 @@ describe("Festiya API & Tenant Boundary Integration Tests", () => {
     expect(publicData.event.name).toBe("Maya & Arjun's Destination Wedding");
     expect(publicData.role).toBe("client");
   });
+
+  it("POST /api/events/:eventId/ask invokes Festi AI and returns answers, suggestions, and context", async () => {
+    const askRes = await app.request("/api/events/evt_wedding_jaipur/ask", {
+      method: "POST",
+      headers: {
+        "x-user-id": "usr_souvik",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        question: "What is our weather backup plan for the outdoor Sangeet ceremony?",
+        context: "timeline",
+      }),
+    });
+
+    expect(askRes.status).toBe(200);
+    const body = await askRes.json();
+    expect(body.success).toBe(true);
+    expect(body.answer).toBeDefined();
+    expect(typeof body.answer).toBe("string");
+    expect(body.answer.length).toBeGreaterThan(20);
+    expect(Array.isArray(body.suggestions)).toBe(true);
+    expect(body.suggestions.length).toBeGreaterThan(0);
+    expect(body.providerUsed).toBeDefined();
+  });
 });
+

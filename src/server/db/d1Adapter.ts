@@ -335,7 +335,7 @@ export class D1DatabaseAdapter implements DatabaseAdapter {
   async createPlan(plan: Plan): Promise<Plan> {
     await this.d1
       .prepare(
-        `INSERT INTO plans (id, event_id, version, schema_version, status, summary, assumptions, open_questions, content, created_at, updated_at)
+        `INSERT INTO plans (id, event_id, version, schema_version, status, summary, assumptions_json, open_questions_json, content_json, created_at, updated_at)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
       .bind(
@@ -366,7 +366,7 @@ export class D1DatabaseAdapter implements DatabaseAdapter {
     };
     await this.d1
       .prepare(
-        `UPDATE plans SET version = ?, schema_version = ?, status = ?, summary = ?, assumptions = ?, open_questions = ?, content = ?, updated_at = ?
+        `UPDATE plans SET version = ?, schema_version = ?, status = ?, summary = ?, assumptions_json = ?, open_questions_json = ?, content_json = ?, updated_at = ?
          WHERE id = ?`
       )
       .bind(
@@ -385,6 +385,10 @@ export class D1DatabaseAdapter implements DatabaseAdapter {
   }
 
   private mapPlan(row: any): Plan {
+    const rawAssumptions = row.assumptions_json ?? row.assumptions;
+    const rawQuestions = row.open_questions_json ?? row.open_questions;
+    const rawContent = row.content_json ?? row.content;
+
     return {
       id: row.id,
       eventId: row.event_id,
@@ -392,9 +396,9 @@ export class D1DatabaseAdapter implements DatabaseAdapter {
       schemaVersion: row.schema_version || "1",
       status: row.status || "active",
       summary: row.summary,
-      assumptions: typeof row.assumptions === "string" ? JSON.parse(row.assumptions) : row.assumptions || [],
-      openQuestions: typeof row.open_questions === "string" ? JSON.parse(row.open_questions) : row.open_questions || [],
-      content: typeof row.content === "string" ? JSON.parse(row.content) : row.content,
+      assumptions: typeof rawAssumptions === "string" ? JSON.parse(rawAssumptions) : rawAssumptions || [],
+      openQuestions: typeof rawQuestions === "string" ? JSON.parse(rawQuestions) : rawQuestions || [],
+      content: typeof rawContent === "string" ? JSON.parse(rawContent) : rawContent,
       createdAt: row.created_at,
       updatedAt: row.updated_at || row.created_at,
     };
@@ -412,7 +416,7 @@ export class D1DatabaseAdapter implements DatabaseAdapter {
   async createTask(task: Task): Promise<Task> {
     await this.d1
       .prepare(
-        `INSERT INTO tasks (id, event_id, title, description, status, priority, owner_id, owner_name, due_date, due_offset_days, depends_on, linked_vendor_id, linked_budget_item_id, created_at, updated_at)
+        `INSERT INTO tasks (id, event_id, title, description, status, priority, owner_id, owner_name, due_date, due_offset_days, depends_on_json, linked_vendor_id, linked_budget_item_id, created_at, updated_at)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
       .bind(
@@ -443,7 +447,7 @@ export class D1DatabaseAdapter implements DatabaseAdapter {
     const u: Task = { ...current, ...updates, updatedAt: new Date().toISOString() };
     await this.d1
       .prepare(
-        `UPDATE tasks SET title = ?, description = ?, status = ?, priority = ?, owner_id = ?, owner_name = ?, due_date = ?, due_offset_days = ?, depends_on = ?, linked_vendor_id = ?, linked_budget_item_id = ?, updated_at = ?
+        `UPDATE tasks SET title = ?, description = ?, status = ?, priority = ?, owner_id = ?, owner_name = ?, due_date = ?, due_offset_days = ?, depends_on_json = ?, linked_vendor_id = ?, linked_budget_item_id = ?, updated_at = ?
          WHERE id = ?`
       )
       .bind(
@@ -471,6 +475,7 @@ export class D1DatabaseAdapter implements DatabaseAdapter {
   }
 
   private mapTask(r: any): Task {
+    const rawDepends = r.depends_on_json ?? r.depends_on;
     return {
       id: r.id,
       eventId: r.event_id,
@@ -482,7 +487,7 @@ export class D1DatabaseAdapter implements DatabaseAdapter {
       ownerName: r.owner_name || undefined,
       dueDate: r.due_date || undefined,
       dueOffsetDays: r.due_offset_days !== null ? r.due_offset_days : undefined,
-      dependsOn: typeof r.depends_on === "string" ? JSON.parse(r.depends_on) : r.depends_on || [],
+      dependsOn: typeof rawDepends === "string" ? JSON.parse(rawDepends) : rawDepends || [],
       linkedVendorId: r.linked_vendor_id || undefined,
       linkedBudgetItemId: r.linked_budget_item_id || undefined,
       createdAt: r.created_at,
@@ -861,7 +866,7 @@ export class D1DatabaseAdapter implements DatabaseAdapter {
   async createShare(share: Share): Promise<Share> {
     await this.d1
       .prepare(
-        `INSERT INTO shares (id, event_id, share_token, role, allowed_sections, expires_at, is_revoked, view_count, created_at)
+        `INSERT INTO shares (id, event_id, share_token, role, allowed_sections_json, expires_at, is_revoked, view_count, created_at)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
       .bind(
@@ -889,12 +894,13 @@ export class D1DatabaseAdapter implements DatabaseAdapter {
   }
 
   private mapShare(row: any): Share {
+    const rawAllowed = row.allowed_sections_json ?? row.allowed_sections;
     return {
       id: row.id,
       eventId: row.event_id,
       shareToken: row.share_token,
       role: row.role,
-      allowedSections: typeof row.allowed_sections === "string" ? JSON.parse(row.allowed_sections) : row.allowed_sections,
+      allowedSections: typeof rawAllowed === "string" ? JSON.parse(rawAllowed) : rawAllowed,
       expiresAt: row.expires_at || undefined,
       isRevoked: Boolean(row.is_revoked),
       viewCount: row.view_count,
@@ -983,7 +989,7 @@ export class D1DatabaseAdapter implements DatabaseAdapter {
   async logActivity(log: ActivityLog): Promise<void> {
     await this.d1
       .prepare(
-        `INSERT INTO activity_log (id, workspace_id, event_id, actor_id, actor_name, action, entity_type, entity_id, metadata, created_at)
+        `INSERT INTO activity_log (id, workspace_id, event_id, actor_id, actor_name, action, entity_type, entity_id, metadata_json, created_at)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
       .bind(
@@ -1009,18 +1015,21 @@ export class D1DatabaseAdapter implements DatabaseAdapter {
       ? this.d1.prepare(query).bind(workspaceId, eventId)
       : this.d1.prepare(query).bind(workspaceId);
     const res = await stmt.all<any>();
-    return (res.results || []).map((r) => ({
-      id: r.id,
-      workspaceId: r.workspace_id,
-      eventId: r.event_id || undefined,
-      actorId: r.actor_id,
-      actorName: r.actor_name,
-      action: r.action,
-      entityType: r.entity_type,
-      entityId: r.entity_id,
-      metadata: typeof r.metadata === "string" ? JSON.parse(r.metadata) : r.metadata,
-      createdAt: r.created_at,
-    }));
+    return (res.results || []).map((r) => {
+      const rawMeta = r.metadata_json ?? r.metadata;
+      return {
+        id: r.id,
+        workspaceId: r.workspace_id,
+        eventId: r.event_id || undefined,
+        actorId: r.actor_id,
+        actorName: r.actor_name,
+        action: r.action,
+        entityType: r.entity_type,
+        entityId: r.entity_id,
+        metadata: typeof rawMeta === "string" ? JSON.parse(rawMeta) : rawMeta,
+        createdAt: r.created_at,
+      };
+    });
   }
 
   async reset(): Promise<void> {

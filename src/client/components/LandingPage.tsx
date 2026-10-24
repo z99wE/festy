@@ -5,6 +5,7 @@ import { DistrictScenesFeed } from "./landing/DistrictScenesFeed.tsx";
 import { LandingComparison } from "./landing/LandingComparison.tsx";
 import { LandingWorkflow } from "./landing/LandingWorkflow.tsx";
 import { LandingCollections } from "./landing/LandingCollections.tsx";
+import { LandingAeoFaq } from "./landing/LandingAeoFaq.tsx";
 import { LandingCTA } from "./landing/LandingCTA.tsx";
 
 interface LandingPageProps {
@@ -91,6 +92,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         onExploreDemoEvent={onExploreDemoEvent}
         onSelectBudgetTemplate={handleSelectBudgetTemplate}
       />
+      <LandingAeoFaq />
       <LandingCTA
         onStartPlanning={() => window.scrollTo({ top: 120, behavior: "smooth" })}
         onGoToPricing={onGoToPricing}

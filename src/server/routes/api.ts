@@ -284,6 +284,60 @@ app.post("/api/events/:eventId/plan/generate", async (c) => {
   return c.json({ plan: newPlan, metadata: result });
 });
 
+app.post("/api/events/:eventId/ask", async (c) => {
+  const userId = c.get("userId");
+  const eventId = c.req.param("eventId");
+
+  const event = await db.getEvent(eventId);
+  if (!event) return c.json({ error: "Event not found" }, 404);
+
+  const member = await db.getWorkspaceMember(event.workspaceId, userId);
+  if (!member) {
+    return c.json({ error: "Forbidden: Access denied to this event" }, 403);
+  }
+
+  const body = await c.req.json();
+  const prompt = body.prompt || body.question;
+  const tabContext = body.tabContext || body.context || "general";
+  if (!prompt || typeof prompt !== "string") {
+    return c.json({ error: "Prompt is required" }, 400);
+  }
+
+  let latestPlan = await db.getLatestPlan(eventId);
+  if (!latestPlan) {
+    const gen = await aiGateway.generatePlan(event);
+    latestPlan = {
+      id: `pln_${Math.random().toString(36).substring(2, 9)}`,
+      eventId,
+      version: 1,
+      schemaVersion: "1" as const,
+      status: "active" as const,
+      summary: gen.plan.summary,
+      assumptions: gen.plan.assumptions,
+      openQuestions: gen.plan.openQuestions,
+      content: gen.plan,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    await db.createPlan(latestPlan);
+  }
+
+  const result = await aiGateway.askAssistant(
+    event,
+    latestPlan ? latestPlan.content : null,
+    prompt,
+    tabContext
+  );
+
+  return c.json({
+    success: true,
+    answer: result.answer,
+    suggestions: result.suggestions || [],
+    proposedPlanRevision: result.proposedPlanRevision || null,
+    providerUsed: result.providerUsed,
+  });
+});
+
 app.post("/api/events/:eventId/plan/revise", async (c) => {
   const userId = c.get("userId");
   const eventId = c.req.param("eventId");
