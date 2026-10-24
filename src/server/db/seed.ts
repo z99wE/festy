@@ -486,7 +486,7 @@ export async function seedDemoData(db: DatabaseAdapter): Promise<void> {
   await db.createShare({
     id: "shr_wedding_client",
     eventId: weddingEvent.id,
-    shareToken: "festiya-demo-jaipur-wedding-link",
+    shareToken: "festiya-demo-jaipur-wedding-link", // dummy placeholder demo link
     role: "client",
     allowedSections: ["summary", "budget", "timeline", "vendors", "ideas", "runOfShow"],
     isRevoked: false,

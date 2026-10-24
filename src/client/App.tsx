@@ -172,7 +172,7 @@ export const App: React.FC = () => {
         setActiveShare({
           id: "shr_demo",
           eventId: event.id,
-          shareToken: "festiya-demo-jaipur-wedding-link",
+          shareToken: "festiya-demo-jaipur-wedding-link", // dummy placeholder demo link
           role: "client",
           allowedSections: ["summary", "budget", "timeline", "vendors", "ideas", "runOfShow"],
           isRevoked: false,
