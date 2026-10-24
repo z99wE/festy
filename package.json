@@ -4,6 +4,9 @@
   "description": "Global AI-powered event planning and operations workspace",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
