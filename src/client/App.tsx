@@ -166,13 +166,13 @@ export const App: React.FC = () => {
       if (rRes.ok) setRisks((await rRes.json()).risks);
       if (rosRes.ok) setRunOfShow((await rosRes.json()).items);
 
-      // Check active share token
-      const shareRes = await fetch(`/api/shares/festiya-demo-jaipur-wedding-token`);
+      // Check active share link
+      const shareRes = await fetch(`/api/shares/festiya-demo-jaipur-wedding-link`);
       if (shareRes.ok) {
         setActiveShare({
           id: "shr_demo",
           eventId: event.id,
-          shareToken: "festiya-demo-jaipur-wedding-token",
+          shareToken: "festiya-demo-jaipur-wedding-link",
           role: "client",
           allowedSections: ["summary", "budget", "timeline", "vendors", "ideas", "runOfShow"],
           isRevoked: false,

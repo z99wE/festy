@@ -16,7 +16,7 @@ export async function seedDemoData(db: DatabaseAdapter): Promise<void> {
   // 1. Users
   const userSouvik = {
     id: "usr_souvik",
-    email: "souvik@festiya.app",
+    email: "souvik@example.com",
     name: "Souvik Chakraborty",
     avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80",
     locale: "en-US",
@@ -27,7 +27,7 @@ export async function seedDemoData(db: DatabaseAdapter): Promise<void> {
 
   const userElena = {
     id: "usr_elena",
-    email: "elena@festiya.app",
+    email: "elena@example.com",
     name: "Elena Rostova",
     avatarUrl: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=256&q=80",
     locale: "en-GB",
@@ -412,7 +412,7 @@ export async function seedDemoData(db: DatabaseAdapter): Promise<void> {
     name: "Jaigarh Palace & Fort Heritage Trust",
     category: "Venue",
     contactName: "Mahaveer Singh",
-    contactEmail: "events@jaigarhheritage.com",
+    contactEmail: "events@example.com",
     contactPhone: "+91 141 263 1200",
     website: "https://jaigarhheritage.com",
     notes: "Requires acoustic volume limiter after 10 PM. Backup banquet hall included in package.",
@@ -429,7 +429,7 @@ export async function seedDemoData(db: DatabaseAdapter): Promise<void> {
     name: "Marwar Culinary Arts & Hospitality",
     category: "Catering",
     contactName: "Chef Vikramaditya Rathore",
-    contactEmail: "reservations@marwarculinary.in",
+    contactEmail: "chef@example.com",
     contactPhone: "+91 98290 44122",
     notes: "Specializes in 100-year old heirloom recipes, organic ker-sangri, and live bajra rotla.",
     quoteAmount: 1200000,
@@ -486,7 +486,7 @@ export async function seedDemoData(db: DatabaseAdapter): Promise<void> {
   await db.createShare({
     id: "shr_wedding_client",
     eventId: weddingEvent.id,
-    shareToken: "festiya-demo-jaipur-wedding-token",
+    shareToken: "festiya-demo-jaipur-wedding-link",
     role: "client",
     allowedSections: ["summary", "budget", "timeline", "vendors", "ideas", "runOfShow"],
     isRevoked: false,

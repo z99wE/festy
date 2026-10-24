@@ -291,7 +291,7 @@ export const VendorsView: React.FC<VendorsViewProps> = ({
                     className="form-input"
                     value={newContactEmail}
                     onChange={(e) => setNewContactEmail(e.target.value)}
-                    placeholder="events@partner.com"
+                    placeholder="events@example.com"
                   />
                 </div>
                 <div className="form-group">
