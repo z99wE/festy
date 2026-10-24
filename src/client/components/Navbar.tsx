@@ -67,49 +67,31 @@ export const Navbar: React.FC<NavbarProps> = ({
               textAlign: "left",
             }}
           >
-            <div
-              style={{
-                width: "36px",
-                height: "36px",
-                backgroundColor: "#000000",
-                border: "2px solid #000000",
-                borderRadius: "8px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "3px 3px 0px 0px #000000",
-              }}
-            >
-              <span style={{ color: "#ffe17c", fontSize: "20px", fontWeight: 900 }}>⚡</span>
-            </div>
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span
-                  style={{
-                    fontFamily: "var(--font-heading)",
-                    fontSize: "24px",
-                    fontWeight: 800,
-                    color: "#000000",
-                    letterSpacing: "-0.03em",
-                  }}
-                >
-                  FESTIYA
-                </span>
-                <span
-                  style={{
-                    fontSize: "11px",
-                    fontWeight: 800,
-                    padding: "2px 8px",
-                    borderRadius: "4px",
-                    background: "#000000",
-                    color: "#ffe17c",
-                    border: "2px solid #000000",
-                    fontFamily: "var(--font-mono)",
-                  }}
-                >
-                  2.0
-                </span>
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <img
+                src="/favicon.png"
+                alt="Festiya Logo"
+                style={{
+                  height: "36px",
+                  width: "auto",
+                  objectFit: "contain",
+                  display: "block",
+                }}
+              />
+              <span
+                style={{
+                  fontSize: "11px",
+                  fontWeight: 800,
+                  padding: "2px 8px",
+                  borderRadius: "4px",
+                  background: "#000000",
+                  color: "#ffe17c",
+                  border: "2px solid #000000",
+                  fontFamily: "var(--font-mono)",
+                }}
+              >
+                2.0
+              </span>
             </div>
           </button>
 

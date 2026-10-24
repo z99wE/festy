@@ -10,9 +10,10 @@ import { AskFestiyaDrawer } from "./components/AskFestiyaDrawer.tsx";
 import { BillingPortalModal } from "./components/BillingPortalModal.tsx";
 import { AccountExportModal } from "./components/AccountExportModal.tsx";
 import { SharedEventView } from "./components/SharedEventView.tsx";
-import { FestiTamagotchi } from "./components/tamagotchi/FestiTamagotchi.tsx";
+import { DancingCompanionMascot } from "./components/festive/DancingCompanionMascot.tsx";
 import { AuthModal } from "./components/AuthModal.tsx";
 import { useFestiyaState } from "./hooks/useFestiyaState.ts";
+import { Event as FestiyaEvent } from "../types/index.ts";
 
 export const App: React.FC = () => {
   const {
@@ -224,41 +225,67 @@ export const App: React.FC = () => {
             eventName={generatingEventName}
           />
 
-          {activeEvent && (
-            <>
-              <ClientShareModal
-                isOpen={isShareModalOpen}
-                onClose={() => setIsShareModalOpen(false)}
-                event={activeEvent}
-                share={activeShare}
-                onCreateShare={handleCreateShare}
-                onRevokeShare={handleRevokeShare}
-                onOpenPreview={(token) => {
-                  setIsShareModalOpen(false);
-                  loadSharedEvent(token);
-                }}
-              />
+          {/* Global Event Resolution for Assistant Context */}
+          {(() => {
+            const effectiveEvent: FestiyaEvent = activeEvent || events[0] || {
+              id: "demo-genesis-festiya",
+              workspaceId: activeWorkspace?.id || "ws-festiya-default",
+              name: "Festiya Grand Celebration",
+              occasion: "Festival Launch",
+              category: "festival",
+              dateMode: "single_day",
+              timezone: "UTC",
+              locationMode: "venue",
+              locationAddress: "Festiya Pavilion",
+              guestCount: 150,
+              currency: "USD",
+              targetBudget: 25000,
+              createdBy: user?.id || "usr-genesis",
+              status: "planning",
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            };
 
-              <AskFestiyaDrawer
-                isOpen={isAskFestiyaOpen}
-                onClose={() => setIsAskFestiyaOpen(false)}
-                event={activeEvent}
-                initialPrompt={askFestiyaInitialPrompt}
-                onRequestRevision={handleRequestRevision}
-                onApplyPlan={handleApplyProposedPlan}
-                onAddTask={handleAddTask}
-                tabContext={activeTab}
-              />
+            return (
+              <>
+                <AskFestiyaDrawer
+                  isOpen={isAskFestiyaOpen}
+                  onClose={() => setIsAskFestiyaOpen(false)}
+                  event={effectiveEvent}
+                  initialPrompt={askFestiyaInitialPrompt}
+                  onRequestRevision={handleRequestRevision}
+                  onApplyPlan={handleApplyProposedPlan}
+                  onAddTask={handleAddTask}
+                  tabContext={activeTab}
+                />
 
-              <AccountExportModal
-                isOpen={isExportModalOpen}
-                onClose={() => setIsExportModalOpen(false)}
-                event={activeEvent}
-                onDownloadProposalMarkdown={handleDownloadProposalMarkdown}
-                onDownloadGdprJson={handleDownloadGdprJson}
-              />
-            </>
-          )}
+                {activeEvent && (
+                  <>
+                    <ClientShareModal
+                      isOpen={isShareModalOpen}
+                      onClose={() => setIsShareModalOpen(false)}
+                      event={activeEvent}
+                      share={activeShare}
+                      onCreateShare={handleCreateShare}
+                      onRevokeShare={handleRevokeShare}
+                      onOpenPreview={(token) => {
+                        setIsShareModalOpen(false);
+                        loadSharedEvent(token);
+                      }}
+                    />
+
+                    <AccountExportModal
+                      isOpen={isExportModalOpen}
+                      onClose={() => setIsExportModalOpen(false)}
+                      event={activeEvent}
+                      onDownloadProposalMarkdown={handleDownloadProposalMarkdown}
+                      onDownloadGdprJson={handleDownloadGdprJson}
+                    />
+                  </>
+                )}
+              </>
+            );
+          })()}
 
           {activeWorkspace && (
             <BillingPortalModal
@@ -276,8 +303,18 @@ export const App: React.FC = () => {
             onAuthSuccess={handleAuthSuccess}
           />
 
-          {/* Tamagotchi Mascot Companion */}
-          <FestiTamagotchi />
+          {/* Interactive Dancing Mascot Companion with Ingrained AI Chat & Page Evolution */}
+          <DancingCompanionMascot
+            currentView={currentView}
+            activeEvent={activeEvent}
+            tasksCount={tasks.length}
+            budgetItemsCount={budgetItems.length}
+            activeTab={activeTab}
+            onOpenChat={(prompt) => {
+              setAskFestiyaInitialPrompt(prompt || "");
+              setIsAskFestiyaOpen(true);
+            }}
+          />
         </>
       )}
     </div>

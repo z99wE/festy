@@ -755,17 +755,15 @@ h1, h2, h3, h4, .cabinet-heading {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 4px;
+  margin-top: 12px;
 }
 
 .dancing-favicon-logo {
-  width: 48px;
-  height: 48px;
+  height: 38px;
+  width: auto;
+  max-width: 150px;
   object-fit: contain;
-  border-radius: 10px;
-  border: 2px solid #000000;
-  box-shadow: 4px 4px 0px 0px #000000;
-  background-color: #ffffff;
+  display: block;
 }
 
 /* Stylized Application UI Container: Browser Mockup Dashboard */
@@ -836,5 +834,28 @@ h1, h2, h3, h4, .cabinet-heading {
   transform: translate(2px, 2px);
   box-shadow: 0px 0px 0px 0px #000000 !important;
 }
+
+@keyframes mascotPillFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+@keyframes shadowPulse {
+  0% { transform: scale(1.05); opacity: 0.35; }
+  50% { transform: scale(0.85); opacity: 0.15; }
+  100% { transform: scale(1.05); opacity: 0.35; }
+}
+
+@keyframes pulseRing {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 0.3; }
+  100% { transform: scale(0.9); opacity: 0.8; }
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 
 
