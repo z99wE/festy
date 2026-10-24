@@ -71,11 +71,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
         aria-label="Authentication dialog"
         style={{
           maxWidth: "460px",
-          background: "#141721",
-          color: "#FFFFFF",
-          border: "1px solid rgba(255, 255, 255, 0.15)",
-          borderRadius: "24px",
-          padding: "32px 28px",
+          background: "var(--surface)",
+          color: "var(--text)",
+          border: "2px solid var(--surface-border-strong)",
+          borderRadius: "4px",
+          padding: "36px 32px",
+          boxShadow: "8px 8px 0px #000000",
         }}
       >
         {/* Close Button */}
@@ -85,40 +86,43 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
           onClick={onClose}
           style={{
             position: "absolute",
-            top: "20px",
-            right: "20px",
-            color: "#94A3B8",
+            top: "16px",
+            right: "16px",
+            color: "var(--text-muted)",
             cursor: "pointer",
+            background: "transparent",
+            border: "none",
           }}
         >
           <X size={20} />
         </button>
 
         {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+        <div style={{ textAlign: "center", marginBottom: "28px" }}>
           <div
             style={{
-              width: "48px",
-              height: "48px",
-              borderRadius: "14px",
-              background: "linear-gradient(135deg, #FF4757 0%, #A855F7 100%)",
+              width: "44px",
+              height: "44px",
+              borderRadius: "4px",
+              background: "var(--neopop-mint)",
+              border: "2px solid #000000",
+              boxShadow: "3px 3px 0px #000000",
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              marginBottom: "12px",
-              boxShadow: "0 6px 16px rgba(255, 71, 87, 0.35)",
+              marginBottom: "14px",
             }}
           >
-            <Sparkles size={24} color="#FFFFFF" />
+            <Sparkles size={22} color="#000000" />
           </div>
 
-          <h2 style={{ fontSize: "24px", fontWeight: 800, letterSpacing: "-0.5px" }}>
-            {mode === "login" ? "Welcome back to Festiya" : "Create your Festiya account"}
+          <h2 style={{ fontSize: "22px", fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.02em" }}>
+            {mode === "login" ? "WORKSPACE ACCESS" : "PROVISION NEW TENANT"}
           </h2>
-          <p style={{ fontSize: "13px", color: "#94A3B8", marginTop: "4px" }}>
+          <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginTop: "6px" }}>
             {mode === "login"
-              ? "Sign in to access your isolated workspace & events."
-              : "Launch your private, multi-tenant event command center."}
+              ? "Authenticate to your isolated enterprise workspace & event pipelines."
+              : "Launch your private, isolated event operations command center."}
           </p>
         </div>
 
@@ -126,10 +130,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
         <div
           style={{
             display: "flex",
-            background: "#1C2030",
-            borderRadius: "12px",
+            background: "var(--canvas-subtle)",
+            border: "1px solid var(--surface-border)",
+            borderRadius: "4px",
             padding: "4px",
-            marginBottom: "20px",
+            marginBottom: "24px",
           }}
         >
           <button
@@ -141,13 +146,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
             }}
             style={{
               flex: 1,
-              padding: "8px",
-              borderRadius: "8px",
-              fontSize: "13px",
-              fontWeight: 700,
-              color: mode === "login" ? "#FFFFFF" : "#94A3B8",
-              background: mode === "login" ? "#FF4757" : "transparent",
-              transition: "all 0.15s ease",
+              padding: "10px",
+              borderRadius: "2px",
+              fontSize: "12px",
+              fontWeight: 800,
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+              color: mode === "login" ? "#000000" : "var(--text-muted)",
+              background: mode === "login" ? "var(--neopop-mint)" : "transparent",
+              border: mode === "login" ? "1px solid #000000" : "none",
+              boxShadow: mode === "login" ? "2px 2px 0px #000000" : "none",
+              cursor: "pointer",
             }}
           >
             Sign In
@@ -161,16 +170,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
             }}
             style={{
               flex: 1,
-              padding: "8px",
-              borderRadius: "8px",
-              fontSize: "13px",
-              fontWeight: 700,
-              color: mode === "signup" ? "#FFFFFF" : "#94A3B8",
-              background: mode === "signup" ? "#FF4757" : "transparent",
-              transition: "all 0.15s ease",
+              padding: "10px",
+              borderRadius: "2px",
+              fontSize: "12px",
+              fontWeight: 800,
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+              color: mode === "signup" ? "#000000" : "var(--text-muted)",
+              background: mode === "signup" ? "var(--neopop-mint)" : "transparent",
+              border: mode === "signup" ? "1px solid #000000" : "none",
+              boxShadow: mode === "signup" ? "2px 2px 0px #000000" : "none",
+              cursor: "pointer",
             }}
           >
-            Create Account
+            New Tenant
           </button>
         </div>
 
@@ -318,36 +331,38 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
               display: "flex",
               alignItems: "center",
               gap: "8px",
-              padding: "8px 12px",
-              borderRadius: "8px",
-              background: "rgba(46, 213, 115, 0.1)",
-              border: "1px solid rgba(46, 213, 115, 0.25)",
-              color: "#2ED573",
+              padding: "10px 14px",
+              borderRadius: "2px",
+              background: "rgba(0, 229, 153, 0.08)",
+              border: "1px solid var(--neopop-mint)",
+              color: "var(--neopop-mint)",
               fontSize: "11px",
-              fontWeight: 600,
+              fontWeight: 800,
+              textTransform: "uppercase",
+              letterSpacing: "0.04em",
             }}
           >
             <ShieldCheck size={14} />
-            <span>Cloudflare Native Auth • Strict Tenant Isolation • Zero Data Leakage</span>
+            <span>CLOUDFLARE NATIVE AUTH • ZERO CROSS-TENANT DATA LEAKAGE</span>
           </div>
 
           <button
             type="submit"
             aria-label="Submit authentication form"
             disabled={isLoading}
-            className="btn-skeuo"
+            className="btn-primary"
             style={{
-              padding: "12px",
+              padding: "14px",
               marginTop: "8px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               gap: "8px",
-              fontSize: "14px",
+              fontSize: "13px",
               opacity: isLoading ? 0.7 : 1,
             }}
           >
-            {isLoading ? "Authenticating..." : mode === "login" ? "Sign In to Workspace" : "Create Private Tenant"}
+            {isLoading ? "AUTHENTICATING..." : mode === "login" ? "SIGN IN TO WORKSPACE" : "PROVISION PRIVATE TENANT"}
           </button>
         </form>
       </section>

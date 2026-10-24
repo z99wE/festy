@@ -6,9 +6,8 @@ import {
   Users,
   Briefcase,
   Compass,
-  Calendar,
-  DollarSign,
   CheckCircle2,
+  Sparkles,
 } from "lucide-react";
 import { EventCategory } from "../../../types/index.ts";
 
@@ -50,67 +49,50 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
   onExploreDemoEvent,
 }) => {
   const categories = [
-    { key: "wedding" as const, label: "Wedding", icon: Heart, color: "var(--coral)" },
-    { key: "birthday" as const, label: "Birthday", icon: Cake, color: "#E67700" },
-    { key: "gathering" as const, label: "Gathering", icon: Users, color: "var(--berry)" },
-    { key: "work_event" as const, label: "Work Event", icon: Briefcase, color: "var(--cobalt)" },
-    { key: "custom" as const, label: "Custom Occasion", icon: Compass, color: "var(--mint)" },
+    { key: "wedding" as const, label: "Wedding", icon: Heart },
+    { key: "birthday" as const, label: "Birthday", icon: Cake },
+    { key: "gathering" as const, label: "Gathering", icon: Users },
+    { key: "work_event" as const, label: "Corporate", icon: Briefcase },
+    { key: "custom" as const, label: "Custom Production", icon: Compass },
   ];
 
   return (
     <section
       style={{
-        padding: "70px 0 60px",
-        background: "radial-gradient(ellipse at 50% 20%, #FFF2E0 0%, var(--canvas) 70%)",
-        borderBottom: "1px solid var(--surface-border)",
+        padding: "80px 0 70px",
+        background: "radial-gradient(ellipse at 50% 0%, #151A24 0%, var(--canvas) 75%)",
+        borderBottom: "2px solid var(--surface-border)",
       }}
     >
-      <div className="container" style={{ textAlign: "center", maxWidth: "960px" }}>
-        {/* Trust Tag */}
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
-            padding: "6px 16px",
-            borderRadius: "9999px",
-            background: "rgba(255, 98, 87, 0.1)",
-            color: "var(--coral)",
-            fontSize: "13px",
-            fontWeight: 700,
-            marginBottom: "20px",
-          }}
-        >
-          <span>The Event Operations Command Center</span>
-        </div>
-
+      <div className="container" style={{ textAlign: "center", maxWidth: "980px" }}>
+        {/* Direct NeoPOP Headline — NO EYEBROW PULL TAGS */}
         <h1
-          className="serif-heading"
+          className="neopop-title"
           style={{
-            fontSize: "clamp(36px, 5.5vw, 62px)",
-            lineHeight: 1.12,
-            letterSpacing: "-1px",
-            color: "var(--ink)",
+            fontSize: "clamp(36px, 5.8vw, 68px)",
+            lineHeight: 1.05,
+            color: "#FFFFFF",
             marginBottom: "20px",
+            letterSpacing: "-0.03em",
           }}
         >
-          Run unforgettable events. <br />
-          <span style={{ color: "var(--coral)" }}>Without the spreadsheet chaos.</span>
+          PRODUCTION EVENT <br />
+          <span style={{ color: "var(--neopop-mint)" }}>INFRASTRUCTURE.</span>
         </h1>
 
         <p
           style={{
-            fontSize: "clamp(17px, 2.2vw, 21px)",
+            fontSize: "clamp(16px, 2vw, 19px)",
             color: "var(--ink-secondary)",
-            maxWidth: "720px",
+            maxWidth: "760px",
             margin: "0 auto 36px",
-            lineHeight: 1.5,
+            lineHeight: 1.6,
           }}
         >
-          From initial brief to minute-by-minute cue sheets. Build accurate decimal-safe budgets, align vendor contracts, track live run-of-show cues, and share client proposals in seconds.
+          High-precision planning for producers and hosts. Synthesize decimal-safe budgets, vendor agreements, cue-by-cue run of shows, and instant contingency reasoning.
         </p>
 
-        {/* Quick Demo Shortcuts */}
+        {/* Global Access / 1-Click Live Demos — Anyone Worldwide Can Use Instantly */}
         <div
           style={{
             display: "flex",
@@ -118,54 +100,60 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             justifyContent: "center",
             gap: "12px",
             flexWrap: "wrap",
-            marginBottom: "36px",
+            marginBottom: "40px",
           }}
         >
-          <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--ink-muted)" }}>
-            Explore Live Demos:
-          </span>
           <button
-            aria-label="Explore Jaipur wedding demo"
+            aria-label="Explore Jaipur destination wedding demo"
+            type="button"
             onClick={() => onExploreDemoEvent("evt_wedding_jaipur")}
-            className="badge badge-sunshine"
-            style={{ cursor: "pointer", padding: "6px 14px", fontSize: "13px", fontWeight: 600 }}
+            className="btn btn-secondary btn-sm"
+            style={{
+              borderColor: "var(--neopop-gold)",
+              color: "var(--neopop-gold)",
+            }}
           >
-            💍 Maya & Arjun's Destination Wedding (Jaipur)
+            <span>💍 JAIPUR WEDDING DEMO (₹45,00,000)</span>
           </button>
+
           <button
-            aria-label="Explore Apex summit demo"
+            aria-label="Explore Apex summit leadership dinner demo"
+            type="button"
             onClick={() => onExploreDemoEvent("evt_apex_summit")}
-            className="badge badge-cobalt"
-            style={{ cursor: "pointer", padding: "6px 14px", fontSize: "13px", fontWeight: 600 }}
+            className="btn btn-secondary btn-sm"
+            style={{
+              borderColor: "var(--neopop-blue)",
+              color: "#8CB0FF",
+            }}
           >
-            🏢 Apex Global Leadership Dinner (New York)
+            <span>🏢 APEX SUMMIT DEMO ($125,000)</span>
           </button>
         </div>
 
-        {/* Interactive Brief Form Card */}
+        {/* NeoPOP 3D Plinth Brief Container — NO SQUISHED BOXES */}
         <div
           className="card"
           style={{
-            maxWidth: "760px",
+            maxWidth: "820px",
             margin: "0 auto",
             textAlign: "left",
-            boxShadow: "var(--shadow-md)",
-            border: "1px solid var(--surface-border)",
+            padding: "36px",
             background: "var(--surface)",
-            padding: "32px",
+            border: "2px solid var(--surface-border-strong)",
+            boxShadow: "7px 7px 0px #000000",
           }}
         >
           <form onSubmit={onSubmit}>
-            {/* Category Selector */}
-            <div style={{ marginBottom: "20px" }}>
-              <label className="form-label" style={{ marginBottom: "8px", display: "block" }}>
-                Select Event Type
+            {/* Category 3D Grid */}
+            <div style={{ marginBottom: "26px" }}>
+              <label className="form-label" style={{ marginBottom: "10px", display: "block" }}>
+                1. Select Production Type
               </label>
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
-                  gap: "8px",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+                  gap: "10px",
                 }}
               >
                 {categories.map((cat) => {
@@ -181,18 +169,21 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                         display: "flex",
                         alignItems: "center",
                         gap: "8px",
-                        padding: "10px 14px",
+                        padding: "12px 14px",
                         borderRadius: "var(--radius-md)",
-                        border: isSelected ? "2px solid var(--coral)" : "1px solid var(--surface-border)",
-                        background: isSelected ? "var(--coral-light)" : "var(--surface)",
-                        color: isSelected ? "var(--coral)" : "var(--ink)",
-                        fontWeight: isSelected ? 700 : 500,
-                        fontSize: "13px",
+                        border: isSelected ? "2px solid var(--neopop-mint)" : "1.5px solid var(--surface-border)",
+                        background: isSelected ? "var(--surface-alt)" : "#0C0E14",
+                        color: isSelected ? "var(--neopop-mint)" : "var(--ink-secondary)",
+                        fontWeight: 700,
+                        fontSize: "12.5px",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.04em",
                         cursor: "pointer",
-                        transition: "all 0.15s ease",
+                        boxShadow: isSelected ? "3px 3px 0px #000000" : "none",
+                        transition: "all 0.12s ease",
                       }}
                     >
-                      <Icon size={16} color={cat.color} />
+                      <Icon size={16} />
                       <span>{cat.label}</span>
                     </button>
                   );
@@ -201,9 +192,9 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             </div>
 
             {/* Occasion Input */}
-            <div style={{ marginBottom: "20px" }}>
-              <label className="form-label" htmlFor="occasion-input">
-                What are you celebrating?
+            <div style={{ marginBottom: "26px" }}>
+              <label className="form-label" htmlFor="occasion-input" style={{ marginBottom: "8px", display: "block" }}>
+                2. Event Scope or Name
               </label>
               <input
                 id="occasion-input"
@@ -212,36 +203,35 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                 style={{
                   fontSize: "16px",
                   fontWeight: 600,
-                  padding: "12px 16px",
-                  borderRadius: "var(--radius-md)",
+                  padding: "14px 18px",
                 }}
-                placeholder="e.g. Silver Jubilee Anniversary or Annual Global Executive Forum"
+                placeholder="e.g. Maya & Arjun 3-Day Heritage Celebration or Annual Tech Summit"
                 value={occasion}
                 onChange={(e) => setOccasion(e.target.value)}
                 required
               />
             </div>
 
-            {/* Date, Guests, Budget Grid */}
+            {/* Date, Guests, Budget Grid — Ample Breathing Room */}
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                gap: "16px",
-                marginBottom: "24px",
+                gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
+                gap: "20px",
+                marginBottom: "32px",
               }}
             >
               {/* Date */}
               <div className="form-group">
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <label htmlFor="landing-event-date" className="form-label">Event Date</label>
+                  <label htmlFor="landing-event-date" className="form-label">Schedule Date</label>
                   <button
                     aria-label="Toggle event date between decided and undecided"
                     type="button"
                     onClick={() => setDateMode(dateMode === "decided" ? "undecided" : "decided")}
-                    style={{ fontSize: "11px", color: "var(--cobalt)", fontWeight: 600 }}
+                    style={{ fontSize: "11px", color: "var(--neopop-mint)", fontWeight: 700, textTransform: "uppercase" }}
                   >
-                    {dateMode === "decided" ? "Not decided yet?" : "Set specific date"}
+                    {dateMode === "decided" ? "Undecided?" : "Specify Date"}
                   </button>
                 </div>
                 {dateMode === "decided" ? (
@@ -256,22 +246,23 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                 ) : (
                   <div
                     style={{
-                      padding: "10px 14px",
-                      background: "var(--surface-alt)",
+                      padding: "12px 14px",
+                      background: "#0C0E14",
                       borderRadius: "var(--radius-md)",
-                      fontSize: "13px",
+                      fontSize: "12px",
                       color: "var(--ink-secondary)",
-                      border: "1px dashed var(--surface-border)",
+                      border: "1.5px dashed var(--surface-border)",
+                      fontFamily: "var(--font-mono)",
                     }}
                   >
-                    🗓️ Date undecided (Relative timeline schedule)
+                    RELATIVE DAY-OFFSET TIMELINE
                   </div>
                 )}
               </div>
 
               {/* Guest Count */}
               <div className="form-group">
-                <label htmlFor="landing-guest-count" className="form-label">Approximate Guests</label>
+                <label htmlFor="landing-guest-count" className="form-label">Attendees / Scale</label>
                 <input
                   id="landing-guest-count"
                   aria-label="Approximate guest count"
@@ -281,7 +272,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                   max="10000"
                   value={guestCount ?? ""}
                   onChange={(e) => setGuestCount(e.target.value ? Number(e.target.value) : undefined)}
-                  placeholder="e.g. 75"
+                  placeholder="e.g. 150"
                 />
               </div>
 
@@ -293,18 +284,18 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                     id="landing-currency"
                     aria-label="Currency"
                     className="form-select"
-                    style={{ width: "95px", fontWeight: 700 }}
+                    style={{ width: "105px", fontWeight: 700 }}
                     value={currency}
                     onChange={(e) => setCurrency(e.target.value)}
                   >
+                    <option value="INR">INR (₹)</option>
                     <option value="USD">USD ($)</option>
                     <option value="EUR">EUR (€)</option>
                     <option value="GBP">GBP (£)</option>
-                    <option value="INR">INR (₹)</option>
                     <option value="AUD">AUD (A$)</option>
+                    <option value="SGD">SGD (S$)</option>
                     <option value="CAD">CAD (C$)</option>
                     <option value="JPY">JPY (¥)</option>
-                    <option value="SGD">SGD (S$)</option>
                   </select>
                   <input
                     id="landing-target-budget"
@@ -313,30 +304,38 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                     className="form-input"
                     value={targetBudget ?? ""}
                     onChange={(e) => setTargetBudget(e.target.value ? Number(e.target.value) : undefined)}
-                    placeholder="e.g. 10000"
+                    placeholder="e.g. 500000"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Submit CTA */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "var(--mint)", fontWeight: 600 }}>
+            {/* Submit Action Bar */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: "18px",
+                paddingTop: "16px",
+                borderTop: "1.5px solid var(--surface-border)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "var(--neopop-mint)", fontWeight: 700 }}>
                 <CheckCircle2 size={16} />
-                <span>Instant master plan, budget ledger, and timeline</span>
+                <span>Zero login barrier • Instant live workspace generation</span>
               </div>
               <button
-                aria-label="Create My Event Plan"
+                aria-label="Launch Event Workspace"
                 type="submit"
                 className="btn btn-primary"
                 style={{
-                  padding: "14px 28px",
-                  fontSize: "16px",
-                  fontWeight: 700,
-                  borderRadius: "var(--radius-md)",
+                  padding: "14px 32px",
+                  fontSize: "14px",
                 }}
               >
-                <span>Create Event Plan</span>
+                <span>LAUNCH EVENT WORKSPACE</span>
                 <ArrowRight size={18} />
               </button>
             </div>

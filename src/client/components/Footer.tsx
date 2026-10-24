@@ -1,5 +1,5 @@
 import React from "react";
-import { Sparkles, Shield, Heart } from "lucide-react";
+import { Sparkles, Shield } from "lucide-react";
 
 interface FooterProps {
   onOpenExportModal: () => void;
@@ -11,54 +11,58 @@ export const Footer: React.FC<FooterProps> = ({ onOpenExportModal, onOpenPricing
     <footer
       style={{
         background: "var(--surface)",
-        borderTop: "1px solid var(--surface-border)",
-        padding: "48px 0 32px",
+        borderTop: "2px solid var(--surface-border)",
+        padding: "60px 0 36px",
         marginTop: "auto",
         fontSize: "13px",
         color: "var(--ink-secondary)",
       }}
     >
-      <div className="container" style={{ maxWidth: "1080px" }}>
+      <div className="container" style={{ maxWidth: "1120px" }}>
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: "32px",
-            marginBottom: "36px",
+            gap: "36px",
+            marginBottom: "44px",
           }}
         >
           {/* Brand Col */}
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
               <div
                 style={{
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "8px",
-                  background: "var(--coral)",
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "var(--radius-sm)",
+                  background: "var(--neopop-mint)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#FFF",
+                  color: "#000",
+                  border: "1.5px solid #000",
+                  boxShadow: "2px 2px 0px #000",
                 }}
               >
                 <Sparkles size={16} />
               </div>
-              <span style={{ fontSize: "18px", fontWeight: 800, color: "var(--ink)" }}>Festiya</span>
+              <span className="neopop-title" style={{ fontSize: "18px", color: "#FFFFFF" }}>FESTIYA</span>
             </div>
-            <p style={{ fontSize: "13px", lineHeight: 1.5, color: "var(--ink-secondary)" }}>
-              The event command center for independent producers and premier celebrations. Precision budgets, live cue sheets, and unified vendor operations.
+            <p style={{ fontSize: "13px", lineHeight: 1.6, color: "var(--ink-secondary)" }}>
+              The high-precision event operations engine. Decimal-safe budgets, minute-by-minute cue sheets, and unified partner logistics.
             </p>
-            <div style={{ marginTop: "12px", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "var(--mint)" }}>
+            <div style={{ marginTop: "16px", display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "var(--neopop-mint)", fontWeight: 700 }}>
               <Shield size={14} />
-              <span>Cloudflare-first deployment • WCAG 2.2 AA compliant</span>
+              <span>Edge Deployment • Row-Level Multi-Tenant Isolation</span>
             </div>
           </div>
 
           {/* Product links */}
           <div>
-            <h4 style={{ fontWeight: 700, color: "var(--ink)", marginBottom: "12px" }}>Product</h4>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "8px" }}>
+            <h4 style={{ fontWeight: 800, color: "#FFFFFF", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "0.05em", fontSize: "12px" }}>
+              Platform
+            </h4>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
               <li>
                 <a href="#main-content" style={{ color: "var(--ink-secondary)" }}>
                   Event Discovery & Planning
@@ -67,60 +71,67 @@ export const Footer: React.FC<FooterProps> = ({ onOpenExportModal, onOpenPricing
               <li>
                 <button
                   aria-label="Open pricing and entitlements"
+                  type="button"
                   onClick={onOpenPricing}
-                  style={{ color: "var(--ink-secondary)", cursor: "pointer", fontSize: "13px" }}
+                  style={{ color: "var(--ink-secondary)", cursor: "pointer", fontSize: "13px", textAlign: "left", padding: 0 }}
                 >
-                  Pricing & Entitlements
+                  Tiers & Subscription Limits
                 </button>
               </li>
               <li>
-                <span style={{ color: "var(--ink-muted)" }}>Multi-Provider AI Gateway</span>
+                <span style={{ color: "var(--ink-muted)" }}>Edge Reasoning Gateway</span>
               </li>
             </ul>
           </div>
 
           {/* Planners & Agencies */}
           <div>
-            <h4 style={{ fontWeight: 700, color: "var(--ink)", marginBottom: "12px" }}>For Planners</h4>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "8px" }}>
+            <h4 style={{ fontWeight: 800, color: "#FFFFFF", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "0.05em", fontSize: "12px" }}>
+              Operations
+            </h4>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
               <li>
-                <span style={{ color: "var(--ink-secondary)" }}>Client Proposal Generator</span>
+                <span style={{ color: "var(--ink-secondary)" }}>Client Proposal Generation</span>
               </li>
               <li>
-                <span style={{ color: "var(--ink-secondary)" }}>Vendor & Partner Tracking</span>
+                <span style={{ color: "var(--ink-secondary)" }}>Vendor Agreement Pipeline</span>
               </li>
               <li>
-                <span style={{ color: "var(--ink-secondary)" }}>Scoped Share Links</span>
+                <span style={{ color: "var(--ink-secondary)" }}>Tokenized Client Portals</span>
               </li>
             </ul>
           </div>
 
-          {/* Trust & GDPR */}
+          {/* Privacy & GDPR */}
           <div>
-            <h4 style={{ fontWeight: 700, color: "var(--ink)", marginBottom: "12px" }}>Privacy & Rights</h4>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "8px" }}>
+            <h4 style={{ fontWeight: 800, color: "#FFFFFF", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "0.05em", fontSize: "12px" }}>
+              Governance
+            </h4>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
               <li>
                 <button
-                  aria-label="Open GDPR data export modal"
+                  aria-label="Download account data export"
+                  type="button"
                   onClick={onOpenExportModal}
-                  style={{ color: "var(--cobalt)", fontWeight: 600, cursor: "pointer", fontSize: "13px" }}
+                  style={{ color: "var(--ink-secondary)", cursor: "pointer", fontSize: "13px", textAlign: "left", padding: 0 }}
                 >
-                  GDPR Data Export (Article 20)
+                  Export Workspace Data (JSON)
                 </button>
               </li>
               <li>
-                <span style={{ color: "var(--ink-muted)" }}>Zero private prompt logging</span>
+                <span style={{ color: "var(--ink-secondary)" }}>WCAG 2.1 AA Standard</span>
               </li>
               <li>
-                <span style={{ color: "var(--ink-muted)" }}>Tenant-scoped security</span>
+                <span style={{ color: "var(--ink-secondary)" }}>Zero External Server Telemetry</span>
               </li>
             </ul>
           </div>
         </div>
 
+        {/* Bottom Bar */}
         <div
           style={{
-            borderTop: "1px solid var(--surface-border)",
+            borderTop: "1.5px solid var(--surface-border)",
             paddingTop: "24px",
             display: "flex",
             justifyContent: "space-between",
@@ -131,8 +142,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenExportModal, onOpenPricing
             color: "var(--ink-muted)",
           }}
         >
-          <div>© 2026 Festiya Workspace. All rights reserved.</div>
-          <div>Deployed on Cloudflare Workers + D1 Database.</div>
+          <div>
+            © {new Date().getFullYear()} Festiya Operations Inc. All rights reserved.
+          </div>
+          <div style={{ fontFamily: "var(--font-mono)", color: "var(--neopop-mint)" }}>
+            CLOUDFLARE EDGE PRODUCTION
+          </div>
         </div>
       </div>
     </footer>

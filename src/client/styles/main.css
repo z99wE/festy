@@ -1,62 +1,78 @@
-/* Festiya Design System
- * Palette:
- * Warm canvas: #FFF8EF
- * White surfaces: #FFFFFF
- * Charcoal ink: #24212B
- * Coral: #FF6257
- * Sunshine: #FFD45A
- * Cobalt: #4559D8
- * Mint: #A9E7D0
- * Berry: #8C4E78
- */
+/* ==========================================================
+   FESTIYA — CRED NeoPOP DESIGN SYSTEM
+   Inspired by CRED-CLUB/neopop-web
+   Neo-Brutalist 3D Plinths, High-Contrast Onyx & Neo-Mint Accents
+   ========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap');
 
 :root {
-  --canvas: #FFF8EF;
-  --surface: #FFFFFF;
-  --surface-alt: #F8F1E7;
-  --surface-border: #EADBCE;
-  --ink: #24212B;
-  --ink-secondary: #575263;
-  --ink-muted: #837E91;
+  /* Canvas & Obsidian Surfaces */
+  --canvas: #0A0B0E;
+  --surface: #12151D;
+  --surface-alt: #181C26;
+  --surface-border: #242A38;
+  --surface-border-strong: #363E52;
 
-  --coral: #FF6257;
-  --coral-light: #FFEAE8;
-  --coral-hover: #E84D42;
+  /* Typography Inks */
+  --ink: #FFFFFF;
+  --ink-secondary: #9EA8B6;
+  --ink-muted: #64748B;
 
-  --sunshine: #FFD45A;
-  --sunshine-light: #FFF8E0;
+  /* NeoPOP Signature High-Voltage Accents */
+  --neopop-mint: #00E599;      /* CRED Signature Mint / Emerald */
+  --neopop-mint-hover: #05FFAB;
+  --neopop-gold: #FFD026;      /* Neo Cyber Gold */
+  --neopop-gold-hover: #FFE066;
+  --neopop-crimson: #FF3366;   /* Neo Neon Crimson */
+  --neopop-blue: #2D68FF;      /* Neo Electric Azure */
+  --neopop-black: #000000;
+  --neopop-white: #FFFFFF;
 
-  --cobalt: #4559D8;
-  --cobalt-light: #EEF1FD;
-  --cobalt-hover: #3747B8;
+  /* Mapped Brand Colors to NeoPOP Palette */
+  --coral: var(--neopop-mint);
+  --coral-light: rgba(0, 229, 153, 0.12);
+  --coral-hover: var(--neopop-mint-hover);
 
-  --mint: #2E9E78;
-  --mint-bg: #E7F9F2;
-  --mint-border: #A9E7D0;
+  --sunshine: var(--neopop-gold);
+  --sunshine-light: rgba(255, 208, 38, 0.12);
 
-  --berry: #8C4E78;
-  --berry-light: #F7EEF4;
+  --cobalt: var(--neopop-blue);
+  --cobalt-light: rgba(45, 104, 255, 0.15);
+  --cobalt-hover: #457BFF;
 
-  --warning-bg: #FFF5EA;
-  --warning-ink: #A35200;
-  --warning-border: #FFD8A8;
+  --mint: var(--neopop-mint);
+  --mint-bg: rgba(0, 229, 153, 0.12);
+  --mint-border: var(--neopop-mint);
 
-  --danger-bg: #FFEAEA;
-  --danger-ink: #C92A2A;
+  --berry: var(--neopop-crimson);
+  --berry-light: rgba(255, 51, 102, 0.15);
 
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --radius-full: 9999px;
+  --warning-bg: rgba(255, 208, 38, 0.1);
+  --warning-ink: #FFD026;
+  --warning-border: #FFD026;
 
-  --shadow-sm: 0 1px 3px rgba(36, 33, 43, 0.05);
-  --shadow-md: 0 4px 14px rgba(36, 33, 43, 0.07);
-  --shadow-lg: 0 10px 28px rgba(36, 33, 43, 0.1);
+  --danger-bg: rgba(255, 51, 102, 0.12);
+  --danger-ink: #FF3366;
+  --danger-border: #FF3366;
 
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-serif: 'Playfair Display', Georgia, serif;
+  /* NeoPOP Sharp Geometry */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --radius-full: 4px;
+
+  /* NeoPOP Hard 3D Plinth Extrusions */
+  --shadow-sm: 2px 2px 0px #000000;
+  --shadow-md: 4px 4px 0px #000000;
+  --shadow-lg: 7px 7px 0px #000000;
+  --shadow-mint: 4px 4px 0px var(--neopop-mint);
+  --shadow-gold: 4px 4px 0px var(--neopop-gold);
+
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Space Grotesk', var(--font-sans);
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-serif: var(--font-heading);
 }
 
 * {
@@ -71,29 +87,31 @@ html, body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
+  line-height: 1.6;
   min-height: 100vh;
 }
 
 /* Accessibility: Visible Focus Ring & Skip Link */
 :focus-visible {
-  outline: 2px solid var(--cobalt);
+  outline: 2px solid var(--neopop-mint);
   outline-offset: 2px;
 }
 
 .skip-link {
   position: absolute;
-  top: -40px;
+  top: -50px;
   left: 20px;
-  background: var(--ink);
-  color: #fff;
-  padding: 8px 16px;
+  background: var(--neopop-mint);
+  color: #000000;
+  padding: 10px 18px;
   z-index: 99999;
-  border-radius: var(--radius-sm);
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px #000000;
   transition: top 0.2s;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 800;
+  font-size: 13px;
+  text-transform: uppercase;
 }
 .skip-link:focus {
   top: 10px;
@@ -119,185 +137,276 @@ a {
 
 /* Typography styles */
 .serif-heading {
-  font-family: var(--font-serif);
+  font-family: var(--font-heading);
   font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
-/* Base Buttons */
+.neopop-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+/* ==========================================================
+   NeoPOP 3D Plinth Buttons
+   ========================================================== */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 10px 20px;
+  gap: 10px;
+  padding: 12px 22px;
   border-radius: var(--radius-md);
-  font-size: 14px;
-  font-weight: 600;
-  transition: all 0.18s ease;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease;
   min-height: 44px; /* Touch target accessibility */
+  user-select: none;
 }
 
+/* Primary: CRED Emerald Button with 3D black plinth */
 .btn-primary {
-  background-color: var(--coral);
-  color: #FFFFFF;
+  background-color: var(--neopop-mint);
+  color: #000000;
+  border: 1.5px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
 }
 .btn-primary:hover {
-  background-color: var(--coral-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 98, 87, 0.3);
+  background-color: var(--neopop-mint-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #000000;
+}
+.btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #000000;
 }
 
+/* Secondary: Deep Obsidian Button with crisp border */
 .btn-secondary {
-  background-color: var(--surface);
-  color: var(--ink);
-  border: 1px solid var(--surface-border);
+  background-color: var(--surface-alt);
+  color: #FFFFFF;
+  border: 1.5px solid var(--surface-border-strong);
+  box-shadow: 3px 3px 0px #000000;
 }
 .btn-secondary:hover {
-  background-color: var(--surface-alt);
-  border-color: var(--ink-muted);
+  background-color: #222736;
+  border-color: var(--neopop-mint);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px #000000;
+}
+.btn-secondary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #000000;
 }
 
+/* Gold: Neo Cyber Gold Button */
+.btn-gold {
+  background-color: var(--neopop-gold);
+  color: #000000;
+  border: 1.5px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+}
+.btn-gold:hover {
+  background-color: var(--neopop-gold-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #000000;
+}
+.btn-gold:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #000000;
+}
+
+/* Cobalt / Blue Button */
 .btn-cobalt {
-  background-color: var(--cobalt);
+  background-color: var(--neopop-blue);
   color: #FFFFFF;
+  border: 1.5px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
 }
 .btn-cobalt:hover {
-  background-color: var(--cobalt-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(69, 89, 216, 0.25);
+  background-color: #457BFF;
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #000000;
+}
+.btn-cobalt:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #000000;
 }
 
 .btn-outline {
-  border: 1.5px solid var(--ink);
-  color: var(--ink);
+  border: 1.5px solid var(--surface-border-strong);
+  color: #FFFFFF;
   background: transparent;
+  box-shadow: 3px 3px 0px #000000;
 }
 .btn-outline:hover {
-  background: var(--ink);
-  color: #FFFFFF;
+  border-color: var(--neopop-mint);
+  color: var(--neopop-mint);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px #000000;
+}
+.btn-outline:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #000000;
 }
 
 .btn-sm {
-  padding: 6px 14px;
-  font-size: 13px;
-  min-height: 36px;
+  padding: 8px 14px;
+  font-size: 12px;
+  min-height: 38px;
   border-radius: var(--radius-sm);
 }
 
-/* Badges & Chips */
+/* ==========================================================
+   NeoPOP Badges & Tags (No Rounded Pills, Sharp Rectangular Tags)
+   ========================================================== */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   padding: 4px 10px;
-  border-radius: var(--radius-full);
-  font-size: 12px;
-  font-weight: 600;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   line-height: 1;
+  border: 1px solid currentColor;
 }
 
 .badge-coral {
-  background: var(--coral-light);
-  color: var(--coral-hover);
+  background: rgba(0, 229, 153, 0.12);
+  color: var(--neopop-mint);
+  border-color: var(--neopop-mint);
 }
 
 .badge-sunshine {
-  background: var(--sunshine-light);
-  color: #8C6A00;
+  background: rgba(255, 208, 38, 0.12);
+  color: var(--neopop-gold);
+  border-color: var(--neopop-gold);
 }
 
 .badge-mint {
-  background: var(--mint-bg);
-  color: var(--mint);
-  border: 1px solid var(--mint-border);
+  background: rgba(0, 229, 153, 0.12);
+  color: var(--neopop-mint);
+  border-color: var(--neopop-mint);
 }
 
 .badge-cobalt {
-  background: var(--cobalt-light);
-  color: var(--cobalt);
+  background: rgba(45, 104, 255, 0.15);
+  color: #6C92FF;
+  border-color: #6C92FF;
 }
 
 .badge-berry {
-  background: var(--berry-light);
-  color: var(--berry);
+  background: rgba(255, 51, 102, 0.15);
+  color: var(--neopop-crimson);
+  border-color: var(--neopop-crimson);
 }
 
 .badge-neutral {
   background: var(--surface-alt);
   color: var(--ink-secondary);
+  border-color: var(--surface-border-strong);
 }
 
-/* Card Surface */
+/* ==========================================================
+   NeoPOP Cards (Generous Padding — NO SQUISHED BOXES)
+   ========================================================== */
 .card {
   background-color: var(--surface);
-  border: 1px solid var(--surface-border);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  border: 2px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  padding: 32px; /* Generous breathing room */
+  box-shadow: 5px 5px 0px #000000;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 .card:hover {
-  box-shadow: var(--shadow-md);
+  border-color: var(--surface-border-strong);
+  box-shadow: 7px 7px 0px #000000;
 }
 
-/* Form inputs */
+.card-mint-edge {
+  border-color: var(--neopop-mint);
+  box-shadow: 6px 6px 0px #000000;
+}
+
+.card-gold-edge {
+  border-color: var(--neopop-gold);
+  box-shadow: 6px 6px 0px #000000;
+}
+
+/* ==========================================================
+   NeoPOP Form Inputs & Controls
+   ========================================================== */
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .form-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-secondary);
 }
 
 .form-input, .form-select, .form-textarea {
   width: 100%;
-  padding: 10px 14px;
+  padding: 12px 16px;
   border-radius: var(--radius-md);
-  border: 1px solid var(--surface-border);
-  background: var(--surface);
-  color: var(--ink);
+  border: 1.5px solid var(--surface-border);
+  background: #0B0D13;
+  color: #FFFFFF;
+  font-size: 14px;
+  box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.5);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 .form-input:focus, .form-select:focus, .form-textarea:focus {
-  border-color: var(--cobalt);
+  border-color: var(--neopop-mint);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(69, 89, 216, 0.15);
+  box-shadow: 0 0 0 2px rgba(0, 229, 153, 0.25);
 }
 
-/* Modals & Overlays */
+/* ==========================================================
+   Modals & Overlays (NeoPOP 3D Dialogs)
+   ========================================================== */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(36, 33, 43, 0.55);
-  backdrop-filter: blur(4px);
+  background-color: rgba(6, 7, 10, 0.85);
+  backdrop-filter: blur(8px);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 24px;
 }
 
 .modal-content {
   background: var(--surface);
-  border-radius: var(--radius-lg);
+  border: 2px solid var(--surface-border-strong);
+  border-radius: var(--radius-md);
   max-width: 680px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: var(--shadow-lg);
-  padding: 32px;
+  box-shadow: 10px 10px 0px #000000;
+  padding: 36px; /* Generous breathing room */
   position: relative;
-  animation: modalEnter 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: modalEnter 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes modalEnter {
   from {
     opacity: 0;
-    transform: scale(0.96) translateY(8px);
+    transform: scale(0.97) translateY(8px);
   }
   to {
     opacity: 1;
@@ -305,12 +414,14 @@ a {
   }
 }
 
-/* Drawer */
+/* ==========================================================
+   Drawers (NeoPOP Side Panel)
+   ========================================================== */
 .drawer-backdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(36, 33, 43, 0.45);
-  backdrop-filter: blur(2px);
+  background-color: rgba(6, 7, 10, 0.85);
+  backdrop-filter: blur(4px);
   z-index: 1000;
   display: flex;
   justify-content: flex-end;
@@ -318,13 +429,14 @@ a {
 
 .drawer-panel {
   background: var(--surface);
+  border-left: 2px solid var(--surface-border-strong);
   width: 100%;
-  max-width: 480px;
+  max-width: 520px;
   height: 100%;
-  box-shadow: -4px 0 24px rgba(36, 33, 43, 0.15);
+  box-shadow: -10px 0 0px #000000;
   display: flex;
   flex-direction: column;
-  animation: drawerSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: drawerSlide 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes drawerSlide {
@@ -336,7 +448,7 @@ a {
 .container {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
 /* Animations */
@@ -350,238 +462,114 @@ a {
 }
 
 /* ==========================================================
-   Chromium Style System
+   Chromium Style System (NeoPOP Dark Variant)
    ========================================================== */
 .chromium-tab-bar {
   display: flex;
   align-items: center;
-  background: #1E1F26;
-  border-bottom: 1px solid #2C2D38;
-  padding: 6px 12px 0;
-  gap: 6px;
+  background: #0E1017;
+  border-bottom: 2px solid #1D222E;
+  padding: 8px 16px 0;
+  gap: 8px;
   overflow-x: auto;
 }
 
 .chromium-dot {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px; /* NeoPOP Square Dots */
   display: inline-block;
 }
-.chromium-dot-red { background: #FF5F56; border: 1px solid #E0443E; }
-.chromium-dot-yellow { background: #FFBD2E; border: 1px solid #DEA123; }
-.chromium-dot-green { background: #27C93F; border: 1px solid #1AAB29; }
+.chromium-dot-red { background: #FF3366; }
+.chromium-dot-yellow { background: #FFD026; }
+.chromium-dot-green { background: #00E599; }
 
 .chromium-tab {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 7px 16px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #9AA0A6;
+  padding: 8px 18px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #7E8B9B;
   background: transparent;
   transition: all 0.15s ease;
   cursor: pointer;
-  border: none;
+  border: 1px solid transparent;
+  border-bottom: none;
 }
 .chromium-tab:hover {
-  background: #282A35;
-  color: #E2E2EB;
+  background: #171A24;
+  color: #FFFFFF;
 }
 .chromium-tab.active {
-  background: #111319;
-  color: #FFFFFF;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.4);
+  background: var(--surface);
+  color: var(--neopop-mint);
+  border-color: #242A38;
+  border-top: 2px solid var(--neopop-mint);
 }
 
 .chromium-omnibar {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #181A22;
-  border: 1px solid #2C2F3D;
-  border-radius: 9999px;
+  background: #0B0D13;
+  border: 1.5px solid #242A38;
+  border-radius: 4px;
   padding: 6px 14px;
-  font-size: 12.5px;
-  color: #E2E2EB;
-  transition: all 0.2s ease;
-}
-.chromium-omnibar:focus-within {
-  border-color: #FF4757;
-  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.25);
-  background: #1E212B;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: #00E599;
 }
 
 /* ==========================================================
-   Tamagotchi Pet Console (Festi Mascot)
-   ========================================================== */
-.tamagotchi-case {
-  background: linear-gradient(145deg, #FF6B81 0%, #FF4757 60%, #D63031 100%);
-  border: 3px solid #FFFFFF;
-  border-radius: 46px 46px 54px 54px;
-  box-shadow: 
-    0 12px 28px rgba(255, 71, 87, 0.4),
-    inset 0 4px 6px rgba(255, 255, 255, 0.5),
-    inset 0 -6px 8px rgba(0, 0, 0, 0.25);
-  position: relative;
-  overflow: hidden;
-}
-
-.tamagotchi-screen {
-  background: #C4DDB4;
-  border: 3px solid #2D3436;
-  border-radius: 14px;
-  box-shadow: 
-    inset 0 3px 6px rgba(0, 0, 0, 0.4),
-    0 1px 0 rgba(255, 255, 255, 0.4);
-  color: #1A2518;
-  font-family: 'Courier New', Courier, monospace;
-  position: relative;
-}
-.tamagotchi-screen::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    rgba(255, 255, 255, 0.15) 0%,
-    transparent 50%,
-    rgba(0, 0, 0, 0.05) 100%
-  );
-  pointer-events: none;
-}
-
-.tamagotchi-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #FFEAA7 0%, #FDCB6E 70%, #E17055 100%);
-  border: 1.5px solid #2D3436;
-  box-shadow: 0 3px 0 #2D3436, 0 4px 6px rgba(0,0,0,0.3);
-  cursor: pointer;
-  transition: all 0.08s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 800;
-  color: #2D3436;
-}
-.tamagotchi-btn:active {
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 #2D3436, 0 2px 3px rgba(0,0,0,0.3);
-}
-
-/* ==========================================================
-   Skeuomorphic District Tickets & Scenes (Swiggy/Zomato style)
+   District & Scene Cards (NeoPOP 3D Architecture)
    ========================================================== */
 .district-scene-card {
-  background: #141721;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+  background: var(--surface);
+  border: 2px solid var(--surface-border);
+  border-radius: 4px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  box-shadow: 6px 6px 0px #000000;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
 .district-scene-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 36px rgba(255, 71, 87, 0.2), 0 0 0 1px rgba(255, 71, 87, 0.4);
+  border-color: var(--neopop-mint);
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px #000000;
 }
 
-/* Tactile Skeuomorphic Ticket Notch */
-.skeuo-ticket-stub {
-  position: relative;
-  background: #181C28;
-  border-top: 2px dashed rgba(255, 255, 255, 0.15);
-}
-.skeuo-ticket-stub::before,
-.skeuo-ticket-stub::after {
-  content: "";
-  position: absolute;
-  top: -11px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--canvas, #0C0E14);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
-  z-index: 2;
-}
-.skeuo-ticket-stub::before { left: -11px; }
-.skeuo-ticket-stub::after { right: -11px; }
-
-/* Holographic Shimmer Foil */
-.holo-shimmer {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 71, 87, 0.3) 25%,
-    rgba(168, 85, 247, 0.35) 50%,
-    rgba(46, 213, 115, 0.3) 75%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  background-size: 300% 300%;
-  animation: holoAnimation 5s ease infinite;
-}
-
-@keyframes holoAnimation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Skeuomorphic 3D Push Button */
-.btn-skeuo {
-  background: linear-gradient(180deg, #FF6B81 0%, #FF4757 100%);
-  color: #FFFFFF;
-  border: none;
-  border-radius: 14px;
-  font-weight: 700;
-  box-shadow: 
-    0 4px 0 #C0392B,
-    0 6px 14px rgba(255, 71, 87, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  cursor: pointer;
-  transition: all 0.08s ease;
-}
-.btn-skeuo:hover {
-  filter: brightness(1.05);
-}
-.btn-skeuo:active {
-  transform: translateY(3px);
-  box-shadow: 
-    0 1px 0 #C0392B,
-    0 2px 6px rgba(255, 71, 87, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-/* Tactile Filter Chips */
 .district-pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  border-radius: 9999px;
-  font-size: 13px;
-  font-weight: 700;
-  background: #181C28;
-  color: #94A3B8;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--surface-alt);
+  color: var(--ink-secondary);
+  border: 1.5px solid var(--surface-border);
+  box-shadow: 3px 3px 0px #000000;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.1s ease;
 }
 .district-pill:hover {
   color: #FFFFFF;
-  border-color: rgba(255, 255, 255, 0.25);
-  transform: translateY(-1px);
+  border-color: var(--neopop-mint);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px #000000;
 }
 .district-pill.active {
-  background: linear-gradient(135deg, #FF4757 0%, #A855F7 100%);
-  color: #FFFFFF;
-  border-color: transparent;
-  box-shadow: 0 4px 14px rgba(255, 71, 87, 0.4);
+  background: var(--neopop-mint);
+  color: #000000;
+  border-color: #000000;
+  box-shadow: 4px 4px 0px #000000;
 }
-

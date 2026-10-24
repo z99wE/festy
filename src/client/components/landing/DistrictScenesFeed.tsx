@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Sparkles, MapPin, Calendar, Users, Flame, Star, Ticket } from "lucide-react";
+import { MapPin, Calendar, Users, Star, Ticket } from "lucide-react";
 
 interface DistrictScene {
   id: string;
@@ -25,9 +25,9 @@ const DISTRICT_SCENES: DistrictScene[] = [
     vibeScore: 99,
     priceEstimate: "$45 - $80 / guest",
     guestCount: "240 guests",
-    dateStr: "Next Saturday • 10 PM",
+    dateStr: "Saturday • 10 PM",
     imageUrl: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=700&q=80",
-    festiBadge: "TAMAGOTCHI HYPED ⚡",
+    festiBadge: "SYNTH RAVE",
   },
   {
     id: "scene_sunset_rooftop",
@@ -38,9 +38,9 @@ const DISTRICT_SCENES: DistrictScene[] = [
     vibeScore: 96,
     priceEstimate: "$65 - $110 / guest",
     guestCount: "85 guests",
-    dateStr: "This Friday • 6 PM",
+    dateStr: "Friday • 6 PM",
     imageUrl: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=700&q=80",
-    festiBadge: "GOLDEN HOUR 🍸",
+    festiBadge: "GOLDEN HOUR",
   },
   {
     id: "scene_indie_live",
@@ -51,9 +51,9 @@ const DISTRICT_SCENES: DistrictScene[] = [
     vibeScore: 94,
     priceEstimate: "$35 - $60 / guest",
     guestCount: "180 guests",
-    dateStr: "Sunday Evening • 7 PM",
+    dateStr: "Sunday • 7 PM",
     imageUrl: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=700&q=80",
-    festiBadge: "CHILL GUITAR 🎸",
+    festiBadge: "LIVE GUITAR",
   },
   {
     id: "scene_furry_social",
@@ -64,9 +64,9 @@ const DISTRICT_SCENES: DistrictScene[] = [
     vibeScore: 98,
     priceEstimate: "$20 - $40 / guest",
     guestCount: "120 pets & humans",
-    dateStr: "Saturday Morning • 11 AM",
+    dateStr: "Saturday • 11 AM",
     imageUrl: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=700&q=80",
-    festiBadge: "CUTE FURRY VIBE 🐾",
+    festiBadge: "PET CARNIVAL",
   },
   {
     id: "scene_matcha_brunch",
@@ -77,9 +77,9 @@ const DISTRICT_SCENES: DistrictScene[] = [
     vibeScore: 95,
     priceEstimate: "$50 - $90 / guest",
     guestCount: "60 guests",
-    dateStr: "Sunday Morning • 11:30 AM",
+    dateStr: "Sunday • 11:30 AM",
     imageUrl: "https://images.unsplash.com/photo-1525268771113-32d9e9021a97?auto=format&fit=crop&w=700&q=80",
-    festiBadge: "GEN Z FOODIE 🥐",
+    festiBadge: "VINYL BRUNCH",
   },
 ];
 
@@ -98,82 +98,50 @@ export const DistrictScenesFeed: React.FC<DistrictScenesFeedProps> = ({ onSelect
       : DISTRICT_SCENES.filter((s) => s.category === selectedCategory);
 
   const categories = [
-    { key: "all" as const, label: "🔥 All District Scenes" },
-    { key: "raves" as const, label: "⚡ Neon Raves" },
-    { key: "rooftop" as const, label: "🍸 Sunset Soirées" },
-    { key: "indie" as const, label: "🎸 Indie Band Nights" },
-    { key: "furry" as const, label: "🐾 Furry Pet Socials" },
-    { key: "brunch" as const, label: "🥐 Aesthetic Brunches" },
+    { key: "all" as const, label: "ALL SCENES" },
+    { key: "raves" as const, label: "NEON RAVES" },
+    { key: "rooftop" as const, label: "SUNSET SOIRÉES" },
+    { key: "indie" as const, label: "LIVE GIGS" },
+    { key: "furry" as const, label: "PET CARNIVALS" },
+    { key: "brunch" as const, label: "VINYL BRUNCH" },
   ];
 
   return (
     <section
       style={{
-        padding: "70px 0 80px",
-        background: "linear-gradient(180deg, var(--canvas) 0%, #11141E 15%, #0B0D13 100%)",
+        padding: "90px 0",
+        background: "var(--canvas)",
+        borderBottom: "2px solid var(--surface-border)",
         color: "#FFFFFF",
-        position: "relative",
       }}
     >
       <div className="container">
-        {/* District Header */}
-        <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto 36px" }}>
-          <div
+        {/* District Header — NO EYEBROW PULL TAGS */}
+        <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto 48px" }}>
+          <h2
+            className="neopop-title"
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "6px 16px",
-              borderRadius: "9999px",
-              background: "rgba(255, 71, 87, 0.15)",
-              border: "1px solid rgba(255, 71, 87, 0.4)",
-              color: "#FF4757",
-              fontSize: "12px",
-              fontWeight: 800,
-              textTransform: "uppercase",
-              letterSpacing: "0.5px",
+              fontSize: "clamp(28px, 4vw, 44px)",
+              color: "#FFFFFF",
               marginBottom: "16px",
             }}
           >
-            <Flame size={14} />
-            <span>District Scenes & Live Gigs (Swiggy Scenes Style)</span>
-          </div>
-
-          <h2
-            style={{
-              fontSize: "clamp(28px, 4vw, 44px)",
-              fontWeight: 800,
-              letterSpacing: "-1px",
-              lineHeight: 1.2,
-              marginBottom: "14px",
-            }}
-          >
-            Discover Electric Scenes. <br />
-            <span
-              style={{
-                background: "linear-gradient(90deg, #FF4757 0%, #FFC043 50%, #A855F7 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              Or plan your own legendary gathering in seconds.
-            </span>
+            CURATED DISTRICT PRODUCTIONS
           </h2>
 
-          <p style={{ fontSize: "16px", color: "#94A3B8", lineHeight: 1.6 }}>
-            Tap any scene to tear off your skeuomorphic event blueprint, estimate your budget with zero
-            surprise fees, and summon your Tamagotchi party assistant!
+          <p style={{ fontSize: "16px", color: "var(--ink-secondary)", lineHeight: 1.6 }}>
+            Select any production blueprint to load its real vendor budget matrix, timetable, and operational cues.
           </p>
         </div>
 
-        {/* Tactile Category Filter Strip */}
+        {/* NeoPOP 3D Category Filter Strip */}
         <div
           style={{
             display: "flex",
             gap: "10px",
             overflowX: "auto",
             paddingBottom: "16px",
-            marginBottom: "32px",
+            marginBottom: "36px",
             justifyContent: "center",
             flexWrap: "wrap",
           }}
@@ -181,7 +149,8 @@ export const DistrictScenesFeed: React.FC<DistrictScenesFeedProps> = ({ onSelect
           {categories.map((cat) => (
             <button
               key={cat.key}
-              aria-label={cat.label}
+              aria-label={`Filter by ${cat.label}`}
+              type="button"
               onClick={() => setSelectedCategory(cat.key)}
               className={`district-pill ${selectedCategory === cat.key ? "active" : ""}`}
             >
@@ -190,18 +159,29 @@ export const DistrictScenesFeed: React.FC<DistrictScenesFeedProps> = ({ onSelect
           ))}
         </div>
 
-        {/* Skeuomorphic Ticket Grid */}
+        {/* NeoPOP 3D Card Grid */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-            gap: "24px",
+            gridTemplateColumns: "repeat(auto-fit, minmax(330px, 1fr))",
+            gap: "28px",
           }}
         >
           {filteredScenes.map((scene) => (
-            <article key={scene.id} className="district-scene-card">
+            <article
+              key={scene.id}
+              className="card"
+              style={{
+                padding: "0",
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+                border: "2px solid var(--surface-border-strong)",
+                boxShadow: "6px 6px 0px #000000",
+              }}
+            >
               {/* Event Image Banner with Overlay */}
-              <div style={{ height: "200px", position: "relative", overflow: "hidden" }}>
+              <div style={{ height: "210px", position: "relative", overflow: "hidden" }}>
                 <img
                   src={scene.imageUrl}
                   alt={scene.title}
@@ -209,7 +189,7 @@ export const DistrictScenesFeed: React.FC<DistrictScenesFeedProps> = ({ onSelect
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
-                    filter: "brightness(0.85)",
+                    filter: "brightness(0.8)",
                   }}
                 />
                 <div
@@ -217,7 +197,7 @@ export const DistrictScenesFeed: React.FC<DistrictScenesFeedProps> = ({ onSelect
                     position: "absolute",
                     inset: 0,
                     background:
-                      "linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(20,23,33,0.95) 100%)",
+                      "linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(18,21,29,0.95) 100%)",
                   }}
                 />
 
@@ -234,36 +214,28 @@ export const DistrictScenesFeed: React.FC<DistrictScenesFeedProps> = ({ onSelect
                   }}
                 >
                   <span
-                    className="holo-shimmer"
-                    style={{
-                      padding: "4px 10px",
-                      borderRadius: "9999px",
-                      fontSize: "11px",
-                      fontWeight: 800,
-                      color: "#FFFFFF",
-                      border: "1px solid rgba(255,255,255,0.4)",
-                      textShadow: "0 1px 2px rgba(0,0,0,0.6)",
-                    }}
+                    className="badge badge-mint"
+                    style={{ fontSize: "10.5px" }}
                   >
                     {scene.festiBadge}
                   </span>
 
                   <span
                     style={{
-                      background: "rgba(0,0,0,0.7)",
-                      backdropFilter: "blur(6px)",
-                      padding: "4px 10px",
-                      borderRadius: "9999px",
+                      background: "#000000",
+                      padding: "4px 8px",
+                      borderRadius: "var(--radius-sm)",
                       fontSize: "11px",
-                      fontWeight: 700,
-                      color: "#2ED573",
+                      fontWeight: 800,
+                      color: "var(--neopop-mint)",
                       display: "flex",
                       alignItems: "center",
                       gap: "4px",
+                      border: "1px solid var(--neopop-mint)",
                     }}
                   >
-                    <Star size={12} fill="#2ED573" />
-                    <span>{scene.vibeScore}% Vibe Match</span>
+                    <Star size={12} fill="var(--neopop-mint)" />
+                    <span>{scene.vibeScore}% VIBE MATCH</span>
                   </span>
                 </div>
 
@@ -271,9 +243,9 @@ export const DistrictScenesFeed: React.FC<DistrictScenesFeedProps> = ({ onSelect
                 <div
                   style={{
                     position: "absolute",
-                    bottom: "14px",
-                    left: "16px",
-                    right: "16px",
+                    bottom: "16px",
+                    left: "18px",
+                    right: "18px",
                   }}
                 >
                   <h3
@@ -281,7 +253,7 @@ export const DistrictScenesFeed: React.FC<DistrictScenesFeedProps> = ({ onSelect
                       fontSize: "18px",
                       fontWeight: 800,
                       color: "#FFFFFF",
-                      letterSpacing: "-0.5px",
+                      letterSpacing: "-0.01em",
                     }}
                   >
                     {scene.title}
@@ -290,18 +262,18 @@ export const DistrictScenesFeed: React.FC<DistrictScenesFeedProps> = ({ onSelect
               </div>
 
               {/* Middle Details */}
-              <div style={{ padding: "16px 20px" }}>
+              <div style={{ padding: "20px 24px", flexGrow: 1 }}>
                 <div
                   style={{
                     display: "flex",
                     alignItems: "center",
                     gap: "6px",
-                    color: "#94A3B8",
-                    fontSize: "12.5px",
-                    marginBottom: "8px",
+                    color: "var(--ink-secondary)",
+                    fontSize: "13px",
+                    marginBottom: "10px",
                   }}
                 >
-                  <MapPin size={14} color="#FF4757" />
+                  <MapPin size={14} color="var(--neopop-mint)" />
                   <span>{scene.district}</span>
                 </div>
 
@@ -310,82 +282,63 @@ export const DistrictScenesFeed: React.FC<DistrictScenesFeedProps> = ({ onSelect
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    fontSize: "12.5px",
-                    color: "#CBD5E1",
-                    marginBottom: "4px",
+                    fontSize: "13px",
+                    color: "#FFFFFF",
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                    <Calendar size={13} color="#FFC043" />
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                    <Calendar size={13} color="var(--neopop-gold)" />
                     <span>{scene.dateStr}</span>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                    <Users size={13} color="#A855F7" />
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                    <Users size={13} color="var(--neopop-blue)" />
                     <span>{scene.guestCount}</span>
                   </div>
                 </div>
               </div>
 
-              {/* Skeuomorphic Perforated Ticket Stub Bottom */}
-              <div className="skeuo-ticket-stub" style={{ padding: "18px 20px" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "14px",
-                  }}
-                >
-                  <div>
-                    <div
-                      style={{
-                        fontSize: "10px",
-                        fontWeight: 700,
-                        color: "#94A3B8",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      Budget Target
-                    </div>
-                    <div style={{ fontSize: "14px", fontWeight: 800, color: "#2ED573" }}>
-                      {scene.priceEstimate}
-                    </div>
+              {/* NeoPOP Plinth Bottom Bar */}
+              <div
+                style={{
+                  padding: "18px 24px",
+                  background: "var(--surface-alt)",
+                  borderTop: "2px solid var(--surface-border)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "16px",
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      fontSize: "10px",
+                      fontWeight: 800,
+                      color: "var(--ink-muted)",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.06em",
+                    }}
+                  >
+                    Budget Target
                   </div>
-
-                  {/* Skeuomorphic Barcode Stripe */}
-                  <div style={{ textAlign: "right", opacity: 0.6 }}>
-                    <div
-                      style={{
-                        fontFamily: "monospace",
-                        letterSpacing: "3px",
-                        fontSize: "14px",
-                        fontWeight: 900,
-                        color: "#E2E2EB",
-                      }}
-                    >
-                      ||| | |||| | ||
-                    </div>
-                    <div style={{ fontSize: "9px", color: "#94A3B8" }}>#FESTI-{scene.id.slice(-4)}</div>
+                  <div style={{ fontSize: "14px", fontWeight: 800, color: "var(--neopop-mint)", fontFamily: "var(--font-mono)" }}>
+                    {scene.priceEstimate}
                   </div>
                 </div>
 
-                {/* Tear Off Button */}
+                {/* Plan This Scene CTA */}
                 <button
-                  aria-label={`Tear off ticket to plan ${scene.title}`}
+                  aria-label={`Plan event based on ${scene.title}`}
+                  type="button"
                   onClick={() => onSelectScene(scene.title, parseInt(scene.guestCount) || 80)}
-                  className="btn-skeuo"
+                  className="btn btn-primary btn-sm"
                   style={{
-                    width: "100%",
-                    padding: "10px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "8px",
-                    fontSize: "13px",
+                    padding: "8px 16px",
+                    fontSize: "12px",
                   }}
                 >
-                  <Ticket size={16} />
-                  <span>Tear Off & Plan This Scene</span>
+                  <Ticket size={14} />
+                  <span>LOAD BLUEPRINT</span>
                 </button>
               </div>
             </article>

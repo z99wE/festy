@@ -297,7 +297,7 @@ app.post("/api/events/:eventId/ask", async (c) => {
   }
 
   const body = await c.req.json();
-  const prompt = body.prompt || body.question;
+  const prompt = body.prompt || body.question || body.message;
   const tabContext = body.tabContext || body.context || "general";
   if (!prompt || typeof prompt !== "string") {
     return c.json({ error: "Prompt is required" }, 400);

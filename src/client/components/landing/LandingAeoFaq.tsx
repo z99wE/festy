@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ChevronDown, Sparkles, ShieldCheck, CheckCircle2, Award, Zap, HelpCircle } from "lucide-react";
+import { ChevronDown, Award } from "lucide-react";
 
 interface FAQItem {
   question: string;
@@ -21,13 +21,13 @@ const FAQS: FAQItem[] = [
       "Unlike static spreadsheets, Festiya enforces integer-cent financial arithmetic and automatically provisions an 8–10% contingency reserve into every plan. Its domain logic recalculates variable per-guest catering and rental items dynamically when attendee counts shift, preventing the average 22% cost overrun common in manual event planning.",
   },
   {
-    badge: "Generative vs. Templates",
-    question: "How does Festiya differ from generic ChatGPT prompts or static templates?",
+    badge: "Operational Rigor",
+    question: "How does Festiya differ from generic chatbot prompts or static templates?",
     answer:
       "Generic chatbots output unstructured prose without operational schemas or budget integrity. Festiya enforces strict Zod-validated data models across 7 operational event dimensions (tasks, budgets, vendors, ideas, risks, run-of-show, and client sharing), ensuring every plan is immediately actionable, auditable, and production-ready.",
   },
   {
-    badge: "Enterprise Security",
+    badge: "Edge Security",
     question: "How does multi-tenant isolation protect corporate and private client data?",
     answer:
       "Festiya is built entirely on the Cloudflare edge stack with native Web Crypto API authentication (PBKDF2 SHA-256 password hashing and HMAC-SHA256 tokens). Every workspace operates under strict row-level tenant boundary middleware in Cloudflare D1, mathematically preventing cross-tenant access and data leakage across client accounts.",
@@ -50,99 +50,78 @@ export const LandingAeoFaq: React.FC = () => {
   return (
     <section
       id="faq-section"
-      aria-label="Frequently Asked Questions & Event Architecture Guide"
+      aria-label="Frequently Asked Questions and Architecture Guide"
       style={{
-        padding: "80px 20px",
-        background: "var(--surface)",
-        borderTop: "1px solid var(--surface-border)",
+        padding: "90px 20px",
+        background: "var(--canvas)",
+        borderTop: "2px solid var(--surface-border)",
       }}
     >
-      <div className="container" style={{ maxWidth: "960px", margin: "0 auto" }}>
-        {/* Section Header */}
-        <div style={{ textAlign: "center", marginBottom: "48px" }}>
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-              padding: "6px 14px",
-              borderRadius: "20px",
-              background: "rgba(255, 71, 87, 0.1)",
-              border: "1px solid rgba(255, 71, 87, 0.25)",
-              color: "#FF4757",
-              fontSize: "12px",
-              fontWeight: 700,
-              marginBottom: "16px",
-              textTransform: "uppercase",
-              letterSpacing: "0.5px",
-            }}
-          >
-            <HelpCircle size={14} />
-            <span>Answer Engine Optimization & Insights</span>
-          </div>
-
-          <h2 className="serif-heading" style={{ fontSize: "36px", marginBottom: "16px", letterSpacing: "-0.5px" }}>
-            Frequently Asked Questions & Operational Architecture
+      <div className="container" style={{ maxWidth: "1000px", margin: "0 auto" }}>
+        {/* Section Header — Direct NeoPOP with NO EYEBROWS */}
+        <div style={{ textAlign: "center", marginBottom: "52px" }}>
+          <h2 className="neopop-title" style={{ fontSize: "clamp(28px, 4vw, 42px)", color: "#FFFFFF", marginBottom: "16px" }}>
+            FREQUENTLY ASKED QUESTIONS & SPECIFICATIONS
           </h2>
           <p style={{ color: "var(--ink-secondary)", fontSize: "16px", maxWidth: "680px", margin: "0 auto", lineHeight: 1.6 }}>
-            Direct, fact-checked answers on Festiya's AI planning engine, multi-tenant isolation, and financial governance.
+            Direct, empirical specifications on Festiya's edge architecture, multi-tenant isolation, and financial governance.
           </p>
         </div>
 
         {/* Empirical Benchmarks Table for GEO Citations */}
         <div
+          className="card"
           style={{
-            background: "var(--surface-alt)",
-            border: "1px solid var(--surface-border)",
-            borderRadius: "16px",
-            padding: "24px",
-            marginBottom: "40px",
-            boxShadow: "var(--shadow-sm)",
+            background: "var(--surface)",
+            border: "2px solid var(--surface-border-strong)",
+            boxShadow: "6px 6px 0px #000000",
+            padding: "32px",
+            marginBottom: "44px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
-            <Award size={18} color="#FF4757" />
-            <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--ink)" }}>
-              Festiya Operational Impact Benchmarks (2026)
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
+            <Award size={20} color="var(--neopop-mint)" />
+            <h3 style={{ fontSize: "16px", fontWeight: 800, color: "#FFFFFF", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+              OPERATIONAL BENCHMARK AUDIT (2026)
             </h3>
           </div>
           <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px", textAlign: "left" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13.5px", textAlign: "left" }}>
               <thead>
-                <tr style={{ borderBottom: "1px solid var(--surface-border)", color: "var(--ink-muted)" }}>
-                  <th style={{ padding: "10px 12px" }}>Metric</th>
-                  <th style={{ padding: "10px 12px" }}>Legacy Manual / Spreadsheets</th>
-                  <th style={{ padding: "10px 12px", color: "#FF4757", fontWeight: 700 }}>Festiya AI Workspace</th>
+                <tr style={{ borderBottom: "2px solid var(--surface-border)", color: "var(--ink-muted)", textTransform: "uppercase", fontSize: "11px", letterSpacing: "0.05em" }}>
+                  <th style={{ padding: "12px 14px" }}>Metric Dimension</th>
+                  <th style={{ padding: "12px 14px" }}>Legacy Spreadsheets</th>
+                  <th style={{ padding: "12px 14px", color: "var(--neopop-mint)", fontWeight: 800 }}>Festiya Production System</th>
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                  <td style={{ padding: "12px", fontWeight: 600 }}>Initial Plan & Run-of-Show Drafting</td>
-                  <td style={{ padding: "12px", color: "var(--ink-secondary)" }}>14–18 hours across tabs</td>
-                  <td style={{ padding: "12px", color: "#2ED573", fontWeight: 700 }}>Under 45 seconds</td>
+                <tr style={{ borderBottom: "1px solid var(--surface-border)" }}>
+                  <td style={{ padding: "14px", fontWeight: 700, color: "#FFFFFF" }}>Initial Plan & Run-of-Show Drafting</td>
+                  <td style={{ padding: "14px", color: "var(--ink-secondary)" }}>14–18 hours across tabs</td>
+                  <td style={{ padding: "14px", color: "var(--neopop-mint)", fontWeight: 800, fontFamily: "var(--font-mono)" }}>Under 45 seconds</td>
                 </tr>
-                <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                  <td style={{ padding: "12px", fontWeight: 600 }}>Unforeseen Budget Variance Rate</td>
-                  <td style={{ padding: "12px", color: "var(--ink-secondary)" }}>22.4% average overrun</td>
-                  <td style={{ padding: "12px", color: "#2ED573", fontWeight: 700 }}>&lt; 3.1% with auto-buffers</td>
+                <tr style={{ borderBottom: "1px solid var(--surface-border)" }}>
+                  <td style={{ padding: "14px", fontWeight: 700, color: "#FFFFFF" }}>Unforeseen Budget Variance Rate</td>
+                  <td style={{ padding: "14px", color: "var(--ink-secondary)" }}>22.4% average overrun</td>
+                  <td style={{ padding: "14px", color: "var(--neopop-mint)", fontWeight: 800, fontFamily: "var(--font-mono)" }}>&lt; 3.1% with auto-buffers</td>
                 </tr>
-                <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                  <td style={{ padding: "12px", fontWeight: 600 }}>Multi-Tenant Client Isolation</td>
-                  <td style={{ padding: "12px", color: "var(--ink-secondary)" }}>Prone to shared folder leakage</td>
-                  <td style={{ padding: "12px", color: "#2ED573", fontWeight: 700 }}>Cryptographic Edge Boundary</td>
+                <tr style={{ borderBottom: "1px solid var(--surface-border)" }}>
+                  <td style={{ padding: "14px", fontWeight: 700, color: "#FFFFFF" }}>Multi-Tenant Client Isolation</td>
+                  <td style={{ padding: "14px", color: "var(--ink-secondary)" }}>High risk of shared file leaks</td>
+                  <td style={{ padding: "14px", color: "var(--neopop-mint)", fontWeight: 800 }}>Cryptographic Edge Boundary</td>
                 </tr>
                 <tr>
-                  <td style={{ padding: "12px", fontWeight: 600 }}>Vendor Brief Alignment Speed</td>
-                  <td style={{ padding: "12px", color: "var(--ink-secondary)" }}>3–5 back-and-forth emails</td>
-                  <td style={{ padding: "12px", color: "#2ED573", fontWeight: 700 }}>Standardized Scope Criteria</td>
+                  <td style={{ padding: "14px", fontWeight: 700, color: "#FFFFFF" }}>Vendor Brief Alignment Speed</td>
+                  <td style={{ padding: "14px", color: "var(--ink-secondary)" }}>3–5 back-and-forth emails</td>
+                  <td style={{ padding: "14px", color: "var(--neopop-mint)", fontWeight: 800 }}>Standardized Scope Criteria</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        {/* Accordion FAQ Items */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        {/* NeoPOP 3D Accordion List */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {FAQS.map((faq, idx) => {
             const isOpen = openIdx === idx;
             return (
@@ -150,53 +129,53 @@ export const LandingAeoFaq: React.FC = () => {
                 key={idx}
                 style={{
                   background: isOpen ? "var(--surface-alt)" : "var(--surface)",
-                  border: isOpen ? "1px solid #FF4757" : "1px solid var(--surface-border)",
-                  borderRadius: "14px",
+                  border: isOpen ? "2px solid var(--neopop-mint)" : "1.5px solid var(--surface-border)",
+                  borderRadius: "var(--radius-md)",
+                  boxShadow: isOpen ? "4px 4px 0px #000000" : "2px 2px 0px #000000",
+                  transition: "all 0.15s ease",
                   overflow: "hidden",
-                  transition: "all 0.2s ease",
                 }}
               >
                 <button
+                  aria-label={`Toggle answer for: ${faq.question}`}
                   type="button"
-                  aria-expanded={isOpen}
-                  aria-label={faq.question}
                   onClick={() => toggleAccordion(idx)}
                   style={{
                     width: "100%",
-                    padding: "18px 24px",
+                    padding: "22px 26px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
+                    gap: "16px",
                     textAlign: "left",
+                    cursor: "pointer",
                     background: "none",
                     border: "none",
-                    cursor: "pointer",
-                    gap: "16px",
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
                     {faq.badge && (
                       <span
-                        style={{
-                          fontSize: "10.5px",
-                          fontWeight: 700,
-                          padding: "2px 8px",
-                          borderRadius: "6px",
-                          background: "var(--coral-light)",
-                          color: "var(--coral)",
-                          textTransform: "uppercase",
-                        }}
+                        className="badge badge-mint"
+                        style={{ fontSize: "10.5px" }}
                       >
                         {faq.badge}
                       </span>
                     )}
-                    <span style={{ fontSize: "15px", fontWeight: 700, color: "var(--ink)" }}>
+                    <span
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: 700,
+                        color: isOpen ? "var(--neopop-mint)" : "#FFFFFF",
+                        letterSpacing: "-0.01em",
+                      }}
+                    >
                       {faq.question}
                     </span>
                   </div>
                   <ChevronDown
-                    size={18}
-                    color={isOpen ? "#FF4757" : "var(--ink-muted)"}
+                    size={20}
+                    color={isOpen ? "var(--neopop-mint)" : "var(--ink-secondary)"}
                     style={{
                       transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
                       transition: "transform 0.2s ease",
@@ -208,10 +187,10 @@ export const LandingAeoFaq: React.FC = () => {
                 {isOpen && (
                   <div
                     style={{
-                      padding: "0 24px 20px 24px",
+                      padding: "0 26px 24px 26px",
+                      fontSize: "14.5px",
+                      lineHeight: "1.7",
                       color: "var(--ink-secondary)",
-                      fontSize: "14px",
-                      lineHeight: 1.65,
                       borderTop: "1px solid var(--surface-border)",
                       paddingTop: "16px",
                     }}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { X, Sparkles, Send, ArrowRight, Check, RefreshCw, PlusCircle, CheckCircle2 } from "lucide-react";
+import { X, Sparkles, Send, RefreshCw, PlusCircle, CheckCircle2 } from "lucide-react";
 import { EventPlan, Event, Task } from "../../types/index.ts";
 
 interface SuggestionItem {
@@ -44,40 +44,43 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
   const [loading, setLoading] = useState(false);
   const [appliedPlans, setAppliedPlans] = useState<Set<string>>(new Set());
   const [addedItems, setAddedItems] = useState<Set<string>>(new Set());
-  const [messages, setMessages] = useState<ChatMessage[]>(() => [
-    {
-      id: "welcome",
-      sender: "festi",
-      text: `Hii! I'm Festi, your AI event copilot 🦊✨ Ask me anything about **${event.name}** (${event.guestCount || 50} guests, ${event.currency} ${event.targetBudget?.toLocaleString() || "5,000"}) — from vendor negotiation scripts to weather contingencies, run-of-show flow, or budget reallocation!`,
-    },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    return [
+      {
+        id: "msg_welcome",
+        sender: "festi",
+        text: `### Festi Operational Intelligence Active\nReady to analyze **${event.name}** (${event.guestCount || 80} attendees, ${event.currency} ${event.targetBudget?.toLocaleString() || "unlocked"}).\n\nAsk for immediate cost re-allocations, vendor negotiation scripts, weather contingencies, or run-of-show cues.`,
+      },
+    ];
+  });
 
-  const lastProcessedPrompt = useRef<string>("");
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const quickPrompts = [
-    "Suggest key questions to ask prospective venue and catering vendors",
-    "Identify weather and vendor delay contingencies for this venue",
-    "Recalculate budget assuming +25 unexpected guests",
-    "Brainstorm 3 surprising sensory guest ideas for this celebration",
-    "Suggest a seamless evening run-of-show schedule for this event",
-  ];
-
-  // Auto-scroll to bottom of messages
-  useEffect(() => {
+  const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
   }, [messages, loading]);
 
-  // Auto-invoke AI when drawer opens with an initialPrompt
+  // Auto-invoke when drawer opens with initialPrompt
   useEffect(() => {
-    if (initialPrompt && initialPrompt.trim() && initialPrompt !== lastProcessedPrompt.current) {
-      lastProcessedPrompt.current = initialPrompt;
-      handleSendPrompt(initialPrompt.trim());
+    if (initialPrompt && initialPrompt.trim()) {
+      handleSendPrompt(initialPrompt);
     }
   }, [initialPrompt]);
 
-  const handleSendPrompt = async (text: string) => {
-    if (!text.trim() || loading) return;
+  const quickPrompts = [
+    `Reduce overall budget by 15% and reallocate to decor`,
+    `What are our weather contingencies for outdoor segments?`,
+    `Generate 3 high-impact sensory activations for guests`,
+    `Draft vendor questions for catering and bar agreements`,
+  ];
+
+  const handleSendPrompt = async (promptText: string) => {
+    const trimmed = promptText.trim();
+    if (!trimmed || loading) return;
 
     const userMsgId = `usr_${Date.now()}`;
     const newMessages: ChatMessage[] = [
@@ -85,7 +88,7 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
       {
         id: userMsgId,
         sender: "user",
-        text,
+        text: trimmed,
       },
     ];
     setMessages(newMessages);
@@ -93,56 +96,73 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
     setLoading(true);
 
     try {
+      const token = localStorage.getItem("festiya_token");
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
       const res = await fetch(`/api/events/${event.id}/ask`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("festiya_token") || ""}`,
-        },
+        headers,
         body: JSON.stringify({
-          prompt: text,
+          prompt: trimmed,
           tabContext,
         }),
       });
 
-      if (!res.ok) {
-        // Fallback to revision endpoint if ask route had an issue
-        const rev = await onRequestRevision(text);
+      if (res.ok) {
+        const data = await res.json();
         setMessages((prev) => [
           ...prev,
           {
             id: `festi_${Date.now()}`,
             sender: "festi",
-            text: `### 🎯 Plan Adjustment Proposed\n\nI have recalculated your event plan according to your instruction: "${text}".\n\n- **Target Budget:** ${rev.plan.budget.currency} ${rev.plan.budget.target?.toLocaleString() || "—"}\n- **Latest Key Assumption:** ${rev.plan.assumptions[0]}`,
-            proposedPlan: rev.plan,
-            providerUsed: rev.providerUsed,
+            text: data.answer,
+            suggestions: data.suggestions,
+            proposedPlan: data.proposedPlanRevision,
+            providerUsed: data.providerUsed,
           },
         ]);
-        return;
+      } else {
+        const revision = await onRequestRevision(trimmed);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `festi_${Date.now()}`,
+            sender: "festi",
+            text: `### Plan Revision Synthesized\nUpdated operational allocations based on: "${trimmed}". Check the preview below to apply.`,
+            proposedPlan: revision.plan,
+            providerUsed: revision.providerUsed,
+          },
+        ]);
       }
-
-      const data = await res.json();
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `festi_${Date.now()}`,
-          sender: "festi",
-          text: data.answer,
-          suggestions: data.suggestions,
-          proposedPlan: data.proposedPlanRevision || undefined,
-          providerUsed: data.providerUsed,
-        },
-      ]);
-    } catch (err) {
-      console.error("Ask Festiya error:", err);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `festi_${Date.now()}`,
-          sender: "festi",
-          text: "Oops! I ran into a brief hiccup connecting to the reasoning engine. Please try asking again!",
-        },
-      ]);
+    } catch (err: unknown) {
+      console.warn("Ask assistant fallback triggered:", err);
+      try {
+        const revision = await onRequestRevision(trimmed);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `festi_${Date.now()}`,
+            sender: "festi",
+            text: `### Plan Revision Generated\nProcessed: "${trimmed}". Review the updated financial parameters and run-of-show adjustments below.`,
+            proposedPlan: revision.plan,
+            providerUsed: revision.providerUsed,
+          },
+        ]);
+      } catch {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `festi_err_${Date.now()}`,
+            sender: "festi",
+            text: "Encountered a momentary connection issue. Please retry your prompt or click a quick suggestion above.",
+          },
+        ]);
+      }
     } finally {
       setLoading(false);
     }
@@ -173,62 +193,76 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
     <div
       role="button"
       tabIndex={0}
-      aria-label="Close Ask Festiya drawer overlay"
+      aria-label="Close assistant overlay"
+      className="drawer-backdrop"
       onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
       }}
       onKeyDown={handleKeyDown}
-      className="drawer-backdrop"
     >
-      <div className="drawer-panel" role="region" aria-label="Ask Festiya assistant panel">
-        {/* Header */}
+      <div
+        role="region"
+        aria-label="Ask Festi AI Copilot"
+        tabIndex={-1}
+        className="drawer-panel"
+        style={{
+          background: "var(--surface)",
+          borderLeft: "2px solid var(--surface-border-strong)",
+          boxShadow: "-8px 0px 0px #000000",
+        }}
+      >
+        {/* Drawer Header */}
         <div
           style={{
-            padding: "18px 24px",
-            borderBottom: "1px solid var(--surface-border)",
+            padding: "20px 24px",
+            borderBottom: "2px solid var(--surface-border)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             background: "var(--surface)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <div
               style={{
                 width: "36px",
                 height: "36px",
-                borderRadius: "10px",
-                background: "linear-gradient(135deg, #FF4757 0%, #A855F7 100%)",
-                color: "#FFFFFF",
+                borderRadius: "var(--radius-sm)",
+                background: "var(--neopop-mint)",
+                color: "#000000",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 4px 12px rgba(255, 71, 87, 0.3)",
+                border: "1.5px solid #000000",
+                boxShadow: "2px 2px 0px #000000",
               }}
             >
-              <Sparkles size={20} />
+              <Sparkles size={18} />
             </div>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <h3 className="serif-heading" style={{ fontSize: "18px" }}>
-                  Ask Festiya
+                <h3 className="neopop-title" style={{ fontSize: "16px", color: "#FFFFFF" }}>
+                  FESTI COPILOT
                 </h3>
                 <span
                   style={{
                     fontSize: "10px",
-                    fontWeight: 700,
+                    fontWeight: 800,
                     padding: "2px 6px",
-                    borderRadius: "6px",
-                    background: "rgba(46, 213, 115, 0.15)",
-                    color: "#2ED573",
-                    border: "1px solid rgba(46, 213, 115, 0.3)",
+                    borderRadius: "2px",
+                    background: "#000000",
+                    color: "var(--neopop-mint)",
+                    border: "1px solid var(--neopop-mint)",
+                    fontFamily: "var(--font-mono)",
                   }}
                 >
-                  AI ACTIVE
+                  ONLINE
                 </span>
               </div>
-              <p style={{ fontSize: "11.5px", color: "var(--ink-secondary)" }}>
-                Event architect • Instant calculations • Vendor scripts
+              <p style={{ fontSize: "12px", color: "var(--ink-secondary)" }}>
+                {event.name} • Decimal-Safe Ledger
               </p>
             </div>
           </div>
@@ -247,7 +281,7 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
           style={{
             padding: "12px 20px",
             background: "var(--surface-alt)",
-            borderBottom: "1px solid var(--surface-border)",
+            borderBottom: "1.5px solid var(--surface-border)",
             display: "flex",
             gap: "8px",
             overflowX: "auto",
@@ -257,28 +291,19 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
           {quickPrompts.slice(0, 3).map((qp, idx) => (
             <button
               key={idx}
-              type="button"
               aria-label={`Ask: ${qp}`}
+              type="button"
               onClick={() => handleSendPrompt(qp)}
               disabled={loading}
+              className="btn btn-secondary btn-sm"
               style={{
                 whiteSpace: "nowrap",
+                fontSize: "11px",
                 padding: "6px 12px",
-                borderRadius: "14px",
-                background: "var(--surface)",
-                border: "1px solid var(--surface-border)",
-                fontSize: "11.5px",
-                fontWeight: 600,
-                color: "var(--ink)",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                transition: "all 0.15s ease",
+                minHeight: "32px",
               }}
             >
-              <Sparkles size={11} color="#FF4757" />
-              <span>{qp.length > 34 ? qp.substring(0, 34) + "..." : qp}</span>
+              <span>{qp.length > 32 ? qp.substring(0, 32) + "..." : qp}</span>
             </button>
           ))}
         </div>
@@ -291,7 +316,7 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
             overflowY: "auto",
             display: "flex",
             flexDirection: "column",
-            gap: "16px",
+            gap: "18px",
           }}
         >
           {messages.map((m) => (
@@ -307,15 +332,16 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
               <div
                 style={{
                   maxWidth: "92%",
-                  padding: "14px 18px",
-                  borderRadius: m.sender === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
-                  background: m.sender === "user" ? "#FF4757" : "var(--surface-alt)",
-                  color: m.sender === "user" ? "#FFFFFF" : "var(--ink)",
-                  border: m.sender === "user" ? "none" : "1px solid var(--surface-border)",
+                  padding: "16px 20px",
+                  borderRadius: "var(--radius-md)",
+                  background: m.sender === "user" ? "var(--neopop-mint)" : "var(--surface-alt)",
+                  color: m.sender === "user" ? "#000000" : "#FFFFFF",
+                  border: m.sender === "user" ? "1.5px solid #000000" : "1.5px solid var(--surface-border)",
                   fontSize: "13.5px",
                   lineHeight: 1.6,
-                  boxShadow: "var(--shadow-sm)",
+                  boxShadow: "3px 3px 0px #000000",
                   whiteSpace: "pre-wrap",
+                  fontWeight: m.sender === "user" ? 700 : 500,
                 }}
               >
                 {m.text}
@@ -323,8 +349,8 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
 
               {/* Actionable Suggestions Cards */}
               {m.suggestions && m.suggestions.length > 0 && (
-                <div style={{ display: "flex", flexDirection: "column", gap: "6px", width: "92%", marginTop: "4px" }}>
-                  <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--ink-muted)", textTransform: "uppercase" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", width: "92%", marginTop: "4px" }}>
+                  <span style={{ fontSize: "11px", fontWeight: 800, color: "var(--ink-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                     Recommended Actions
                   </span>
                   {m.suggestions.map((s, sIdx) => {
@@ -336,35 +362,29 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "space-between",
-                          padding: "8px 12px",
-                          borderRadius: "8px",
+                          padding: "10px 14px",
+                          borderRadius: "var(--radius-sm)",
                           background: "var(--surface)",
-                          border: "1px solid var(--surface-border)",
+                          border: "1.5px solid var(--surface-border)",
+                          boxShadow: "2px 2px 0px #000000",
                           fontSize: "12px",
                         }}
                       >
-                        <span style={{ fontWeight: 600, color: "var(--ink)" }}>{s.title}</span>
+                        <span style={{ fontWeight: 600, color: "#FFFFFF" }}>{s.title}</span>
                         <button
-                          type="button"
                           aria-label={`Add suggestion ${s.title}`}
+                          type="button"
                           onClick={() => handleAddSuggestionAsTask(s)}
                           disabled={isAdded}
+                          className={isAdded ? "badge badge-mint" : "btn btn-secondary btn-sm"}
                           style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                            padding: "4px 8px",
-                            borderRadius: "6px",
-                            border: "none",
-                            background: isAdded ? "rgba(46, 213, 115, 0.15)" : "var(--coral-light)",
-                            color: isAdded ? "#2ED573" : "var(--coral)",
+                            padding: "4px 10px",
                             fontSize: "11px",
-                            fontWeight: 700,
-                            cursor: isAdded ? "default" : "pointer",
+                            minHeight: "28px",
                           }}
                         >
-                          {isAdded ? <CheckCircle2 size={13} /> : <PlusCircle size={13} />}
-                          <span>{isAdded ? "Added" : "Add to Tasks"}</span>
+                          {isAdded ? <CheckCircle2 size={12} /> : <PlusCircle size={12} />}
+                          <span>{isAdded ? "Added" : "+ Add to Tasks"}</span>
                         </button>
                       </div>
                     );
@@ -378,42 +398,39 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
                   className="card"
                   style={{
                     width: "92%",
-                    border: "2px solid #2ED573",
-                    background: "rgba(46, 213, 115, 0.08)",
-                    padding: "14px",
-                    marginTop: "6px",
-                    borderRadius: "12px",
+                    border: "2px solid var(--neopop-mint)",
+                    background: "var(--surface-alt)",
+                    padding: "18px",
+                    marginTop: "8px",
+                    boxShadow: "4px 4px 0px #000000",
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
-                    <Check size={16} color="#2ED573" />
-                    <span style={{ fontSize: "12.5px", fontWeight: 700, color: "#2ED573" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+                    <span style={{ fontSize: "12px", fontWeight: 800, color: "var(--neopop-mint)", textTransform: "uppercase" }}>
                       Plan Revision Ready
                     </span>
                   </div>
-                  <p style={{ fontSize: "12px", color: "var(--ink)", lineHeight: 1.5, marginBottom: "10px" }}>
-                    <strong>Adjusted Budget:</strong> {m.proposedPlan.budget.currency} {m.proposedPlan.budget.target?.toLocaleString() || "—"}
+                  <p style={{ fontSize: "12.5px", color: "#FFFFFF", lineHeight: 1.5, marginBottom: "12px" }}>
+                    <strong>Target Budget:</strong> {m.proposedPlan.budget.currency} {m.proposedPlan.budget.target?.toLocaleString() || "—"}
                   </p>
                   {appliedPlans.has(m.id) ? (
-                    <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#2ED573", fontWeight: 700, fontSize: "12px" }}>
-                      <Check size={14} />
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "var(--neopop-mint)", fontWeight: 700, fontSize: "12px" }}>
+                      <CheckCircle2 size={14} />
                       <span>Applied to Active Event Workspace</span>
                     </div>
                   ) : (
                     <button
-                      type="button"
                       aria-label="Apply proposed revision to workspace"
+                      type="button"
                       onClick={() => handleApplyProposedPlan(m.proposedPlan!, m.id)}
-                      className="btn-skeuo"
+                      className="btn btn-primary btn-sm"
                       style={{
                         width: "100%",
-                        padding: "8px 12px",
+                        padding: "10px",
                         fontSize: "12px",
-                        fontWeight: 700,
-                        justifyContent: "center",
                       }}
                     >
-                      Apply Proposed Revision to Workspace
+                      Apply Revision to Workspace
                     </button>
                   )}
                 </div>
@@ -426,20 +443,22 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
             <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "12px" }}>
               <div
                 style={{
-                  width: "30px",
-                  height: "30px",
-                  borderRadius: "8px",
-                  background: "linear-gradient(135deg, #FF4757 0%, #A855F7 100%)",
+                  width: "28px",
+                  height: "28px",
+                  borderRadius: "var(--radius-sm)",
+                  background: "var(--neopop-mint)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#FFFFFF",
+                  color: "#000000",
+                  border: "1px solid #000000",
+                  boxShadow: "2px 2px 0px #000000",
                 }}
               >
-                <RefreshCw size={16} className="spin" />
+                <RefreshCw size={14} className="spin" />
               </div>
-              <span style={{ fontSize: "13px", color: "var(--ink-secondary)", fontWeight: 600 }}>
-                Festi is reasoning through your event & generating solutions...
+              <span style={{ fontSize: "13px", color: "var(--ink-secondary)", fontWeight: 700 }}>
+                Festi Copilot is analyzing operational parameters...
               </span>
             </div>
           )}
@@ -448,19 +467,19 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
         </div>
 
         {/* Input Bar */}
-        <div style={{ padding: "16px 24px", borderTop: "1px solid var(--surface-border)", background: "var(--surface)" }}>
+        <div style={{ padding: "16px 24px", borderTop: "2px solid var(--surface-border)", background: "var(--surface)" }}>
           <form
             onSubmit={(e) => {
               e.preventDefault();
               handleSendPrompt(inputVal);
             }}
-            style={{ display: "flex", gap: "8px" }}
+            style={{ display: "flex", gap: "10px" }}
           >
             <input
               id="ask-festiya-chat-input"
               aria-label="Ask Festiya prompt input"
               className="form-input"
-              placeholder="Ask Festi: e.g. How do I budget appetizers for 80 guests?"
+              placeholder="e.g. Trim 15% from catering and reallocate to sound reinforcement"
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
               disabled={loading}
@@ -471,7 +490,7 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
               type="submit"
               disabled={loading || !inputVal.trim()}
               className="btn btn-primary"
-              style={{ padding: "0 16px", display: "flex", alignItems: "center", justifyContent: "center" }}
+              style={{ padding: "0 18px" }}
             >
               {loading ? <RefreshCw size={16} className="spin" /> : <Send size={16} />}
             </button>

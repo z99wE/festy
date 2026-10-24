@@ -1,5 +1,5 @@
 import React from "react";
-import { Sparkles, Calendar, Plus, Building2, UserCircle2, ArrowRight, Lock, Search, LogIn, LogOut } from "lucide-react";
+import { Sparkles, Calendar, Plus, Building2, UserCircle2, Lock, LogIn, LogOut } from "lucide-react";
 import { Workspace, Event, User } from "../../types/index.ts";
 
 interface NavbarProps {
@@ -37,16 +37,16 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header
       style={{
         backgroundColor: "var(--surface)",
-        borderBottom: "1px solid var(--surface-border)",
+        borderBottom: "2px solid var(--surface-border)",
         position: "sticky",
         top: 0,
         zIndex: 100,
-        boxShadow: "var(--shadow-sm)",
+        boxShadow: "0 4px 0px #000000",
       }}
     >
-      {/* 1. Chromium Browser Window Top Frame */}
+      {/* 1. Chromium Browser Window Top Frame — NeoPOP Dark Edition */}
       <div className="chromium-tab-bar">
-        {/* Window controls (traffic light dots) */}
+        {/* Window controls (traffic light squares) */}
         <div style={{ display: "flex", alignItems: "center", gap: "6px", marginRight: "12px" }}>
           <span className="chromium-dot chromium-dot-red" />
           <span className="chromium-dot chromium-dot-yellow" />
@@ -56,40 +56,43 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Chromium Tabs */}
         <button
           aria-label="Festiya Scenes Tab"
+          type="button"
           onClick={() => setCurrentView("landing")}
           className={`chromium-tab ${currentView === "landing" ? "active" : ""}`}
         >
           <span>🎪</span>
-          <span>Festiya District</span>
+          <span>EXPLORE PRODUCTIONS</span>
         </button>
 
         <button
           aria-label="Workspace Command Center Tab"
+          type="button"
           onClick={() => setCurrentView("workspace")}
           className={`chromium-tab ${currentView === "workspace" ? "active" : ""}`}
         >
           <span>📋</span>
-          <span>Event Studio {activeEvent ? `(${activeEvent.name.slice(0, 14)}...)` : ""}</span>
+          <span>EVENT STUDIO {activeEvent ? `(${activeEvent.name.slice(0, 14)}...)` : ""}</span>
         </button>
 
         <button
-          aria-label="Pricing & Plans Tab"
+          aria-label="Pricing and Plans Tab"
+          type="button"
           onClick={() => setCurrentView("pricing")}
           className={`chromium-tab ${currentView === "pricing" ? "active" : ""}`}
         >
-          <span>💎</span>
-          <span>VIP Access</span>
+          <span>⚡</span>
+          <span>TIERS & LIMITS</span>
         </button>
 
         {/* Chromium Omnibar URL Capsule */}
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center" }}>
           <div className="chromium-omnibar">
-            <Lock size={12} color="#2ED573" />
-            <span style={{ opacity: 0.9 }}>festiya.district/{currentView}</span>
-            <span style={{ fontSize: "10px", color: "#64748B", marginLeft: "6px" }}>⌘K</span>
+            <Lock size={12} color="var(--neopop-mint)" />
+            <span>festiya.app/{currentView}</span>
           </div>
         </div>
       </div>
+
       <div
         className="container"
         style={{
@@ -104,74 +107,99 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div style={{ display: "flex", alignItems: "center", gap: "28px" }}>
           <button
             aria-label="Festiya Home"
+            type="button"
             onClick={() => setCurrentView("landing")}
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "10px",
+              gap: "12px",
               textAlign: "left",
             }}
           >
             <div
               style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "12px",
-                background: "linear-gradient(135deg, var(--coral) 0%, #FF8D54 100%)",
+                width: "38px",
+                height: "38px",
+                borderRadius: "var(--radius-sm)",
+                background: "var(--neopop-mint)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#FFFFFF",
-                boxShadow: "0 4px 10px rgba(255, 98, 87, 0.3)",
+                color: "#000000",
+                border: "1.5px solid #000000",
+                boxShadow: "3px 3px 0px #000000",
               }}
             >
-              <Sparkles size={22} />
+              <Sparkles size={20} />
             </div>
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <span style={{ fontSize: "22px", fontWeight: 800, letterSpacing: "-0.5px", color: "var(--ink)" }}>
-                  Festiya
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span
+                  className="neopop-title"
+                  style={{ fontSize: "22px", color: "#FFFFFF", letterSpacing: "-0.03em" }}
+                >
+                  FESTIYA
                 </span>
-                <span className="badge badge-sunshine" style={{ fontSize: "10px", padding: "2px 6px" }}>
-                  Studio
+                <span
+                  style={{
+                    fontSize: "10px",
+                    fontWeight: 800,
+                    padding: "2px 6px",
+                    borderRadius: "2px",
+                    background: "#000000",
+                    color: "var(--neopop-mint)",
+                    border: "1px solid var(--neopop-mint)",
+                    fontFamily: "var(--font-mono)",
+                  }}
+                >
+                  PRO
                 </span>
               </div>
-              <p style={{ fontSize: "11px", color: "var(--ink-muted)", fontWeight: 500 }}>
-                Make a moment of it.
-              </p>
             </div>
           </button>
 
           {/* Navigation Links */}
-          <nav style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+          <nav style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <button
               aria-label="Explore"
+              type="button"
               onClick={() => setCurrentView("landing")}
               className={`btn btn-sm ${currentView === "landing" ? "btn-secondary" : ""}`}
-              style={{ color: currentView === "landing" ? "var(--ink)" : "var(--ink-secondary)" }}
+              style={{
+                color: currentView === "landing" ? "var(--neopop-mint)" : "var(--ink-secondary)",
+                borderColor: currentView === "landing" ? "var(--neopop-mint)" : "transparent",
+              }}
             >
-              Explore
+              EXPLORE
             </button>
 
             {events.length > 0 && (
               <button
                 aria-label="Workspace"
+                type="button"
                 onClick={() => setCurrentView("workspace")}
                 className={`btn btn-sm ${currentView === "workspace" ? "btn-secondary" : ""}`}
-                style={{ color: currentView === "workspace" ? "var(--ink)" : "var(--ink-secondary)" }}
+                style={{
+                  color: currentView === "workspace" ? "var(--neopop-mint)" : "var(--ink-secondary)",
+                  borderColor: currentView === "workspace" ? "var(--neopop-mint)" : "transparent",
+                }}
               >
                 <Calendar size={14} />
-                Workspace
+                WORKSPACE
               </button>
             )}
 
             <button
               aria-label="Pricing"
+              type="button"
               onClick={() => setCurrentView("pricing")}
               className={`btn btn-sm ${currentView === "pricing" ? "btn-secondary" : ""}`}
-              style={{ color: currentView === "pricing" ? "var(--ink)" : "var(--ink-secondary)" }}
+              style={{
+                color: currentView === "pricing" ? "var(--neopop-mint)" : "var(--ink-secondary)",
+                borderColor: currentView === "pricing" ? "var(--neopop-mint)" : "transparent",
+              }}
             >
-              Pricing
+              PRICING
             </button>
           </nav>
         </div>
@@ -188,16 +216,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                   gap: "6px",
                   padding: "6px 12px",
                   background: "var(--surface-alt)",
-                  borderRadius: "var(--radius-md)",
-                  border: "1px solid var(--surface-border)",
-                  fontSize: "13px",
-                  fontWeight: 600,
+                  borderRadius: "var(--radius-sm)",
+                  border: "1.5px solid var(--surface-border)",
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  boxShadow: "2px 2px 0px #000000",
                 }}
               >
                 {activeWorkspace.type === "professional" ? (
-                  <Building2 size={16} color="var(--cobalt)" />
+                  <Building2 size={14} color="var(--neopop-blue)" />
                 ) : (
-                  <UserCircle2 size={16} color="var(--coral)" />
+                  <UserCircle2 size={14} color="var(--neopop-mint)" />
                 )}
                 <select
                   value={activeWorkspace.id}
@@ -208,24 +237,27 @@ export const Navbar: React.FC<NavbarProps> = ({
                   style={{
                     background: "transparent",
                     border: "none",
-                    fontWeight: 600,
+                    fontWeight: 700,
                     cursor: "pointer",
                     outline: "none",
+                    color: "#FFFFFF",
                   }}
                   aria-label="Select active workspace"
                 >
                   {workspaces.map((w) => (
-                    <option key={w.id} value={w.id}>
+                    <option key={w.id} value={w.id} style={{ background: "#12151D", color: "#FFF" }}>
                       {w.name} ({w.type})
                     </option>
                   ))}
                 </select>
 
                 <button
+                  aria-label="Open billing modal"
+                  type="button"
                   onClick={onOpenBillingModal}
                   className="badge badge-mint"
                   title="Manage subscription and usage limits"
-                  style={{ cursor: "pointer", textTransform: "uppercase" }}
+                  style={{ cursor: "pointer", padding: "2px 6px" }}
                 >
                   {activeWorkspace.subscriptionTier}
                 </button>
@@ -240,12 +272,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                     gap: "6px",
                     padding: "6px 12px",
                     background: "var(--surface-alt)",
-                    borderRadius: "var(--radius-md)",
-                    border: "1px solid var(--surface-border)",
-                    fontSize: "13px",
+                    borderRadius: "var(--radius-sm)",
+                    border: "1.5px solid var(--surface-border)",
+                    fontSize: "12px",
+                    boxShadow: "2px 2px 0px #000000",
                   }}
                 >
-                  <Calendar size={15} color="var(--ink-secondary)" />
+                  <Calendar size={13} color="var(--ink-secondary)" />
                   <select
                     value={activeEvent.id}
                     onChange={(e) => {
@@ -258,16 +291,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                     style={{
                       background: "transparent",
                       border: "none",
-                      fontWeight: 600,
+                      fontWeight: 700,
                       cursor: "pointer",
-                      maxWidth: "180px",
+                      maxWidth: "160px",
                       textOverflow: "ellipsis",
                       outline: "none",
+                      color: "#FFFFFF",
                     }}
                     aria-label="Select active event"
                   >
                     {events.map((ev) => (
-                      <option key={ev.id} value={ev.id}>
+                      <option key={ev.id} value={ev.id} style={{ background: "#12151D", color: "#FFF" }}>
                         {ev.name}
                       </option>
                     ))}
@@ -277,15 +311,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           )}
 
-          {/* New Event CTA */}
+          {/* New Event CTA — NeoPOP Primary Button */}
           <button
-            aria-label="Plan an event"
+            aria-label="Plan a new event"
+            type="button"
             onClick={onOpenNewEventModal}
-            className="btn btn-primary"
-            style={{ fontWeight: 700 }}
+            className="btn btn-primary btn-sm"
           >
             <Plus size={16} />
-            <span>Plan an event</span>
+            <span>PLAN EVENT</span>
           </button>
 
           {/* User Account / Auth CTA */}
@@ -298,17 +332,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                   gap: "6px",
                   padding: "6px 12px",
                   background: "var(--surface-alt)",
-                  borderRadius: "var(--radius-md)",
-                  border: "1px solid var(--surface-border)",
-                  fontSize: "13px",
-                  fontWeight: 600,
+                  borderRadius: "var(--radius-sm)",
+                  border: "1.5px solid var(--surface-border)",
+                  fontSize: "12px",
+                  fontWeight: 700,
                 }}
               >
-                <UserCircle2 size={16} color="var(--mint)" />
+                <UserCircle2 size={14} color="var(--neopop-mint)" />
                 <span>{user.name.split(" ")[0]}</span>
               </div>
               <button
                 aria-label="Sign out"
+                type="button"
                 onClick={onLogout}
                 title="Sign out"
                 className="btn btn-sm btn-secondary"
@@ -320,12 +355,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           ) : (
             <button
               aria-label="Sign In or Sign Up"
+              type="button"
               onClick={onOpenAuthModal}
               className="btn btn-sm btn-secondary"
-              style={{ fontWeight: 700, gap: "6px" }}
             >
               <LogIn size={14} />
-              <span>Sign In</span>
+              <span>SIGN IN</span>
             </button>
           )}
         </div>
