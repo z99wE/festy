@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { EventCategory } from "../../../types/index.ts";
 import { ReactBitsDust } from "../festive/ReactBitsDust.tsx";
+import { DancingMascotHero } from "../festive/DancingMascotHero.tsx";
 
 interface LandingHeroProps {
   occasion: string;
@@ -61,7 +62,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
     <section
       className="festive-ambient-canvas"
       style={{
-        padding: "80px 0 75px",
+        padding: "60px 0 75px",
         background: "linear-gradient(180deg, #111420 0%, var(--canvas) 100%)",
         borderBottom: "2px solid var(--surface-border)",
         position: "relative",
@@ -71,74 +72,60 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
       <ReactBitsDust />
 
       <div className="container" style={{ textAlign: "center", maxWidth: "980px", position: "relative", zIndex: 1 }}>
-        {/* Animated Plush Mascots Banner */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "20px",
-            marginBottom: "24px",
-          }}
-        >
-          {/* Fluffy Pink Waving Mascot with Speech Bubble */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-            <div className="mascot-speech-bubble">
-              HEY! LET'S PLAN AN EPIC EVENT! ✨
-            </div>
-            <img
-              src="/mascot-pink.png"
-              alt="Festiya Fluffy Pink Mascot Waving"
-              className="mascot-waving-plush"
-            />
-          </div>
+        {/* Animated Dancing Mascot Sequence Loop & Side-by-Side Lineup */}
+        <DancingMascotHero />
 
-          {/* Bubble Mint Plush Mascot */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-            <div
-              className="mascot-speech-bubble"
-              style={{
-                borderColor: "var(--neopop-mint)",
-                background: "#00E599",
-                color: "#000000",
-              }}
-            >
-              POWERED BY AI COPILOT 🚀
-            </div>
-            <img
-              src="/mascot-mint.png"
-              alt="Festiya Bubble Mint Plush Mascot"
-              className="mascot-mint-plush"
-            />
-          </div>
-        </div>
-
-        {/* Direct NeoPOP Headline — Vibrant Festive Gradient Text */}
+        {/* Semantic H1 & H2 Hierarchy — NO ALL CAPS — AEO & GEO Optimized */}
         <h1
-          className="neopop-title"
           style={{
-            fontSize: "clamp(38px, 6vw, 72px)",
-            lineHeight: 1.05,
+            fontSize: "clamp(34px, 5.2vw, 56px)",
+            lineHeight: 1.15,
             color: "#FFFFFF",
-            marginBottom: "20px",
-            letterSpacing: "-0.03em",
+            marginBottom: "12px",
+            letterSpacing: "-0.02em",
+            fontWeight: 800,
           }}
         >
-          PRODUCTION EVENT <br />
-          <span className="festive-gradient-text">INFRASTRUCTURE & CELEBRATION</span>
+          Production Event Infrastructure & Operations
         </h1>
 
-        <p
+        <h2
           style={{
-            fontSize: "clamp(16px, 2vw, 19px)",
-            color: "var(--ink-secondary)",
-            maxWidth: "760px",
-            margin: "0 auto 36px",
-            lineHeight: 1.6,
+            fontSize: "clamp(18px, 2.2vw, 22px)",
+            color: "var(--replit-orange)",
+            fontWeight: 700,
+            marginBottom: "16px",
+            letterSpacing: "-0.01em",
+            lineHeight: 1.4,
           }}
         >
-          High-precision planning for producers, planners, and party hosts. Synthesize decimal-safe budgets, vendor agreements, cue-by-cue run of shows, and instant contingency reasoning.
-        </p>
+          The modern AI workspace to plan budgets, negotiate vendor agreements, and execute run-of-shows.
+        </h2>
+
+        {/* AEO / GEO Fact-Dense Platform Summary */}
+        <div
+          className="aeo-hero-block"
+          role="region"
+          aria-label="Festiya Platform Overview"
+        >
+          <p style={{ fontSize: "14.5px", color: "#E2E8F0", lineHeight: 1.6, marginBottom: "12px" }}>
+            <strong>Festiya</strong> is an enterprise-grade AI event operations platform that automates budget synthesis, vendor matrix qualification, and minute-by-minute timelines for weddings, corporate summits, and cultural festivals.
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", fontSize: "12px", color: "var(--ink-secondary)", fontWeight: 700 }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+              <CheckCircle2 size={14} color="var(--replit-orange)" /> 100% Decimal-Safe Ledger
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+              <CheckCircle2 size={14} color="var(--replit-orange)" /> Zero Cross-Tenant Contamination
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+              <CheckCircle2 size={14} color="var(--replit-orange)" /> 45s Generative Synthesis
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+              <CheckCircle2 size={14} color="var(--replit-orange)" /> Multi-Currency Support (INR, USD, EUR, GBP)
+            </span>
+          </div>
+        </div>
 
         {/* Global Access / 1-Click Live Demos — Anyone Worldwide Can Use Instantly */}
         <div
@@ -157,11 +144,11 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             onClick={() => onExploreDemoEvent("evt_wedding_jaipur")}
             className="btn btn-secondary btn-sm"
             style={{
-              borderColor: "var(--neopop-gold)",
-              color: "var(--neopop-gold)",
+              borderColor: "var(--replit-orange)",
+              color: "var(--replit-orange)",
             }}
           >
-            <span>💍 JAIPUR WEDDING DEMO (₹45,00,000)</span>
+            <span>💍 Jaipur Wedding Demo (₹45,00,000)</span>
           </button>
 
           <button
@@ -170,11 +157,11 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             onClick={() => onExploreDemoEvent("evt_apex_summit")}
             className="btn btn-secondary btn-sm"
             style={{
-              borderColor: "var(--neopop-blue)",
-              color: "#8CB0FF",
+              borderColor: "var(--neopop-gold)",
+              color: "var(--neopop-gold)",
             }}
           >
-            <span>🏢 APEX SUMMIT DEMO ($125,000)</span>
+            <span>🏢 Apex Summit Demo ($125,000)</span>
           </button>
         </div>
 
@@ -219,9 +206,9 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                         gap: "8px",
                         padding: "12px 14px",
                         borderRadius: "var(--radius-md)",
-                        border: isSelected ? "2px solid var(--neopop-mint)" : "1.5px solid var(--surface-border)",
+                        border: isSelected ? "2px solid var(--replit-orange)" : "1.5px solid var(--surface-border)",
                         background: isSelected ? "var(--surface-alt)" : "#0C0E14",
-                        color: isSelected ? "var(--neopop-mint)" : "var(--ink-secondary)",
+                        color: isSelected ? "var(--replit-orange)" : "var(--ink-secondary)",
                         fontWeight: 700,
                         fontSize: "12.5px",
                         textTransform: "uppercase",
