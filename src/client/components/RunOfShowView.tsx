@@ -47,12 +47,14 @@ export const RunOfShowView: React.FC<RunOfShowViewProps> = ({
           </div>
           <div style={{ display: "flex", gap: "8px" }}>
             <button
+              aria-label="Suggest schedule"
               onClick={() => onOpenAskFestiya("Suggest a seamless evening run-of-show schedule for this event")}
               className="btn btn-secondary btn-sm"
             >
               Suggest schedule
             </button>
             <button
+              aria-label="Add schedule cue"
               onClick={() => setShowAddModal(true)}
               className="btn btn-primary btn-sm"
             >
@@ -110,15 +112,28 @@ export const RunOfShowView: React.FC<RunOfShowViewProps> = ({
       </div>
 
       {showAddModal && (
-        <div className="modal-backdrop" onClick={() => setShowAddModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "440px" }}>
+        <div
+          role="button"
+          tabIndex={0}
+          aria-label="Close schedule cue modal overlay"
+          className="modal-backdrop"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowAddModal(false);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setShowAddModal(false);
+          }}
+        >
+          <div className="modal-content" style={{ maxWidth: "440px" }} role="dialog" aria-modal="true">
             <h3 className="serif-heading" style={{ fontSize: "20px", marginBottom: "16px" }}>
               Add Schedule Cue
             </h3>
             <form onSubmit={handleCreateSubmit} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
               <div className="form-group">
-                <label className="form-label">Time</label>
+                <label htmlFor="cue-time" className="form-label">Time</label>
                 <input
+                  id="cue-time"
+                  aria-label="Cue time"
                   className="form-input"
                   value={newTime}
                   onChange={(e) => setNewTime(e.target.value)}
@@ -128,8 +143,10 @@ export const RunOfShowView: React.FC<RunOfShowViewProps> = ({
               </div>
 
               <div className="form-group">
-                <label className="form-label">Activity / Cue</label>
+                <label htmlFor="cue-activity" className="form-label">Activity / Cue</label>
                 <input
+                  id="cue-activity"
+                  aria-label="Activity or cue"
                   className="form-input"
                   value={newActivity}
                   onChange={(e) => setNewActivity(e.target.value)}
@@ -139,8 +156,10 @@ export const RunOfShowView: React.FC<RunOfShowViewProps> = ({
               </div>
 
               <div className="form-group">
-                <label className="form-label">Lead / Owner</label>
+                <label htmlFor="cue-owner" className="form-label">Lead / Owner</label>
                 <input
+                  id="cue-owner"
+                  aria-label="Lead or owner"
                   className="form-input"
                   value={newOwner}
                   onChange={(e) => setNewOwner(e.target.value)}
@@ -149,10 +168,10 @@ export const RunOfShowView: React.FC<RunOfShowViewProps> = ({
               </div>
 
               <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "16px" }}>
-                <button type="button" onClick={() => setShowAddModal(false)} className="btn btn-secondary">
+                <button aria-label="Cancel" type="button" onClick={() => setShowAddModal(false)} className="btn btn-secondary">
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
+                <button aria-label="Save cue" type="submit" className="btn btn-primary">
                   Save Cue
                 </button>
               </div>

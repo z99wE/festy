@@ -26,6 +26,7 @@ export const RisksView: React.FC<RisksViewProps> = ({
             </p>
           </div>
           <button
+            aria-label="Stress-test event risks"
             onClick={() => onOpenAskFestiya("Identify weather and vendor delay contingencies for this venue")}
             className="btn btn-secondary btn-sm"
           >
@@ -66,6 +67,7 @@ export const RisksView: React.FC<RisksViewProps> = ({
             </div>
 
             <button
+              aria-label={risk.isResolved ? `Mark risk unresolved: ${risk.risk}` : `Mark risk secured: ${risk.risk}`}
               onClick={() => onToggleResolve(risk.id, !risk.isResolved)}
               className={`btn btn-sm ${risk.isResolved ? "btn-secondary" : "btn-primary"}`}
               style={{ whiteSpace: "nowrap" }}

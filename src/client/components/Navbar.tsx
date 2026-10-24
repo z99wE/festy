@@ -51,6 +51,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Brand */}
         <div style={{ display: "flex", alignItems: "center", gap: "28px" }}>
           <button
+            aria-label="Festiya Home"
             onClick={() => setCurrentView("landing")}
             style={{
               display: "flex",
@@ -58,7 +59,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               gap: "10px",
               textAlign: "left",
             }}
-            aria-label="Festiya Home"
           >
             <div
               style={{
@@ -93,6 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Navigation Links */}
           <nav style={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <button
+              aria-label="Explore"
               onClick={() => setCurrentView("landing")}
               className={`btn btn-sm ${currentView === "landing" ? "btn-secondary" : ""}`}
               style={{ color: currentView === "landing" ? "var(--ink)" : "var(--ink-secondary)" }}
@@ -102,6 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {events.length > 0 && (
               <button
+                aria-label="Workspace"
                 onClick={() => setCurrentView("workspace")}
                 className={`btn btn-sm ${currentView === "workspace" ? "btn-secondary" : ""}`}
                 style={{ color: currentView === "workspace" ? "var(--ink)" : "var(--ink-secondary)" }}
@@ -112,6 +114,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
 
             <button
+              aria-label="Pricing"
               onClick={() => setCurrentView("pricing")}
               className={`btn btn-sm ${currentView === "pricing" ? "btn-secondary" : ""}`}
               style={{ color: currentView === "pricing" ? "var(--ink)" : "var(--ink-secondary)" }}
@@ -224,6 +227,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* New Event CTA */}
           <button
+            aria-label="Plan an event"
             onClick={onOpenNewEventModal}
             className="btn btn-primary"
             style={{ fontWeight: 700 }}

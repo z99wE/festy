@@ -75,8 +75,19 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
   };
 
   return (
-    <div className="modal-backdrop" onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="brief-title">
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div
+      role="button"
+      tabIndex={0}
+      aria-label="Close event brief modal overlay"
+      className="modal-backdrop"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Escape") onClose();
+      }}
+    >
+      <div className="modal-content" role="dialog" aria-modal="true" aria-labelledby="brief-title">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
           <div>
             <div className="badge badge-coral" style={{ marginBottom: "8px" }}>
@@ -91,6 +102,7 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
             </p>
           </div>
           <button
+            aria-label="Close modal"
             onClick={onClose}
             style={{
               padding: "6px",
@@ -98,7 +110,6 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
               color: "var(--ink-muted)",
               cursor: "pointer",
             }}
-            aria-label="Close modal"
           >
             <X size={20} />
           </button>
@@ -107,8 +118,9 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {/* Category */}
           <div className="form-group">
-            <label className="form-label">Category *</label>
+            <label htmlFor="brief-category-select" className="form-label">Category *</label>
             <select
+              id="brief-category-select"
               className="form-select"
               value={category}
               onChange={(e) => setCategory(e.target.value as EventCategory)}
@@ -123,8 +135,10 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
 
           {/* Occasion / Name */}
           <div className="form-group">
-            <label className="form-label">Event Name / Occasion *</label>
+            <label htmlFor="brief-event-name" className="form-label">Event Name / Occasion *</label>
             <input
+              id="brief-event-name"
+              aria-label="Event Name or Occasion"
               className="form-input"
               placeholder="e.g. Maya & Arjun's Destination Wedding or 40th Birthday"
               value={name}
@@ -140,8 +154,9 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
             <div className="form-group">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <label className="form-label">Date Status</label>
+                <label htmlFor="brief-start-date" className="form-label">Date Status</label>
                 <button
+                  aria-label="Toggle date status between decided and undecided"
                   type="button"
                   onClick={() => setDateMode(dateMode === "decided" ? "undecided" : "decided")}
                   style={{ fontSize: "11px", color: "var(--cobalt)", fontWeight: 600 }}
@@ -151,6 +166,8 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
               </div>
               {dateMode === "decided" ? (
                 <input
+                  id="brief-start-date"
+                  aria-label="Event start date"
                   type="date"
                   className="form-input"
                   value={startDate}
@@ -164,8 +181,9 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
             </div>
 
             <div className="form-group">
-              <label className="form-label">Location Mode</label>
+              <label htmlFor="brief-location-mode" className="form-label">Location Mode</label>
               <select
+                id="brief-location-mode"
                 className="form-select"
                 value={locationMode}
                 onChange={(e) => setLocationMode(e.target.value as LocationMode)}
@@ -179,8 +197,10 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
 
           {/* Location Address */}
           <div className="form-group">
-            <label className="form-label">Destination / Venue Address (Optional)</label>
+            <label htmlFor="brief-location-address" className="form-label">Destination / Venue Address (Optional)</label>
             <input
+              id="brief-location-address"
+              aria-label="Destination or venue address"
               className="form-input"
               placeholder="e.g. Brooklyn Botanic Garden or Jaipur Heritage Palace"
               value={locationAddress}
@@ -191,8 +211,10 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
           {/* Guests & Budget */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
             <div className="form-group">
-              <label className="form-label">Guest Count Estimate</label>
+              <label htmlFor="brief-guest-count" className="form-label">Guest Count Estimate</label>
               <input
+                id="brief-guest-count"
+                aria-label="Guest count estimate"
                 type="number"
                 className="form-input"
                 placeholder="e.g. 80"
@@ -202,9 +224,11 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
             </div>
 
             <div className="form-group">
-              <label className="form-label">Target Budget</label>
+              <label htmlFor="brief-target-budget" className="form-label">Target Budget</label>
               <div style={{ display: "flex", gap: "6px" }}>
                 <select
+                  id="brief-currency-select"
+                  aria-label="Currency"
                   className="form-select"
                   style={{ width: "90px" }}
                   value={currency}
@@ -219,6 +243,8 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
                   <option value="JPY">JPY (¥)</option>
                 </select>
                 <input
+                  id="brief-target-budget"
+                  aria-label="Target budget amount"
                   type="number"
                   className="form-input"
                   placeholder="e.g. 12000"
@@ -231,8 +257,10 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
 
           {/* Aesthetic Style */}
           <div className="form-group">
-            <label className="form-label">Style & Atmosphere (Optional)</label>
+            <label htmlFor="brief-style" className="form-label">Style & Atmosphere (Optional)</label>
             <input
+              id="brief-style"
+              aria-label="Style and atmosphere"
               className="form-input"
               placeholder="e.g. Candlelit bohemian courtyard, modern editorial chic"
               value={style}
@@ -240,10 +268,11 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
             />
           </div>
 
-          {/* Dietary & Accessibility Constraints */}
+          {/* Dietary & Constraints */}
           <div className="form-group">
-            <label className="form-label">Dietary, Accessibility or Timing Constraints (Optional)</label>
+            <label htmlFor="brief-constraints" className="form-label">Dietary, Accessibility or Timing Constraints (Optional)</label>
             <textarea
+              id="brief-constraints"
               className="form-textarea"
               rows={2}
               placeholder="e.g. Step-free wheelchair access, gluten-free vegan options, strict 10 PM sound curfew"
@@ -266,6 +295,7 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
           }}
         >
           <button
+            aria-label="Save draft only"
             type="button"
             onClick={() => handleSubmit(false)}
             className="btn btn-secondary"
@@ -274,6 +304,7 @@ export const EventBriefModal: React.FC<EventBriefModalProps> = ({
           </button>
 
           <button
+            aria-label="Generate structured plan"
             type="button"
             onClick={() => handleSubmit(true)}
             className="btn btn-primary"

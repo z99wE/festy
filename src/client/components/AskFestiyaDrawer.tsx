@@ -59,8 +59,19 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
   };
 
   return (
-    <div className="drawer-backdrop" onClick={onClose} role="dialog" aria-modal="true">
-      <div className="drawer-panel" onClick={(e) => e.stopPropagation()}>
+    <div
+      role="button"
+      tabIndex={0}
+      aria-label="Close Ask Festiya drawer overlay"
+      className="drawer-backdrop"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Escape") onClose();
+      }}
+    >
+      <div className="drawer-panel" role="region" aria-label="Ask Festiya assistant panel">
         {/* Header */}
         <div
           style={{
@@ -111,6 +122,7 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
               {quickPrompts.map((qp, idx) => (
                 <button
                   key={idx}
+                  aria-label={qp}
                   onClick={() => {
                     setPrompt(qp);
                     handleSend(qp);
@@ -167,6 +179,7 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
                 </div>
               ) : (
                 <button
+                  aria-label="Apply proposed revision to workspace"
                   onClick={handleApply}
                   className="btn btn-primary btn-sm"
                   style={{ width: "100%", justifyContent: "center" }}
@@ -188,6 +201,8 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
             style={{ display: "flex", gap: "8px" }}
           >
             <input
+              id="ask-festiya-prompt-input"
+              aria-label="Ask Festiya prompt"
               className="form-input"
               placeholder="e.g. Cut budget by 10% or add vegan desserts"
               value={prompt}
@@ -196,6 +211,7 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
               style={{ fontSize: "13.5px" }}
             />
             <button
+              aria-label="Send prompt to Festiya"
               type="submit"
               disabled={loading || !prompt.trim()}
               className="btn btn-primary"

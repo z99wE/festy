@@ -82,12 +82,14 @@ export const VendorsView: React.FC<VendorsViewProps> = ({
           </div>
           <div style={{ display: "flex", gap: "8px" }}>
             <button
+              aria-label="Draft questions to ask vendors"
               onClick={() => onOpenAskFestiya("Suggest key questions to ask prospective venue and catering vendors")}
               className="btn btn-secondary btn-sm"
             >
               Draft questions to ask
             </button>
             <button
+              aria-label="Add vendor"
               onClick={() => setShowAddModal(true)}
               className="btn btn-primary btn-sm"
             >
@@ -103,6 +105,7 @@ export const VendorsView: React.FC<VendorsViewProps> = ({
         {["all", "selected", "quote_received", "contacted", "to_research"].map((st) => (
           <button
             key={st}
+            aria-label={`Filter by ${st.replace("_", " ")}`}
             onClick={() => setFilterStatus(st)}
             className={`btn btn-sm ${filterStatus === st ? "btn-secondary" : ""}`}
             style={{ fontWeight: 600, textTransform: "capitalize" }}
@@ -216,15 +219,28 @@ export const VendorsView: React.FC<VendorsViewProps> = ({
 
       {/* Add Vendor Modal */}
       {showAddModal && (
-        <div className="modal-backdrop" onClick={() => setShowAddModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "480px" }}>
+        <div
+          role="button"
+          tabIndex={0}
+          aria-label="Close add vendor modal overlay"
+          className="modal-backdrop"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowAddModal(false);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setShowAddModal(false);
+          }}
+        >
+          <div className="modal-content" style={{ maxWidth: "480px" }} role="dialog" aria-modal="true">
             <h3 className="serif-heading" style={{ fontSize: "20px", marginBottom: "16px" }}>
               Add Vendor / Partner
             </h3>
             <form onSubmit={handleCreateSubmit} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
               <div className="form-group">
-                <label className="form-label">Vendor Business Name</label>
+                <label htmlFor="vendor-new-name" className="form-label">Vendor Business Name</label>
                 <input
+                  id="vendor-new-name"
+                  aria-label="Vendor business name"
                   className="form-input"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
@@ -235,8 +251,10 @@ export const VendorsView: React.FC<VendorsViewProps> = ({
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                 <div className="form-group">
-                  <label className="form-label">Category</label>
+                  <label htmlFor="vendor-new-category" className="form-label">Category</label>
                   <input
+                    id="vendor-new-category"
+                    aria-label="Category"
                     className="form-input"
                     value={newCategory}
                     onChange={(e) => setNewCategory(e.target.value)}
@@ -246,8 +264,9 @@ export const VendorsView: React.FC<VendorsViewProps> = ({
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Pipeline Status</label>
+                  <label htmlFor="vendor-new-status" className="form-label">Pipeline Status</label>
                   <select
+                    id="vendor-new-status"
                     className="form-select"
                     value={newStatus}
                     onChange={(e) => setNewStatus(e.target.value as VendorStatus)}
@@ -263,8 +282,10 @@ export const VendorsView: React.FC<VendorsViewProps> = ({
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                 <div className="form-group">
-                  <label className="form-label">Contact Person</label>
+                  <label htmlFor="vendor-new-contact" className="form-label">Contact Person</label>
                   <input
+                    id="vendor-new-contact"
+                    aria-label="Contact person"
                     className="form-input"
                     value={newContactName}
                     onChange={(e) => setNewContactName(e.target.value)}
@@ -272,8 +293,10 @@ export const VendorsView: React.FC<VendorsViewProps> = ({
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Quote Amount ({event.currency})</label>
+                  <label htmlFor="vendor-new-quote" className="form-label">Quote Amount ({event.currency})</label>
                   <input
+                    id="vendor-new-quote"
+                    aria-label={`Quote amount in ${event.currency}`}
                     type="number"
                     className="form-input"
                     value={newQuote}
@@ -285,8 +308,10 @@ export const VendorsView: React.FC<VendorsViewProps> = ({
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                 <div className="form-group">
-                  <label className="form-label">Email</label>
+                  <label htmlFor="vendor-new-email" className="form-label">Email</label>
                   <input
+                    id="vendor-new-email"
+                    aria-label="Contact email"
                     type="email"
                     className="form-input"
                     value={newContactEmail}
@@ -295,8 +320,10 @@ export const VendorsView: React.FC<VendorsViewProps> = ({
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Phone</label>
+                  <label htmlFor="vendor-new-phone" className="form-label">Phone</label>
                   <input
+                    id="vendor-new-phone"
+                    aria-label="Contact phone"
                     className="form-input"
                     value={newContactPhone}
                     onChange={(e) => setNewContactPhone(e.target.value)}
@@ -306,8 +333,9 @@ export const VendorsView: React.FC<VendorsViewProps> = ({
               </div>
 
               <div className="form-group">
-                <label className="form-label">Notes & Criteria</label>
+                <label htmlFor="vendor-new-notes" className="form-label">Notes & Criteria</label>
                 <textarea
+                  id="vendor-new-notes"
                   className="form-textarea"
                   rows={2}
                   value={newNotes}
@@ -317,10 +345,10 @@ export const VendorsView: React.FC<VendorsViewProps> = ({
               </div>
 
               <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "16px" }}>
-                <button type="button" onClick={() => setShowAddModal(false)} className="btn btn-secondary">
+                <button aria-label="Cancel" type="button" onClick={() => setShowAddModal(false)} className="btn btn-secondary">
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
+                <button aria-label="Save vendor" type="submit" className="btn btn-primary">
                   Save Vendor
                 </button>
               </div>

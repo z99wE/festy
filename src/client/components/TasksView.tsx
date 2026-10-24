@@ -77,12 +77,14 @@ export const TasksView: React.FC<TasksViewProps> = ({
           </div>
           <div style={{ display: "flex", gap: "8px" }}>
             <button
+              aria-label="Suggest missing tasks"
               onClick={() => onOpenAskFestiya("Suggest missing tasks based on current plan and timeline")}
               className="btn btn-secondary btn-sm"
             >
               Suggest missing tasks
             </button>
             <button
+              aria-label="Add task"
               onClick={() => setShowAddModal(true)}
               className="btn btn-primary btn-sm"
             >
@@ -117,6 +119,7 @@ export const TasksView: React.FC<TasksViewProps> = ({
         {["all", "todo", "in_progress", "done"].map((status) => (
           <button
             key={status}
+            aria-label={`Filter by ${status.replace("_", " ")}`}
             onClick={() => setFilterStatus(status)}
             className={`btn btn-sm ${filterStatus === status ? "btn-secondary" : ""}`}
             style={{ textTransform: "capitalize", fontWeight: 600 }}
@@ -156,6 +159,7 @@ export const TasksView: React.FC<TasksViewProps> = ({
               >
                 {/* Status Toggle Checkbox */}
                 <button
+                  aria-label={isDone ? "Mark todo" : "Mark done"}
                   onClick={() =>
                     onUpdateTask(task.id, {
                       status: isDone ? "todo" : "done",
@@ -167,7 +171,6 @@ export const TasksView: React.FC<TasksViewProps> = ({
                     cursor: "pointer",
                     marginTop: "2px",
                   }}
-                  aria-label={isDone ? "Mark todo" : "Mark done"}
                 >
                   {isDone ? <CheckSquare size={20} /> : <Square size={20} />}
                 </button>
@@ -232,15 +235,28 @@ export const TasksView: React.FC<TasksViewProps> = ({
 
       {/* Add Task Modal */}
       {showAddModal && (
-        <div className="modal-backdrop" onClick={() => setShowAddModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "480px" }}>
+        <div
+          role="button"
+          tabIndex={0}
+          aria-label="Close add task modal overlay"
+          className="modal-backdrop"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowAddModal(false);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setShowAddModal(false);
+          }}
+        >
+          <div className="modal-content" style={{ maxWidth: "480px" }} role="dialog" aria-modal="true">
             <h3 className="serif-heading" style={{ fontSize: "20px", marginBottom: "16px" }}>
               Add New Task
             </h3>
             <form onSubmit={handleCreateSubmit} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
               <div className="form-group">
-                <label className="form-label">Task Title</label>
+                <label htmlFor="task-new-title" className="form-label">Task Title</label>
                 <input
+                  id="task-new-title"
+                  aria-label="Task title"
                   className="form-input"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
@@ -250,8 +266,9 @@ export const TasksView: React.FC<TasksViewProps> = ({
               </div>
 
               <div className="form-group">
-                <label className="form-label">Description / Instructions</label>
+                <label htmlFor="task-new-desc" className="form-label">Description / Instructions</label>
                 <textarea
+                  id="task-new-desc"
                   className="form-textarea"
                   rows={2}
                   value={newDescription}
@@ -262,8 +279,9 @@ export const TasksView: React.FC<TasksViewProps> = ({
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                 <div className="form-group">
-                  <label className="form-label">Priority</label>
+                  <label htmlFor="task-new-priority" className="form-label">Priority</label>
                   <select
+                    id="task-new-priority"
                     className="form-select"
                     value={newPriority}
                     onChange={(e) => setNewPriority(e.target.value as TaskPriority)}
@@ -276,8 +294,10 @@ export const TasksView: React.FC<TasksViewProps> = ({
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Due Date</label>
+                  <label htmlFor="task-new-due-date" className="form-label">Due Date</label>
                   <input
+                    id="task-new-due-date"
+                    aria-label="Due date"
                     type="date"
                     className="form-input"
                     value={newDueDate}
@@ -287,8 +307,10 @@ export const TasksView: React.FC<TasksViewProps> = ({
               </div>
 
               <div className="form-group">
-                <label className="form-label">Assignee / Owner Name</label>
+                <label htmlFor="task-new-owner" className="form-label">Assignee / Owner Name</label>
                 <input
+                  id="task-new-owner"
+                  aria-label="Assignee or owner name"
                   className="form-input"
                   value={newOwner}
                   onChange={(e) => setNewOwner(e.target.value)}
@@ -297,10 +319,10 @@ export const TasksView: React.FC<TasksViewProps> = ({
               </div>
 
               <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "16px" }}>
-                <button type="button" onClick={() => setShowAddModal(false)} className="btn btn-secondary">
+                <button aria-label="Cancel" type="button" onClick={() => setShowAddModal(false)} className="btn btn-secondary">
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
+                <button aria-label="Save task" type="submit" className="btn btn-primary">
                   Save Task
                 </button>
               </div>

@@ -167,6 +167,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
         {/* Category Tabs */}
         <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
           <button
+            aria-label="All categories"
             onClick={() => setSelectedCategory("all")}
             className={`btn btn-sm ${selectedCategory === "all" ? "btn-secondary" : ""}`}
             style={{ fontWeight: 600 }}
@@ -176,6 +177,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
           {categories.map((cat) => (
             <button
               key={cat}
+              aria-label={`Filter by ${cat}`}
               onClick={() => setSelectedCategory(cat)}
               className={`btn btn-sm ${selectedCategory === cat ? "btn-secondary" : ""}`}
               style={{ fontWeight: 600 }}
@@ -188,12 +190,14 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
         {/* Action CTAs */}
         <div style={{ display: "flex", gap: "8px" }}>
           <button
+            aria-label="Ask Festiya to optimize budget"
             onClick={() => onOpenAskFestiya("Analyze budget variances and suggest cost reductions")}
             className="btn btn-secondary btn-sm"
           >
             Ask Festiya to optimize
           </button>
           <button
+            aria-label="Add expense line item"
             onClick={() => setShowAddModal(true)}
             className="btn btn-primary btn-sm"
           >
@@ -272,6 +276,8 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                     <td style={{ padding: "14px 18px", textAlign: "right" }}>
                       <div style={{ display: "inline-flex", gap: "6px" }}>
                         <button
+                          aria-label="Record paid amount"
+                          title="Record payment"
                           onClick={() => {
                             const newPaid = prompt("Enter actual paid amount:", item.actualAmount?.toString() || "");
                             if (newPaid !== null) {
@@ -283,7 +289,6 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                           }}
                           className="btn btn-secondary btn-sm"
                           style={{ padding: "4px 8px" }}
-                          title="Record payment"
                         >
                           Record Paid
                         </button>
@@ -306,15 +311,28 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
 
       {/* Add Item Modal */}
       {showAddModal && (
-        <div className="modal-backdrop" onClick={() => setShowAddModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "500px" }}>
+        <div
+          role="button"
+          tabIndex={0}
+          aria-label="Close add budget item overlay"
+          className="modal-backdrop"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowAddModal(false);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setShowAddModal(false);
+          }}
+        >
+          <div className="modal-content" style={{ maxWidth: "500px" }} role="dialog" aria-modal="true">
             <h3 className="serif-heading" style={{ fontSize: "20px", marginBottom: "16px" }}>
               Add Budget Line Item
             </h3>
             <form onSubmit={handleCreateSubmit} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
               <div className="form-group">
-                <label className="form-label">Category</label>
+                <label htmlFor="budget-new-category" className="form-label">Category</label>
                 <input
+                  id="budget-new-category"
+                  aria-label="Category"
                   className="form-input"
                   value={newItemCategory}
                   onChange={(e) => setNewItemCategory(e.target.value)}
@@ -324,8 +342,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
               </div>
 
               <div className="form-group">
-                <label className="form-label">Item Label</label>
+                <label htmlFor="budget-new-label" className="form-label">Item Label</label>
                 <input
+                  id="budget-new-label"
+                  aria-label="Item Label"
                   className="form-input"
                   value={newItemLabel}
                   onChange={(e) => setNewItemLabel(e.target.value)}
@@ -336,8 +356,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                 <div className="form-group">
-                  <label className="form-label">Estimate ({event.currency})</label>
+                  <label htmlFor="budget-new-estimate" className="form-label">Estimate ({event.currency})</label>
                   <input
+                    id="budget-new-estimate"
+                    aria-label={`Estimate in ${event.currency}`}
                     type="number"
                     className="form-input"
                     value={newItemEstimate}
@@ -346,8 +368,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Quote Received ({event.currency})</label>
+                  <label htmlFor="budget-new-quoted" className="form-label">Quote Received ({event.currency})</label>
                   <input
+                    id="budget-new-quoted"
+                    aria-label={`Quote received in ${event.currency}`}
                     type="number"
                     className="form-input"
                     value={newItemQuoted}
@@ -359,8 +383,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                 <div className="form-group">
-                  <label className="form-label">Committed ({event.currency})</label>
+                  <label htmlFor="budget-new-committed" className="form-label">Committed ({event.currency})</label>
                   <input
+                    id="budget-new-committed"
+                    aria-label={`Committed amount in ${event.currency}`}
                     type="number"
                     className="form-input"
                     value={newItemCommitted}
@@ -369,8 +395,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Actual Paid ({event.currency})</label>
+                  <label htmlFor="budget-new-actual" className="form-label">Actual Paid ({event.currency})</label>
                   <input
+                    id="budget-new-actual"
+                    aria-label={`Actual paid amount in ${event.currency}`}
                     type="number"
                     className="form-input"
                     value={newItemActual}
@@ -381,10 +409,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
               </div>
 
               <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "16px" }}>
-                <button type="button" onClick={() => setShowAddModal(false)} className="btn btn-secondary">
+                <button aria-label="Cancel" type="button" onClick={() => setShowAddModal(false)} className="btn btn-secondary">
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
+                <button aria-label="Save line item" type="submit" className="btn btn-primary">
                   Save Item
                 </button>
               </div>

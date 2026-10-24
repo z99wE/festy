@@ -33,6 +33,7 @@ export const IdeasView: React.FC<IdeasViewProps> = ({
             </p>
           </div>
           <button
+            aria-label="Brainstorm new ideas"
             onClick={() => onOpenAskFestiya("Brainstorm 3 surprising sensory guest ideas for this celebration")}
             className="btn btn-secondary btn-sm"
           >
@@ -82,6 +83,7 @@ export const IdeasView: React.FC<IdeasViewProps> = ({
                   </div>
                 ) : (
                   <button
+                    aria-label={`Accept idea: ${idea.title}`}
                     onClick={() => onAcceptIdea(idea)}
                     className="btn btn-secondary btn-sm"
                     style={{ width: "100%", justifyContent: "center" }}

@@ -9,6 +9,9 @@ export interface Money {
   currency: string;
 }
 
+/**
+ * Converts a decimal representation (number or string) into exact Money object in minor units.
+ */
 export function fromDecimal(amount: number | string | undefined | null, currency = "USD"): Money {
   if (amount === undefined || amount === null || amount === "") {
     return { cents: 0n, currency };
@@ -23,10 +26,16 @@ export function fromDecimal(amount: number | string | undefined | null, currency
   return { cents: totalCents, currency };
 }
 
+/**
+ * Converts a Money struct in minor units back into a standard decimal float.
+ */
 export function toDecimal(money: Money): number {
   return Number(money.cents) / 100;
 }
 
+/**
+ * Adds two Money values together, validating currency parity.
+ */
 export function addMoney(a: Money, b: Money): Money {
   if (a.currency !== b.currency) {
     throw new Error(`Currency mismatch: cannot add ${a.currency} and ${b.currency}`);

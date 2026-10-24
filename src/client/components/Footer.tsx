@@ -66,6 +66,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenExportModal, onOpenPricing
               </li>
               <li>
                 <button
+                  aria-label="Open pricing and entitlements"
                   onClick={onOpenPricing}
                   style={{ color: "var(--ink-secondary)", cursor: "pointer", fontSize: "13px" }}
                 >
@@ -100,6 +101,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenExportModal, onOpenPricing
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "8px" }}>
               <li>
                 <button
+                  aria-label="Open GDPR data export modal"
                   onClick={onOpenExportModal}
                   style={{ color: "var(--cobalt)", fontWeight: 600, cursor: "pointer", fontSize: "13px" }}
                 >

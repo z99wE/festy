@@ -131,6 +131,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               Explore Live Demos:
             </span>
             <button
+              aria-label="Explore Jaipur wedding demo"
               onClick={() => onExploreDemoEvent("evt_wedding_jaipur")}
               className="badge badge-sunshine"
               style={{ cursor: "pointer", padding: "6px 12px", fontSize: "13px" }}
@@ -138,6 +139,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               💍 Maya & Arjun's Destination Wedding (Jaipur)
             </button>
             <button
+              aria-label="Explore Apex summit demo"
               onClick={() => onExploreDemoEvent("evt_apex_summit")}
               className="badge badge-cobalt"
               style={{ cursor: "pointer", padding: "6px 12px", fontSize: "13px" }}
@@ -172,6 +174,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                       <button
                         type="button"
                         key={c.key}
+                        aria-label={`Select ${c.label} category`}
                         onClick={() => setCategory(c.key)}
                         style={{
                           display: "flex",
@@ -229,8 +232,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 {/* Date */}
                 <div className="form-group">
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <label className="form-label">Event Date</label>
+                    <label htmlFor="landing-event-date" className="form-label">Event Date</label>
                     <button
+                      aria-label="Toggle event date between decided and undecided"
                       type="button"
                       onClick={() => setDateMode(dateMode === "decided" ? "undecided" : "decided")}
                       style={{ fontSize: "11px", color: "var(--cobalt)", fontWeight: 600 }}
@@ -240,6 +244,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   </div>
                   {dateMode === "decided" ? (
                     <input
+                      id="landing-event-date"
+                      aria-label="Event date"
                       type="date"
                       className="form-input"
                       value={startDate}
@@ -263,8 +269,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
                 {/* Guest Count */}
                 <div className="form-group">
-                  <label className="form-label">Approximate Guests</label>
+                  <label htmlFor="landing-guest-count" className="form-label">Approximate Guests</label>
                   <input
+                    id="landing-guest-count"
+                    aria-label="Approximate guest count"
                     type="number"
                     className="form-input"
                     min="2"
@@ -277,9 +285,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
                 {/* Target Budget & Currency */}
                 <div className="form-group">
-                  <label className="form-label">Target Budget</label>
+                  <label htmlFor="landing-target-budget" className="form-label">Target Budget</label>
                   <div style={{ display: "flex", gap: "8px" }}>
                     <select
+                      id="landing-currency"
+                      aria-label="Currency"
                       className="form-select"
                       style={{ width: "95px", fontWeight: 700 }}
                       value={currency}
@@ -295,6 +305,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                       <option value="SGD">SGD (S$)</option>
                     </select>
                     <input
+                      id="landing-target-budget"
+                      aria-label="Target budget"
                       type="number"
                       className="form-input"
                       value={targetBudget ?? ""}
@@ -311,6 +323,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   ⚡ Generates low/likely/high estimates, vendor criteria, tasks & timeline.
                 </p>
                 <button
+                  aria-label="Build my event plan"
                   type="submit"
                   className="btn btn-primary"
                   style={{
@@ -540,6 +553,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 Focusing investments into sensory touches: custom fragrance bars, live watercolor portraitists, and handwritten guest welcomes.
               </p>
               <button
+                aria-label="View Jaipur Wedding Example"
                 onClick={() => onExploreDemoEvent("evt_wedding_jaipur")}
                 className="btn btn-secondary btn-sm"
               >
@@ -555,6 +569,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 Clever budget allocations: food truck gallerias, Spotify acoustic transition sets, and twilight micro-lighting over public venues.
               </p>
               <button
+                aria-label="Try Budget Template"
                 onClick={() => {
                   setOccasion("Rooftop Sunset Gathering with Friends");
                   setCategory("gathering");
@@ -575,6 +590,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 Large scale gatherings and professional executive summits with hybrid audio/video, designated speaker runs, and VIP dinners.
               </p>
               <button
+                aria-label="View Executive Summit Example"
                 onClick={() => onExploreDemoEvent("evt_apex_summit")}
                 className="btn btn-secondary btn-sm"
               >
@@ -604,13 +620,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </p>
           <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
             <button
+              aria-label="Start Planning Now"
               onClick={() => window.scrollTo({ top: 120, behavior: "smooth" })}
               className="btn btn-primary"
             >
               <span>Start Planning Now</span>
               <ArrowRight size={16} />
             </button>
-            <button onClick={onGoToPricing} className="btn btn-secondary">
+            <button
+              aria-label="View Pricing and Entitlements"
+              onClick={onGoToPricing}
+              className="btn btn-secondary"
+            >
               View Pricing & Entitlements
             </button>
           </div>

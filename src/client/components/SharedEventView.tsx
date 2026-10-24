@@ -45,6 +45,7 @@ export const SharedEventView: React.FC<SharedEventViewProps> = ({
             🔒 Viewing read-only client proposal for <strong>{event.name}</strong>
           </span>
           <button
+            aria-label="Exit client preview"
             onClick={onExitPreview}
             style={{
               color: "var(--sunshine)",

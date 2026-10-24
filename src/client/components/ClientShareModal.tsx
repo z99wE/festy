@@ -56,8 +56,19 @@ export const ClientShareModal: React.FC<ClientShareModalProps> = ({
   };
 
   return (
-    <div className="modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
-      <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "560px" }}>
+    <div
+      role="button"
+      tabIndex={0}
+      aria-label="Close client share dialog overlay"
+      className="modal-backdrop"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Escape") onClose();
+      }}
+    >
+      <div className="modal-content" style={{ maxWidth: "560px" }} role="dialog" aria-modal="true">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "18px" }}>
           <div>
             <div className="badge badge-cobalt" style={{ marginBottom: "6px" }}>
@@ -85,6 +96,7 @@ export const ClientShareModal: React.FC<ClientShareModalProps> = ({
             {availableSections.map((sec) => (
               <label
                 key={sec.key}
+                htmlFor={`section-${sec.key}`}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -97,6 +109,8 @@ export const ClientShareModal: React.FC<ClientShareModalProps> = ({
                 }}
               >
                 <input
+                  id={`section-${sec.key}`}
+                  aria-label={`Allow client to view ${sec.label}`}
                   type="checkbox"
                   checked={selectedSections.includes(sec.key)}
                   onChange={() => toggleSection(sec.key)}
@@ -109,17 +123,24 @@ export const ClientShareModal: React.FC<ClientShareModalProps> = ({
 
         {share && !share.isRevoked ? (
           <div>
-            <label className="form-label" style={{ marginBottom: "6px", display: "block" }}>
+            <label htmlFor="client-share-link" className="form-label" style={{ marginBottom: "6px", display: "block" }}>
               Active Share Link (Views: {share.viewCount})
             </label>
             <div style={{ display: "flex", gap: "8px", marginBottom: "16px" }}>
               <input
+                id="client-share-link"
+                aria-label="Client shareable link"
                 className="form-input"
                 readOnly
                 value={shareUrl}
                 style={{ fontSize: "12px", background: "var(--surface-alt)" }}
               />
-              <button onClick={handleCopy} className="btn btn-secondary btn-sm" style={{ padding: "8px 14px" }}>
+              <button
+                aria-label="Copy share link to clipboard"
+                onClick={handleCopy}
+                className="btn btn-secondary btn-sm"
+                style={{ padding: "8px 14px" }}
+              >
                 {copied ? <Check size={16} color="var(--mint)" /> : <Copy size={16} />}
                 <span>{copied ? "Copied" : "Copy"}</span>
               </button>
@@ -127,6 +148,7 @@ export const ClientShareModal: React.FC<ClientShareModalProps> = ({
 
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <button
+                aria-label="Preview client view"
                 onClick={() => onOpenPreview(share.shareToken)}
                 className="btn btn-secondary btn-sm"
               >
@@ -134,6 +156,7 @@ export const ClientShareModal: React.FC<ClientShareModalProps> = ({
                 <span>Preview client view</span>
               </button>
               <button
+                aria-label="Revoke link access"
                 onClick={() => onRevokeShare(share.id)}
                 style={{ color: "#E03131", fontSize: "12.5px", fontWeight: 600, cursor: "pointer" }}
               >
@@ -144,6 +167,7 @@ export const ClientShareModal: React.FC<ClientShareModalProps> = ({
         ) : (
           <div style={{ textAlign: "center", paddingTop: "10px" }}>
             <button
+              aria-label="Generate secure client link"
               onClick={() => onCreateShare(selectedSections)}
               className="btn btn-primary"
               style={{ width: "100%" }}

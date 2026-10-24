@@ -142,6 +142,7 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
           {/* Breadcrumb back */}
           <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px", fontSize: "12.5px" }}>
             <button
+              aria-label="Back to Events Overview"
               onClick={onBackToLanding}
               style={{ display: "flex", alignItems: "center", gap: "4px", color: "var(--ink-secondary)", cursor: "pointer" }}
             >
@@ -216,6 +217,7 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
             {/* Quick Action Buttons */}
             <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
               <button
+                aria-label="Ask Festiya assistant"
                 onClick={() => onOpenAskFestiya()}
                 className="btn btn-secondary"
                 style={{ border: "1.5px solid var(--coral)", color: "var(--coral)" }}
@@ -224,12 +226,12 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
                 <span>Ask Festiya</span>
               </button>
 
-              <button onClick={onOpenShareModal} className="btn btn-secondary">
+              <button aria-label="Share Client Link" onClick={onOpenShareModal} className="btn btn-secondary">
                 <Share2 size={16} />
                 <span>Share Client Link</span>
               </button>
 
-              <button onClick={onOpenExportModal} className="btn btn-secondary">
+              <button aria-label="Export Proposal" onClick={onOpenExportModal} className="btn btn-secondary">
                 <Download size={16} />
                 <span>Export Proposal</span>
               </button>
@@ -317,6 +319,7 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
             return (
               <button
                 key={tab.key}
+                aria-label={tab.label}
                 onClick={() => setActiveTab(tab.key)}
                 style={{
                   display: "flex",

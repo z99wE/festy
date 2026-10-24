@@ -670,6 +670,7 @@ export const App: React.FC = () => {
               {activeWorkspace && (
                 <div style={{ textAlign: "center", marginBottom: "24px" }}>
                   <button
+                    aria-label="Open billing and subscription manager"
                     onClick={() => setIsBillingModalOpen(true)}
                     className="btn btn-primary"
                   >

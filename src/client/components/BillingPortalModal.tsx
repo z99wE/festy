@@ -85,8 +85,19 @@ export const BillingPortalModal: React.FC<BillingPortalModalProps> = ({
   };
 
   return (
-    <div className="modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
-      <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "860px" }}>
+    <div
+      role="button"
+      tabIndex={0}
+      aria-label="Close billing modal overlay"
+      className="modal-backdrop"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Escape") onClose();
+      }}
+    >
+      <div className="modal-content" style={{ maxWidth: "860px" }} role="dialog" aria-modal="true">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
           <div>
             <div className="badge badge-mint" style={{ marginBottom: "6px" }}>
@@ -210,6 +221,7 @@ export const BillingPortalModal: React.FC<BillingPortalModalProps> = ({
                     </div>
                   ) : (
                     <button
+                      aria-label={`Select ${t.name} plan`}
                       onClick={() => handleSelectTier(t.id)}
                       disabled={loadingTier === t.id}
                       className="btn btn-secondary btn-sm"

@@ -28,6 +28,7 @@ export const PlanView: React.FC<PlanViewProps> = ({
           Turn the event brief into an actionable plan with budget allocations, timelines, and partner criteria.
         </p>
         <button
+          aria-label="Generate AI plan"
           onClick={onRegenerate}
           disabled={isRegenerating}
           className="btn btn-primary"
@@ -63,6 +64,7 @@ export const PlanView: React.FC<PlanViewProps> = ({
 
           <div style={{ display: "flex", gap: "8px" }}>
             <button
+              aria-label="Ask Festiya about concept"
               onClick={() => onOpenAskFestiya("Suggest creative improvements to the executive concept")}
               className="btn btn-secondary btn-sm"
             >
@@ -70,10 +72,11 @@ export const PlanView: React.FC<PlanViewProps> = ({
               <span>Ask Festiya</span>
             </button>
             <button
+              aria-label="Regenerate plan"
+              title="Regenerate plan"
               onClick={onRegenerate}
               disabled={isRegenerating}
               className="btn btn-secondary btn-sm"
-              title="Regenerate plan"
             >
               <RefreshCw size={14} className={isRegenerating ? "spin" : ""} />
               <span>{isRegenerating ? "Updating..." : "Re-synthesize"}</span>
@@ -154,6 +157,7 @@ export const PlanView: React.FC<PlanViewProps> = ({
                   <span>{q}</span>
                 </div>
                 <button
+                  aria-label={`Resolve question: ${q}`}
                   onClick={() => onOpenAskFestiya(`Help me decide: ${q}`)}
                   className="badge badge-cobalt"
                   style={{ cursor: "pointer", whiteSpace: "nowrap" }}
