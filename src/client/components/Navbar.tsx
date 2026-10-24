@@ -1,5 +1,5 @@
 import React from "react";
-import { Sparkles, Calendar, Plus, Building2, UserCircle2, ArrowRight } from "lucide-react";
+import { Sparkles, Calendar, Plus, Building2, UserCircle2, ArrowRight, Lock, Search } from "lucide-react";
 import { Workspace, Event } from "../../types/index.ts";
 
 interface NavbarProps {
@@ -38,6 +38,52 @@ export const Navbar: React.FC<NavbarProps> = ({
         boxShadow: "var(--shadow-sm)",
       }}
     >
+      {/* 1. Chromium Browser Window Top Frame */}
+      <div className="chromium-tab-bar">
+        {/* Window controls (traffic light dots) */}
+        <div style={{ display: "flex", alignItems: "center", gap: "6px", marginRight: "12px" }}>
+          <span className="chromium-dot chromium-dot-red" />
+          <span className="chromium-dot chromium-dot-yellow" />
+          <span className="chromium-dot chromium-dot-green" />
+        </div>
+
+        {/* Chromium Tabs */}
+        <button
+          aria-label="Festiya Scenes Tab"
+          onClick={() => setCurrentView("landing")}
+          className={`chromium-tab ${currentView === "landing" ? "active" : ""}`}
+        >
+          <span>🎪</span>
+          <span>Festiya District</span>
+        </button>
+
+        <button
+          aria-label="Workspace Command Center Tab"
+          onClick={() => setCurrentView("workspace")}
+          className={`chromium-tab ${currentView === "workspace" ? "active" : ""}`}
+        >
+          <span>📋</span>
+          <span>Event Studio {activeEvent ? `(${activeEvent.name.slice(0, 14)}...)` : ""}</span>
+        </button>
+
+        <button
+          aria-label="Pricing & Plans Tab"
+          onClick={() => setCurrentView("pricing")}
+          className={`chromium-tab ${currentView === "pricing" ? "active" : ""}`}
+        >
+          <span>💎</span>
+          <span>VIP Access</span>
+        </button>
+
+        {/* Chromium Omnibar URL Capsule */}
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center" }}>
+          <div className="chromium-omnibar">
+            <Lock size={12} color="#2ED573" />
+            <span style={{ opacity: 0.9 }}>festiya.district/{currentView}</span>
+            <span style={{ fontSize: "10px", color: "#64748B", marginLeft: "6px" }}>⌘K</span>
+          </div>
+        </div>
+      </div>
       <div
         className="container"
         style={{

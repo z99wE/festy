@@ -10,6 +10,7 @@ import { AskFestiyaDrawer } from "./components/AskFestiyaDrawer.tsx";
 import { BillingPortalModal } from "./components/BillingPortalModal.tsx";
 import { AccountExportModal } from "./components/AccountExportModal.tsx";
 import { SharedEventView } from "./components/SharedEventView.tsx";
+import { FestiTamagotchi } from "./components/tamagotchi/FestiTamagotchi.tsx";
 import { useFestiyaState } from "./hooks/useFestiyaState.ts";
 
 export const App: React.FC = () => {
@@ -257,6 +258,9 @@ export const App: React.FC = () => {
               onUpgradeTier={handleUpgradeTier}
             />
           )}
+
+          {/* Tamagotchi Mascot Companion */}
+          <FestiTamagotchi />
         </>
       )}
     </div>

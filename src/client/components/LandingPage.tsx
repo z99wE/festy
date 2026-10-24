@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { EventCategory, Event } from "../../types/index.ts";
 import { LandingHero } from "./landing/LandingHero.tsx";
+import { DistrictScenesFeed } from "./landing/DistrictScenesFeed.tsx";
 import { LandingComparison } from "./landing/LandingComparison.tsx";
 import { LandingWorkflow } from "./landing/LandingWorkflow.tsx";
 import { LandingCollections } from "./landing/LandingCollections.tsx";
@@ -56,6 +57,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({
     window.scrollTo({ top: 150, behavior: "smooth" });
   };
 
+  const handleSelectDistrictScene = (sceneTitle: string, count: number) => {
+    setOccasion(sceneTitle);
+    setCategory("gathering");
+    setGuestCount(count);
+    window.scrollTo({ top: 150, behavior: "smooth" });
+  };
+
   return (
     <div>
       <LandingHero
@@ -76,6 +84,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         onSubmit={handleSubmit}
         onExploreDemoEvent={onExploreDemoEvent}
       />
+      <DistrictScenesFeed onSelectScene={handleSelectDistrictScene} />
       <LandingComparison />
       <LandingWorkflow />
       <LandingCollections
@@ -89,3 +98,4 @@ export const LandingPage: React.FC<LandingPageProps> = ({
     </div>
   );
 };
+

@@ -348,3 +348,240 @@ a {
     scroll-behavior: auto !important;
   }
 }
+
+/* ==========================================================
+   Chromium Style System
+   ========================================================== */
+.chromium-tab-bar {
+  display: flex;
+  align-items: center;
+  background: #1E1F26;
+  border-bottom: 1px solid #2C2D38;
+  padding: 6px 12px 0;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.chromium-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.chromium-dot-red { background: #FF5F56; border: 1px solid #E0443E; }
+.chromium-dot-yellow { background: #FFBD2E; border: 1px solid #DEA123; }
+.chromium-dot-green { background: #27C93F; border: 1px solid #1AAB29; }
+
+.chromium-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #9AA0A6;
+  background: transparent;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  border: none;
+}
+.chromium-tab:hover {
+  background: #282A35;
+  color: #E2E2EB;
+}
+.chromium-tab.active {
+  background: #111319;
+  color: #FFFFFF;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.chromium-omnibar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #181A22;
+  border: 1px solid #2C2F3D;
+  border-radius: 9999px;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  color: #E2E2EB;
+  transition: all 0.2s ease;
+}
+.chromium-omnibar:focus-within {
+  border-color: #FF4757;
+  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.25);
+  background: #1E212B;
+}
+
+/* ==========================================================
+   Tamagotchi Pet Console (Festi Mascot)
+   ========================================================== */
+.tamagotchi-case {
+  background: linear-gradient(145deg, #FF6B81 0%, #FF4757 60%, #D63031 100%);
+  border: 3px solid #FFFFFF;
+  border-radius: 46px 46px 54px 54px;
+  box-shadow: 
+    0 12px 28px rgba(255, 71, 87, 0.4),
+    inset 0 4px 6px rgba(255, 255, 255, 0.5),
+    inset 0 -6px 8px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.tamagotchi-screen {
+  background: #C4DDB4;
+  border: 3px solid #2D3436;
+  border-radius: 14px;
+  box-shadow: 
+    inset 0 3px 6px rgba(0, 0, 0, 0.4),
+    0 1px 0 rgba(255, 255, 255, 0.4);
+  color: #1A2518;
+  font-family: 'Courier New', Courier, monospace;
+  position: relative;
+}
+.tamagotchi-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  pointer-events: none;
+}
+
+.tamagotchi-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #FFEAA7 0%, #FDCB6E 70%, #E17055 100%);
+  border: 1.5px solid #2D3436;
+  box-shadow: 0 3px 0 #2D3436, 0 4px 6px rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: all 0.08s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: #2D3436;
+}
+.tamagotchi-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #2D3436, 0 2px 3px rgba(0,0,0,0.3);
+}
+
+/* ==========================================================
+   Skeuomorphic District Tickets & Scenes (Swiggy/Zomato style)
+   ========================================================== */
+.district-scene-card {
+  background: #141721;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+.district-scene-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(255, 71, 87, 0.2), 0 0 0 1px rgba(255, 71, 87, 0.4);
+}
+
+/* Tactile Skeuomorphic Ticket Notch */
+.skeuo-ticket-stub {
+  position: relative;
+  background: #181C28;
+  border-top: 2px dashed rgba(255, 255, 255, 0.15);
+}
+.skeuo-ticket-stub::before,
+.skeuo-ticket-stub::after {
+  content: "";
+  position: absolute;
+  top: -11px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--canvas, #0C0E14);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+  z-index: 2;
+}
+.skeuo-ticket-stub::before { left: -11px; }
+.skeuo-ticket-stub::after { right: -11px; }
+
+/* Holographic Shimmer Foil */
+.holo-shimmer {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 71, 87, 0.3) 25%,
+    rgba(168, 85, 247, 0.35) 50%,
+    rgba(46, 213, 115, 0.3) 75%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 300% 300%;
+  animation: holoAnimation 5s ease infinite;
+}
+
+@keyframes holoAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Skeuomorphic 3D Push Button */
+.btn-skeuo {
+  background: linear-gradient(180deg, #FF6B81 0%, #FF4757 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 14px;
+  font-weight: 700;
+  box-shadow: 
+    0 4px 0 #C0392B,
+    0 6px 14px rgba(255, 71, 87, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.08s ease;
+}
+.btn-skeuo:hover {
+  filter: brightness(1.05);
+}
+.btn-skeuo:active {
+  transform: translateY(3px);
+  box-shadow: 
+    0 1px 0 #C0392B,
+    0 2px 6px rgba(255, 71, 87, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Tactile Filter Chips */
+.district-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  background: #181C28;
+  color: #94A3B8;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.district-pill:hover {
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+.district-pill.active {
+  background: linear-gradient(135deg, #FF4757 0%, #A855F7 100%);
+  color: #FFFFFF;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(255, 71, 87, 0.4);
+}
+
