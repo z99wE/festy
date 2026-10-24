@@ -87,6 +87,8 @@ interface DistrictScenesFeedProps {
   onSelectScene: (sceneTitle: string, guestCount: number) => void;
 }
 
+import { ReactBitsDust } from "../festive/ReactBitsDust.tsx";
+
 export const DistrictScenesFeed: React.FC<DistrictScenesFeedProps> = ({ onSelectScene }) => {
   const [selectedCategory, setSelectedCategory] = useState<
     "all" | "raves" | "rooftop" | "indie" | "furry" | "brunch"
@@ -108,20 +110,48 @@ export const DistrictScenesFeed: React.FC<DistrictScenesFeedProps> = ({ onSelect
 
   return (
     <section
+      className="festive-ambient-canvas"
       style={{
         padding: "90px 0",
-        background: "var(--canvas)",
+        background: "linear-gradient(180deg, var(--canvas) 0%, #10141F 50%, var(--canvas) 100%)",
         borderBottom: "2px solid var(--surface-border)",
         color: "#FFFFFF",
+        position: "relative",
       }}
     >
-      <div className="container">
-        {/* District Header — NO EYEBROW PULL TAGS */}
-        <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto 48px" }}>
+      <ReactBitsDust />
+
+      <div className="container" style={{ position: "relative", zIndex: 1 }}>
+        {/* District Header with Mascot Host */}
+        <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto 40px" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+            <img
+              src="/mascot-mint.png"
+              alt="Mascot Host"
+              className="mascot-mint-plush"
+              style={{ width: "48px", height: "48px" }}
+            />
+            <span
+              style={{
+                fontSize: "12px",
+                fontWeight: 800,
+                color: "#00E599",
+                background: "rgba(0, 229, 153, 0.12)",
+                padding: "6px 12px",
+                borderRadius: "4px",
+                border: "1.5px solid var(--neopop-mint)",
+                textTransform: "uppercase",
+                letterSpacing: "0.05em",
+              }}
+            >
+              🎉 LIVE GIGS & PARTY DISTRICTS
+            </span>
+          </div>
+
           <h2
             className="neopop-title"
             style={{
-              fontSize: "clamp(28px, 4vw, 44px)",
+              fontSize: "clamp(30px, 4.5vw, 48px)",
               color: "#FFFFFF",
               marginBottom: "16px",
             }}

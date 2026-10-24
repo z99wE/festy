@@ -116,22 +116,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               textAlign: "left",
             }}
           >
-            <div
+            <img
+              src="/mascot-mint.png"
+              alt="Festiya Mascot Logo"
               style={{
                 width: "38px",
                 height: "38px",
-                borderRadius: "var(--radius-sm)",
-                background: "var(--neopop-mint)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#000000",
-                border: "1.5px solid #000000",
-                boxShadow: "3px 3px 0px #000000",
+                objectFit: "contain",
+                filter: "drop-shadow(0 2px 8px rgba(0, 229, 153, 0.5))",
               }}
-            >
-              <Sparkles size={20} />
-            </div>
+            />
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <span

@@ -225,22 +225,17 @@ export const AskFestiyaDrawer: React.FC<AskFestiyaDrawerProps> = ({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div
+            <img
+              src="/mascot-mint.png"
+              alt="Festi AI Mascot"
               style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "var(--radius-sm)",
-                background: "var(--neopop-mint)",
-                color: "#000000",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                border: "1.5px solid #000000",
-                boxShadow: "2px 2px 0px #000000",
+                width: "44px",
+                height: "44px",
+                filter: "drop-shadow(0 4px 12px rgba(0, 229, 153, 0.45))",
+                objectFit: "contain",
+                animation: "mascotMintBounce 4s ease-in-out infinite",
               }}
-            >
-              <Sparkles size={18} />
-            </div>
+            />
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <h3 className="neopop-title" style={{ fontSize: "16px", color: "#FFFFFF" }}>

@@ -10,6 +10,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { EventCategory } from "../../../types/index.ts";
+import { ReactBitsDust } from "../festive/ReactBitsDust.tsx";
 
 interface LandingHeroProps {
   occasion: string;
@@ -58,18 +59,65 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
 
   return (
     <section
+      className="festive-ambient-canvas"
       style={{
-        padding: "80px 0 70px",
-        background: "radial-gradient(ellipse at 50% 0%, #151A24 0%, var(--canvas) 75%)",
+        padding: "80px 0 75px",
+        background: "linear-gradient(180deg, #111420 0%, var(--canvas) 100%)",
         borderBottom: "2px solid var(--surface-border)",
+        position: "relative",
       }}
     >
-      <div className="container" style={{ textAlign: "center", maxWidth: "980px" }}>
-        {/* Direct NeoPOP Headline — NO EYEBROW PULL TAGS */}
+      {/* ReactBits Radiant Gradient Dust & Stardust Particles */}
+      <ReactBitsDust />
+
+      <div className="container" style={{ textAlign: "center", maxWidth: "980px", position: "relative", zIndex: 1 }}>
+        {/* Animated Plush Mascots Banner */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "20px",
+            marginBottom: "24px",
+          }}
+        >
+          {/* Fluffy Pink Waving Mascot with Speech Bubble */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+            <div className="mascot-speech-bubble">
+              HEY! LET'S PLAN AN EPIC EVENT! ✨
+            </div>
+            <img
+              src="/mascot-pink.png"
+              alt="Festiya Fluffy Pink Mascot Waving"
+              className="mascot-waving-plush"
+            />
+          </div>
+
+          {/* Bubble Mint Plush Mascot */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+            <div
+              className="mascot-speech-bubble"
+              style={{
+                borderColor: "var(--neopop-mint)",
+                background: "#00E599",
+                color: "#000000",
+              }}
+            >
+              POWERED BY AI COPILOT 🚀
+            </div>
+            <img
+              src="/mascot-mint.png"
+              alt="Festiya Bubble Mint Plush Mascot"
+              className="mascot-mint-plush"
+            />
+          </div>
+        </div>
+
+        {/* Direct NeoPOP Headline — Vibrant Festive Gradient Text */}
         <h1
           className="neopop-title"
           style={{
-            fontSize: "clamp(36px, 5.8vw, 68px)",
+            fontSize: "clamp(38px, 6vw, 72px)",
             lineHeight: 1.05,
             color: "#FFFFFF",
             marginBottom: "20px",
@@ -77,7 +125,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
           }}
         >
           PRODUCTION EVENT <br />
-          <span style={{ color: "var(--neopop-mint)" }}>INFRASTRUCTURE.</span>
+          <span className="festive-gradient-text">INFRASTRUCTURE & CELEBRATION</span>
         </h1>
 
         <p
@@ -89,7 +137,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             lineHeight: 1.6,
           }}
         >
-          High-precision planning for producers and hosts. Synthesize decimal-safe budgets, vendor agreements, cue-by-cue run of shows, and instant contingency reasoning.
+          High-precision planning for producers, planners, and party hosts. Synthesize decimal-safe budgets, vendor agreements, cue-by-cue run of shows, and instant contingency reasoning.
         </p>
 
         {/* Global Access / 1-Click Live Demos — Anyone Worldwide Can Use Instantly */}
