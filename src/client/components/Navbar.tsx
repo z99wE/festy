@@ -81,7 +81,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   Festiya
                 </span>
                 <span className="badge badge-sunshine" style={{ fontSize: "10px", padding: "2px 6px" }}>
-                  AI
+                  Studio
                 </span>
               </div>
               <p style={{ fontSize: "11px", color: "var(--ink-muted)", fontWeight: 500 }}>

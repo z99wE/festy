@@ -1,0 +1,19 @@
+stages:
+  - test
+  - build
+
+test_job:
+  stage: test
+  image: node:20
+  script:
+    - npm ci
+    - npm run typecheck
+    - npm test
+    - npm run lint
+
+build_job:
+  stage: build
+  image: node:20
+  script:
+    - npm ci
+    - npm run build

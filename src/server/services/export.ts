@@ -107,43 +107,47 @@ export async function exportUserData(db: DatabaseAdapter, userId: string): Promi
   if (!user) throw new Error("User not found");
 
   const workspaces = await db.listWorkspacesForUser(userId);
-  const workspaceData = [];
+  const workspaceData = await Promise.all(
+    workspaces.map(async (ws) => {
+      const [events, members, subscription] = await Promise.all([
+        db.listEvents(ws.id),
+        db.listWorkspaceMembers(ws.id),
+        db.getSubscription(ws.id),
+      ]);
 
-  for (const ws of workspaces) {
-    const events = await db.listEvents(ws.id);
-    const eventsData = [];
+      const eventsData = await Promise.all(
+        events.map(async (evt) => {
+          const [plan, tasks, budgetItems, vendors, ideas, risks, runOfShow] = await Promise.all([
+            db.getLatestPlan(evt.id),
+            db.listTasks(evt.id),
+            db.listBudgetItems(evt.id),
+            db.listVendors(evt.id),
+            db.listIdeas(evt.id),
+            db.listRisks(evt.id),
+            db.listRunOfShow(evt.id),
+          ]);
 
-    for (const evt of events) {
-      const plan = await db.getLatestPlan(evt.id);
-      const tasks = await db.listTasks(evt.id);
-      const budgetItems = await db.listBudgetItems(evt.id);
-      const vendors = await db.listVendors(evt.id);
-      const ideas = await db.listIdeas(evt.id);
-      const risks = await db.listRisks(evt.id);
-      const runOfShow = await db.listRunOfShow(evt.id);
+          return {
+            event: evt,
+            plan,
+            tasks,
+            budgetItems,
+            vendors,
+            ideas,
+            risks,
+            runOfShow,
+          };
+        })
+      );
 
-      eventsData.push({
-        event: evt,
-        plan,
-        tasks,
-        budgetItems,
-        vendors,
-        ideas,
-        risks,
-        runOfShow,
-      });
-    }
-
-    const members = await db.listWorkspaceMembers(ws.id);
-    const subscription = await db.getSubscription(ws.id);
-
-    workspaceData.push({
-      workspace: ws,
-      subscription,
-      members,
-      events: eventsData,
-    });
-  }
+      return {
+        workspace: ws,
+        subscription,
+        members,
+        events: eventsData,
+      };
+    })
+  );
 
   return {
     exportedAt: new Date().toISOString(),

@@ -47,7 +47,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenExportModal, onOpenPricing
               <span style={{ fontSize: "18px", fontWeight: 800, color: "var(--ink)" }}>Festiya</span>
             </div>
             <p style={{ fontSize: "13px", lineHeight: 1.5, color: "var(--ink-secondary)" }}>
-              Make a moment of it. Global AI-powered event planning and operations workspace.
+              The event command center for independent producers and premier celebrations. Precision budgets, live cue sheets, and unified vendor operations.
             </p>
             <div style={{ marginTop: "12px", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "var(--mint)" }}>
               <Shield size={14} />
