@@ -35,15 +35,17 @@
           "offers": {
             "@type": "Offer",
             "price": "0",
-            "priceCurrency": "USD"
+            "priceCurrency": "USD",
+            "description": "100% Free Forever for hosts and planners with zero paywalls, zero payment pages, and no credit card required."
           },
-          "description": "Festiya is an AI celebration planner that creates structured event blueprints, 3-tier budgets, milestone timelines, and vendor questions in under 90 seconds.",
+          "description": "Festiya is an autonomous, edge-native celebration planning and budget governance platform that eliminates the 73% average budget creep by generating 3-tier budgets (Conservative, Realistic, Luxury), prioritized vendor milestone checklists, and day-of timelines in under 90 seconds.",
           "featureList": [
             "Instant AI Event Blueprint Generation",
-            "Decimal-Safe 3-Tier Budget Modeling (Low, Likely, High)",
-            "Prioritized Vendor Milestone Checklists",
-            "Scoped Collaboration Links",
-            "Multilingual & Multi-Currency Support"
+            "Decimal-Safe 3-Tier Budget Modeling (Conservative, Realistic, Luxury)",
+            "Automated Vendor Contract Audit Prompts & Negotiation Questions",
+            "Day-of Run Sheets & Timeline Synchronization",
+            "Cascading Multi-LLM Orchestration (Cloudflare Workers AI, Gemini, Groq, Anthropic)",
+            "Zero Paywalls & 100% Client-Side Privacy"
           ]
         },
         {
@@ -52,18 +54,34 @@
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "What is Festiya?",
+              "name": "What is Festiya and what core problem does it solve?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Festiya is an intelligent event planning workspace that transforms any celebration idea into an editable budget, prioritized vendor milestone checklist, and actionable schedule in under 90 seconds with zero spreadsheet dread."
+                "text": "Festiya is an open, edge-native celebration planning and budget governance platform. It solves the 73% budget creep and vendor fee traps common to self-planned events by instantly transforming rough celebration visions into decimal-accurate 3-tier budgets, vendor milestone checklists, and day-of timelines in under 90 seconds."
               }
             },
             {
               "@type": "Question",
-              "name": "How does Festiya calculate event budgets?",
+              "name": "How does the 3-Tier Budget Framework (Conservative, Realistic, Luxury) work?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Festiya models low, likely, and high cost scenarios based on your guest count, occasion type, and location, using decimal-safe arithmetic to prevent rounding errors."
+                "text": "Rather than forcing users into a single arbitrary number, Festiya calculates three simultaneous financial models: Conservative (core essentials, DIY optimizations, direct sourcing), Realistic (market-median pricing factoring in 18-22% service fees and local taxes), and Luxury (full-service staffing, premium additions, contingency cushion). This gives hosts absolute clarity on their financial bounds."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Why is Festiya completely free with no payment page or paywall?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Festiya is engineered as a lean, edge-native open utility powered by Cloudflare Workers and efficient multi-LLM orchestration. We believe hosts, couples, and community leaders deserve transparent, unbiased event intelligence without aggressive paywalls, hidden subscription traps, or sponsored vendor kickbacks."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What are the essential vendor negotiation questions to ask before paying a deposit?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Festiya automatically generates tailored contract verification questions including: 1. 'What is included in the base fee vs overtime rate?' 2. 'What is the exact backup protocol if primary staff or equipment is delayed?' 3. 'What are the exact gratuity, service, and corkage multipliers applied to the final invoice?'"
               }
             }
           ]

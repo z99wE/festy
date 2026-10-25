@@ -3396,6 +3396,231 @@ img {
   font-size: 13px;
 }
 
+/* --------------------------------------------------------------------------
+   AEO & SEO KNOWLEDGE HUB (EVENT INSIGHTS)
+   -------------------------------------------------------------------------- */
+.aeo-insights-section {
+  padding: var(--space-800) 0;
+  background: var(--bg-canvas-subtle);
+  border-top: 1.5px solid var(--border-subtle);
+  border-bottom: 1.5px solid var(--border-subtle);
+  position: relative;
+}
 
+.insights-benchmarks-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-300);
+}
 
+.benchmark-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-2xl);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.2s ease;
+}
 
+.benchmark-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--orange-400);
+}
+
+.benchmark-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.benchmark-metric {
+  font-size: 34px;
+  line-height: 38px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+
+.benchmark-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.benchmark-detail {
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Comparison Table */
+.comparison-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-2xl);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.insights-table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.insights-table th {
+  padding: 16px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  background: var(--bg-canvas-subtle);
+  border-bottom: 1.5px solid var(--border-subtle);
+}
+
+.insights-table td {
+  padding: 18px 20px;
+  font-size: 14px;
+  line-height: 22px;
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: top;
+}
+
+.insights-table tr:last-child td {
+  border-bottom: none;
+}
+
+.insights-table th.highlight-col,
+.insights-table td.highlight-col {
+  background: rgba(255, 94, 30, 0.04);
+}
+
+.insights-table th.highlight-col {
+  color: var(--orange-600);
+}
+
+.row-feature-title {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.status-indicator span {
+  flex: 1;
+}
+
+.status-indicator.font-semibold {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.muted-col {
+  color: var(--text-secondary);
+}
+
+/* AEO Q&A Grid */
+.aeo-qa-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-300);
+}
+
+.aeo-qa-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: var(--shadow-xs);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.aeo-qa-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--orange-300);
+}
+
+.aeo-qa-question {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 24px;
+  margin-bottom: 10px;
+}
+
+.aeo-qa-answer {
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* CTA Banner */
+.insights-cta-banner {
+  background: linear-gradient(135deg, rgba(255, 237, 213, 0.9) 0%, rgba(255, 255, 255, 0.98) 100%);
+  border: 1.5px solid var(--orange-300);
+  border-radius: var(--radius-2xl);
+  padding: 32px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+
+.insights-cta-content {
+  flex: 1;
+  min-width: 280px;
+}
+
+.insights-cta-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .insights-benchmarks-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .insights-benchmarks-grid {
+    grid-template-columns: 1fr;
+  }
+  .aeo-qa-grid {
+    grid-template-columns: 1fr;
+  }
+  .insights-cta-banner {
+    padding: 24px 20px;
+  }
+  .insights-cta-buttons {
+    width: 100%;
+    flex-direction: column;
+  }
+  .insights-cta-buttons button {
+    width: 100%;
+  }
+}

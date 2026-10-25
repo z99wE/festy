@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
   ArrowRight,
-  CheckCircle2,
 } from 'lucide-react';
 import { Navbar, type AuthUser } from './components/Navbar';
 import { AuthModal } from './components/AuthModal';
@@ -14,6 +13,7 @@ import { PlanBuilder } from './components/PlanBuilder';
 import { CategoryShowcase } from './components/CategoryShowcase';
 import { SocialProof } from './components/SocialProof';
 import { FAQSection } from './components/FAQSection';
+import { EventInsights } from './components/EventInsights';
 import { FestiChatbot } from './components/FestiChatbot';
 import { playCelebrationSound } from './utils/audio';
 
@@ -223,75 +223,14 @@ export function App() {
         {/* FAQ Section */}
         <FAQSection soundEnabled={soundEnabled} />
 
-        {/* Pricing Section */}
-        <section id="pricing" className="plan-builder-section" style={{ background: 'var(--bg-canvas-subtle)', borderTop: '1.5px solid var(--border-subtle)' }} aria-labelledby="pricing-heading">
-          <div className="content-wrapper">
-            <div className="section-header">
-              <h2 id="pricing-heading" className="section-title">
-                Transparent Pricing That Pays For Itself On Your First Vendor Contract
-              </h2>
-              <p className="section-subtitle">
-                Avoid $2,500+ in hidden vendor markups and overtime traps. Start completely free, upgrade only when managing multi-event client workspaces.
-              </p>
-            </div>
-
-            <div className="pricing-grid">
-              {/* Free Tier */}
-              <div className="pricing-card">
-                <span className="pricing-tier-pill">Free forever</span>
-                <h3 style={{ fontSize: '20px', color: 'var(--text-primary)', marginTop: '8px' }}>Individual host</h3>
-                <div className="price-tag tabular-data">$0</div>
-                <p style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--text-secondary)' }}>
-                  For individuals and families organizing birthdays, reunions, and intimate gatherings.
-                </p>
-                <ul className="price-features-list">
-                  <li><CheckCircle2 size={16} color="var(--orange-500)" /> 3 active event plans</li>
-                  <li><CheckCircle2 size={16} color="var(--orange-500)" /> Decimal safe budget tracking</li>
-                  <li><CheckCircle2 size={16} color="var(--orange-500)" /> Scoped guest share links</li>
-                </ul>
-                <button type="button" className="btn btn-secondary" style={{ width: '100%' }} onClick={handleStartPlanning}>
-                  Get started free
-                </button>
-              </div>
-
-              {/* Plus Tier */}
-              <div className="pricing-card featured">
-                <span className="pricing-tier-pill sunshine">Most popular</span>
-                <h3 style={{ fontSize: '20px', color: 'var(--text-primary)', marginTop: '8px' }}>Festiya Plus</h3>
-                <div className="price-tag tabular-data">$19<span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>/mo</span></div>
-                <p style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--text-secondary)' }}>
-                  For frequent hosts, wedding organizers, and community leaders who need deep revisions.
-                </p>
-                <ul className="price-features-list">
-                  <li><CheckCircle2 size={16} color="var(--orange-500)" /> Unlimited active events</li>
-                  <li><CheckCircle2 size={16} color="var(--orange-500)" /> Timeline revisions on date change</li>
-                  <li><CheckCircle2 size={16} color="var(--orange-500)" /> Clean PDF and Markdown export</li>
-                </ul>
-                <button type="button" className="btn btn-primary" style={{ width: '100%' }} onClick={handleStartPlanning}>
-                  Start 14 day trial
-                </button>
-              </div>
-
-              {/* Planner Pro Tier */}
-              <div className="pricing-card">
-                <span className="pricing-tier-pill mint">For agencies</span>
-                <h3 style={{ fontSize: '20px', color: 'var(--text-primary)', marginTop: '8px' }}>Planner Pro</h3>
-                <div className="price-tag tabular-data">$49<span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>/mo</span></div>
-                <p style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--text-secondary)' }}>
-                  For independent planners managing client workspaces with custom branded proposals.
-                </p>
-                <ul className="price-features-list">
-                  <li><CheckCircle2 size={16} color="var(--orange-500)" /> Branded client share views</li>
-                  <li><CheckCircle2 size={16} color="var(--orange-500)" /> Reusable proposal templates</li>
-                  <li><CheckCircle2 size={16} color="var(--orange-500)" /> Multi event activity ledger</li>
-                </ul>
-                <button type="button" className="btn btn-secondary" style={{ width: '100%' }} onClick={handleStartPlanning}>
-                  Explore Planner Pro
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* Event Intelligence & AEO Knowledge Hub (Replacing Payment/Pricing with Search & Answer Engine Optimized Content) */}
+        <EventInsights
+          onStartPlanning={handleStartPlanning}
+          onExploreDemo={() => {
+            const el = document.getElementById('interactive-demo');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+        />
 
         {/* Final CTA Section */}
         <section className="final-cta-section" aria-label="Ready to plan your celebration">
@@ -338,7 +277,7 @@ export function App() {
                 <li><a href="#how-it-works">The Journey</a></li>
                 <li><a href="#interactive-planner">Live Planner</a></li>
                 <li><a href="#categories">Event blueprints</a></li>
-                <li><a href="#pricing">Pricing and plans</a></li>
+                <li><a href="#insights">Event Intelligence & AEO Guide</a></li>
               </ul>
             </div>
 
@@ -348,7 +287,7 @@ export function App() {
                 <li><a href="#categories">Milestone birthdays</a></li>
                 <li><a href="#categories">Weddings and receptions</a></li>
                 <li><a href="#categories">Community carnivals</a></li>
-                <li><a href="#pricing">Agency client proposals</a></li>
+                <li><a href="#insights">3-Tier Budget Benchmarks</a></li>
               </ul>
             </div>
 
@@ -364,7 +303,7 @@ export function App() {
           </div>
 
           <div className="footer-bottom">
-            <span>© {new Date().getFullYear()} Festiya. All rights reserved.</span>
+            <span>© 2026 Festiya. All rights reserved.</span>
             <span>Turn every moment into a festival.</span>
           </div>
         </div>

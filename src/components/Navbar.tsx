@@ -107,9 +107,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               type="button"
               className="island-nav-link"
-              onClick={() => handleNavClick('pricing')}
+              onClick={() => handleNavClick('insights')}
             >
-              Pricing
+              Event Insights
             </button>
             <button
               type="button"
@@ -217,9 +217,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 type="button"
                 className="mobile-nav-item item-delay-5"
-                onClick={() => handleNavClick('pricing')}
+                onClick={() => handleNavClick('insights')}
               >
-                Pricing & Plans
+                Event Insights
               </button>
               <button
                 type="button"
