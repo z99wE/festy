@@ -12,6 +12,8 @@
  * Each provider has its own timeout and circuit breaker to prevent slow cascades.
  */
 
+import { FestiSecurityGuard, type ThreatCategory } from './festiSecurityGuard';
+
 export interface LLMMessage {
   role: 'system' | 'user' | 'assistant';
   content: string;
@@ -29,6 +31,9 @@ export interface OrchestrationResult {
     latencyMs: number;
   }>;
   isFallback: boolean;
+  threatNeutralized?: boolean;
+  threatCategory?: ThreatCategory;
+  guardReason?: string;
 }
 
 export interface LLMConfig {
@@ -102,12 +107,39 @@ export class MultiLLMOrchestrator {
     messages: LLMMessage[],
     systemPrompt?: string
   ): Promise<OrchestrationResult> {
+    const overallStartTime = Date.now();
+
+    // 0. PRE-FLIGHT HARD DRILL & THREAT EVALUATION
+    // Defends against LLM Hijacking, Jacking, Spooking, Meta-Prompting, and Domain Violations
+    const lastUserMessage = [...messages].reverse().find((m) => m.role === 'user')?.content || '';
+    const guardEval = FestiSecurityGuard.evaluate(lastUserMessage);
+
+    if (!guardEval.isSafe) {
+      const duration = Date.now() - overallStartTime;
+      return {
+        content: guardEval.deflectionResponse || 'I am Festi, your Festi AI celebration architect! How can I assist with your event?',
+        providerUsed: 'Festi AI Security Guard',
+        modelUsed: 'Hard-Drill-Defense-Engine',
+        latencyMs: Math.max(1, duration),
+        attempts: [
+          {
+            provider: 'Festi AI Security Guard',
+            success: true,
+            latencyMs: Math.max(1, duration),
+          },
+        ],
+        isFallback: false,
+        threatNeutralized: true,
+        threatCategory: guardEval.category,
+        guardReason: guardEval.reason,
+      };
+    }
+
     const fullMessages: LLMMessage[] = systemPrompt
       ? [{ role: 'system', content: systemPrompt }, ...messages]
       : messages;
 
     const attempts: OrchestrationResult['attempts'] = [];
-    const overallStartTime = Date.now();
 
     // 1. PRIMARY: Cloudflare Workers AI
     if (this.config.cloudflareAccountId && this.config.cloudflareApiToken && !this.getCircuitBreaker('cloudflare').isOpen()) {
@@ -118,7 +150,7 @@ export class MultiLLMOrchestrator {
         const duration = Date.now() - start;
         attempts.push({ provider: 'Cloudflare Workers AI', success: true, latencyMs: duration });
         return {
-          content: text,
+          content: FestiSecurityGuard.sanitizeOutput(text),
           providerUsed: 'Cloudflare Workers AI',
           modelUsed: '@cf/meta/llama-3.3-70b-instruct',
           latencyMs: duration,
@@ -143,7 +175,7 @@ export class MultiLLMOrchestrator {
         const duration = Date.now() - start;
         attempts.push({ provider: 'Google Gemini', success: true, latencyMs: duration });
         return {
-          content: text,
+          content: FestiSecurityGuard.sanitizeOutput(text),
           providerUsed: 'Google Gemini',
           modelUsed: 'gemini-2.5-flash',
           latencyMs: duration,
@@ -168,7 +200,7 @@ export class MultiLLMOrchestrator {
         const duration = Date.now() - start;
         attempts.push({ provider: 'Groq', success: true, latencyMs: duration });
         return {
-          content: text,
+          content: FestiSecurityGuard.sanitizeOutput(text),
           providerUsed: 'Groq',
           modelUsed: 'llama-3.3-70b-versatile',
           latencyMs: duration,
@@ -193,7 +225,7 @@ export class MultiLLMOrchestrator {
         const duration = Date.now() - start;
         attempts.push({ provider: 'OpenAI', success: true, latencyMs: duration });
         return {
-          content: text,
+          content: FestiSecurityGuard.sanitizeOutput(text),
           providerUsed: 'OpenAI',
           modelUsed: 'gpt-4o-mini',
           latencyMs: duration,
@@ -218,7 +250,7 @@ export class MultiLLMOrchestrator {
         const duration = Date.now() - start;
         attempts.push({ provider: 'Anthropic', success: true, latencyMs: duration });
         return {
-          content: text,
+          content: FestiSecurityGuard.sanitizeOutput(text),
           providerUsed: 'Anthropic',
           modelUsed: 'claude-3-5-haiku-20241022',
           latencyMs: duration,
@@ -240,7 +272,7 @@ export class MultiLLMOrchestrator {
     attempts.push({ provider: 'Festiya Heuristic Engine', success: true, latencyMs: 1 });
 
     return {
-      content: fallbackText,
+      content: FestiSecurityGuard.sanitizeOutput(fallbackText),
       providerUsed: 'Festiya Deterministic Engine',
       modelUsed: 'festiya-heuristic-v2',
       latencyMs: duration,

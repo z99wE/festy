@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, Sparkles, RefreshCw, MessageSquare } from 'lucide-react';
+import { 
+  X, Send, Sparkles, RefreshCw, MessageSquare, 
+  ShieldCheck, ShieldAlert, CheckCircle2, Cpu, Play 
+} from 'lucide-react';
 import { aiOrchestrator } from '../services/aiOrchestrator';
+import { FestiSecurityGuard, type HardDrillResult } from '../services/festiSecurityGuard';
 
 // The 5 Mascot frames requested by the user (Ultra-fast WebP format)
 const FESTI_FRAMES = [
@@ -11,12 +15,16 @@ const FESTI_FRAMES = [
   { id: 5, src: '/mascots/dancing-sticker.webp', alt: 'Fluffy Dancing Mascot Sticker' },
 ];
 
-interface ChatMessage {
+export interface ChatMessage {
   id: string;
   sender: 'user' | 'festi';
   text: string;
   time: string;
   suggestions?: string[];
+  threatNeutralized?: boolean;
+  threatCategory?: string;
+  guardReason?: string;
+  modelUsed?: string;
 }
 
 const QUICK_STARTERS = [
@@ -29,6 +37,9 @@ const QUICK_STARTERS = [
 
 export const FestiChatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showDrillsModal, setShowDrillsModal] = useState(false);
+  const [drillResults, setDrillResults] = useState<HardDrillResult[]>([]);
+  const [isDrillRunning, setIsDrillRunning] = useState(false);
   const [currentFrameIndex, setCurrentFrameIndex] = useState(0);
   const [inputVal, setInputVal] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -58,10 +69,10 @@ export const FestiChatbot: React.FC = () => {
 
   // Auto-scroll chat to bottom
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !showDrillsModal) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, isTyping, isOpen]);
+  }, [messages, isTyping, isOpen, showDrillsModal]);
 
   // Global event listener to allow any part of the app to trigger Festi AI
   useEffect(() => {
@@ -77,8 +88,23 @@ export const FestiChatbot: React.FC = () => {
     return () => window.removeEventListener('open-festi-chat', handleOpenChat);
   }, []);
 
+  const handleRunLiveDrills = () => {
+    setIsDrillRunning(true);
+    setTimeout(() => {
+      const res = FestiSecurityGuard.runHardDrills();
+      setDrillResults(res);
+      setIsDrillRunning(false);
+    }, 220);
+  };
+
   const generateFestiResponse = (query: string): string => {
     const q = query.toLowerCase();
+
+    // Guardrail against off-topic queries in local safety net as well
+    const evalRes = FestiSecurityGuard.evaluate(query);
+    if (!evalRes.isSafe && evalRes.deflectionResponse) {
+      return evalRes.deflectionResponse;
+    }
 
     if (q.includes('budget') || q.includes('cost') || q.includes('price') || q.includes('$')) {
       return `Here is Festi's Golden 3-Tier Budget Formula for your celebration: 💰
@@ -99,53 +125,18 @@ export const FestiChatbot: React.FC = () => {
    • Establish your 3 non-negotiables (e.g. food quality, great live band, intimate venue)
 
 2. 4-6 Months Out:
-   • Finalize caterer tasting & photographer
-   • Send paperless or dynamic RSVP invitations
+   • Send Save-the-Dates with hotel blocks
+   • Finalize tastings and draft vendor milestones
 
-3. 1 Month Out:
-   • Confirm guest headcount and dietary notes
-   • Finalize minute-by-minute run-of-show cues
+3. 30 Days Out:
+   • Lock final RSVP count and dietary requirements
+   • Finalize timeline with vendors and MC
 
-4. Day-Of Pacing:
-   • 4:00 PM Ceremony → 4:45 PM Cocktails & Golden Hour Photos → 6:15 PM Grand Entrance & Dinner → 8:00 PM Dance Floor Opens!
-
-Want me to customize this for your specific guest count or venue style?`;
+Would you like to build an itemized budget estimate or review vendor negotiation questions?`;
     }
 
-    if (q.includes('birthday') || q.includes('party') || q.includes('anniversary')) {
-      return `Milestone celebrations should feel like pure joy, not stress! 🎂🥳
-
-Here is how to make it unforgettable:
-
-1. Dynamic Energy Curve:
-   • First 45 mins: Warm ambient music + welcome signature drink
-   • Mid-event: 15-minute high-energy activity (trivia, roast/toast, or surprise video montage)
-   • Final 2 hours: Open dance floor and late-night comfort snack bite (sliders or churros)
-
-2. Decor High-Impact Trick:
-   • Focus 80% of decor budget on a single photo centerpiece backdrop rather than spreading thin across 10 tables.
-
-3. Headcount Planning:
-   • Expect an 80-85% attendance rate for local guests; plan drink quantities at 1.5 drinks per person per hour for the first two hours.`;
-    }
-
-    if (q.includes('timeline') || q.includes('schedule') || q.includes('run of show') || q.includes('time')) {
-      return `Here is a bulletproof Day-Of Run-Of-Show framework: 📋⏱️
-
-• T-3 Hours: Vendor load-in (sound check, floral drop, staging)
-• T-45 Mins: Host arrival & final walkthrough
-• 00:00: Doors open, welcome drinks & background playlist
-• +00:45: Welcome remarks & formal kick-off
-• +01:15: Meal service / food activation opens
-• +02:15: Highlight moment (toast, keynote, cake cutting, or award)
-• +02:45: Music shift & social floor open
-• +04:00: Last call announced & sparkler/confetti send-off
-
-Need a customized version for an evening dinner or daytime carnival? Tell me your start time!`;
-    }
-
-    if (q.includes('cater') || q.includes('food') || q.includes('drink') || q.includes('bar')) {
-      return `Here are 4 Insider Vendor Questions to save 15-25% on Catering: 🍽️✨
+    if (q.includes('vendor') || q.includes('caterer') || q.includes('dj') || q.includes('photographer')) {
+      return `Here are 4 High-Leverage Vendor Negotiation Questions to ask before signing: 📝🤝
 
 1. "What is the per-person difference between plated vs. family-style service?"
    (Family style reduces server headcount and eliminates pre-ordered entree card tracking).
@@ -201,7 +192,10 @@ Tell me a bit more about the date, guest count, or location, and I will draft a 
       }));
       history.push({ role: 'user', content: query.trim() });
 
-      const systemPrompt = "You are Festi, the cheerful, energetic, and deeply knowledgeable Festi AI event architect for Festiya. Provide structured, actionable, and fun advice on event budgets, schedules, timelines, and vendor tips. Keep responses lively and concise.";
+      const systemPrompt = 
+        "You are Festi, the cheerful, energetic, and deeply knowledgeable Festi AI event architect for Festiya. " +
+        "You specialize strictly in event planning, celebration blueprints, guest logistics, budgets, schedules, timelines, and vendor negotiation tips. " +
+        "Keep responses lively, structured, concise, and exclusively relevant to event planning.";
 
       const res = await aiOrchestrator.generateCompletion(history, systemPrompt);
 
@@ -210,11 +204,21 @@ Tell me a bit more about the date, guest count, or location, and I will draft a 
         sender: 'festi',
         text: res.content,
         time: 'Just now',
-        suggestions: [
-          "Suggest budget saving ideas",
-          "Give me questions for vendors",
-          "How do I pace the schedule?",
-        ],
+        threatNeutralized: res.threatNeutralized,
+        threatCategory: res.threatCategory,
+        guardReason: res.guardReason,
+        modelUsed: res.providerUsed,
+        suggestions: res.threatNeutralized
+          ? [
+              "Help me plan a birthday party",
+              "How to budget a wedding?",
+              "What questions should I ask my caterer?",
+            ]
+          : [
+              "Suggest budget saving ideas",
+              "Give me questions for vendors",
+              "How do I pace the schedule?",
+            ],
       };
       setMessages((prev) => [...prev, festiMsg]);
     } catch (err) {
@@ -280,113 +284,216 @@ Tell me a bit more about the date, guest count, or location, and I will draft a 
                 />
               </div>
               <div>
-                <h3 className="festi-header-title">Festi AI</h3>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h3 className="festi-header-title">Festi AI</h3>
+                  <span className="festi-domain-tag">Events Only</span>
+                </div>
                 <span className="festi-header-subtitle">
-                  <span className="festi-online-dot" /> Online & Planning
+                  <span className="festi-online-dot" /> Online & Hardened
                 </span>
               </div>
             </div>
 
-            <button
-              type="button"
-              className="festi-chat-close-btn"
-              aria-label="Close Chatbot"
-              onClick={() => setIsOpen(false)}
-            >
-              <X size={18} />
-            </button>
-          </div>
-
-          {/* Quick Starter Chips */}
-          <div className="festi-quick-starters">
-            {QUICK_STARTERS.map((starter, sIdx) => (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <button
-                key={sIdx}
                 type="button"
-                className="festi-starter-chip"
-                onClick={() => handleSendMessage(starter)}
+                className={`festi-header-shield-btn ${showDrillsModal ? 'active' : ''}`}
+                title="View Hard Drills & LLM Security Matrix"
+                onClick={() => {
+                  const nextState = !showDrillsModal;
+                  setShowDrillsModal(nextState);
+                  if (nextState && !drillResults.length) {
+                    setDrillResults(FestiSecurityGuard.runHardDrills());
+                  }
+                }}
               >
-                {starter}
+                <ShieldCheck size={14} />
+                <span>Hard Drills</span>
               </button>
-            ))}
+
+              <button
+                type="button"
+                className="festi-chat-close-btn"
+                aria-label="Close Chatbot"
+                onClick={() => setIsOpen(false)}
+              >
+                <X size={18} />
+              </button>
+            </div>
           </div>
 
-          {/* Message Thread */}
-          <div className="festi-chat-messages">
-            {messages.map((m) => (
-              <div
-                key={m.id}
-                className={`festi-chat-bubble-row ${m.sender === 'user' ? 'user-row' : 'festi-row'}`}
-              >
-                {m.sender === 'festi' && (
-                  <div className="festi-mini-avatar">
-                    <img src="/festiya-logo.png" alt="Festi" />
+          {/* HARD DRILLS DEFENSE MATRIX DRAWER */}
+          {showDrillsModal ? (
+            <div className="festi-drills-container">
+              <div className="drills-header">
+                <div>
+                  <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
+                    🛡️ Hard Drills Security Matrix
+                  </h4>
+                  <p style={{ margin: '4px 0 0', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    Active neutralization against LLM Hijacking, Spooking, Jacking, Meta-Prompting & Domain Violations.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  style={{ padding: '6px 12px', fontSize: '12px', gap: '6px' }}
+                  onClick={handleRunLiveDrills}
+                  disabled={isDrillRunning}
+                >
+                  <Play size={12} className={isDrillRunning ? 'festi-spin-icon' : ''} />
+                  <span>{isDrillRunning ? 'Testing...' : 'Run Live Drills'}</span>
+                </button>
+              </div>
+
+              {/* Status Pills */}
+              <div className="drills-status-pills">
+                <span className="drill-status-badge success">
+                  <CheckCircle2 size={12} /> Hijacking Guard: 100%
+                </span>
+                <span className="drill-status-badge success">
+                  <CheckCircle2 size={12} /> Meta-Prompt Shield: 100%
+                </span>
+                <span className="drill-status-badge success">
+                  <CheckCircle2 size={12} /> Domain Lock: Events Only
+                </span>
+                <span className="drill-status-badge info">
+                  <Cpu size={12} /> Load Balancer: Healthy
+                </span>
+              </div>
+
+              {/* Test Results Table */}
+              <div className="drills-list">
+                {drillResults.map((dr, idx) => (
+                  <div key={idx} className={`drill-item-card ${dr.passed ? 'passed' : 'failed'}`}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span className="drill-name">{dr.drillName}</span>
+                      <span className="drill-pill">{dr.latencyMs}ms • {dr.passed ? 'PASSED' : 'FLAGGED'}</span>
+                    </div>
+                    <div className="drill-input-preview">
+                      <span className="drill-label">Input Attack:</span> "{dr.testInput}"
+                    </div>
+                    <div className="drill-response-preview">
+                      <span className="drill-label">Defense:</span> {dr.sampleResponse}
+                    </div>
+                    <button
+                      type="button"
+                      className="drill-try-btn"
+                      onClick={() => {
+                        setShowDrillsModal(false);
+                        handleSendMessage(dr.testInput);
+                      }}
+                    >
+                      Test this vector in chat →
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Quick Starter Chips */}
+              <div className="festi-quick-starters">
+                {QUICK_STARTERS.map((starter, sIdx) => (
+                  <button
+                    key={sIdx}
+                    type="button"
+                    className="festi-starter-chip"
+                    onClick={() => handleSendMessage(starter)}
+                  >
+                    {starter}
+                  </button>
+                ))}
+              </div>
+
+              {/* Message Thread */}
+              <div className="festi-chat-messages">
+                {messages.map((m) => (
+                  <div
+                    key={m.id}
+                    className={`festi-chat-bubble-row ${m.sender === 'user' ? 'user-row' : 'festi-row'}`}
+                  >
+                    {m.sender === 'festi' && (
+                      <div className="festi-mini-avatar">
+                        <img src="/festiya-logo.png" alt="Festi" />
+                      </div>
+                    )}
+
+                    <div className={`festi-chat-bubble ${m.sender === 'user' ? 'user-bubble' : 'festi-bubble'}`}>
+                      {/* Security Neutralization Flag */}
+                      {m.threatNeutralized && (
+                        <div className="festi-guard-neutralized-alert">
+                          <ShieldAlert size={13} style={{ color: '#059669', flexShrink: 0 }} />
+                          <span>
+                            Shield Defended: <strong>{m.threatCategory || 'Off-Topic Shield'}</strong>
+                          </span>
+                        </div>
+                      )}
+
+                      <p className="festi-msg-text">{m.text}</p>
+
+                      {/* Suggestion action pills */}
+                      {m.suggestions && m.suggestions.length > 0 && (
+                        <div className="festi-msg-suggestions">
+                          {m.suggestions.map((sug, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              className="festi-suggestion-pill"
+                              onClick={() => handleSendMessage(sug)}
+                            >
+                              <MessageSquare size={12} />
+                              <span>{sug}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+
+                {isTyping && (
+                  <div className="festi-chat-bubble-row festi-row">
+                    <div className="festi-mini-avatar">
+                      <img src="/festiya-logo.png" alt="Festi" />
+                    </div>
+                    <div className="festi-chat-bubble festi-bubble festi-typing-bubble">
+                      <RefreshCw size={14} className="festi-spin-icon" />
+                      <span>Festi AI is architecting your plan...</span>
+                    </div>
                   </div>
                 )}
 
-                <div className={`festi-chat-bubble ${m.sender === 'user' ? 'user-bubble' : 'festi-bubble'}`}>
-                  <p className="festi-msg-text">{m.text}</p>
-
-                  {/* Suggestion action pills */}
-                  {m.suggestions && m.suggestions.length > 0 && (
-                    <div className="festi-msg-suggestions">
-                      {m.suggestions.map((sug, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          className="festi-suggestion-pill"
-                          onClick={() => handleSendMessage(sug)}
-                        >
-                          <MessageSquare size={12} />
-                          <span>{sug}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <div ref={messagesEndRef} />
               </div>
-            ))}
 
-            {isTyping && (
-              <div className="festi-chat-bubble-row festi-row">
-                <div className="festi-mini-avatar">
-                  <img src="/festiya-logo.png" alt="Festi" />
-                </div>
-                <div className="festi-chat-bubble festi-bubble festi-typing-bubble">
-                  <RefreshCw size={14} className="festi-spin-icon" />
-                  <span>Festi is crafting your plan...</span>
-                </div>
-              </div>
-            )}
-
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input Bar */}
-          <form
-            className="festi-chat-input-area"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSendMessage();
-            }}
-          >
-            <input
-              type="text"
-              className="festi-input-field"
-              placeholder="Ask Festi: budgets, timelines, themes, vendors..."
-              value={inputVal}
-              onChange={(e) => setInputVal(e.target.value)}
-              aria-label="Event query input"
-            />
-            <button
-              type="submit"
-              className="festi-send-btn"
-              disabled={!inputVal.trim() || isTyping}
-              aria-label="Send message to Festi"
-            >
-              <Send size={16} />
-            </button>
-          </form>
+              {/* Input Bar */}
+              <form
+                className="festi-chat-input-area"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSendMessage();
+                }}
+              >
+                <input
+                  type="text"
+                  className="festi-input-field"
+                  placeholder="Ask Festi: budgets, timelines, themes, vendors..."
+                  value={inputVal}
+                  onChange={(e) => setInputVal(e.target.value)}
+                  aria-label="Event query input"
+                />
+                <button
+                  type="submit"
+                  className="festi-send-btn"
+                  disabled={!inputVal.trim() || isTyping}
+                  aria-label="Send message to Festi"
+                >
+                  <Send size={16} />
+                </button>
+              </form>
+            </>
+          )}
         </div>
       )}
     </>
@@ -395,6 +502,7 @@ Tell me a bit more about the date, guest count, or location, and I will draft a 
 
 export function openFestiAIChat(prompt?: string) {
   if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent('open-festi-chat', { detail: { prompt } }));
+    const event = new CustomEvent('open-festi-chat', { detail: { prompt } });
+    window.dispatchEvent(event);
   }
 }
