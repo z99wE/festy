@@ -13,6 +13,7 @@ import { EventInsights } from './components/EventInsights';
 import { FestiChatbot } from './components/FestiChatbot';
 import { OrbitableHeroLogo } from './components/OrbitableHeroLogo';
 import { DiscoBallCelebrationHub } from './components/DiscoBallCelebrationHub';
+import { PeekingMascot } from './components/PeekingMascot';
 import { detectUserRegion } from './utils/currency';
 import { playCelebrationSound } from './utils/audio';
 
@@ -572,6 +573,9 @@ export function App() {
           </div>
         </div>
       </footer>
+
+      {/* Playful 3D Alive Peeking Mascot (randomized, max 3 per session, side & upside-down peek) */}
+      <PeekingMascot />
 
       {/* Floating Animated Festi AI Copilot Assistant & Chatbot */}
       <FestiChatbot />

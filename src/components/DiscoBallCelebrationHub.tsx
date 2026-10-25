@@ -168,12 +168,12 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     const container = canvasRef.current;
     if (!container) return;
 
-    const width = container.clientWidth || 520;
-    const height = 460;
+    const width = container.clientWidth || 440;
+    const height = 380;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 100);
-    camera.position.set(0, 0, 6.8);
+    camera.position.set(0, 0.1, 6.4);
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -188,26 +188,30 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     container.appendChild(renderer.domElement);
 
     // DYNAMIC CELEBRATORY ENVIRONMENT MAP
-    // This gives the disco ball real shimmering reflections so facets are NEVER black or invisible!
+    // This gives the disco ball real shimmering reflections so mirror facets sparkle brilliantly!
     const envCanvas = document.createElement('canvas');
-    envCanvas.width = 256;
-    envCanvas.height = 128;
+    envCanvas.width = 512;
+    envCanvas.height = 256;
     const envCtx = envCanvas.getContext('2d');
     if (envCtx) {
-      const grad = envCtx.createLinearGradient(0, 0, 256, 128);
-      grad.addColorStop(0, '#FFF6E0');
-      grad.addColorStop(0.25, '#FFD54F');
-      grad.addColorStop(0.5, '#FF8A65');
-      grad.addColorStop(0.75, '#BA68C8');
-      grad.addColorStop(1, '#FFE082');
+      const grad = envCtx.createLinearGradient(0, 0, 512, 256);
+      grad.addColorStop(0, '#FFFBEB');
+      grad.addColorStop(0.2, '#FDE047');
+      grad.addColorStop(0.4, '#FB923C');
+      grad.addColorStop(0.6, '#EC4899');
+      grad.addColorStop(0.8, '#818CF8');
+      grad.addColorStop(1, '#FBBF24');
       envCtx.fillStyle = grad;
-      envCtx.fillRect(0, 0, 256, 128);
+      envCtx.fillRect(0, 0, 512, 256);
 
-      // Add bright reflection spotlights
-      for (let i = 0; i < 8; i++) {
-        envCtx.fillStyle = '#FFFFFF';
+      // Add high-intensity pinpoint reflection spotlights
+      const spotColors = ['#FFFFFF', '#FFF7ED', '#FEF08A', '#FBCFE8', '#BAE6FD'];
+      for (let i = 0; i < 16; i++) {
+        envCtx.fillStyle = spotColors[i % spotColors.length];
         envCtx.beginPath();
-        envCtx.arc(i * 32 + 16, 64 + (i % 2 === 0 ? 18 : -18), 10, 0, Math.PI * 2);
+        const px = (i * 32 + 16) % 512;
+        const py = 40 + ((i * 37) % 176);
+        envCtx.arc(px, py, 12 + (i % 3) * 4, 0, Math.PI * 2);
         envCtx.fill();
       }
 
@@ -217,18 +221,18 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     }
 
     // Warm ambient and pin-spot lighting
-    const ambient = new THREE.AmbientLight(0xfffaed, 2.0);
+    const ambient = new THREE.AmbientLight(0xfffaed, 2.2);
     scene.add(ambient);
 
-    const spotGold = new THREE.DirectionalLight(0xffd54f, 3.6);
+    const spotGold = new THREE.DirectionalLight(0xffd54f, 4.0);
     spotGold.position.set(4, 5, 4);
     scene.add(spotGold);
 
-    const spotAmber = new THREE.DirectionalLight(0xff7043, 3.0);
+    const spotAmber = new THREE.DirectionalLight(0xff7043, 3.2);
     spotAmber.position.set(-5, 4, 3);
     scene.add(spotAmber);
 
-    const spotWhite = new THREE.DirectionalLight(0xffffff, 2.8);
+    const spotWhite = new THREE.DirectionalLight(0xffffff, 3.0);
     spotWhite.position.set(0, -3, 5);
     scene.add(spotWhite);
 
@@ -240,8 +244,8 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     const rodGeom = new THREE.CylinderGeometry(0.035, 0.035, 2.2, 16);
     const rodMat = new THREE.MeshStandardMaterial({
       color: 0xdddddd,
-      metalness: 0.9,
-      roughness: 0.15,
+      metalness: 0.95,
+      roughness: 0.12,
     });
     const rodMesh = new THREE.Mesh(rodGeom, rodMat);
     rodMesh.position.set(0, 2.9, 0);
@@ -253,18 +257,31 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     discoGroup.add(ringMesh);
 
     // FACETED MIRROR DISCO GLOBE SPHERE
-    // Flat-shaded facets reflect the environment lights brilliantly
-    const sphereRadius = 1.75;
-    const sphereGeom = new THREE.IcosahedronGeometry(sphereRadius, 4);
-    const sphereMat = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
-      metalness: 0.82,
-      roughness: 0.18,
+    // Sphere with latitude / longitude grid facets produces authentic mirror tiles!
+    const sphereRadius = 1.72;
+    const sphereGeom = new THREE.SphereGeometry(sphereRadius, 48, 28);
+    const sphereMat = new THREE.MeshPhysicalMaterial({
+      color: 0xf5f7fa,
+      metalness: 0.95,
+      roughness: 0.08,
+      clearcoat: 0.8,
+      clearcoatRoughness: 0.1,
       flatShading: true,
-      envMapIntensity: 1.8,
+      envMapIntensity: 2.8,
     });
     const discoBall = new THREE.Mesh(sphereGeom, sphereMat);
     discoGroup.add(discoBall);
+
+    // Chrome Top Fixture Cap
+    const capGeom = new THREE.CylinderGeometry(0.35, 0.45, 0.18, 24);
+    const capMat = new THREE.MeshStandardMaterial({
+      color: 0xcccccc,
+      metalness: 0.95,
+      roughness: 0.15,
+    });
+    const capMesh = new THREE.Mesh(capGeom, capMat);
+    capMesh.position.set(0, sphereRadius + 0.06, 0);
+    discoBall.add(capMesh);
 
     // 3D Glowing Festival Beacons around the Globe
     const beaconGroup = new THREE.Group();
@@ -274,31 +291,32 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
       // Convert lat/lon to sphere Cartesian coordinates
       const phi = (90 - ev.lat) * (Math.PI / 180);
       const theta = (ev.lon + 180) * (Math.PI / 180);
-      const r = sphereRadius + 0.06;
+      const r = sphereRadius + 0.08;
 
       const bx = -(r * Math.sin(phi) * Math.cos(theta));
       const by = r * Math.cos(phi);
       const bz = r * Math.sin(phi) * Math.sin(theta);
 
-      // Glowing pin
-      const pinGeo = new THREE.SphereGeometry(0.09, 12, 12);
+      // Glowing celebration jewel pin
+      const pinGeo = new THREE.SphereGeometry(0.1, 16, 16);
       const pinMat = new THREE.MeshStandardMaterial({
         color: ev.color,
         emissive: ev.color,
-        emissiveIntensity: 0.8,
-        roughness: 0.2,
+        emissiveIntensity: 1.2,
+        roughness: 0.1,
+        metalness: 0.2,
       });
       const pinMesh = new THREE.Mesh(pinGeo, pinMat);
       pinMesh.position.set(bx, by, bz);
       beaconGroup.add(pinMesh);
 
       // Pulsing beacon halo ring
-      const haloGeo = new THREE.RingGeometry(0.12, 0.16, 24);
+      const haloGeo = new THREE.RingGeometry(0.14, 0.22, 24);
       const haloMat = new THREE.MeshBasicMaterial({
         color: ev.color,
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.7,
+        opacity: 0.85,
       });
       const haloMesh = new THREE.Mesh(haloGeo, haloMat);
       haloMesh.position.set(bx, by, bz);
@@ -312,7 +330,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     const sparklePositions = new Float32Array(sparkleCount * 3);
 
     for (let i = 0; i < sparkleCount; i++) {
-      const radius = 2.2 + Math.random() * 2.2;
+      const radius = 2.1 + Math.random() * 2.2;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
 
@@ -349,19 +367,6 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
 
     const sparklesMesh = new THREE.Points(sparkleGeom, sparkleMaterial);
     discoGroup.add(sparklesMesh);
-
-    // Orbiting Golden Horizon Rings
-    const orbitRingGeom = new THREE.TorusGeometry(2.5, 0.02, 16, 80);
-    const orbitRingMat = new THREE.MeshStandardMaterial({
-      color: 0xffaa44,
-      metalness: 0.8,
-      roughness: 0.25,
-      transparent: true,
-      opacity: 0.55,
-    });
-    const orbitRing = new THREE.Mesh(orbitRingGeom, orbitRingMat);
-    orbitRing.rotation.x = Math.PI * 0.42;
-    discoGroup.add(orbitRing);
 
     // Mouse / Touch Drag Interaction
     let isDragging = false;
@@ -433,8 +438,8 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     // Resize Handler
     const handleResize = () => {
       if (!container) return;
-      const w = container.clientWidth || 520;
-      const h = 460;
+      const w = container.clientWidth || 440;
+      const h = 380;
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
@@ -463,7 +468,6 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
       sparklesMesh.rotation.y = currentRotY * 1.2;
       sparklesMesh.rotation.x = currentTiltX + Math.sin(elapsed * 0.5) * 0.1;
 
-      orbitRing.rotation.z = elapsed * 0.15;
       discoGroup.position.y = Math.sin(elapsed * 1.4) * 0.08;
 
       dom.style.cursor = isDragging ? 'grabbing' : 'grab';
@@ -573,7 +577,6 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
             <div
               ref={canvasRef}
               className="disco-canvas-wrap"
-              title="Click or drag to spin the 3D celebration globe!"
             />
 
             <div className="disco-ball-action-bar">
