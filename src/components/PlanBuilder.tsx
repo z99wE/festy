@@ -248,14 +248,10 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
       playCelebrationSound(soundEnabled);
     } catch (err) {
       console.warn('AI Generation failed, falling back:', err);
-      setAiResponse(
-        `Festi AI Blueprint Synthesized for ${eventName}:\n\n` +
-        `• Budget Allocation: Reserve 38% for catering, 32% for venue, 14% for audio/entertainment, and 10% for ambiance lighting.\n` +
-        `• Milestones: Send Save-the-Dates 8 weeks out; lock vendor deposits 6 weeks out; finalize headcount 14 days out.\n` +
-        `• Pro Negotiation Tip: Request an itemized "out-the-door" quote including service charge and cleanup to eliminate unexpected 22% fees.`
-      );
-      setAiModelUsed('Festiya Deterministic Engine');
-      setAiLatency(10);
+      const fallback = aiOrchestrator.generateDeterministicResponse(promptText);
+      setAiResponse(fallback);
+      setAiModelUsed('Festi AI Engine (Offline Resilience)');
+      setAiLatency(5);
     } finally {
       setIsAILoading(false);
     }

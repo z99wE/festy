@@ -98,76 +98,13 @@ export const FestiChatbot: React.FC = () => {
   };
 
   const generateFestiResponse = (query: string): string => {
-    const q = query.toLowerCase();
-
-    // Guardrail against off-topic queries in local safety net as well
+    // Guardrail against malicious queries in local safety net as well
     const evalRes = FestiSecurityGuard.evaluate(query);
     if (!evalRes.isSafe && evalRes.deflectionResponse) {
       return evalRes.deflectionResponse;
     }
 
-    if (q.includes('budget') || q.includes('cost') || q.includes('price') || q.includes('$')) {
-      return `Here is Festi's Golden 3-Tier Budget Formula for your celebration: 💰
-
-• Venue & Rentals (35-40%): Reserve early to lock in off-peak dates (Thursdays or Sundays save up to 25%).
-• Food & Drinks (30-35%): Opt for family-style or interactive food stations rather than multi-course plating to trim staffing fees by 18%.
-• Photography & Music (15-20%): Book 6 hours instead of full-day coverage; prioritize golden hour and the main toast.
-• Decor, Lighting & Contingency (10-15%): Ambient uplighting creates 3x more warmth than expensive floral centerpieces.
-
-💡 Pro-Tip: Always ask caterers for an itemized "out-the-door" quote including service charge (20-24%), tax, and gratuity before signing!`;
-    }
-
-    if (q.includes('wedding') || q.includes('marry') || q.includes('bride') || q.includes('groom')) {
-      return `Let's plan your dream wedding with zero spreadsheet panic! 💍
-
-1. 9-12 Months Out:
-   • Lock venue & date
-   • Establish your 3 non-negotiables (e.g. food quality, great live band, intimate venue)
-
-2. 4-6 Months Out:
-   • Send Save-the-Dates with hotel blocks
-   • Finalize tastings and draft vendor milestones
-
-3. 30 Days Out:
-   • Lock final RSVP count and dietary requirements
-   • Finalize timeline with vendors and MC
-
-Would you like to build an itemized budget estimate or review vendor negotiation questions?`;
-    }
-
-    if (q.includes('vendor') || q.includes('caterer') || q.includes('dj') || q.includes('photographer')) {
-      return `Here are 4 High-Leverage Vendor Negotiation Questions to ask before signing: 📝🤝
-
-1. "What is the per-person difference between plated vs. family-style service?"
-   (Family style reduces server headcount and eliminates pre-ordered entree card tracking).
-
-2. "Can we supply our own wine and champagne with a flat corkage fee?"
-   (Often saves $800-$2,000 compared to venue markups).
-
-3. "Are staffing, linens, plateware, and cleanup included in the per-head rate?"
-   (Avoids surprising +$1,200 cleanup charges at midnight).
-
-4. "Can we do passed late-night bites instead of a sit-down dessert course?"
-   (Keeps guests energized on the dance floor and cuts dessert costs in half).`;
-    }
-
-    if (q.includes('corporate') || q.includes('offsite') || q.includes('work') || q.includes('company')) {
-      return `Here is Festi's blueprint for High-Impact Corporate Offsites: 🏢🎉
-
-• Pacing Rule: Never schedule talks longer than 45 minutes without an active physical shift or bio-break.
-• Space Layout: Blend formal classroom seating with casual lounge nooks for spontaneous cross-team collaboration.
-• A/V Contingency: Test wireless mics and backup clickers 60 minutes before opening remarks.
-• Evening Vibe: Transition from work to social with an interactive activity (cooking class, mixology, or local team quest) before dinner.`;
-    }
-
-    return `That sounds like a wonderful celebration idea! 🎉 
-
-Here are the 3 immediate steps to turn this into an actionable plan:
-1. Lock your Target Budget & Guest Range: Even a loose target (e.g. 50 guests, ~$3,500) gives vendors an exact frame.
-2. Select 2 Key Priorities: Whether it's unforgettable food, incredible music, or breathtaking photography, spend 60% of resources on what people actually remember.
-3. Establish a Day-Of Run of Show: Plan milestone cues early to prevent host fatigue.
-
-Tell me a bit more about the date, guest count, or location, and I will draft a full blueprint for you!`;
+    return aiOrchestrator.generateDeterministicResponse(query);
   };
 
   const handleSendMessage = async (textToSend?: string) => {

@@ -57,7 +57,12 @@ const EVENT_DOMAIN_KEYWORDS = [
   'contract', 'contracts', 'deposit', 'deposits', 'negotiate', 'negotiation', 'seating',
   'curfew', 'permit', 'permits', 'logistics', 'favor', 'favors', 'cake', 'dessert',
   'toast', 'speeches', 'mc', 'host', 'hosting', 'bachelorette', 'bachelor', 'graduation',
-  'housewarming', 'picnic', 'reunion', 'fundraiser', 'pop-up', 'popup', 'festi', 'festiya'
+  'housewarming', 'picnic', 'reunion', 'fundraiser', 'pop-up', 'popup', 'festi', 'festiya',
+  'idea', 'ideas', 'tip', 'tips', 'advice', 'suggest', 'recommend', 'organize', 'organizing',
+  'dinner', 'brunch', 'lunch', 'supper', 'tasting', 'wine', 'beer', 'cocktail party',
+  'games', 'activities', 'entertainment', 'vibe', 'vibes', 'ambiance', 'atmosphere',
+  'stage', 'seating chart', 'table', 'tables', 'linens', 'rentals', 'cleanup', 'overtime',
+  'diwali', 'eid', 'christmas', 'new year', 'halloween', 'thanksgiving', 'fiesta', 'soiree'
 ];
 
 // -----------------------------------------------------------------------------
@@ -275,8 +280,11 @@ export class FestiSecurityGuard {
   private static checkEventDomainRelevance(text: string): boolean {
     const lower = text.toLowerCase();
     
-    // Very short queries like greetings ("Hi", "Hello Festi", "Help") are allowed to invite the user
-    if (/^(hi|hello|hey|yo|greetings|festi|help|start)\b/i.test(lower) && lower.length < 25) {
+    // Greetings, capabilities, and onboarding inquiries
+    if (
+      /^(hi|hello|hey|yo|greetings|festi|help|start|welcome|sup|hola)\b/i.test(lower) ||
+      /\b(what\s+can\s+you\s+do|how\s+does\s+(this|festiya)\s+work|who\s+are\s+you|what\s+do\s+you\s+do|tell\s+me\s+about|show\s+me\s+ideas|where\s+do\s+i\s+start|can\s+you\s+help\s+me|how\s+to\s+use|features)\b/i.test(lower)
+    ) {
       return true;
     }
 
