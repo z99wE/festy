@@ -17,10 +17,10 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     const container = mountRef.current;
     if (!container) return;
 
-    // Viewport: 30% bigger presence
+    // Viewport sizing: ample width and height to prevent any edge clipping
     const getViewportSize = () => {
-      const w = container.clientWidth || 640;
-      const h = Math.min(480, Math.max(340, Math.round(w * 0.65)));
+      const w = container.clientWidth || 720;
+      const h = Math.min(520, Math.max(380, Math.round(w * 0.62)));
       return { width: w, height: h };
     };
 
@@ -28,17 +28,18 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
 
     // Three.js Scene Setup
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(32, width / height, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 100);
 
-    // Dynamic framing so the 30% larger plush mascot is prominent without edge clipping
+    // Camera distance with generous safety margin (1.35x padding) so 3D rotation NEVER clips at edges
     const updateCameraDistance = (w: number, h: number) => {
       const aspect = w / h;
-      const fovRad = (32 * Math.PI) / 180;
-      const targetW = 4.4;
-      const targetH = 1.65;
-      const distW = targetW / (2 * aspect * Math.tan(fovRad / 2));
-      const distH = targetH / (2 * Math.tan(fovRad / 2));
-      camera.position.set(0, 0, Math.max(4.8, Math.max(distW, distH)));
+      const fovRad = (30 * Math.PI) / 180;
+      const targetW = 4.2; // mascot width
+      const targetH = 1.58;
+      // Generous buffer factor (1.42) prevents "F" or "a" from clipping during 360 rotation and tilt
+      const distW = (targetW * 1.42) / (2 * aspect * Math.tan(fovRad / 2));
+      const distH = (targetH * 1.42) / (2 * Math.tan(fovRad / 2));
+      camera.position.set(0, 0, Math.max(6.2, Math.max(distW, distH)));
     };
     updateCameraDistance(width, height);
 
@@ -50,26 +51,25 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 1.2;
     container.innerHTML = '';
     container.appendChild(renderer.domElement);
 
-    // Balanced Studio Lighting: Soft warm ambiance without harsh hotspots
-    const ambientLight = new THREE.AmbientLight(0xfff8ee, 2.0);
+    // Warm, velvety lighting without white specular blowouts or harsh reflections
+    const ambientLight = new THREE.AmbientLight(0xfff6ea, 2.2);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffeed6, 2.4);
-    keyLight.position.set(3, 4, 3);
+    const keyLight = new THREE.DirectionalLight(0xffeed6, 2.0);
+    keyLight.position.set(2, 4, 3);
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0xffdfb8, 1.4);
+    const fillLight = new THREE.DirectionalLight(0xffdfb8, 1.2);
     fillLight.position.set(-3, -2, 2);
     scene.add(fillLight);
 
-    // Warm rim light highlighting fur fibers during 360 rotation
-    const rimLight = new THREE.DirectionalLight(0xffa834, 2.2);
-    rimLight.position.set(-2, 2, -4);
-    scene.add(rimLight);
+    const warmRim = new THREE.DirectionalLight(0xff9e30, 2.4);
+    warmRim.position.set(-2, 2, -4);
+    scene.add(warmRim);
 
     // Orbitable Root Group
     const orbitGroup = new THREE.Group();
@@ -88,180 +88,39 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
 
         const worldW = 4.2;
         const worldH = 1.58;
-        const depth = 0.24; // Plump 3D volume & extrusion
-        const halfDepth = depth / 2;
-
-        // Build continuous 3D side extrusion from the alpha contour of the plush letters
-        if (texture.image && typeof document !== 'undefined') {
-          const sampleW = 288;
-          const sampleH = 108;
-          const canvas = document.createElement('canvas');
-          canvas.width = sampleW;
-          canvas.height = sampleH;
-          const ctx = canvas.getContext('2d', { willReadFrequently: true });
-
-          if (ctx) {
-            ctx.drawImage(texture.image, 0, 0, sampleW, sampleH);
-            const imgData = ctx.getImageData(0, 0, sampleW, sampleH);
-            const data = imgData.data;
-
-            const isSolid = (x: number, y: number) => {
-              if (x < 0 || x >= sampleW || y < 0 || y >= sampleH) return false;
-              const idx = (y * sampleW + x) * 4;
-              return data[idx + 3] > 75; // Alpha threshold
-            };
-
-            const positions: number[] = [];
-            const colors: number[] = [];
-
-            const toWorldX = (px: number) => ((px / sampleW) - 0.5) * worldW;
-            const toWorldY = (py: number) => (0.5 - (py / sampleH)) * worldH;
-
-            const addQuad = (
-              vA: [number, number, number],
-              vB: [number, number, number],
-              vC: [number, number, number],
-              vD: [number, number, number],
-              r: number,
-              g: number,
-              b: number
-            ) => {
-              // Triangle 1
-              positions.push(...vA, ...vB, ...vC);
-              colors.push(r, g, b, r, g, b, r, g, b);
-              // Triangle 2
-              positions.push(...vA, ...vC, ...vD);
-              colors.push(r, g, b, r, g, b, r, g, b);
-            };
-
-            for (let y = 0; y < sampleH; y++) {
-              for (let x = 0; x < sampleW; x++) {
-                if (!isSolid(x, y)) continue;
-
-                const idx = (y * sampleW + x) * 4;
-                const r = data[idx] / 255;
-                const g = data[idx + 1] / 255;
-                const b = data[idx + 2] / 255;
-
-                // Top boundary (normal facing +Y)
-                if (!isSolid(x, y - 1)) {
-                  addQuad(
-                    [toWorldX(x), toWorldY(y), halfDepth],
-                    [toWorldX(x + 1), toWorldY(y), halfDepth],
-                    [toWorldX(x + 1), toWorldY(y), -halfDepth],
-                    [toWorldX(x), toWorldY(y), -halfDepth],
-                    r, g, b
-                  );
-                }
-
-                // Bottom boundary (normal facing -Y)
-                if (!isSolid(x, y + 1)) {
-                  addQuad(
-                    [toWorldX(x + 1), toWorldY(y + 1), halfDepth],
-                    [toWorldX(x), toWorldY(y + 1), halfDepth],
-                    [toWorldX(x), toWorldY(y + 1), -halfDepth],
-                    [toWorldX(x + 1), toWorldY(y + 1), -halfDepth],
-                    r, g, b
-                  );
-                }
-
-                // Left boundary (normal facing -X)
-                if (!isSolid(x - 1, y)) {
-                  addQuad(
-                    [toWorldX(x), toWorldY(y + 1), halfDepth],
-                    [toWorldX(x), toWorldY(y), halfDepth],
-                    [toWorldX(x), toWorldY(y), -halfDepth],
-                    [toWorldX(x), toWorldY(y + 1), -halfDepth],
-                    r, g, b
-                  );
-                }
-
-                // Right boundary (normal facing +X)
-                if (!isSolid(x + 1, y)) {
-                  addQuad(
-                    [toWorldX(x + 1), toWorldY(y), halfDepth],
-                    [toWorldX(x + 1), toWorldY(y + 1), halfDepth],
-                    [toWorldX(x + 1), toWorldY(y + 1), -halfDepth],
-                    [toWorldX(x + 1), toWorldY(y), -halfDepth],
-                    r, g, b
-                  );
-                }
-              }
-            }
-
-            if (positions.length > 0) {
-              const sideGeometry = new THREE.BufferGeometry();
-              sideGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-              sideGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-              sideGeometry.computeVertexNormals();
-
-              const sideMaterial = new THREE.MeshStandardMaterial({
-                vertexColors: true,
-                roughness: 0.55,
-                metalness: 0.04,
-                side: THREE.DoubleSide,
-              });
-
-              const sideMesh = new THREE.Mesh(sideGeometry, sideMaterial);
-              orbitGroup.add(sideMesh);
-            }
-          }
-        }
-
-        // Front Face (Sharp high-res plush fur)
         const planeGeo = new THREE.PlaneGeometry(worldW, worldH, 16, 8);
-        const frontMaterial = new THREE.MeshStandardMaterial({
-          map: texture,
-          transparent: true,
-          alphaTest: 0.05,
-          roughness: 0.38,
-          metalness: 0.06,
-          side: THREE.FrontSide,
-        });
-        const frontMesh = new THREE.Mesh(planeGeo, frontMaterial);
-        frontMesh.position.z = halfDepth + 0.002;
-        orbitGroup.add(frontMesh);
 
-        // Back Face (Mirrored 180° so fluffy fur is visible from all angles)
-        const backMaterial = new THREE.MeshStandardMaterial({
-          map: texture,
-          transparent: true,
-          alphaTest: 0.05,
-          roughness: 0.38,
-          metalness: 0.06,
-          side: THREE.FrontSide,
-        });
-        const backMesh = new THREE.Mesh(planeGeo, backMaterial);
-        backMesh.rotation.y = Math.PI;
-        backMesh.position.z = -halfDepth - 0.002;
-        orbitGroup.add(backMesh);
+        // Volumetric Plush Fur Stack:
+        // 14 micro-spaced layers at EXACT scale 1.0 (NO scaled shells = ZERO white fungus or halo).
+        // alphaTest: 0.35 cleanly drops anti-aliased border fringe so all edges are crisp, cohesive, and vibrant.
+        // High roughness (0.88) gives warm matte velvet plushness with NO white plastic shine.
+        const layerCount = 14;
+        const totalThickness = 0.16;
+        const step = totalThickness / (layerCount - 1);
+        const startZ = -totalThickness / 2;
 
-        // Soft Fluffy Fur Shells (Shell texturing for touchable fuzzy depth)
-        const shellConfigs = [
-          { z: halfDepth + 0.016, scale: 1.01, opacity: 0.55, isBack: false },
-          { z: halfDepth + 0.032, scale: 1.02, opacity: 0.32, isBack: false },
-          { z: -halfDepth - 0.016, scale: 1.01, opacity: 0.55, isBack: true },
-          { z: -halfDepth - 0.032, scale: 1.02, opacity: 0.32, isBack: true },
-        ];
+        for (let i = 0; i < layerCount; i++) {
+          const z = startZ + i * step;
+          const isFront = i === layerCount - 1;
+          const isBack = i === 0;
 
-        shellConfigs.forEach(({ z, scale, opacity, isBack }) => {
-          const shellMat = new THREE.MeshStandardMaterial({
+          const material = new THREE.MeshStandardMaterial({
             map: texture,
             transparent: true,
-            opacity,
-            roughness: 0.45,
+            alphaTest: 0.35, // Crisp edge boundary, eliminates any white/gray fringe
+            roughness: 0.88, // Velvet matte fur, no white specular hot spots
             metalness: 0.02,
-            side: THREE.FrontSide,
-            depthWrite: false,
+            side: isFront ? THREE.FrontSide : isBack ? THREE.FrontSide : THREE.DoubleSide,
+            depthWrite: true,
           });
-          const shellMesh = new THREE.Mesh(planeGeo, shellMat);
-          shellMesh.position.z = z;
-          shellMesh.scale.set(scale, scale, 1);
+
+          const mesh = new THREE.Mesh(planeGeo, material);
+          mesh.position.z = z;
           if (isBack) {
-            shellMesh.rotation.y = Math.PI;
+            mesh.rotation.y = Math.PI; // Perfectly faces back for 360 orbit visibility
           }
-          orbitGroup.add(shellMesh);
-        });
+          orbitGroup.add(mesh);
+        }
       },
       undefined,
       (err) => {
@@ -295,11 +154,11 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       const deltaX = clientX - prevMouseX;
       const deltaY = clientY - prevMouseY;
 
-      targetRotationY += deltaX * 0.011;
-      targetRotationX += deltaY * 0.008;
+      targetRotationY += deltaX * 0.01;
+      targetRotationX += deltaY * 0.007;
 
-      // Vertical tilt limits
-      targetRotationX = Math.max(-0.55, Math.min(0.55, targetRotationX));
+      // Vertical tilt limit
+      targetRotationX = Math.max(-0.5, Math.min(0.5, targetRotationX));
 
       prevMouseX = clientX;
       prevMouseY = clientY;
@@ -342,8 +201,8 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
 
       // Gentle continuous 360 orbit when idle
       if (!isDragging && !reducedMotion) {
-        targetRotationY += 0.007;
-        orbitGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.07;
+        targetRotationY += 0.006;
+        orbitGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.06;
       }
 
       // Smooth inertia damping
@@ -381,22 +240,24 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       style={{
         position: 'relative',
         width: '100%',
-        maxWidth: '720px',
+        maxWidth: '820px',
         margin: '0 auto',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        overflow: 'visible',
       }}
     >
       <div
         ref={mountRef}
         style={{
           width: '100%',
-          height: '460px',
+          height: '480px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           userSelect: 'none',
+          overflow: 'visible',
         }}
         title="Festiya 3D Plush Logo"
       />

@@ -11,7 +11,6 @@ import {
 import { Navbar, type AuthUser, type ActiveAppTab } from './components/Navbar';
 import { AuthModal } from './components/AuthModal';
 import { VenueExperience3D } from './components/VenueExperience3D';
-import { HomeVenueStage3D } from './components/HomeVenueStage3D';
 import { LiveInteractiveDemo } from './components/LiveInteractiveDemo';
 import { TaglineReveal } from './components/TaglineReveal';
 import { ProblemSolution } from './components/ProblemSolution';
@@ -140,7 +139,7 @@ export function App() {
                   <div className="hero-content">
                     {/* HIGH-ROI H1 TITLE */}
                     <h1 id="hero-title" className="hero-title">
-                      The Autonomous Event Architect That
+                      <span className="hero-headline-lead">The Autonomous Event Architect That</span>
                       <br />
                       <span className="highlight-orange">Cuts Planning Time by 90% & Saves Thousands on Vendors.</span>
                     </h1>
@@ -212,33 +211,13 @@ export function App() {
                   />
                 </div>
 
-                {/* 3D CELEBRATION STAGE & VENUE EXPERIENCE */}
-                <div style={{ marginTop: '20px' }}>
-                  <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 20px' }}>
-                    <h2 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '8px' }}>
-                      Celebration Pavilion & Spatial Floorplan
-                    </h2>
-                    <p style={{ fontSize: '14.5px', color: 'var(--text-secondary)' }}>
-                      Rotate to explore key celebration zones, guest flow, acoustical coverage, and pre-calibrated budget allocations.
-                    </p>
-                  </div>
-
-                  <HomeVenueStage3D
-                    reducedMotion={reducedMotion}
-                    onLaunchZonePlan={(_zoneId) => {
-                      setActiveTab('planner');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                  />
-                </div>
-
                 {/* APP NAVIGATION GATEWAY CARDS (Dividing the app into distinct parts) */}
                 <div style={{ marginTop: '10px' }}>
                   <div style={{ textAlign: 'center', marginBottom: '24px' }}>
                     <span style={{ fontSize: '12px', fontWeight: 800, color: '#BD3700', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                       Commercial Event Architecture Hub
                     </span>
-                    <h3 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>
+                    <h3 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)', marginTop: '4px' }}>
                       Explore Different Parts of Festiya
                     </h3>
                   </div>

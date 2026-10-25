@@ -40,6 +40,7 @@
   --accent-mint-light: #D8FBF0;
   --accent-sky: #118AB2;
   --accent-sky-light: #E0F4FB;
+  --bubblegum-purple-blue: #5b42f3;
 
   /* Typography: Zero pure black (#000000). Rich Espresso & Spiced Roast (WCAG AAA > 13:1) */
   --text-primary: #28140A;     /* Rich deep espresso */
@@ -617,11 +618,18 @@ img {
 }
 
 .hero-title {
+  color: var(--bubblegum-purple-blue, #5b42f3);
   letter-spacing: -0.03em;
   margin: var(--space-200) 0 var(--space-200);
   max-width: var(--hero-text-max-width);
   line-height: 1.18;
   overflow: visible;
+}
+
+.hero-headline-lead {
+  color: var(--bubblegum-purple-blue, #5b42f3) !important;
+  font-weight: 850;
+  display: inline;
 }
 
 /* Only permitted text gradient per Rule B5 */
