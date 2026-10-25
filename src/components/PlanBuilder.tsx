@@ -63,8 +63,6 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
   const [customAIPrompt, setCustomAIPrompt] = useState<string>('');
   const [isAILoading, setIsAILoading] = useState<boolean>(false);
   const [aiResponse, setAiResponse] = useState<string>('');
-  const [aiModelUsed, setAiModelUsed] = useState<string>('');
-  const [aiLatency, setAiLatency] = useState<number>(0);
   const [aiCopied, setAiCopied] = useState<boolean>(false);
 
   const guestSliderId = useId();
@@ -243,15 +241,11 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
         systemPrompt
       );
       setAiResponse(res.content);
-      setAiModelUsed(res.providerUsed);
-      setAiLatency(res.latencyMs);
       playCelebrationSound(soundEnabled);
     } catch (err) {
       console.warn('AI Generation failed, falling back:', err);
       const fallback = aiOrchestrator.generateDeterministicResponse(promptText);
       setAiResponse(fallback);
-      setAiModelUsed('Festi AI Engine (Offline Resilience)');
-      setAiLatency(5);
     } finally {
       setIsAILoading(false);
     }
@@ -297,10 +291,6 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
       <div className="content-wrapper">
         {/* Section Header */}
         <div className="section-header">
-          <div className="disco-header-badge">
-            <span>AI Event Architecture Engine</span>
-          </div>
-
           <h2 id="planner-heading" className="section-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
             Planner & AI Cost Simulator
           </h2>
@@ -476,10 +466,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
           {/* AI Output Panel */}
           {aiResponse && (
             <div className="ai-studio-result-panel">
-              <div className="ai-result-header">
-                <span className="ai-result-tag">
-                  Synthesized by {aiModelUsed || 'Festi AI Engine'} ({aiLatency}ms)
-                </span>
+              <div className="ai-result-header" style={{ justifyContent: 'flex-end' }}>
                 <button
                   type="button"
                   className="ai-copy-btn"

@@ -383,7 +383,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
               }}
             >
               <Calendar size={15} />
-              <span>Worldwide Long Weekends ({WORLDWIDE_LONG_WEEKENDS.length})</span>
+              <span>Worldwide Long Weekends</span>
             </button>
 
             <button
@@ -396,7 +396,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                 playPopSound(true);
               }}
             >
-              <span>Major World Festivals ({UPCOMING_WORLD_FESTIVALS.length})</span>
+              <span>Major World Festivals</span>
             </button>
           </div>
         </div>

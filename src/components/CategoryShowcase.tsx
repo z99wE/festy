@@ -215,21 +215,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
               }}
               aria-label={`Select ${cat.title} and launch blueprint`}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                <span
-                  style={{
-                    fontSize: '12px',
-                    fontWeight: 800,
-                    color: 'var(--bubblegum-purple-blue, #5b42f3)',
-                    background: '#EDE9FE',
-                    padding: '3px 9px',
-                    borderRadius: '8px',
-                  }}
-                >
-                  Blueprint #{String(idx + 1).padStart(2, '0')}
-                </span>
-              </div>
-
               <h4>{cat.title}</h4>
               <p>{cat.categoryDescription}</p>
 

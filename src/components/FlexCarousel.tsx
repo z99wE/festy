@@ -280,22 +280,6 @@ const fixedLensFragment = lensFragment.replace(
   'float edge = (nd - 1.0) / glen;\n  vec2 outward = grad / glen;\n  vec2 normal'
 );
 
-const Digits: React.FC<{ value: number }> = ({ value }) => (
-  <span className="flex-carousel__digits">
-    {String(value)
-      .padStart(2, '0')
-      .split('')
-      .map((digit, index) => (
-        <span key={index} className="flex-carousel__digit">
-          <span className="flex-carousel__reel" style={{ transform: `translateY(${-Number(digit) * 10}%)` }}>
-            {'0123456789'.split('').map(n => (
-              <span key={n}>{n}</span>
-            ))}
-          </span>
-        </span>
-      ))}
-  </span>
-);
 
 export const FlexCarousel: React.FC<FlexCarouselProps> = ({
   items = DEFAULT_ITEMS,
@@ -333,7 +317,7 @@ export const FlexCarousel: React.FC<FlexCarouselProps> = ({
   const callbacksRef = useRef<{ onChange?: (index: number, item: any) => void; onSelect?: (index: number, item: any) => void }>({ onChange, onSelect });
   const [active, setActive] = useState(0);
   const [revealed, setRevealed] = useState(false);
-  const [focusOpen, setFocusOpen] = useState(false);
+  const [, setFocusOpen] = useState(false);
 
   const base = BEND_PRESETS[preset] || BEND_PRESETS.liquid;
   const pick = (value: any, key: keyof typeof base) => (value === undefined || value === null ? base[key] : value);
@@ -1295,15 +1279,10 @@ export const FlexCarousel: React.FC<FlexCarouselProps> = ({
             {current.title || current.alt}
             {current.subtitle && <span className="flex-carousel__subtitle">{current.subtitle}</span>}
           </span>
-          <span className="flex-carousel__count" data-hidden={focusOpen ? '' : undefined}>
-            <Digits value={active + 1} />
-            <span className="flex-carousel__slash">/</span>
-            <span>{String(list.length).padStart(2, '0')}</span>
-          </span>
         </div>
       )}
       <div className="flex-carousel__live" aria-live="polite" aria-atomic="true">
-        {`${label}, ${active + 1} of ${list.length}`}
+        {label}
       </div>
     </div>
   );
