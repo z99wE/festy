@@ -203,7 +203,7 @@ export const AccessibilityToolbar: React.FC<AccessibilityToolbarProps> = ({
               <div>
                 <strong style={{ color: 'var(--text-primary)', display: 'block' }}>Calm Mode (Reduced Motion)</strong>
                 <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                  Halts rapid 3D camera travel, tilt, and particle swirling for motion sensitivity.
+                  Halts 3D camera travel, tilt, and motion effects for motion sensitivity.
                 </span>
               </div>
               <label className="toggle-switch">

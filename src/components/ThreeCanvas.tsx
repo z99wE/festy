@@ -81,64 +81,7 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     dynamicStageLight.position.set(0, 0, 5);
     scene.add(dynamicStageLight);
 
-    // --- 3D Confetti Particle Galaxy (Subtle, Airy, Elegant Celebration Sparkles) ---
-    // NO floating billboard mascots, NO toruses
-    const particleCount = 900;
-    const particleGeo = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const colors = new Float32Array(particleCount * 3);
 
-    const confettiPalette = [
-      new THREE.Color(0xFF5E1E), // Happy Orange
-      new THREE.Color(0xFF8A47), // Peach Orange
-      new THREE.Color(0xFFB703), // Sunshine Gold
-      new THREE.Color(0xFF4D6D), // Coral
-      new THREE.Color(0x06D6A0), // Mint
-      new THREE.Color(0xFFEAA7), // Cream Glow
-    ];
-
-    for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 36;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 45 - 6;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 24;
-
-      const c = confettiPalette[Math.floor(Math.random() * confettiPalette.length)];
-      colors[i * 3] = c.r;
-      colors[i * 3 + 1] = c.g;
-      colors[i * 3 + 2] = c.b;
-    }
-
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-    // Circular sparkle texture
-    const canvas = document.createElement('canvas');
-    canvas.width = 32;
-    canvas.height = 32;
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-      gradient.addColorStop(0, 'rgba(255,255,255,1)');
-      gradient.addColorStop(0.35, 'rgba(255,225,190,0.85)');
-      gradient.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(16, 16, 16, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    const particleTexture = new THREE.CanvasTexture(canvas);
-
-    const particleMat = new THREE.PointsMaterial({
-      size: 0.28,
-      vertexColors: true,
-      map: particleTexture,
-      transparent: true,
-      opacity: 0.75,
-      depthWrite: false,
-      blending: THREE.NormalBlending,
-    });
-    const particleSystem = new THREE.Points(particleGeo, particleMat);
-    scene.add(particleSystem);
 
     // --- Mouse Parallax Handler ---
     const handleMouseMove = (e: MouseEvent) => {
@@ -208,11 +151,7 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
         camera.position.z - 2
       );
 
-      // Gentle drift for celebration sparkle particles
-      if (!isCalm) {
-        particleSystem.rotation.y = elapsedTime * 0.025;
-        particleSystem.rotation.x = Math.sin(elapsedTime * 0.02) * 0.04;
-      }
+
 
       renderer.render(scene, camera);
     };
@@ -229,9 +168,6 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
       }
       scene.clear();
       renderer.dispose();
-      particleGeo.dispose();
-      particleMat.dispose();
-      particleTexture.dispose();
     };
   }, []);
 

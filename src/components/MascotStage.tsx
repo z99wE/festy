@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import confetti from 'canvas-confetti';
 import { Sparkles, Heart, Volume2, ShieldCheck } from 'lucide-react';
 import { playCelebrationSound, playPopSound } from '../utils/audio';
 
@@ -97,16 +96,7 @@ export const MascotStage: React.FC<MascotStageProps> = ({ soundEnabled, reducedM
     setCelebrating(true);
     playCelebrationSound(soundEnabled);
 
-    // Trigger joyful confetti burst
-    if (!reducedMotion) {
-      confetti({
-        particleCount: 55,
-        spread: 70,
-        origin: { y: 0.7 },
-        colors: ['#FF5E1E', '#FFB703', '#FF4D6D', '#06D6A0'],
-        disableForReducedMotion: true,
-      });
-    }
+
 
     setTimeout(() => setCelebrating(false), 800);
   };

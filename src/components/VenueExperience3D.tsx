@@ -11,7 +11,6 @@ interface VenueExperience3DProps {
  * An ambient, immersive Three.js spatial background that creates the sensation
  * of stepping into an illuminated evening festival/gala venue:
  * - Floating warm bokeh light orbs with soft depth-of-field bobbing
- * - Golden festoon celebration sparkles drifting upward
  * - Ambient 3D venue archways providing spatial architectural depth
  * - Smooth camera parallax responding to mouse drift and page scroll
  * - Cinematic motion-blur alpha trailing for smooth, luxurious motion
@@ -127,55 +126,7 @@ export const VenueExperience3D: React.FC<VenueExperience3DProps> = ({
     }
     scene.add(orbGroup);
 
-    // 4. Celebration Sparkle Particle Dust
-    const particleCount = 180;
-    const particleGeometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const opacities = new Float32Array(particleCount);
-
-    for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 36;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 24;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 20;
-      opacities[i] = 0.2 + Math.random() * 0.7;
-    }
-
-    particleGeometry.setAttribute(
-      'position',
-      new THREE.BufferAttribute(positions, 3)
-    );
-
-    const particleTexture = (() => {
-      const canvas = document.createElement('canvas');
-      canvas.width = 32;
-      canvas.height = 32;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-        grad.addColorStop(0, 'rgba(255, 220, 140, 1)');
-        grad.addColorStop(0.3, 'rgba(255, 120, 40, 0.6)');
-        grad.addColorStop(1, 'rgba(255, 100, 30, 0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(16, 16, 16, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      return new THREE.CanvasTexture(canvas);
-    })();
-
-    const particleMaterial = new THREE.PointsMaterial({
-      size: 0.4,
-      map: particleTexture,
-      transparent: true,
-      opacity: 0.6,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    });
-
-    const particles = new THREE.Points(particleGeometry, particleMaterial);
-    scene.add(particles);
-
-    // 5. Elegant Venue Depth Arches
+    // 4. Elegant Venue Depth Arches
     const archGroup = new THREE.Group();
     const archCount = 3;
     for (let a = 0; a < archCount; a++) {
@@ -254,19 +205,6 @@ export const VenueExperience3D: React.FC<VenueExperience3DProps> = ({
         item.mesh.rotation.y = elapsedTime * 0.2;
       }
 
-      // Animate Particle Sparkles (slow graceful ascent)
-      const posAttr = particleGeometry.attributes.position as THREE.BufferAttribute;
-      const posArray = posAttr.array as Float32Array;
-
-      for (let p = 0; p < particleCount; p++) {
-        const idx = p * 3 + 1; // y position
-        posArray[idx] += 0.015;
-        if (posArray[idx] > 12) {
-          posArray[idx] = -12;
-        }
-      }
-      posAttr.needsUpdate = true;
-
       // Subtle rotational sway on background venue arches
       archGroup.rotation.y = Math.sin(elapsedTime * 0.2) * 0.03;
       archGroup.rotation.z = Math.cos(elapsedTime * 0.15) * 0.01;
@@ -285,9 +223,6 @@ export const VenueExperience3D: React.FC<VenueExperience3DProps> = ({
       cancelAnimationFrame(animationFrameId);
 
       renderer.dispose();
-      particleGeometry.dispose();
-      particleMaterial.dispose();
-      particleTexture.dispose();
       orbGeom.dispose();
       orbMaterials.forEach((m) => m.dispose());
 
