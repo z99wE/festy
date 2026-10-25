@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ChevronDown, ShieldCheck, Download, RefreshCw } from 'lucide-react';
 import { playPopSound } from '../utils/audio';
 
 interface FAQItem {
@@ -43,7 +42,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ soundEnabled }) => {
     },
     {
       question: "How do vendor negotiation checklists help during venue walkthroughs?",
-      answer: "Festiya synthesizes situational negotiation prompts based on your celebration category—identifying hidden load-in surcharges, overtime clauses, and mandatory gratuity multipliers so you have full clarity before finalizing contracts.",
+      answer: "Festiya synthesizes situational negotiation prompts based on your celebration category, identifying hidden load-in surcharges, overtime clauses, and mandatory gratuity multipliers so you have full clarity before finalizing contracts.",
       tag: "Vendor Negotiation",
     },
   ];
@@ -58,7 +57,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ soundEnabled }) => {
     <section className="faq-section" id="faq" aria-labelledby="faq-heading">
       <div className="content-wrapper">
         <div className="section-header">
-          <h2 id="faq-heading" className="section-title">
+          <h2 id="faq-heading" className="section-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
             Everything You Need to Know Before Planning
           </h2>
           <p className="section-subtitle">
@@ -89,8 +88,8 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ soundEnabled }) => {
                     <span className="faq-tag">{faq.tag}</span>
                     <h3 className="faq-question-text">{faq.question}</h3>
                   </div>
-                  <div className={`faq-chevron ${isOpen ? 'rotated' : ''}`} aria-hidden="true">
-                    <ChevronDown size={18} />
+                  <div className="faq-toggle-symbol" aria-hidden="true" style={{ fontSize: '18px', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
+                    {isOpen ? '−' : '+'}
                   </div>
                 </div>
 
@@ -108,7 +107,6 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ soundEnabled }) => {
         <div className="risk-reversal-card">
           <div className="risk-reversal-grid">
             <div className="risk-item">
-              <ShieldCheck size={22} color="var(--orange-500)" />
               <div>
                 <strong>Decimal-Safe Calculations</strong>
                 <p>Multi-tier financial models without rounding errors.</p>
@@ -116,7 +114,6 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ soundEnabled }) => {
             </div>
 
             <div className="risk-item">
-              <Download size={22} color="var(--orange-500)" />
               <div>
                 <strong>Export Your Data Anytime</strong>
                 <p>Download clean PDF, Markdown, or JSON summaries.</p>
@@ -124,7 +121,6 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ soundEnabled }) => {
             </div>
 
             <div className="risk-item">
-              <RefreshCw size={22} color="var(--orange-500)" />
               <div>
                 <strong>Instant Scoped Sharing</strong>
                 <p>Vendor access on mobile without app downloads.</p>

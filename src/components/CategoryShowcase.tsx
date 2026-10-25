@@ -1,19 +1,5 @@
 import React, { useState } from 'react';
-import {
-  ArrowRight,
-  Sparkles,
-  Layers,
-  Cake,
-  Heart,
-  Building2,
-  Users2,
-  Palette,
-  Wine,
-  Music,
-  Tv,
-  Award,
-  Tent,
-} from 'lucide-react';
+
 import { FlexCarousel, type FlexCarouselItem } from './FlexCarousel';
 
 interface CategoryShowcaseProps {
@@ -181,32 +167,11 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
     }
   };
 
-  const getCategoryIcon = (iconName: string) => {
-    switch (iconName) {
-      case 'cake': return <Cake size={22} />;
-      case 'heart': return <Heart size={22} />;
-      case 'sparkles': return <Sparkles size={22} />;
-      case 'building': return <Building2 size={22} />;
-      case 'users': return <Users2 size={22} />;
-      case 'wine': return <Wine size={22} />;
-      case 'music': return <Music size={22} />;
-      case 'tv': return <Tv size={22} />;
-      case 'award': return <Award size={22} />;
-      case 'tent': return <Tent size={22} />;
-      default: return <Palette size={22} />;
-    }
-  };
-
   return (
     <section className="categories-section" id="categories" aria-labelledby="categories-heading">
       <div className="content-wrapper">
         <div className="section-header" style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 36px' }}>
-          <div className="hero-badge" style={{ margin: '0 auto 16px', display: 'inline-flex' }}>
-            <Sparkles size={14} style={{ marginRight: '6px' }} />
-            <span>Curated Celebration Blueprints</span>
-          </div>
-
-          <h2 id="categories-heading" className="section-title">
+          <h2 id="categories-heading" className="section-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
             12 Battle-Tested Celebration Blueprints Engineered for Operational Calm
           </h2>
 
@@ -217,7 +182,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
           {/* Preset Selector Pill Group */}
           <div className="carousel-preset-pills" role="tablist" aria-label="Carousel Motion Presets">
             <span className="preset-label">
-              <Layers size={13} style={{ marginRight: '4px' }} />
               Display Style:
             </span>
             {(['liquid', 'ribbon', 'vortex', 'arch'] as const).map((preset) => (
@@ -277,7 +241,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
               onClick={() => handleLaunchPlan(currentItem.id)}
             >
               <span>Build {currentItem.title} Blueprint</span>
-              <ArrowRight size={18} />
             </button>
           </div>
         </div>
@@ -303,16 +266,19 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
               }}
               aria-label={`Select ${cat.title} and launch blueprint`}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div
-                  className="category-card-icon"
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                <span
                   style={{
-                    backgroundColor: 'var(--orange-100)',
-                    color: cat.color,
+                    fontSize: '12px',
+                    fontWeight: 800,
+                    color: 'var(--bubblegum-purple-blue, #5b42f3)',
+                    background: '#EDE9FE',
+                    padding: '3px 9px',
+                    borderRadius: '8px',
                   }}
                 >
-                  {getCategoryIcon(cat.iconName)}
-                </div>
+                  Blueprint #{String(idx + 1).padStart(2, '0')}
+                </span>
                 <span className="badge-pill sunshine" style={{ fontSize: '11px', padding: '2px 8px' }}>
                   {cat.tags[0]}
                 </span>
@@ -323,7 +289,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
 
               <div className="category-card-cta">
                 <span>Explore Plan Blueprint</span>
-                <ArrowRight size={16} aria-hidden="true" />
               </div>
             </div>
           ))}

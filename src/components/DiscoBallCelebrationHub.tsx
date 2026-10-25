@@ -1,15 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import * as THREE from 'three';
 import confetti from 'canvas-confetti';
-import {
-  Sparkles,
-  Calendar,
-  ArrowRight,
-  CheckCircle2,
-  MapPin,
-  ChevronRight,
-  ChevronLeft,
-} from 'lucide-react';
+
 import {
   formatCurrency,
   REGIONAL_LONG_WEEKENDS,
@@ -554,7 +546,6 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                 playPopSound(true);
               }}
             >
-              <Sparkles size={14} style={{ marginRight: '6px' }} />
               <span>World Festivals ({UPCOMING_WORLD_EVENTS.length})</span>
             </button>
 
@@ -568,7 +559,6 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                 playPopSound(true);
               }}
             >
-              <Calendar size={14} style={{ marginRight: '6px' }} />
               <span>Regional Long Weekends ({regionalWeekends.length})</span>
             </button>
           </div>
@@ -593,7 +583,6 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                 onClick={handleBallSpinClick}
                 aria-label="Spin celebration disco ball"
               >
-                <Sparkles size={15} style={{ marginRight: '6px', color: '#BD3700' }} />
                 <span>Spin Celebration Globe</span>
               </button>
             </div>
@@ -642,25 +631,22 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                 <div className="dossier-header">
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                      <span className="dossier-tag">Upcoming World Holiday</span>
                       <span className="dossier-countdown">{activeEvent.daysUntil} Days Away</span>
                     </div>
                     <h3 className="dossier-title">{activeEvent.name}</h3>
                     <div className="dossier-meta">
-                      <MapPin size={14} />
                       <span>{activeEvent.location}</span>
                       <span style={{ margin: '0 6px' }}>•</span>
-                      <Calendar size={14} />
                       <span>{activeEvent.dates}</span>
                     </div>
                   </div>
 
                   <div className="dossier-arrows">
                     <button type="button" className="dossier-nav-btn" onClick={handlePrevEvent} aria-label="Previous event">
-                      <ChevronLeft size={16} />
+                      ‹
                     </button>
                     <button type="button" className="dossier-nav-btn" onClick={handleNextEvent} aria-label="Next event">
-                      <ChevronRight size={16} />
+                      ›
                     </button>
                   </div>
                 </div>
@@ -679,9 +665,8 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                 </div>
 
                 <div className="dossier-logistics-box">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-                    <CheckCircle2 size={14} color="#059669" />
-                    <span style={{ fontSize: '12px', fontWeight: 800, color: '#059669', textTransform: 'uppercase' }}>
+                  <div style={{ marginBottom: '6px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 800, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       Critical Logistics Check
                     </span>
                   </div>
@@ -700,7 +685,6 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                     }}
                   >
                     <span>Synthesize {activeEvent.name} Plan</span>
-                    <ArrowRight size={16} style={{ marginLeft: '8px' }} />
                   </button>
                 </div>
               </>
@@ -708,12 +692,11 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
               <div>
                 <div style={{ marginBottom: '16px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                    <span className="dossier-tag">Region: {detectedCountry}</span>
                     <span className="dossier-countdown">{regionalWeekends.length} Long Weekends</span>
                   </div>
                   <h3 className="dossier-title">Bank Holidays & 3-Day Escapes</h3>
                   <p style={{ fontSize: '13.5px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                    Pre-calculated bank holidays ideal for reunions, milestone birthdays, and weekend getaways.
+                    Pre-calculated bank holidays in {detectedCountry} ideal for reunions, milestone birthdays, and weekend getaways.
                   </p>
                 </div>
 

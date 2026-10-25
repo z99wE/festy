@@ -1,5 +1,4 @@
 import React from 'react';
-import { Star } from 'lucide-react';
 
 export const SocialProof: React.FC = () => {
   const testimonials = [
@@ -30,7 +29,7 @@ export const SocialProof: React.FC = () => {
     <section className="social-proof-section" aria-labelledby="social-proof-heading">
       <div className="content-wrapper">
         <div className="section-header">
-          <h2 id="social-proof-heading" className="section-title">
+          <h2 id="social-proof-heading" className="section-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
             Loved by Organizers, Planners, and Families
           </h2>
           <p className="section-subtitle">
@@ -41,10 +40,8 @@ export const SocialProof: React.FC = () => {
         <div className="testimonials-grid">
           {testimonials.map((t, idx) => (
             <div key={idx} className="testimonial-card">
-              <div className="testimonial-stars" aria-hidden="true">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={16} fill="var(--accent-gold)" color="var(--accent-gold)" />
-                ))}
+              <div className="testimonial-stars" aria-hidden="true" style={{ color: 'var(--accent-gold, #D97706)', fontWeight: 800, fontSize: '15px', letterSpacing: '2px' }}>
+                ★★★★★
               </div>
 
               <p className="testimonial-quote">"{t.quote}"</p>

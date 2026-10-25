@@ -1,20 +1,10 @@
 import { useState, useEffect } from 'react';
-import {
-  ArrowRight,
-  Layers,
-  Calculator,
-  BookOpen,
-  HelpCircle,
-  Home,
-  CheckCircle2,
-} from 'lucide-react';
 import { Navbar, type AuthUser, type ActiveAppTab } from './components/Navbar';
 import { AuthModal } from './components/AuthModal';
 import { VenueExperience3D } from './components/VenueExperience3D';
 import { LiveInteractiveDemo } from './components/LiveInteractiveDemo';
 import { TaglineReveal } from './components/TaglineReveal';
 import { ProblemSolution } from './components/ProblemSolution';
-import { ScrollJourney } from './components/ScrollJourney';
 import { PlanBuilder } from './components/PlanBuilder';
 import { CategoryShowcase } from './components/CategoryShowcase';
 import { SocialProof } from './components/SocialProof';
@@ -151,9 +141,6 @@ export function App() {
 
                     {/* Fast-Selector Occasion Chips */}
                     <div className="hero-occasion-chips" role="group" aria-label="Select celebration category">
-                      <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                        Instant Launch:
-                      </span>
                       {OCCASION_SWAP_ITEMS.map((item) => (
                         <button
                           key={item.id}
@@ -174,7 +161,6 @@ export function App() {
                         onClick={handleStartPlanning}
                       >
                         <span>Build your event plan</span>
-                        <ArrowRight size={16} aria-hidden="true" />
                       </button>
 
                       <button
@@ -186,7 +172,6 @@ export function App() {
                           window.scrollTo({ top: 0, behavior: 'smooth' });
                         }}
                       >
-                        <Layers size={16} style={{ marginRight: '6px' }} />
                         <span>Explore 12 Blueprints</span>
                       </button>
                     </div>
@@ -214,10 +199,7 @@ export function App() {
                 {/* APP NAVIGATION GATEWAY CARDS (Dividing the app into distinct parts) */}
                 <div style={{ marginTop: '10px' }}>
                   <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-                    <span style={{ fontSize: '12px', fontWeight: 800, color: '#BD3700', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                      Commercial Event Architecture Hub
-                    </span>
-                    <h3 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)', marginTop: '4px' }}>
+                    <h3 style={{ fontSize: '26px', fontWeight: 850, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
                       Explore Different Parts of Festiya
                     </h3>
                   </div>
@@ -233,9 +215,6 @@ export function App() {
                       tabIndex={0}
                     >
                       <div>
-                        <div className="gateway-icon-wrap">
-                          <Layers size={22} />
-                        </div>
                         <h4 className="gateway-card-title">12 Event Blueprints</h4>
                         <p className="gateway-card-desc">
                           Curated celebration models covering weddings, milestone birthdays, music festivals, tech launches, and cultural galas.
@@ -243,7 +222,6 @@ export function App() {
                       </div>
                       <div className="gateway-card-link">
                         <span>Browse 12 Blueprints</span>
-                        <ArrowRight size={15} />
                       </div>
                     </div>
 
@@ -257,9 +235,6 @@ export function App() {
                       tabIndex={0}
                     >
                       <div>
-                        <div className="gateway-icon-wrap" style={{ background: '#FFE4D0', color: '#E64909' }}>
-                          <Calculator size={22} />
-                        </div>
                         <h4 className="gateway-card-title">Live Event Planner</h4>
                         <p className="gateway-card-desc">
                           Dedicated 3-tier budget synthesizer (low, likely, high) and day-of chronological checklist engine.
@@ -267,7 +242,6 @@ export function App() {
                       </div>
                       <div className="gateway-card-link">
                         <span>Launch Live Planner</span>
-                        <ArrowRight size={15} />
                       </div>
                     </div>
 
@@ -281,9 +255,6 @@ export function App() {
                       tabIndex={0}
                     >
                       <div>
-                        <div className="gateway-icon-wrap" style={{ background: '#D8FBF0', color: '#059669' }}>
-                          <BookOpen size={22} />
-                        </div>
                         <h4 className="gateway-card-title">Event Insights & AEO</h4>
                         <p className="gateway-card-desc">
                           Vendor contract negotiation playbooks, regional budget benchmarks, and answer-engine-optimized strategies.
@@ -291,7 +262,6 @@ export function App() {
                       </div>
                       <div className="gateway-card-link">
                         <span>Read Vendor Playbooks</span>
-                        <ArrowRight size={15} />
                       </div>
                     </div>
 
@@ -305,9 +275,6 @@ export function App() {
                       tabIndex={0}
                     >
                       <div>
-                        <div className="gateway-icon-wrap" style={{ background: '#FFE3E8', color: '#FF4D6D' }}>
-                          <HelpCircle size={22} />
-                        </div>
                         <h4 className="gateway-card-title">FAQ & Support</h4>
                         <p className="gateway-card-desc">
                           Answers to licensing, vendor pricing guarantees, data security on Cloudflare, and export formats.
@@ -315,7 +282,6 @@ export function App() {
                       </div>
                       <div className="gateway-card-link">
                         <span>View FAQ Hub</span>
-                        <ArrowRight size={15} />
                       </div>
                     </div>
                   </div>
@@ -332,9 +298,6 @@ export function App() {
             {/* Problem vs Solution Section */}
             <ProblemSolution />
 
-            {/* The 3-Step Journey */}
-            <ScrollJourney />
-
             {/* Social Proof */}
             <SocialProof />
           </>
@@ -348,9 +311,8 @@ export function App() {
             <div className="content-wrapper">
               <div className="section-switch-banner">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Layers size={18} color="#FF5E1E" />
                   <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                    Viewing Section: <strong>12 Celebration Blueprints</strong>
+                    Section: <strong>12 Celebration Blueprints</strong>
                   </span>
                 </div>
                 <button
@@ -362,7 +324,6 @@ export function App() {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                 >
-                  <Home size={14} style={{ marginRight: '4px' }} />
                   <span>Return to Home</span>
                 </button>
               </div>
@@ -390,9 +351,8 @@ export function App() {
             <div className="content-wrapper">
               <div className="section-switch-banner">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Calculator size={18} color="#FF5E1E" />
                   <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                    Viewing Section: <strong>Live Event Planner & 3-Tier Budget Synthesizer</strong>
+                    Section: <strong>Live Event Planner & 3-Tier Budget Synthesizer</strong>
                   </span>
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
@@ -405,7 +365,6 @@ export function App() {
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
                   >
-                    <Layers size={14} style={{ marginRight: '4px' }} />
                     <span>Change Blueprint</span>
                   </button>
                   <button
@@ -417,7 +376,6 @@ export function App() {
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
                   >
-                    <Home size={14} style={{ marginRight: '4px' }} />
                     <span>Home</span>
                   </button>
                 </div>
@@ -440,9 +398,8 @@ export function App() {
             <div className="content-wrapper">
               <div className="section-switch-banner">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <BookOpen size={18} color="#059669" />
                   <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                    Viewing Section: <strong>Event Intelligence & Vendor Negotiation Knowledge Hub</strong>
+                    Section: <strong>Event Intelligence & Vendor Negotiation Knowledge Hub</strong>
                   </span>
                 </div>
                 <button
@@ -454,7 +411,6 @@ export function App() {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                 >
-                  <Home size={14} style={{ marginRight: '4px' }} />
                   <span>Return to Home</span>
                 </button>
               </div>
@@ -482,9 +438,8 @@ export function App() {
             <div className="content-wrapper">
               <div className="section-switch-banner">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <HelpCircle size={18} color="#FF4D6D" />
                   <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                    Viewing Section: <strong>Frequently Asked Questions & Support</strong>
+                    Section: <strong>Frequently Asked Questions & Support</strong>
                   </span>
                 </div>
                 <button
@@ -496,7 +451,6 @@ export function App() {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                 >
-                  <Home size={14} style={{ marginRight: '4px' }} />
                   <span>Return to Home</span>
                 </button>
               </div>
@@ -521,7 +475,6 @@ export function App() {
                 onClick={handleStartPlanning}
               >
                 <span>Build your event plan</span>
-                <ArrowRight size={16} aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -605,10 +558,10 @@ export function App() {
             <div className="footer-col">
               <h5>Trust & Quality</h5>
               <ul className="footer-links">
-                <li style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><CheckCircle2 size={13} color="#059669" /> Decimal-safe accounting</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><CheckCircle2 size={13} color="#059669" /> Zero dark patterns</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><CheckCircle2 size={13} color="#059669" /> Cloudflare Edge Tenant</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><CheckCircle2 size={13} color="#059669" /> Export to CSV & PDF</li>
+                <li>• Decimal-safe accounting</li>
+                <li>• Zero dark patterns</li>
+                <li>• Cloudflare Edge Tenant</li>
+                <li>• Export to CSV & PDF</li>
               </ul>
             </div>
           </div>

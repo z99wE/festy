@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, DollarSign, Calendar, CheckCircle2, ArrowRight, ShieldCheck } from 'lucide-react';
 
 interface Scenario {
   id: string;
@@ -17,7 +16,7 @@ const SCENARIOS: Scenario[] = [
   {
     id: 'birthday',
     tag: 'Milestone 30th Birthday',
-    prompt: '55 Guests • Rooftop Loft • Acoustic Jazz Duo • $4,800 Budget',
+    prompt: '55 Guests, Rooftop Loft, Acoustic Jazz Duo, $4,800 Budget',
     guests: 55,
     budgetTotal: 4800,
     currency: '$',
@@ -29,19 +28,19 @@ const SCENARIOS: Scenario[] = [
       { category: 'Contingency Reserve', amount: 384, percentage: 8 },
     ],
     tasks: [
-      'Lock sound permit & curfew limits (30 days out)',
+      'Lock sound permit and curfew limits (30 days out)',
       'Confirm cocktail signature ingredient order (10 days out)',
       'Distribute acoustic load-in timetable to venue lead',
     ],
     vendorTip: {
-      question: 'Ask: "Can we supply craft wine & cider with a flat corkage fee?"',
-      savings: 'Saves ~$720 vs standard venue bar markups',
+      question: 'Ask: "Can we supply craft wine and cider with a flat corkage fee?"',
+      savings: 'Saves ~$720 versus standard venue bar markups',
     },
   },
   {
     id: 'wedding',
     tag: 'Dream Vineyard Wedding',
-    prompt: '110 Guests • Napa Vineyard • Farm-to-Table Dinner • $26,000 Budget',
+    prompt: '110 Guests, Napa Vineyard, Farm-to-Table Dinner, $26,000 Budget',
     guests: 110,
     budgetTotal: 26000,
     currency: '$',
@@ -58,14 +57,14 @@ const SCENARIOS: Scenario[] = [
       'Golden hour ceremony cue run sheet distributed to photographer',
     ],
     vendorTip: {
-      question: 'Ask: "What is the per-plate delta between plated vs family-style service?"',
+      question: 'Ask: "What is the per-plate delta between plated versus family-style service?"',
       savings: 'Saves ~$1,850 and reduces server headcount by 4',
     },
   },
   {
     id: 'corporate',
     tag: 'Corporate Gala & Offsite',
-    prompt: '80 Guests • Art Gallery Gala • Keynote Stage + Open Bar • $11,500 Budget',
+    prompt: '80 Guests, Art Gallery Gala, Keynote Stage and Open Bar, $11,500 Budget',
     guests: 80,
     budgetTotal: 11500,
     currency: '$',
@@ -77,8 +76,8 @@ const SCENARIOS: Scenario[] = [
       { category: 'Printed Badges & Signage', amount: 805, percentage: 7 },
     ],
     tasks: [
-      'Complete AV mic check & projector aspect ratio test (T-3h)',
-      'VIP badge print lock & sponsor signage inspection (T-24h)',
+      'Complete AV mic check and projector aspect ratio test (T-3h)',
+      'VIP badge print lock and sponsor signage inspection (T-24h)',
       'Post-event invoice receipt collection protocol active',
     ],
     vendorTip: {
@@ -101,43 +100,31 @@ export const LiveInteractiveDemo: React.FC = () => {
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>;
     const targetText = scenario.prompt;
+    let charIndex = 0;
     setTypedText('');
     setIsTyping(true);
     setIsProcessing(false);
     setShowResults(false);
 
-    let charIdx = 0;
-    const typeInterval = setInterval(() => {
-      if (charIdx < targetText.length) {
-        setTypedText(targetText.slice(0, charIdx + 1));
-        charIdx++;
+    const typeChar = () => {
+      if (charIndex < targetText.length) {
+        setTypedText(targetText.slice(0, charIndex + 1));
+        charIndex++;
+        timeout = setTimeout(typeChar, 24 + Math.random() * 18);
       } else {
-        clearInterval(typeInterval);
         setIsTyping(false);
         setIsProcessing(true);
-
-        // Simulate AI orchestration analysis
         timeout = setTimeout(() => {
           setIsProcessing(false);
           setShowResults(true);
-        }, 900);
+        }, 500);
       }
-    }, 28);
-
-    return () => {
-      clearInterval(typeInterval);
-      clearTimeout(timeout);
     };
-  }, [activeScenarioIdx, scenario.prompt]);
 
-  // Auto-advance scenario every 9 seconds if user hasn't clicked
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveScenarioIdx((prev) => (prev + 1) % SCENARIOS.length);
-    }, 9500);
+    timeout = setTimeout(typeChar, 200);
 
-    return () => clearInterval(timer);
-  }, []);
+    return () => clearTimeout(timeout);
+  }, [activeScenarioIdx]);
 
   const handleSelectScenario = (idx: number) => {
     setActiveScenarioIdx(idx);
@@ -155,11 +142,7 @@ export const LiveInteractiveDemo: React.FC = () => {
       <div className="content-wrapper">
         {/* Section Header */}
         <div className="demo-header-wrapper">
-          <div className="demo-badge">
-            <Sparkles size={14} color="var(--orange-500)" />
-            <span>Autonomous Intelligence in Action</span>
-          </div>
-          <h2 className="demo-title">
+          <h2 className="demo-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)', fontWeight: 850 }}>
             Watch Festiya Architect an Event in Real Time
           </h2>
           <p className="demo-subtitle">
@@ -185,7 +168,7 @@ export const LiveInteractiveDemo: React.FC = () => {
 
         {/* Live Simulation Card Container */}
         <div className="demo-stage-card">
-          {/* Simulated Input Console */}
+          {/* Simulated Input Console in Brand Purple / Blue (NO BLACK) */}
           <div className="demo-console-bar">
             <div className="console-indicator">
               <span className="console-dot dot-red" />
@@ -194,7 +177,7 @@ export const LiveInteractiveDemo: React.FC = () => {
               <span className="console-label">Festiya Autonomous Event Architect</span>
             </div>
             <div className="console-input-display">
-              <span className="console-prompt-prefix">Event Prompt:</span>
+              <span className="console-prompt-prefix">Event Brief:</span>
               <span className="console-prompt-text">{typedText}</span>
               {isTyping && <span className="console-cursor" aria-hidden="true">|</span>}
             </div>
@@ -204,7 +187,7 @@ export const LiveInteractiveDemo: React.FC = () => {
           {isProcessing && (
             <div className="demo-processing-banner">
               <div className="demo-spinner" />
-              <span>Analyzing venue benchmarks & allocating 3-tier budget...</span>
+              <span>Analyzing venue benchmarks and allocating 3-tier budget...</span>
             </div>
           )}
 
@@ -213,9 +196,6 @@ export const LiveInteractiveDemo: React.FC = () => {
             {/* 1. Budget Distribution Result */}
             <div className="demo-result-card budget">
               <div className="demo-card-header">
-                <div className="demo-card-icon">
-                  <DollarSign size={16} color="var(--orange-500)" />
-                </div>
                 <div>
                   <h3 className="demo-card-title">3-Tier Calculated Budget</h3>
                   <span className="demo-card-sub">
@@ -249,9 +229,6 @@ export const LiveInteractiveDemo: React.FC = () => {
             {/* 2. Priority Milestone Checklist */}
             <div className="demo-result-card tasks">
               <div className="demo-card-header">
-                <div className="demo-card-icon">
-                  <Calendar size={16} color="var(--mint-500)" />
-                </div>
                 <div>
                   <h3 className="demo-card-title">Prioritized Milestones</h3>
                   <span className="demo-card-sub">Pre-negotiated timeline schedule</span>
@@ -261,7 +238,7 @@ export const LiveInteractiveDemo: React.FC = () => {
               <div className="demo-tasks-list">
                 {scenario.tasks.map((task, i) => (
                   <div key={i} className="demo-task-item">
-                    <CheckCircle2 size={16} className="task-check-icon" />
+                    <span style={{ color: '#059669', fontWeight: 800, marginRight: '6px' }}>•</span>
                     <span>{task}</span>
                   </div>
                 ))}
@@ -270,11 +247,10 @@ export const LiveInteractiveDemo: React.FC = () => {
               {/* Vendor Leverage Script Box */}
               <div className="demo-vendor-leverage-box">
                 <div className="leverage-badge">
-                  <ShieldCheck size={13} color="#059669" />
                   <span>Negotiation Leverage Script</span>
                 </div>
                 <p className="leverage-question">{scenario.vendorTip.question}</p>
-                <span className="leverage-savings">💰 {scenario.vendorTip.savings}</span>
+                <span className="leverage-savings">{scenario.vendorTip.savings}</span>
               </div>
             </div>
           </div>
@@ -290,7 +266,6 @@ export const LiveInteractiveDemo: React.FC = () => {
               onClick={handleJumpToPlanner}
             >
               <span>Build your plan with custom numbers</span>
-              <ArrowRight size={15} />
             </button>
           </div>
         </div>

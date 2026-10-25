@@ -1,5 +1,4 @@
 import React from 'react';
-import { XCircle, CheckCircle2 } from 'lucide-react';
 
 export const ProblemSolution: React.FC = () => {
   const comparisons = [
@@ -25,7 +24,7 @@ export const ProblemSolution: React.FC = () => {
     <section className="problem-solution-section" aria-labelledby="problem-solution-heading">
       <div className="content-wrapper">
         <div className="section-header">
-          <h2 id="problem-solution-heading" className="section-title">
+          <h2 id="problem-solution-heading" className="section-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
             Why 73% of Event Budgets Spiral Out of Control
           </h2>
           <p className="section-subtitle">
@@ -36,11 +35,9 @@ export const ProblemSolution: React.FC = () => {
         <div className="comparison-table-card">
           <div className="comparison-header-row">
             <div className="comparison-col-header problem-header">
-              <XCircle size={18} color="var(--accent-coral)" />
               <span>Fragmented Planning Today</span>
             </div>
             <div className="comparison-col-header solution-header">
-              <CheckCircle2 size={18} color="var(--accent-mint-dark)" />
               <span>The Festiya Experience</span>
             </div>
           </div>

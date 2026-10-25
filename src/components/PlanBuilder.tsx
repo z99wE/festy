@@ -1,16 +1,5 @@
 import React, { useState, useId } from 'react';
-import {
-  DollarSign,
-  CheckCircle2,
-  Calendar,
-  AlertTriangle,
-  Lightbulb,
-  Briefcase,
-  Copy,
-  Check,
-  PartyPopper,
-  Sliders,
-} from 'lucide-react';
+
 import { playPopSound, playCelebrationSound } from '../utils/audio';
 
 interface PlanBuilderProps {
@@ -211,11 +200,11 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
     <section className="plan-builder-section" id="interactive-planner" aria-labelledby="planner-heading">
       <div className="content-wrapper">
         <div className="section-header">
-          <h2 id="planner-heading" className="section-title">
+          <h2 id="planner-heading" className="section-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
             Live Event Budget Engine & Instant Cost Simulator
           </h2>
           <p className="section-subtitle">
-            Configure your celebration parameters below. Festiya models conservative, likely, and luxury expenditure thresholds with decimal-accurate precision — and unlocks insider vendor negotiation questions that save up to 25%.
+            Configure your celebration parameters below. Festiya models conservative, likely, and luxury expenditure thresholds with decimal-accurate precision, and unlocks insider vendor negotiation questions that save up to 25%.
           </p>
         </div>
 
@@ -223,10 +212,7 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
           {/* Controls Column */}
           <aside className="builder-controls-card" aria-label="Event Configuration Controls">
             <div className="controls-card-header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Sliders size={20} color="var(--orange-500)" />
-                <h3 style={{ fontSize: '1.25rem' }}>Your Event Brief</h3>
-              </div>
+              <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>Your Event Brief</h3>
             </div>
 
             {/* Occasion Selection */}
@@ -382,7 +368,6 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                 onClick={handleCopyPlan}
                 aria-label="Copy plan summary to clipboard"
               >
-                {copied ? <Check size={16} color="var(--accent-mint-dark)" /> : <Copy size={16} />}
                 {copied ? 'Copied to Clipboard!' : 'Copy Plan'}
               </button>
             </div>
@@ -406,7 +391,6 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                 className={`plan-tab-btn ${activeTab === 'budget' ? 'active' : ''}`}
                 onClick={() => setActiveTab('budget')}
               >
-                <DollarSign size={16} aria-hidden="true" />
                 Budget Allocation
               </button>
               <button
@@ -416,7 +400,6 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                 className={`plan-tab-btn ${activeTab === 'tasks' ? 'active' : ''}`}
                 onClick={() => setActiveTab('tasks')}
               >
-                <CheckCircle2 size={16} aria-hidden="true" />
                 Milestones ({tasks.filter((t) => t.completed).length}/{tasks.length})
               </button>
               <button
@@ -426,7 +409,6 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                 className={`plan-tab-btn ${activeTab === 'vendors' ? 'active' : ''}`}
                 onClick={() => setActiveTab('vendors')}
               >
-                <Briefcase size={16} aria-hidden="true" />
                 Vendor Criteria
               </button>
               <button
@@ -436,7 +418,6 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                 className={`plan-tab-btn ${activeTab === 'ideas' ? 'active' : ''}`}
                 onClick={() => setActiveTab('ideas')}
               >
-                <Lightbulb size={16} aria-hidden="true" />
                 Festive Ideas
               </button>
               <button
@@ -446,7 +427,6 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                 className={`plan-tab-btn ${activeTab === 'risks' ? 'active' : ''}`}
                 onClick={() => setActiveTab('risks')}
               >
-                <AlertTriangle size={16} aria-hidden="true" />
                 Risks & Mitigations
               </button>
             </div>
@@ -508,7 +488,7 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
             {activeTab === 'tasks' && (
               <div role="tabpanel" aria-labelledby="tasks-tab">
                 <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
-                  Interactive checklist. Toggle items as you progress — Festiya recalculates your milestones:
+                  Interactive checklist. Toggle items as you progress, Festiya recalculates your milestones:
                 </p>
                 <div className="checklist-container">
                   {tasks.map((task) => (
@@ -531,8 +511,7 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                             {task.title}
                           </label>
                           <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
-                            <Calendar size={13} aria-hidden="true" />
-                            {task.offset}
+                            <span>Due: {task.offset}</span>
                           </div>
                         </div>
                       </div>
@@ -609,8 +588,7 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                       }}
                     >
                       <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--orange-600)', marginBottom: '8px' }}>
-                          <PartyPopper size={20} />
+                        <div style={{ marginBottom: '8px' }}>
                           <strong style={{ fontSize: '1.05rem', color: 'var(--text-primary)' }}>{idea.title}</strong>
                         </div>
                         <p style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
@@ -645,12 +623,11 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                         borderBottom: '1px solid var(--border-subtle)',
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                        <AlertTriangle size={18} color="var(--accent-coral)" />
-                        <strong style={{ color: 'var(--text-primary)', fontSize: '0.98rem' }}>Potential Risk:</strong>
+                      <div style={{ marginBottom: '6px' }}>
+                        <strong style={{ color: 'var(--text-primary)', fontSize: '0.98rem' }}>Potential Risk: </strong>
                         <span style={{ color: 'var(--text-primary)' }}>{r.risk}</span>
                       </div>
-                      <div style={{ fontSize: '0.92rem', color: 'var(--accent-mint-dark)', marginLeft: '26px' }}>
+                      <div style={{ fontSize: '0.92rem', color: 'var(--accent-mint-dark)' }}>
                         <strong>Festiya Mitigation:</strong> {r.mitigation}
                       </div>
                     </div>

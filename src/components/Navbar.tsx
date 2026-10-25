@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, LogIn, LogOut, UserPlus } from 'lucide-react';
+
 import { playPopSound } from '../utils/audio';
 
 import { SUPPORTED_CURRENCIES } from '../utils/currency';
@@ -180,7 +180,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     aria-label="Sign out"
                     title="Sign Out"
                   >
-                    <LogOut size={13} />
+                    <span>Sign Out</span>
                   </button>
                 )}
               </div>
@@ -192,7 +192,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => onOpenAuth?.('login')}
                   aria-label="Sign in to your account"
                 >
-                  <LogIn size={13} />
                   <span>Sign In</span>
                 </button>
                 <button
@@ -201,7 +200,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => onOpenAuth?.('signup')}
                   aria-label="Create your account"
                 >
-                  <UserPlus size={13} />
                   <span>Sign Up</span>
                 </button>
               </div>
@@ -217,7 +215,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               aria-label="Build your event plan"
             >
               <span>Build plan</span>
-              <ArrowRight size={14} aria-hidden="true" />
             </button>
 
             {/* Mobile Hamburger Morph Button */}
@@ -316,7 +313,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }}
                       title="Sign Out"
                     >
-                      <LogOut size={14} />
+                      <span>Sign Out</span>
                     </button>
                   )}
                 </div>
@@ -331,7 +328,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     style={{ justifyContent: 'center' }}
                   >
-                    <LogIn size={14} />
                     <span>Sign In</span>
                   </button>
                   <button
@@ -343,7 +339,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     style={{ justifyContent: 'center' }}
                   >
-                    <UserPlus size={14} />
                     <span>Sign Up</span>
                   </button>
                 </div>

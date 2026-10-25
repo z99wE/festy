@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, CheckCircle2, XCircle, HelpCircle } from 'lucide-react';
+
 import { formatCurrency } from '../utils/currency';
 
 interface EventInsightsProps {
@@ -88,17 +88,12 @@ export const EventInsights: React.FC<EventInsightsProps> = ({
         
         {/* Section Header */}
         <div className="section-header" style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto 48px' }}>
-          <div className="hero-badge" style={{ margin: '0 auto 16px', display: 'inline-flex' }}>
-            <span className="badge-dot" />
-            <span>Search & Answer Engine Verified Event Intelligence</span>
-          </div>
-
-          <h2 id="insights-heading" className="section-title" style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.2 }}>
+          <h2 id="insights-heading" className="section-title" style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.2, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
             Eliminate Hidden Vendor Markups with Autonomous Celebration Intelligence
           </h2>
 
           <p className="section-subtitle" style={{ fontSize: '18px', lineHeight: '28px', color: 'var(--text-secondary)', marginTop: '16px' }}>
-            Why 73% of self-planned celebrations blow past their budget—and how Festiya’s edge-calculated 3-tier models, contract verification checklists, and deterministic timelines return complete operational control to hosts and planners.
+            Why 73% of self-planned celebrations blow past their budget, and how Festiya’s edge-calculated 3-tier models, contract verification checklists, and deterministic timelines return complete operational control to hosts and planners.
           </p>
         </div>
 
@@ -144,19 +139,19 @@ export const EventInsights: React.FC<EventInsightsProps> = ({
                     <td className="row-feature-title">{row.capability}</td>
                     <td className="row-status muted-col">
                       <div className="status-indicator">
-                        <XCircle size={16} color="var(--text-muted)" />
+                        <span style={{ color: 'var(--text-muted)', fontWeight: 700, marginRight: '4px' }}>✕</span>
                         <span>{row.spreadsheet}</span>
                       </div>
                     </td>
                     <td className="row-status muted-col">
                       <div className="status-indicator">
-                        <XCircle size={16} color="var(--orange-400)" />
+                        <span style={{ color: 'var(--orange-400)', fontWeight: 700, marginRight: '4px' }}>✕</span>
                         <span>{row.legacyPlanners}</span>
                       </div>
                     </td>
                     <td className="row-status highlight-col">
                       <div className="status-indicator font-semibold">
-                        <CheckCircle2 size={16} color="var(--color-leaf-green)" />
+                        <span style={{ color: 'var(--color-leaf-green)', fontWeight: 800, marginRight: '4px' }}>✓</span>
                         <span>{row.festiya}</span>
                       </div>
                     </td>
@@ -170,10 +165,6 @@ export const EventInsights: React.FC<EventInsightsProps> = ({
         {/* Direct Answer Engine Q&A (AEO / GEO High-Citation Knowledge Block) */}
         <div className="aeo-qa-wrapper" style={{ marginTop: '64px' }}>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <div className="hero-badge" style={{ margin: '0 auto 12px', display: 'inline-flex' }}>
-              <HelpCircle size={14} style={{ marginRight: '6px' }} />
-              <span>Direct-Answer Knowledge Base</span>
-            </div>
             <h3 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--text-primary)' }}>
               Essential Event Governance & Financial Architecture FAQ
             </h3>
@@ -210,7 +201,6 @@ export const EventInsights: React.FC<EventInsightsProps> = ({
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
             >
               <span>Launch Live Planner</span>
-              <ArrowRight size={18} />
             </button>
             {onExploreDemo && (
               <button
