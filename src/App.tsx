@@ -8,7 +8,6 @@ import { ProblemSolution } from './components/ProblemSolution';
 import { PlanBuilder } from './components/PlanBuilder';
 import { CategoryShowcase } from './components/CategoryShowcase';
 import { FAQSection } from './components/FAQSection';
-import { EventInsights } from './components/EventInsights';
 import { FestiChatbot } from './components/FestiChatbot';
 import { OrbitableHeroLogo } from './components/OrbitableHeroLogo';
 import { DiscoBallCelebrationHub } from './components/DiscoBallCelebrationHub';
@@ -175,7 +174,7 @@ export function App() {
                           window.scrollTo({ top: 0, behavior: 'smooth' });
                         }}
                       >
-                        <span>Explore 12 Blueprints</span>
+                        <span>Explore Blueprints</span>
                       </button>
                     </div>
                   </div>
@@ -229,13 +228,13 @@ export function App() {
                       tabIndex={0}
                     >
                       <div>
-                        <h4 className="gateway-card-title">12 Event Blueprints</h4>
+                        <h4 className="gateway-card-title">Blueprints</h4>
                         <p className="gateway-card-desc">
                           Curated celebration models covering weddings, milestone birthdays, music festivals, tech launches, and cultural galas.
                         </p>
                       </div>
                       <div className="gateway-card-link">
-                        <span>Browse 12 Blueprints</span>
+                        <span>Browse Blueprints</span>
                       </div>
                     </div>
 
@@ -249,33 +248,13 @@ export function App() {
                       tabIndex={0}
                     >
                       <div>
-                        <h4 className="gateway-card-title">Live Event Planner</h4>
+                        <h4 className="gateway-card-title">Planner</h4>
                         <p className="gateway-card-desc">
                           Dedicated 3-tier budget synthesizer (low, likely, high) and day-of chronological checklist engine.
                         </p>
                       </div>
                       <div className="gateway-card-link">
-                        <span>Launch Live Planner</span>
-                      </div>
-                    </div>
-
-                    <div
-                      className="home-gateway-card"
-                      onClick={() => {
-                        setActiveTab('insights');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      role="button"
-                      tabIndex={0}
-                    >
-                      <div>
-                        <h4 className="gateway-card-title">Event Insights & AEO</h4>
-                        <p className="gateway-card-desc">
-                          Vendor contract negotiation playbooks, regional budget benchmarks, and answer-engine-optimized strategies.
-                        </p>
-                      </div>
-                      <div className="gateway-card-link">
-                        <span>Read Vendor Playbooks</span>
+                        <span>Launch Planner</span>
                       </div>
                     </div>
 
@@ -334,7 +313,7 @@ export function App() {
         )}
 
         {/* ==========================================================
-            VIEW 3: DEDICATED LIVE EVENT PLANNER WORKSPACE
+            VIEW 3: DEDICATED PLANNER WORKSPACE
             ========================================================== */}
         {activeTab === 'planner' && (
           <div style={{ paddingTop: '80px', minHeight: '80vh' }}>
@@ -352,26 +331,7 @@ export function App() {
         )}
 
         {/* ==========================================================
-            VIEW 4: DEDICATED EVENT INSIGHTS & AEO KNOWLEDGE HUB
-            ========================================================== */}
-        {activeTab === 'insights' && (
-          <div style={{ paddingTop: '80px', minHeight: '80vh' }}>
-            <EventInsights
-              currentCurrency={currentCurrency}
-              onStartPlanning={handleStartPlanning}
-              onExploreDemo={() => {
-                setActiveTab('home');
-                setTimeout(() => {
-                  const el = document.getElementById('interactive-demo');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-              }}
-            />
-          </div>
-        )}
-
-        {/* ==========================================================
-            VIEW 5: DEDICATED FAQ & SUPPORT HUB
+            VIEW 4: DEDICATED FAQ & SUPPORT HUB
             ========================================================== */}
         {activeTab === 'faq' && (
           <div style={{ paddingTop: '80px', minHeight: '80vh' }}>
@@ -436,17 +396,12 @@ export function App() {
                 </li>
                 <li>
                   <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('blueprints'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                    12 Event Blueprints
+                    Blueprints
                   </button>
                 </li>
                 <li>
                   <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                    Live Event Planner
-                  </button>
-                </li>
-                <li>
-                  <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('insights'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                    Event Insights & AEO Hub
+                    Planner
                   </button>
                 </li>
                 <li>

@@ -145,7 +145,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
       <div className="content-wrapper">
         <div className="section-header" style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 36px' }}>
           <h2 id="categories-heading" className="section-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
-            12 Battle-Tested Celebration Blueprints Engineered for Operational Calm
+            Battle-Tested Celebration Blueprints Engineered for Operational Calm
           </h2>
 
           <p className="section-subtitle">

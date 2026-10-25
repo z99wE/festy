@@ -11,7 +11,7 @@ export interface AuthUser {
   workspaceName: string;
 }
 
-export type ActiveAppTab = 'home' | 'blueprints' | 'planner' | 'insights' | 'faq';
+export type ActiveAppTab = 'home' | 'blueprints' | 'planner' | 'faq';
 
 interface NavbarProps {
   onStartPlanning: () => void;
@@ -120,21 +120,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`island-nav-link ${activeTab === 'blueprints' ? 'active-tab' : ''}`}
               onClick={() => handleTabClick('blueprints')}
             >
-              12 Blueprints
+              Blueprints
             </button>
             <button
               type="button"
               className={`island-nav-link ${activeTab === 'planner' ? 'active-tab' : ''}`}
               onClick={() => handleTabClick('planner')}
             >
-              Live Planner
-            </button>
-            <button
-              type="button"
-              className={`island-nav-link ${activeTab === 'insights' ? 'active-tab' : ''}`}
-              onClick={() => handleTabClick('insights')}
-            >
-              Event Insights
+              Planner
             </button>
             <button
               type="button"
@@ -249,25 +242,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className={`mobile-nav-item item-delay-2 ${activeTab === 'blueprints' ? 'active-tab' : ''}`}
                 onClick={() => handleTabClick('blueprints')}
               >
-                12 Event Blueprints
+                Blueprints
               </button>
               <button
                 type="button"
                 className={`mobile-nav-item item-delay-3 ${activeTab === 'planner' ? 'active-tab' : ''}`}
                 onClick={() => handleTabClick('planner')}
               >
-                Live Event Planner
+                Planner
               </button>
               <button
                 type="button"
-                className={`mobile-nav-item item-delay-4 ${activeTab === 'insights' ? 'active-tab' : ''}`}
-                onClick={() => handleTabClick('insights')}
-              >
-                Event Insights & AEO Hub
-              </button>
-              <button
-                type="button"
-                className={`mobile-nav-item item-delay-5 ${activeTab === 'faq' ? 'active-tab' : ''}`}
+                className={`mobile-nav-item item-delay-4 ${activeTab === 'faq' ? 'active-tab' : ''}`}
                 onClick={() => handleTabClick('faq')}
               >
                 FAQ & Support

@@ -88,7 +88,7 @@ export const AccessibilityToolbar: React.FC<AccessibilityToolbarProps> = ({
                 onClick={() => scrollToSection('interactive-planner')}
               >
                 <span className="milestone-dot" />
-                <span>Live Planner</span>
+                <span>Planner</span>
               </button>
               <button
                 type="button"

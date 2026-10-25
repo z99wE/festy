@@ -302,7 +302,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
           </div>
 
           <h2 id="planner-heading" className="section-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
-            Live Event Planner & AI Cost Simulator
+            Planner & AI Cost Simulator
           </h2>
           <p className="section-subtitle">
             Configure your celebration parameters below. Festiya models conservative, likely, and luxury expenditure thresholds
