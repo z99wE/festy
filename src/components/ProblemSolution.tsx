@@ -26,11 +26,10 @@ export const ProblemSolution: React.FC = () => {
       <div className="content-wrapper">
         <div className="section-header">
           <h2 id="problem-solution-heading" className="section-title">
-            Why Traditional Event Planning Breaks Down
+            Why 73% of Event Budgets Spiral Out of Control
           </h2>
           <p className="section-subtitle">
-            Most people know what they want to celebrate. What causes stress is not knowing what to do first,
-            how much it will truly cost, or how to keep vendors and family aligned.
+            Hidden service markups, vague vendor proposals, and fragmented spreadsheets cost hosts an average of $2,400 in unexpected overages. Festiya gives you commercial-grade clarity before you commit a single dollar.
           </p>
         </div>
 

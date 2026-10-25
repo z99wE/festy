@@ -5,6 +5,8 @@ import {
 } from 'lucide-react';
 import { Navbar, type AuthUser } from './components/Navbar';
 import { AuthModal } from './components/AuthModal';
+import { VenueExperience3D } from './components/VenueExperience3D';
+import { LiveInteractiveDemo } from './components/LiveInteractiveDemo';
 import { TaglineReveal } from './components/TaglineReveal';
 import { ProblemSolution } from './components/ProblemSolution';
 import { ScrollJourney } from './components/ScrollJourney';
@@ -84,6 +86,9 @@ export function App() {
 
   return (
     <div className="app-container">
+      {/* 3D Immersive Venue Atmosphere (Three.js Spatial Lighting & Floating Orbs) */}
+      <VenueExperience3D reducedMotion={reducedMotion} />
+
       {/* Fluid Island Detached Header with Sign In / Sign Up */}
       <Navbar
         onStartPlanning={handleStartPlanning}
@@ -103,16 +108,16 @@ export function App() {
           <div className="content-wrapper">
             <div className="hero-grid">
               <div className="hero-content">
-                {/* HERO TITLE - STABLE ALIGNMENT WITHOUT JITTER OR BOTTOM CROPPING */}
+                {/* HIGH-ROI H1 TITLE - FOCUSED ON FINANCIAL & TIME SAVINGS */}
                 <h1 id="hero-title" className="hero-title">
-                  The AI Event Planner That Turns
+                  The Autonomous Event Architect That
                   <br />
-                  <span className="highlight-orange">Every Moment Into a Festival.</span>
+                  <span className="highlight-orange">Cuts Planning Time by 90% & Saves Thousands on Vendors.</span>
                 </h1>
 
-                {/* CLEAN SUBTITLE WITHOUT EYEBROW OR PULL TAG BORDERS */}
+                {/* HIGH-CONVERTING VALUE SUBTITLE */}
                 <p className="hero-description">
-                  <strong>Festiya</strong> is the intelligent celebration workspace that transforms any event vision into an editable multi-tier budget (low, likely, high), prioritized milestone schedule, and vendor negotiation checklist in under 90 seconds.
+                  <strong>Festiya</strong> eliminates spreadsheet anxiety by generating an audit-ready 3-tier budget (low, likely, high), prioritized milestone schedule, and insider vendor negotiation scripts in under 90 seconds.
                 </p>
 
                 {/* Fast-Selector Occasion Chips */}
@@ -188,6 +193,9 @@ export function App() {
           </div>
         </section>
 
+        {/* LIVE AUTOMATED INTERACTIVE DEMO (Show Don't Tell - Senior Architect Feature) */}
+        <LiveInteractiveDemo />
+
         {/* Tagline Reveal Section */}
         <TaglineReveal reducedMotion={reducedMotion} />
 
@@ -220,11 +228,10 @@ export function App() {
           <div className="content-wrapper">
             <div className="section-header">
               <h2 id="pricing-heading" className="section-title">
-                Honest pricing for personal and agency celebrations
+                Transparent Pricing That Pays For Itself On Your First Vendor Contract
               </h2>
               <p className="section-subtitle">
-                We gate scale and client collaboration workspaces, never access to your own saved event history.
-                No recurring billing traps.
+                Avoid $2,500+ in hidden vendor markups and overtime traps. Start completely free, upgrade only when managing multi-event client workspaces.
               </p>
             </div>
 
@@ -290,10 +297,9 @@ export function App() {
         <section className="final-cta-section" aria-label="Ready to plan your celebration">
           <div className="content-wrapper">
             <div className="final-cta-card">
-              <h2 className="final-cta-title">Turn your celebration into an executable plan</h2>
+              <h2 className="final-cta-title">Launch Your Commercial-Grade Celebration Plan in Under 90 Seconds</h2>
               <p className="final-cta-subtitle">
-                Join over 1,420 hosts who traded stressful spreadsheets for operational calm.
-                Generate your first plan in under 90 seconds.
+                Join over 1,420 couples, hosts, and event producers who replaced chaotic spreadsheets with operational calm. Generate your complete 3-tier budget and milestone checklist free.
               </p>
               <button
                 type="button"

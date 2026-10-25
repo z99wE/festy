@@ -62,11 +62,10 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({ onSelectCate
       <div className="content-wrapper">
         <div className="section-header">
           <h2 id="categories-heading" className="section-title">
-            What Are You Celebrating Next?
+            Proven Event Blueprints Engineered for High-Stakes Celebrations
           </h2>
           <p className="section-subtitle">
-            Explore curated event blueprints. Select any category to load custom budget ranges, vendor checklists,
-            and festive inspiration directly into your live workspace.
+            Pre-calibrated spending models, milestone timelines, and vendor interview criteria for weddings, milestone parties, galas, and festivals.
           </p>
         </div>
 

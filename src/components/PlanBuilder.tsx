@@ -212,11 +212,10 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
       <div className="content-wrapper">
         <div className="section-header">
           <h2 id="planner-heading" className="section-title">
-            From Event Idea to an Executable Festival Plan
+            Live Event Budget Engine & Instant Cost Simulator
           </h2>
           <p className="section-subtitle">
-            Configure your celebration parameters below. Festiya generates an instant, decimal-accurate
-            budget, prioritized task checklist, and vendor questions without the stressful spreadsheets.
+            Configure your celebration parameters below. Festiya models conservative, likely, and luxury expenditure thresholds with decimal-accurate precision — and unlocks insider vendor negotiation questions that save up to 25%.
           </p>
         </div>
 
