@@ -474,7 +474,7 @@ export class MultiLLMOrchestrator {
       return "Top 3 vendor negotiation questions you should ask before signing:\n1. 'What is included in the base fee vs overtime rate?'\n2. 'What is the exact backup plan if your primary staff is unavailable?'\n3. 'What is the payment milestone breakdown and refund cancellation schedule?'";
     }
 
-    return "I'm Festi, your AI celebration copilot! I can help you architect detailed budgets, prioritize milestone schedules, draft vendor negotiation questions, or suggest creative theme concepts. What type of celebration are we planning today?";
+    return "I'm Festi, your Festi AI event architect! I can help you architect detailed budgets, prioritize milestone schedules, draft vendor negotiation questions, or suggest creative theme concepts. What type of celebration are we planning today?";
   }
 }
 

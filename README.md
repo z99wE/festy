@@ -42,7 +42,7 @@ Event planning is notoriously stressful. Over **73% of celebration hosts** repor
 - **3-Tier Decimal-Safe Budgets**: Low, likely, and high estimates for every expenditure category with live sliders for guest counts and total spend.
 - **Phased Milestone Checklists**: Priority-ranked tasks organized by time offsets (e.g., T-12 Months, T-6 Months, T-1 Week, Day-Of).
 - **Vendor Negotiation Checklists**: Specific high-leverage questions to ask caterers, venues, and photographers to unlock 15–25% savings.
-- **Animated Festi AI Copilot**: A 5-frame dancing mascot assistant backed by a multi-LLM cascading orchestrator.
+- **Animated Festi AI**: A 5-frame dancing mascot assistant backed by a multi-LLM cascading orchestrator.
 - **Cloudflare Edge Authentication**: Multi-tenant workspace isolation with 1-click instant demo access.
 
 ---
@@ -55,9 +55,9 @@ Event planning is notoriously stressful. Over **73% of celebration hosts** repor
 - **Decimal-Safe Calculations**: Zero floating-point rounding bugs across currency conversions and multi-tier percentage allocations.
 - **1-Click Export**: Copy the entire budget and milestone schedule formatted in clean Markdown or printable plain text.
 
-### 2. Animated Festi AI Mascot & Chat Copilot
+### 2. Animated Festi AI Mascot & Chat
 - **5-Frame Sprite Dance Loop**: Handcrafted celebration animations cycling across `pink-dancing.png`, `yellow-dance.png`, `blue-jumping.png`, `bubble-mint.png`, and `dancing-sticker.png`.
-- **Intelligent Copilot Drawer**: Provides instant domain-specific event guidance, timeline pacing, and vendor scripts.
+- **Intelligent Festi AI Drawer**: Provides instant domain-specific event guidance, timeline pacing, and vendor scripts.
 - **Zero-Latency Landing**: Does not block or freeze page initialization; loads in 0ms.
 
 ### 3. Cloudflare Edge Multi-Tenant Authentication

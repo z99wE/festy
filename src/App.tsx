@@ -591,7 +591,7 @@ export function App() {
       {/* Playful 3D Alive Peeking Mascot (randomized, max 3 per session, side & upside-down peek) */}
       <PeekingMascot />
 
-      {/* Floating Animated Festi AI Copilot Assistant & Chatbot */}
+      {/* Floating Animated Festi AI Mascot & Chatbot */}
       <FestiChatbot />
 
       {/* Cloudflare Edge Tenant Sign In / Sign Up Modal */}

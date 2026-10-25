@@ -393,7 +393,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
           </h2>
           <p className="section-subtitle">
             Curated 6-month calendar of worldwide long weekends, festive bank holidays, and major celebrations.
-            Select any date block to explore logistical checklists and synthesize an audit-ready plan with AI assistance.
+            Select any date block to explore logistical checklists and synthesize an audit-ready plan with Festi AI.
           </p>
 
           {/* Mode Switcher Tabs */}
@@ -736,7 +736,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                   </p>
                 </div>
 
-                {/* AI Copilot Prompt Preview Box */}
+                {/* Festi AI Prompt Preview Box */}
                 <div
                   style={{
                     marginTop: '16px',
@@ -749,7 +749,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
                     <Bot size={14} style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }} />
                     <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
-                      AI Copilot Context Ready
+                      Festi AI Context Ready
                     </span>
                   </div>
                   <p style={{ fontSize: '12.5px', color: 'var(--text-secondary)', margin: 0, fontStyle: 'italic', lineHeight: 1.4 }}>
@@ -780,7 +780,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                     }}
                   >
                     <Sparkles size={16} />
-                    <span>⚡ Plan with AI Copilot</span>
+                    <span>⚡ Plan with Festi AI</span>
                     <ArrowRight size={16} />
                   </button>
 
@@ -859,7 +859,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
                     <Bot size={14} style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }} />
                     <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
-                      AI Copilot Context Ready
+                      Festi AI Context Ready
                     </span>
                   </div>
                   <p style={{ fontSize: '12.5px', color: 'var(--text-secondary)', margin: 0, fontStyle: 'italic', lineHeight: 1.4 }}>
@@ -888,7 +888,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                     }}
                   >
                     <Sparkles size={16} />
-                    <span>⚡ Plan with AI Copilot</span>
+                    <span>⚡ Plan with Festi AI</span>
                     <ArrowRight size={16} />
                   </button>
 

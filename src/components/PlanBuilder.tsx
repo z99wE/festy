@@ -251,7 +251,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
     } catch (err) {
       console.warn('AI Generation failed, falling back:', err);
       setAiResponse(
-        `AI Blueprint Synthesized for ${eventName}:\n\n` +
+        `Festi AI Blueprint Synthesized for ${eventName}:\n\n` +
         `• Budget Allocation: Reserve 38% for catering, 32% for venue, 14% for audio/entertainment, and 10% for ambiance lighting.\n` +
         `• Milestones: Send Save-the-Dates 8 weeks out; lock vendor deposits 6 weeks out; finalize headcount 14 days out.\n` +
         `• Pro Negotiation Tip: Request an itemized "out-the-door" quote including service charge and cleanup to eliminate unexpected 22% fees.`
@@ -356,7 +356,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                 }
               >
                 <Zap size={15} />
-                <span>⚡ Re-generate with AI</span>
+                <span>⚡ Re-generate with Festi AI</span>
               </button>
 
               <button
@@ -370,7 +370,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                 }
               >
                 <Bot size={15} />
-                <span>Chat with AI</span>
+                <span>Chat with Festi AI</span>
               </button>
 
               {onClearPlanningContext && (
@@ -399,7 +399,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
               <span className="ai-live-badge">⚡ Real-Time Multi-LLM</span>
             </div>
             <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-              Ask AI to customize your budget, run-of-show schedule, or vendor negotiation questions anytime.
+              Ask Festi AI to customize your budget, run-of-show schedule, or vendor negotiation questions anytime.
             </span>
           </div>
 
@@ -462,10 +462,10 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
             <input
               type="text"
               className="ai-studio-input"
-              placeholder={`Ask AI anything: e.g. "We need vegan food stations", "How to manage sound curfews", "Plan a 4-day weekend schedule"...`}
+              placeholder={`Ask Festi AI anything: e.g. "We need vegan food stations", "How to manage sound curfews", "Plan a 4-day weekend schedule"...`}
               value={customAIPrompt}
               onChange={(e) => setCustomAIPrompt(e.target.value)}
-              aria-label="Custom AI planning instruction"
+              aria-label="Custom Festi AI planning instruction"
             />
             <button
               type="submit"
@@ -480,7 +480,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
               ) : (
                 <>
                   <Zap size={14} />
-                  <span>Ask AI</span>
+                  <span>Ask Festi AI</span>
                 </>
               )}
             </button>
@@ -497,7 +497,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                   type="button"
                   className="ai-copy-btn"
                   onClick={handleCopyAIResponse}
-                  title="Copy AI Blueprint"
+                  title="Copy Festi AI Blueprint"
                 >
                   {aiCopied ? (
                     <>
@@ -507,7 +507,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                   ) : (
                     <>
                       <Copy size={13} />
-                      <span>Copy AI Blueprint</span>
+                      <span>Copy Festi AI Blueprint</span>
                     </>
                   )}
                 </button>
@@ -666,7 +666,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
             <div className="plan-card-hero-header">
               <div>
                 <div style={{ marginBottom: '6px' }}>
-                  <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Updated live with AI modeling</span>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Updated live with Festi AI modeling</span>
                 </div>
                 <h3 style={{ fontSize: '1.75rem', color: 'var(--text-primary)' }}>
                   {activeOccasionName}

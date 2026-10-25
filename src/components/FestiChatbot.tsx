@@ -36,7 +36,7 @@ export const FestiChatbot: React.FC = () => {
     {
       id: 'welcome',
       sender: 'festi',
-      text: "Hey! I'm Festi, your AI celebration copilot! 🎉\n\nTell me what you're dreaming up, whether it's a budget check, venue negotiation tip, sensory decor theme, or minute-by-minute timeline, and I'll build it for you!",
+      text: "Hey! I'm Festi, your Festi AI event architect! 🎉\n\nTell me what you're dreaming up, whether it's a budget check, venue negotiation tip, sensory decor theme, or minute-by-minute timeline, and I'll build it for you!",
       time: 'Just now',
       suggestions: [
         "How do I estimate an event budget?",
@@ -63,7 +63,7 @@ export const FestiChatbot: React.FC = () => {
     }
   }, [messages, isTyping, isOpen]);
 
-  // Global event listener to allow any part of the app to trigger Festi AI Copilot
+  // Global event listener to allow any part of the app to trigger Festi AI
   useEffect(() => {
     const handleOpenChat = (e: Event) => {
       const customEvent = e as CustomEvent<{ prompt?: string }>;
@@ -201,7 +201,7 @@ Tell me a bit more about the date, guest count, or location, and I will draft a 
       }));
       history.push({ role: 'user', content: query.trim() });
 
-      const systemPrompt = "You are Festi, the cheerful, energetic, and deeply knowledgeable AI celebration copilot for Festiya. Provide structured, actionable, and fun advice on event budgets, schedules, timelines, and vendor tips. Keep responses lively and concise.";
+      const systemPrompt = "You are Festi, the cheerful, energetic, and deeply knowledgeable Festi AI event architect for Festiya. Provide structured, actionable, and fun advice on event budgets, schedules, timelines, and vendor tips. Keep responses lively and concise.";
 
       const res = await aiOrchestrator.generateCompletion(history, systemPrompt);
 
@@ -237,7 +237,7 @@ Tell me a bit more about the date, guest count, or location, and I will draft a 
   return (
     <>
       {/* ==========================================================
-          FLOATING DANCING FESTI MASCOT TRIGGER (Corner Assistant)
+          FLOATING DANCING FESTI MASCOT TRIGGER (Festi AI Companion)
           ========================================================== */}
       <div className="festi-companion-container">
         {!isOpen && (
@@ -250,7 +250,7 @@ Tell me a bit more about the date, guest count, or location, and I will draft a 
         <button
           type="button"
           className="festi-mascot-btn"
-          aria-label="Open Festi AI Event Assistant Chatbot"
+          aria-label="Open Festi AI"
           onClick={() => setIsOpen(!isOpen)}
         >
           <div className="festi-avatar-frame">
@@ -268,19 +268,19 @@ Tell me a bit more about the date, guest count, or location, and I will draft a 
           FESTI AI CHATBOT DRAWER / POPUP
           ========================================================== */}
       {isOpen && (
-        <div className="festi-chat-modal" role="dialog" aria-label="Festi AI Assistant">
+        <div className="festi-chat-modal" role="dialog" aria-label="Festi AI">
           {/* Header */}
           <div className="festi-chat-header">
             <div className="festi-chat-header-brand">
               <div className="festi-header-mascot-wrap">
                 <img
                   src={currentFrame.src}
-                  alt="Festi Dancing Copilot"
+                  alt="Festi AI Mascot"
                   className="festi-header-mascot-img"
                 />
               </div>
               <div>
-                <h3 className="festi-header-title">Festi AI Copilot</h3>
+                <h3 className="festi-header-title">Festi AI</h3>
                 <span className="festi-header-subtitle">
                   <span className="festi-online-dot" /> Online & Planning
                 </span>
