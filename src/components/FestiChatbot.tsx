@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Send, Sparkles, RefreshCw, MessageSquare } from 'lucide-react';
 import { aiOrchestrator } from '../services/aiOrchestrator';
 
-// The 5 Mascot frames requested by the user
+// The 5 Mascot frames requested by the user (Ultra-fast WebP format)
 const FESTI_FRAMES = [
-  { id: 1, src: '/mascots/pink-dancing.png', alt: 'Fluffy PINK Dancing Mascot' },
-  { id: 2, src: '/mascots/yellow-dance.png', alt: 'Cheerful Fluffy Yellow Dance Mascot' },
-  { id: 3, src: '/mascots/blue-jumping.png', alt: 'Cheerful Blue Fuzzy Mascot Jumping' },
-  { id: 4, src: '/mascots/bubble-mint.png', alt: 'Bubble Mint Plush Mascot' },
-  { id: 5, src: '/mascots/dancing-sticker.png', alt: 'Fluffy Dancing Mascot Sticker' },
+  { id: 1, src: '/mascots/pink-dancing.webp', alt: 'Fluffy PINK Dancing Mascot' },
+  { id: 2, src: '/mascots/yellow-dance.webp', alt: 'Cheerful Fluffy Yellow Dance Mascot' },
+  { id: 3, src: '/mascots/blue-jumping.webp', alt: 'Cheerful Blue Fuzzy Mascot Jumping' },
+  { id: 4, src: '/mascots/bubble-mint.webp', alt: 'Bubble Mint Plush Mascot' },
+  { id: 5, src: '/mascots/dancing-sticker.webp', alt: 'Fluffy Dancing Mascot Sticker' },
 ];
 
 interface ChatMessage {

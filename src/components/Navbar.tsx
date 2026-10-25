@@ -77,7 +77,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }}
           >
             <div className="island-brand-icon" style={{ overflow: 'visible', background: 'transparent', width: 'auto', height: 'auto' }}>
-              <img src="/festiya-logo.png" alt="Festiya 3D Brand Logo" style={{ height: '36px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 2px 6px rgba(255, 94, 30, 0.35))' }} />
+              <img src="/festiya-logo-nav.webp" alt="Festiya 3D Brand Logo" width={96} height={36} style={{ height: '36px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 2px 6px rgba(255, 94, 30, 0.35))' }} />
             </div>
           </a>
 

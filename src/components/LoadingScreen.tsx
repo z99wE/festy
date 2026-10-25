@@ -82,9 +82,11 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
         {/* Festive Brand Header */}
         <div className="loading-brand">
           <img
-            src="/festiya-logo.png"
+            src="/festiya-logo-nav.webp"
             alt="Festiya"
             className="loading-brand-logo"
+            width={96}
+            height={36}
           />
         </div>
 
@@ -92,9 +94,11 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
         <div className="loading-mascot-stage">
           <div className="dancing-mascot-wrapper">
             <img
-              src="/mascots/pink-dancing.png"
+              src="/mascots/pink-dancing.webp"
               alt="Festive mascot dancing"
               className="dancing-mascot-img"
+              width={160}
+              height={160}
             />
             <div className="mascot-dance-shadow" aria-hidden="true" />
           </div>

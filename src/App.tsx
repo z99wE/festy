@@ -160,19 +160,28 @@ export function App() {
                 </div>
               </div>
 
-              {/* 3D Plush Festiya Visual Stage Centerpiece (Featuring favicon.png) */}
+              {/* 3D Plush Festiya Visual Stage Centerpiece (Next-Gen AVIF & WebP) */}
               <div className="hero-visual-card">
                 <div className="hero-plush-stage">
                   <div className="hero-plush-glow" aria-hidden="true" />
 
-                  {/* 3D Plush Festiya Logo Centerpiece */}
-                  <img
-                    src="/festiya-logo.png"
-                    alt="Festiya plush 3D celebratory wordmark"
-                    className="hero-plush-logo-img"
-                    onClick={() => playCelebrationSound(soundEnabled)}
-                    title="Festiya: Turn every moment into a festival"
-                  />
+                  {/* 3D Plush Festiya Logo Centerpiece with modern AVIF/WebP */}
+                  <picture>
+                    <source srcSet="/festiya-hero.avif" type="image/avif" />
+                    <source srcSet="/festiya-hero.webp" type="image/webp" />
+                    <img
+                      src="/festiya-hero.webp"
+                      alt="Festiya plush 3D celebratory wordmark"
+                      className="hero-plush-logo-img"
+                      width={1024}
+                      height={384}
+                      loading="eager"
+                      decoding="async"
+                      fetchPriority="high"
+                      onClick={() => playCelebrationSound(soundEnabled)}
+                      title="Festiya: Turn every moment into a festival"
+                    />
+                  </picture>
                 </div>
               </div>
             </div>
@@ -306,7 +315,7 @@ export function App() {
           <div className="footer-grid">
             <div className="footer-brand-col">
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <img src="/festiya-logo.png" alt="Festiya Logo" style={{ height: '24px', width: 'auto' }} />
+                <img src="/festiya-logo-nav.webp" alt="Festiya Logo" width={64} height={24} style={{ height: '24px', width: 'auto' }} />
                 <span className="island-brand-text" style={{ fontSize: '16px' }}>Festiya</span>
               </div>
               <p>
