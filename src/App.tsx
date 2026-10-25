@@ -7,7 +7,6 @@ import { TaglineReveal } from './components/TaglineReveal';
 import { ProblemSolution } from './components/ProblemSolution';
 import { PlanBuilder } from './components/PlanBuilder';
 import { CategoryShowcase } from './components/CategoryShowcase';
-import { SocialProof } from './components/SocialProof';
 import { FAQSection } from './components/FAQSection';
 import { EventInsights } from './components/EventInsights';
 import { FestiChatbot } from './components/FestiChatbot';
@@ -298,9 +297,6 @@ export function App() {
 
             {/* Problem vs Solution Section */}
             <ProblemSolution />
-
-            {/* Social Proof */}
-            <SocialProof />
           </>
         )}
 
