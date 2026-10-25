@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { playPopSound } from '../utils/audio';
 
@@ -12,20 +12,35 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
   soundEnabled = false,
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isInteracting, setIsInteracting] = useState(false);
 
   useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
 
-    const width = container.clientWidth || 460;
-    const height = 360;
+    // Viewport: 30% bigger presence on desktop & mobile
+    const getViewportSize = () => {
+      const w = container.clientWidth || 640;
+      const h = Math.min(480, Math.max(340, Math.round(w * 0.65)));
+      return { width: w, height: h };
+    };
+
+    let { width, height } = getViewportSize();
 
     // Three.js Scene Setup
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 100);
-    camera.position.set(0, 0, 7.8);
+    const camera = new THREE.PerspectiveCamera(32, width / height, 0.1, 100);
+
+    // Dynamic framing so 30% larger logo fits perfectly without clipping on any screen
+    const updateCameraDistance = (w: number, h: number) => {
+      const aspect = w / h;
+      const fovRad = (32 * Math.PI) / 180;
+      const targetW = 4.4; // 30% larger plane span
+      const targetH = 1.65;
+      const distW = targetW / (2 * aspect * Math.tan(fovRad / 2));
+      const distH = targetH / (2 * Math.tan(fovRad / 2));
+      camera.position.set(0, 0, Math.max(4.8, Math.max(distW, distH)));
+    };
+    updateCameraDistance(width, height);
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -35,34 +50,33 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 1.35;
     container.innerHTML = '';
     container.appendChild(renderer.domElement);
 
-    // Warm Studio Lighting
-    const ambientLight = new THREE.AmbientLight(0xfff7ed, 1.8);
+    // Warm Studio Lighting specifically tuned for plush fluffy fur fibers
+    const ambientLight = new THREE.AmbientLight(0xfffaed, 2.4);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffedd5, 2.8);
-    keyLight.position.set(4, 5, 6);
+    const keyLight = new THREE.DirectionalLight(0xffeedb, 3.4);
+    keyLight.position.set(4, 4, 4);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0xff7a18, 2.2);
-    rimLight.position.set(-5, -2, -3);
-    scene.add(rimLight);
+    // Rim light gives golden glow to fluffy fur silhouette as it orbits
+    const rimLightBack = new THREE.DirectionalLight(0xff9f38, 3.2);
+    rimLightBack.position.set(-4, -2, -4);
+    scene.add(rimLightBack);
 
-    const fillLight = new THREE.PointLight(0xffd000, 1.6, 12);
-    fillLight.position.set(0, 3, 3);
-    scene.add(fillLight);
+    const softFill = new THREE.PointLight(0xffd580, 2.0, 12);
+    softFill.position.set(0, 3, 3);
+    scene.add(softFill);
 
-    // Orbitable Root Group
+    // Orbitable Root Group (30% bigger presence)
     const orbitGroup = new THREE.Group();
     scene.add(orbitGroup);
 
-    // Load Pristine Festiya High-Res Texture
+    // Load High-Res Transparent Fluffy Fur Artwork
     const textureLoader = new THREE.TextureLoader();
-    let logoMesh: THREE.Mesh | null = null;
-    let backingMesh: THREE.Mesh | null = null;
 
     textureLoader.load(
       '/festiya-hero.webp',
@@ -72,66 +86,51 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
         texture.magFilter = THREE.LinearFilter;
         texture.colorSpace = THREE.SRGBColorSpace;
 
-        // Front face with Festiya brand artwork
-        const frontMaterial = new THREE.MeshStandardMaterial({
-          map: texture,
-          transparent: true,
-          roughness: 0.22,
-          metalness: 0.12,
-          side: THREE.FrontSide,
-        });
+        // Plane aspect ratio matching the fluffy fur wordmark (1024 x 384 ~ 2.66:1)
+        // Scaled up 30% (from 3.2 to 4.2 width)
+        const planeW = 4.2;
+        const planeH = 1.58;
+        const geometry = new THREE.PlaneGeometry(planeW, planeH, 16, 8);
 
-        // Golden champagne rim & backing
-        const rimMaterial = new THREE.MeshStandardMaterial({
-          color: 0xffa439,
-          roughness: 0.25,
-          metalness: 0.65,
-        });
-
-        const materials = [
-          rimMaterial,   // right
-          rimMaterial,   // left
-          rimMaterial,   // top
-          rimMaterial,   // bottom
-          frontMaterial, // front
-          rimMaterial,   // back
+        // Volumetric Multi-Layer Fur Slices:
+        // No solid cardboard or opaque backing box! The fluffy fur texture is visible from all angles.
+        const layerConfigs = [
+          { z: 0.08, opacity: 1.0, isBack: false, side: THREE.FrontSide },
+          { z: 0.05, opacity: 0.65, isBack: false, side: THREE.DoubleSide },
+          { z: 0.02, opacity: 0.5, isBack: false, side: THREE.DoubleSide },
+          { z: 0.0, opacity: 0.45, isBack: false, side: THREE.DoubleSide },
+          { z: -0.02, opacity: 0.5, isBack: false, side: THREE.DoubleSide },
+          { z: -0.05, opacity: 0.65, isBack: false, side: THREE.DoubleSide },
+          { z: -0.08, opacity: 1.0, isBack: true, side: THREE.FrontSide },
         ];
 
-        // Sleek rounded floating emblem slab
-        const geometry = new THREE.BoxGeometry(4.2, 1.7, 0.16);
-        logoMesh = new THREE.Mesh(geometry, materials);
-        logoMesh.castShadow = true;
-        orbitGroup.add(logoMesh);
+        layerConfigs.forEach(({ z, opacity, isBack, side }) => {
+          const material = new THREE.MeshStandardMaterial({
+            map: texture,
+            transparent: true,
+            opacity,
+            roughness: 0.38,
+            metalness: 0.06,
+            side,
+            depthWrite: false,
+            alphaTest: 0.01,
+          });
 
-        // Golden floating halo ring
-        const ringGeom = new THREE.TorusGeometry(2.35, 0.03, 16, 64);
-        const ringMat = new THREE.MeshStandardMaterial({
-          color: 0xffc470,
-          roughness: 0.2,
-          metalness: 0.85,
-          transparent: true,
-          opacity: 0.65,
+          const mesh = new THREE.Mesh(geometry, material);
+          mesh.position.z = z;
+          if (isBack) {
+            mesh.rotation.y = Math.PI; // Perfectly faces back so fluffy fur is visible when rotated 180°
+          }
+          orbitGroup.add(mesh);
         });
-        const haloRing = new THREE.Mesh(ringGeom, ringMat);
-        haloRing.rotation.x = Math.PI * 0.45;
-        haloRing.position.y = -0.15;
-        orbitGroup.add(haloRing);
       },
       undefined,
       (err) => {
-        console.warn('Fallback: generating geometric emblem', err);
-        const fallbackGeom = new THREE.BoxGeometry(3.6, 1.4, 0.2);
-        const fallbackMat = new THREE.MeshStandardMaterial({
-          color: 0xff5e1e,
-          roughness: 0.3,
-          metalness: 0.4,
-        });
-        backingMesh = new THREE.Mesh(fallbackGeom, fallbackMat);
-        orbitGroup.add(backingMesh);
+        console.warn('Could not load hero texture', err);
       }
     );
 
-    // Orbit Interaction Dynamics
+    // Orbit Interaction Dynamics (Smooth 360 drag rotation)
     let isDragging = false;
     let prevMouseX = 0;
     let prevMouseY = 0;
@@ -139,12 +138,9 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     let targetRotationX = 0;
     let currentRotationY = 0;
     let currentRotationX = 0;
-    let velocityY = 0;
-    let velocityX = 0;
 
     const onPointerDown = (e: MouseEvent | TouchEvent) => {
       isDragging = true;
-      setIsInteracting(true);
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
       const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
       prevMouseX = clientX;
@@ -160,14 +156,11 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       const deltaX = clientX - prevMouseX;
       const deltaY = clientY - prevMouseY;
 
-      velocityY = deltaX * 0.008;
-      velocityX = deltaY * 0.008;
+      targetRotationY += deltaX * 0.011;
+      targetRotationX += deltaY * 0.008;
 
-      targetRotationY += velocityY;
-      targetRotationX += velocityX;
-
-      // Bound vertical tilt to prevent disorienting upside-down flip
-      targetRotationX = Math.max(-0.6, Math.min(0.6, targetRotationX));
+      // Vertical tilt limits
+      targetRotationX = Math.max(-0.55, Math.min(0.55, targetRotationX));
 
       prevMouseX = clientX;
       prevMouseY = clientY;
@@ -175,7 +168,6 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
 
     const onPointerUp = () => {
       isDragging = false;
-      setTimeout(() => setIsInteracting(false), 800);
     };
 
     const dom = renderer.domElement;
@@ -193,29 +185,29 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     // Resize Handler
     const handleResize = () => {
       if (!container) return;
-      const w = container.clientWidth || 460;
-      const h = 360;
-      camera.aspect = w / h;
+      const { width: newW, height: newH } = getViewportSize();
+      camera.aspect = newW / newH;
+      updateCameraDistance(newW, newH);
       camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
+      renderer.setSize(newW, newH);
     };
     window.addEventListener('resize', handleResize);
 
     // Animation Loop with Idle Float & Smooth Inertia
     let animationFrameId: number;
-    let clock = new THREE.Clock();
+    const clock = new THREE.Clock();
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
-      // Idle float when not dragging
+      // Gentle continuous 360 orbit when idle
       if (!isDragging && !reducedMotion) {
-        targetRotationY += 0.005; // Gentle continuous orbit
-        orbitGroup.position.y = Math.sin(elapsedTime * 1.6) * 0.08;
+        targetRotationY += 0.007;
+        orbitGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.07;
       }
 
-      // Apply damping / inertia
+      // Smooth inertia damping
       currentRotationY += (targetRotationY - currentRotationY) * 0.08;
       currentRotationX += (targetRotationX - currentRotationX) * 0.08;
 
@@ -223,7 +215,6 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       orbitGroup.rotation.x = currentRotationX;
 
       dom.style.cursor = isDragging ? 'grabbing' : 'grab';
-
       renderer.render(scene, camera);
     };
 
@@ -248,15 +239,12 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
   return (
     <div
       className="orbitable-hero-wrapper"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       style={{
         position: 'relative',
         width: '100%',
-        maxWidth: '520px',
+        maxWidth: '720px',
         margin: '0 auto',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
       }}
@@ -265,31 +253,14 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
         ref={mountRef}
         style={{
           width: '100%',
-          height: '360px',
+          height: '460px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           userSelect: 'none',
         }}
-        title="Drag to orbit Festiya in 360°"
+        title="Festiya 3D Plush Logo"
       />
-
-      {/* Subtle, Classy Orbit Indicator (clean typography, no weird icons) */}
-      <div
-        style={{
-          marginTop: '-12px',
-          fontSize: '12px',
-          fontWeight: 700,
-          color: '#8C4300',
-          letterSpacing: '0.04em',
-          textTransform: 'uppercase',
-          opacity: isHovered || isInteracting ? 0.95 : 0.6,
-          transition: 'opacity 0.25s ease',
-          pointerEvents: 'none',
-        }}
-      >
-        <span>Drag to orbit 360°</span>
-      </div>
     </div>
   );
 };
