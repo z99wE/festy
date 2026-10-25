@@ -1,22 +1,43 @@
 import React, { useState } from 'react';
-import { ArrowRight, Sparkles, Layers, Cake, Heart, Building2, Users2, Palette } from 'lucide-react';
+import {
+  ArrowRight,
+  Sparkles,
+  Layers,
+  Cake,
+  Heart,
+  Building2,
+  Users2,
+  Palette,
+  Wine,
+  Music,
+  Tv,
+  Award,
+  Tent,
+} from 'lucide-react';
 import { FlexCarousel, type FlexCarouselItem } from './FlexCarousel';
 
 interface CategoryShowcaseProps {
   onSelectCategory: (occasionId: string) => void;
+  onNavigateToPlanner?: () => void;
 }
 
-const CAROUSEL_ITEMS: (FlexCarouselItem & { id: string; categoryDescription: string; tags: string[]; iconName: string; color: string })[] = [
+export const CAROUSEL_ITEMS: (FlexCarouselItem & {
+  id: string;
+  categoryDescription: string;
+  tags: string[];
+  iconName: string;
+  color: string;
+})[] = [
   {
     id: 'wedding',
     src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80&auto=format&fit=max',
     alt: 'Joyful wedding reception with glowing floral arches and table settings',
     title: 'Joyful Weddings & Receptions',
     subtitle: '3-Tier Budgets • Tasting Menus • Floral Timelines',
-    categoryDescription: 'Coordinate venues, tasting menus, floral arches, and guest timelines without sleepless nights.',
+    categoryDescription: 'Coordinate dream venues, tasting menus, floral arches, ceremony run-of-show, and bridal party timelines without sleepless nights.',
     tags: ['Tasting Menus', 'Floral Arches', 'Day-of Run Sheet'],
     iconName: 'heart',
-    color: 'var(--accent-coral)'
+    color: '#FF4D6D',
   },
   {
     id: 'birthday',
@@ -24,32 +45,43 @@ const CAROUSEL_ITEMS: (FlexCarouselItem & { id: string; categoryDescription: str
     alt: 'Vibrant celebration with balloon arches and dessert displays',
     title: 'Milestone Birthdays',
     subtitle: 'Sweet 16s to Golden 50ths • Playlists & Bar Schedules',
-    categoryDescription: 'From sweet 16s to golden 50ths, curate festive playlists, dessert bars, and photo moments.',
+    categoryDescription: 'From sweet 16s to vibrant golden 50ths, curate festive playlists, signature cocktails, dessert buffets, and keepsake photo moments.',
     tags: ['Bar Allocation', 'DJ Run-of-Show', 'Dessert Buffets'],
     iconName: 'cake',
-    color: 'var(--orange-500)'
+    color: '#FF5E1E',
   },
   {
-    id: 'community',
+    id: 'festival',
     src: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80&auto=format&fit=max',
     alt: 'Open air festival crowd with illuminated stage and food trucks',
-    title: 'Community Carnivals & Festivals',
+    title: 'Open-Air Music Festivals & Carnivals',
     subtitle: 'Open-Air Stages • Food Truck Staging • Crowd Safety',
-    categoryDescription: 'Open-air street festivals, volunteer coordination, food truck stages, and safe crowd flow.',
-    tags: ['Volunteer Grid', 'Permit Milestones', 'Power & Sound'],
-    iconName: 'sparkles',
-    color: 'var(--accent-gold)'
+    categoryDescription: 'Open-air festival grounds, volunteer coordination grid, sound permit benchmarks, power drops, and safe high-capacity crowd egress.',
+    tags: ['Sound Permits', 'Stage Power Grids', 'Artist Hospitality'],
+    iconName: 'music',
+    color: '#FFB703',
   },
   {
-    id: 'work',
-    src: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200&q=80&auto=format&fit=max',
-    alt: 'Corporate gala dinner with stage lighting and banquet tables',
-    title: 'Company Galas & Offsites',
-    subtitle: 'Executive Keynotes • Multi-Vendor Logistics • VIP Dining',
-    categoryDescription: 'Celebrate team breakthroughs, product unveilings, and festive dinners with executive polish.',
-    tags: ['AV Production', 'Keynote Run Sheet', 'VIP Catering'],
+    id: 'product_launch',
+    src: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=1200&q=80&auto=format&fit=max',
+    alt: 'High tech product unveiling auditorium with stage lighting and audience',
+    title: 'Tech Product Launches & Hackathons',
+    subtitle: 'Keynote Production • Live Streaming • Demo Stations',
+    categoryDescription: 'Unveil breakthrough innovations with precision teleprompters, worldwide low-latency streaming, press lounges, and interactive demo pods.',
+    tags: ['Keynote Teleprompter', 'Global Stream Sync', 'Press Lounge'],
+    iconName: 'tv',
+    color: '#118AB2',
+  },
+  {
+    id: 'retreat',
+    src: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1200&q=80&auto=format&fit=max',
+    alt: 'Executive team collaboration in luxury mountain retreat',
+    title: 'Executive Offsites & Leadership Retreats',
+    subtitle: 'Luxury Lodging • Strategic Breakouts • Private Dining',
+    categoryDescription: 'Align executive leadership, celebrate quarterly wins, curate private chef dinners, and balance intensive strategy with curated downtime.',
+    tags: ['Breakout Rooms', 'Private Chef Menus', 'Team Expeditions'],
     iconName: 'building',
-    color: 'var(--accent-sky)'
+    color: '#059669',
   },
   {
     id: 'anniversary',
@@ -57,10 +89,32 @@ const CAROUSEL_ITEMS: (FlexCarouselItem & { id: string; categoryDescription: str
     alt: 'Intimate evening anniversary dinner with candles and wine glasses',
     title: 'Joyful Anniversaries & Vow Renewals',
     subtitle: 'Intimate Feasts • Toast Timelines • Keepsake Planning',
-    categoryDescription: 'Multi-generational feasts, fun group activities, accessible venues, and memorable keepsakes.',
-    tags: ['Wine Pairings', 'Memory Table', 'Intimate Acoustics'],
+    categoryDescription: 'Multi-generational feasts, nostalgic tribute videos, acoustic string quartets, accessible venue seating, and memorable family keepsakes.',
+    tags: ['Wine Pairings', 'Memory Table', 'Acoustic Strings'],
     iconName: 'users',
-    color: 'var(--accent-mint-dark)'
+    color: '#BD3700',
+  },
+  {
+    id: 'wine_tasting',
+    src: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1200&q=80&auto=format&fit=max',
+    alt: 'Artisanal wine tasting cellar with wooden barrels and crystal glasses',
+    title: 'Gourmet Food & Wine Tastings',
+    subtitle: 'Sommelier Pairings • Artisanal Courses • Palate Guides',
+    categoryDescription: 'Exquisite multi-course tasting dinners, sommelier tasting cards, crystal stemware rental counts, and artisanal pairing logistics.',
+    tags: ['Sommelier Notes', 'Course Timings', 'Stemware Rentals'],
+    iconName: 'wine',
+    color: '#7E4F38',
+  },
+  {
+    id: 'cultural_fest',
+    src: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=1200&q=80&auto=format&fit=max',
+    alt: 'Glowing festive lanterns celebrating cultural festival',
+    title: 'Cultural Heritage Celebrations',
+    subtitle: 'Diwali, Lunar New Year & Eid • Lanterns & Banquets',
+    categoryDescription: 'Celebrate rich heritage rituals, festive lantern installations, authentic community feast catering, and ceremonial performances.',
+    tags: ['Traditional Catering', 'Heritage Decor', 'Customary Rituals'],
+    iconName: 'sparkles',
+    color: '#FF8A47',
   },
   {
     id: 'shower',
@@ -68,14 +122,50 @@ const CAROUSEL_ITEMS: (FlexCarouselItem & { id: string; categoryDescription: str
     alt: 'Festive brunch table with pastel florals and celebration gifts',
     title: 'Baby & Bridal Showers',
     subtitle: 'Brunch Stations • Favor Registries • Guest Activities',
-    categoryDescription: 'Start with a completely blank canvas and let Festiya help define your unique celebratory ritual.',
+    categoryDescription: 'Sunlit celebratory brunches, custom mimosa bars, interactive keepsake signing, and guest comfort amenities planned to perfection.',
     tags: ['Brunch Matrix', 'Mimosa Bar', 'Guest Favors'],
     iconName: 'palette',
-    color: 'var(--accent-violet)'
-  }
+    color: '#FF4D6D',
+  },
+  {
+    id: 'reunion',
+    src: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=1200&q=80&auto=format&fit=max',
+    alt: 'Group of lifelong friends laughing and celebrating together outdoors',
+    title: 'Class & Alumni Reunions',
+    subtitle: 'Decade Playlists • Memorabilia Galleries • Cocktail Lounges',
+    categoryDescription: 'Bring decades of memories together with nostalgic photo slideshows, school color accents, casual food stations, and digital RSVPs.',
+    tags: ['Name Tag Logistics', 'Slide Show AV', 'Late Night Bites'],
+    iconName: 'tent',
+    color: '#06D6A0',
+  },
+  {
+    id: 'charity_gala',
+    src: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200&q=80&auto=format&fit=max',
+    alt: 'Black tie fundraising dinner with stage spotlight and dining tables',
+    title: 'Non-Profit Charity Galas & Fundraisers',
+    subtitle: 'Silent Auctions • Donor Recognition • Black-Tie Service',
+    categoryDescription: 'Maximize donor contributions with live pledge boards, silent auction bidding kiosks, VIP patron tables, and emotional keynote storytelling.',
+    tags: ['Auction Catalog', 'Pledge Counters', 'Sponsor Spotlights'],
+    iconName: 'award',
+    color: '#FFB703',
+  },
+  {
+    id: 'rooftop_soiree',
+    src: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=1200&q=80&auto=format&fit=max',
+    alt: 'Evening rooftop party with fairy lights and city skyline panorama',
+    title: 'Rooftop Acoustic Nights & Art Soirées',
+    subtitle: 'Cityscape Panoramas • Craft Mixology • Gallery Displays',
+    categoryDescription: 'Intimate evening gatherings, craft cocktails, live acoustic guitars under fairy lights, and gallery art displays overlooking the skyline.',
+    tags: ['Cocktail Formula', 'Ambient Strings', 'Warm Fairy Lights'],
+    iconName: 'music',
+    color: '#E64909',
+  },
 ];
 
-export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({ onSelectCategory }) => {
+export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
+  onSelectCategory,
+  onNavigateToPlanner,
+}) => {
   const [activePreset, setActivePreset] = useState<'liquid' | 'ribbon' | 'vortex' | 'arch'>('liquid');
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -83,18 +173,27 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({ onSelectCate
 
   const handleLaunchPlan = (occasionId: string) => {
     onSelectCategory(occasionId);
-    const el = document.getElementById('interactive-planner');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (onNavigateToPlanner) {
+      onNavigateToPlanner();
+    } else {
+      const el = document.getElementById('interactive-planner');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const getCategoryIcon = (iconName: string) => {
     switch (iconName) {
-      case 'cake': return <Cake size={24} />;
-      case 'heart': return <Heart size={24} />;
-      case 'sparkles': return <Sparkles size={24} />;
-      case 'building': return <Building2 size={24} />;
-      case 'users': return <Users2 size={24} />;
-      default: return <Palette size={24} />;
+      case 'cake': return <Cake size={22} />;
+      case 'heart': return <Heart size={22} />;
+      case 'sparkles': return <Sparkles size={22} />;
+      case 'building': return <Building2 size={22} />;
+      case 'users': return <Users2 size={22} />;
+      case 'wine': return <Wine size={22} />;
+      case 'music': return <Music size={22} />;
+      case 'tv': return <Tv size={22} />;
+      case 'award': return <Award size={22} />;
+      case 'tent': return <Tent size={22} />;
+      default: return <Palette size={22} />;
     }
   };
 
@@ -104,22 +203,22 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({ onSelectCate
         <div className="section-header" style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 36px' }}>
           <div className="hero-badge" style={{ margin: '0 auto 16px', display: 'inline-flex' }}>
             <Sparkles size={14} style={{ marginRight: '6px' }} />
-            <span>Interactive WebGL 3D Carousel</span>
+            <span>Interactive WebGL 3D Carousel (12 Blueprints)</span>
           </div>
 
           <h2 id="categories-heading" className="section-title">
-            Proven Event Blueprints Engineered for High-Stakes Celebrations
+            12 Battle-Tested Celebration Blueprints Engineered for Operational Calm
           </h2>
 
           <p className="section-subtitle">
-            Pre-calibrated spending models, milestone timelines, and vendor interview criteria. Drag or click the 3D cards to explore each celebration type.
+            Pre-calibrated spending models, milestone timelines, and vendor interview criteria. Drag or click any 3D card below to rotate through 12 world-class event formats.
           </p>
 
           {/* Preset Selector Pill Group */}
           <div className="carousel-preset-pills" role="tablist" aria-label="Carousel 3D Lens Presets">
             <span className="preset-label">
               <Layers size={13} style={{ marginRight: '4px' }} />
-              Lens Distortion Preset:
+              WebGL Lens Preset:
             </span>
             {(['liquid', 'ribbon', 'vortex', 'arch'] as const).map((preset) => (
               <button
@@ -183,7 +282,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({ onSelectCate
           </div>
         </div>
 
-        {/* Complete Blueprint Content Card Grid (Always accessible & clickable) */}
+        {/* Complete Blueprint Content Card Grid (All 12 Events Clickable) */}
         <div className="category-grid" style={{ marginTop: '40px' }}>
           {CAROUSEL_ITEMS.map((cat, idx) => (
             <div
@@ -205,7 +304,13 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({ onSelectCate
               aria-label={`Select ${cat.title} and launch blueprint`}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div className="category-card-icon" style={{ background: 'var(--orange-100)', color: cat.color }}>
+                <div
+                  className="category-card-icon"
+                  style={{
+                    backgroundColor: 'var(--orange-100)',
+                    color: cat.color,
+                  }}
+                >
                   {getCategoryIcon(cat.iconName)}
                 </div>
                 <span className="badge-pill sunshine" style={{ fontSize: '11px', padding: '2px 8px' }}>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, LogIn, LogOut, UserPlus, Sparkles } from 'lucide-react';
+import { ArrowRight, LogIn, LogOut, UserPlus } from 'lucide-react';
 import { playPopSound } from '../utils/audio';
 
 export interface AuthUser {
@@ -9,12 +9,16 @@ export interface AuthUser {
   workspaceName: string;
 }
 
+export type ActiveAppTab = 'home' | 'blueprints' | 'planner' | 'insights' | 'faq';
+
 interface NavbarProps {
   onStartPlanning: () => void;
   soundEnabled: boolean;
   currentUser?: AuthUser | null;
   onOpenAuth?: (mode: 'login' | 'signup') => void;
   onSignOut?: () => void;
+  activeTab?: ActiveAppTab;
+  onSelectTab?: (tab: ActiveAppTab) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -23,6 +27,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   currentUser = null,
   onOpenAuth,
   onSignOut,
+  activeTab = 'home',
+  onSelectTab,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -54,11 +60,13 @@ export const Navbar: React.FC<NavbarProps> = ({
     playPopSound(soundEnabled);
   };
 
-  const handleNavClick = (id: string) => {
+  const handleTabClick = (tab: ActiveAppTab) => {
     setMobileMenuOpen(false);
     playPopSound(soundEnabled);
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (onSelectTab) {
+      onSelectTab(tab);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -73,48 +81,59 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-label="Festiya Homepage"
             onClick={(e) => {
               e.preventDefault();
-              handleNavClick('hero');
+              handleTabClick('home');
             }}
           >
             <div className="island-brand-icon" style={{ overflow: 'visible', background: 'transparent', width: 'auto', height: 'auto' }}>
-              <img src="/festiya-logo-nav.webp" alt="Festiya 3D Brand Logo" width={96} height={36} style={{ height: '36px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 2px 6px rgba(255, 94, 30, 0.35))' }} />
+              <img
+                src="/festiya-logo-nav.webp"
+                alt="Festiya 3D Brand Logo"
+                width={96}
+                height={36}
+                style={{
+                  height: '36px',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 2px 6px rgba(255, 94, 30, 0.35))',
+                }}
+              />
             </div>
           </a>
 
-          {/* Desktop Nav Links */}
+          {/* Desktop Nav Links / Tab Switcher */}
           <div className="island-links">
             <button
               type="button"
-              className="island-nav-link"
-              onClick={() => handleNavClick('how-it-works')}
+              className={`island-nav-link ${activeTab === 'home' ? 'active-tab' : ''}`}
+              onClick={() => handleTabClick('home')}
             >
-              The Journey
+              Home 3D
             </button>
             <button
               type="button"
-              className="island-nav-link"
-              onClick={() => handleNavClick('interactive-planner')}
+              className={`island-nav-link ${activeTab === 'blueprints' ? 'active-tab' : ''}`}
+              onClick={() => handleTabClick('blueprints')}
+            >
+              12 Blueprints
+            </button>
+            <button
+              type="button"
+              className={`island-nav-link ${activeTab === 'planner' ? 'active-tab' : ''}`}
+              onClick={() => handleTabClick('planner')}
             >
               Live Planner
             </button>
             <button
               type="button"
-              className="island-nav-link"
-              onClick={() => handleNavClick('categories')}
-            >
-              Categories
-            </button>
-            <button
-              type="button"
-              className="island-nav-link"
-              onClick={() => handleNavClick('insights')}
+              className={`island-nav-link ${activeTab === 'insights' ? 'active-tab' : ''}`}
+              onClick={() => handleTabClick('insights')}
             >
               Event Insights
             </button>
             <button
               type="button"
-              className="island-nav-link"
-              onClick={() => handleNavClick('faq')}
+              className={`island-nav-link ${activeTab === 'faq' ? 'active-tab' : ''}`}
+              onClick={() => handleTabClick('faq')}
             >
               FAQ
             </button>
@@ -166,7 +185,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               type="button"
               className="btn btn-primary island-cta-btn"
-              onClick={onStartPlanning}
+              onClick={() => {
+                handleTabClick('planner');
+                onStartPlanning();
+              }}
               aria-label="Build your event plan"
             >
               <span>Build plan</span>
@@ -195,44 +217,44 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="mobile-links-list">
               <button
                 type="button"
-                className="mobile-nav-item item-delay-1"
-                onClick={() => handleNavClick('how-it-works')}
+                className={`mobile-nav-item item-delay-1 ${activeTab === 'home' ? 'active-tab' : ''}`}
+                onClick={() => handleTabClick('home')}
               >
-                The Journey
+                Home 3D Experience
               </button>
               <button
                 type="button"
-                className="mobile-nav-item item-delay-2"
-                onClick={() => handleNavClick('interactive-planner')}
+                className={`mobile-nav-item item-delay-2 ${activeTab === 'blueprints' ? 'active-tab' : ''}`}
+                onClick={() => handleTabClick('blueprints')}
               >
-                Live Planner
+                12 Event Blueprints
               </button>
               <button
                 type="button"
-                className="mobile-nav-item item-delay-3"
-                onClick={() => handleNavClick('categories')}
+                className={`mobile-nav-item item-delay-3 ${activeTab === 'planner' ? 'active-tab' : ''}`}
+                onClick={() => handleTabClick('planner')}
               >
-                Event Categories
+                Live Event Planner
               </button>
               <button
                 type="button"
-                className="mobile-nav-item item-delay-5"
-                onClick={() => handleNavClick('insights')}
+                className={`mobile-nav-item item-delay-4 ${activeTab === 'insights' ? 'active-tab' : ''}`}
+                onClick={() => handleTabClick('insights')}
               >
-                Event Insights
+                Event Insights & AEO Hub
               </button>
               <button
                 type="button"
-                className="mobile-nav-item item-delay-6"
-                onClick={() => handleNavClick('faq')}
+                className={`mobile-nav-item item-delay-5 ${activeTab === 'faq' ? 'active-tab' : ''}`}
+                onClick={() => handleTabClick('faq')}
               >
-                FAQ
+                FAQ & Support
               </button>
             </div>
 
             <div style={{ marginTop: '24px', width: '100%', maxWidth: '320px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {currentUser ? (
-                <div style={{ background: 'white', padding: '12px 16px', borderRadius: '12px', border: '1.5px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ background: 'var(--bg-surface)', padding: '12px 16px', borderRadius: '12px', border: '1.5px solid #3D1E06', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <div className="navbar-user-avatar">{currentUser.name.charAt(0).toUpperCase()}</div>
                     <div style={{ textAlign: 'left' }}>
@@ -258,43 +280,30 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                   <button
                     type="button"
-                    className="btn btn-secondary"
-                    style={{ width: '100%', justifyContent: 'center' }}
+                    className="navbar-auth-btn"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       onOpenAuth?.('login');
                     }}
+                    style={{ justifyContent: 'center' }}
                   >
-                    <LogIn size={15} />
+                    <LogIn size={14} />
                     <span>Sign In</span>
                   </button>
                   <button
                     type="button"
-                    className="btn btn-primary"
-                    style={{ width: '100%', justifyContent: 'center' }}
+                    className="navbar-auth-btn signup"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       onOpenAuth?.('signup');
                     }}
+                    style={{ justifyContent: 'center' }}
                   >
-                    <UserPlus size={15} />
+                    <UserPlus size={14} />
                     <span>Sign Up</span>
                   </button>
                 </div>
               )}
-
-              <button
-                type="button"
-                className="btn btn-primary"
-                style={{ width: '100%', padding: '12px 24px', fontSize: '1rem', justifyContent: 'center' }}
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onStartPlanning();
-                }}
-              >
-                <Sparkles size={16} />
-                Build your event plan
-              </button>
             </div>
           </div>
         </div>
