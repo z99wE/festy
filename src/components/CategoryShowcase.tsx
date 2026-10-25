@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { ArrowRight, Sparkles, Layers } from 'lucide-react';
+import { ArrowRight, Sparkles, Layers, Cake, Heart, Building2, Users2, Palette } from 'lucide-react';
 import { FlexCarousel, type FlexCarouselItem } from './FlexCarousel';
 
 interface CategoryShowcaseProps {
   onSelectCategory: (occasionId: string) => void;
 }
 
-const CAROUSEL_ITEMS: (FlexCarouselItem & { id: string; categoryDescription: string; tags: string[] })[] = [
+const CAROUSEL_ITEMS: (FlexCarouselItem & { id: string; categoryDescription: string; tags: string[]; iconName: string; color: string })[] = [
   {
     id: 'wedding',
     src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80&auto=format&fit=max',
@@ -14,7 +14,9 @@ const CAROUSEL_ITEMS: (FlexCarouselItem & { id: string; categoryDescription: str
     title: 'Joyful Weddings & Receptions',
     subtitle: '3-Tier Budgets • Tasting Menus • Floral Timelines',
     categoryDescription: 'Coordinate venues, tasting menus, floral arches, and guest timelines without sleepless nights.',
-    tags: ['Tasting Menus', 'Floral Arches', 'Day-of Run Sheet']
+    tags: ['Tasting Menus', 'Floral Arches', 'Day-of Run Sheet'],
+    iconName: 'heart',
+    color: 'var(--accent-coral)'
   },
   {
     id: 'birthday',
@@ -23,7 +25,9 @@ const CAROUSEL_ITEMS: (FlexCarouselItem & { id: string; categoryDescription: str
     title: 'Milestone Birthdays',
     subtitle: 'Sweet 16s to Golden 50ths • Playlists & Bar Schedules',
     categoryDescription: 'From sweet 16s to golden 50ths, curate festive playlists, dessert bars, and photo moments.',
-    tags: ['Bar Allocation', 'DJ Run-of-Show', 'Dessert Buffets']
+    tags: ['Bar Allocation', 'DJ Run-of-Show', 'Dessert Buffets'],
+    iconName: 'cake',
+    color: 'var(--orange-500)'
   },
   {
     id: 'community',
@@ -32,7 +36,9 @@ const CAROUSEL_ITEMS: (FlexCarouselItem & { id: string; categoryDescription: str
     title: 'Community Carnivals & Festivals',
     subtitle: 'Open-Air Stages • Food Truck Staging • Crowd Safety',
     categoryDescription: 'Open-air street festivals, volunteer coordination, food truck stages, and safe crowd flow.',
-    tags: ['Volunteer Grid', 'Permit Milestones', 'Power & Sound']
+    tags: ['Volunteer Grid', 'Permit Milestones', 'Power & Sound'],
+    iconName: 'sparkles',
+    color: 'var(--accent-gold)'
   },
   {
     id: 'work',
@@ -41,7 +47,9 @@ const CAROUSEL_ITEMS: (FlexCarouselItem & { id: string; categoryDescription: str
     title: 'Company Galas & Offsites',
     subtitle: 'Executive Keynotes • Multi-Vendor Logistics • VIP Dining',
     categoryDescription: 'Celebrate team breakthroughs, product unveilings, and festive dinners with executive polish.',
-    tags: ['AV Production', 'Keynote Run Sheet', 'VIP Catering']
+    tags: ['AV Production', 'Keynote Run Sheet', 'VIP Catering'],
+    iconName: 'building',
+    color: 'var(--accent-sky)'
   },
   {
     id: 'anniversary',
@@ -50,7 +58,9 @@ const CAROUSEL_ITEMS: (FlexCarouselItem & { id: string; categoryDescription: str
     title: 'Joyful Anniversaries & Vow Renewals',
     subtitle: 'Intimate Feasts • Toast Timelines • Keepsake Planning',
     categoryDescription: 'Multi-generational feasts, fun group activities, accessible venues, and memorable keepsakes.',
-    tags: ['Wine Pairings', 'Memory Table', 'Intimate Acoustics']
+    tags: ['Wine Pairings', 'Memory Table', 'Intimate Acoustics'],
+    iconName: 'users',
+    color: 'var(--accent-mint-dark)'
   },
   {
     id: 'shower',
@@ -59,7 +69,9 @@ const CAROUSEL_ITEMS: (FlexCarouselItem & { id: string; categoryDescription: str
     title: 'Baby & Bridal Showers',
     subtitle: 'Brunch Stations • Favor Registries • Guest Activities',
     categoryDescription: 'Start with a completely blank canvas and let Festiya help define your unique celebratory ritual.',
-    tags: ['Brunch Matrix', 'Mimosa Bar', 'Guest Favors']
+    tags: ['Brunch Matrix', 'Mimosa Bar', 'Guest Favors'],
+    iconName: 'palette',
+    color: 'var(--accent-violet)'
   }
 ];
 
@@ -73,6 +85,17 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({ onSelectCate
     onSelectCategory(occasionId);
     const el = document.getElementById('interactive-planner');
     if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const getCategoryIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'cake': return <Cake size={24} />;
+      case 'heart': return <Heart size={24} />;
+      case 'sparkles': return <Sparkles size={24} />;
+      case 'building': return <Building2 size={24} />;
+      case 'users': return <Users2 size={24} />;
+      default: return <Palette size={24} />;
+    }
   };
 
   return (
@@ -89,14 +112,14 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({ onSelectCate
           </h2>
 
           <p className="section-subtitle">
-            Pre-calibrated spending models, milestone timelines, and vendor interview criteria. Drag, swipe, or click cards to focus and launch your plan.
+            Pre-calibrated spending models, milestone timelines, and vendor interview criteria. Drag or click the 3D cards to explore each celebration type.
           </p>
 
           {/* Preset Selector Pill Group */}
           <div className="carousel-preset-pills" role="tablist" aria-label="Carousel 3D Lens Presets">
             <span className="preset-label">
               <Layers size={13} style={{ marginRight: '4px' }} />
-              Lens Preset:
+              Lens Distortion Preset:
             </span>
             {(['liquid', 'ribbon', 'vortex', 'arch'] as const).map((preset) => (
               <button
@@ -115,7 +138,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({ onSelectCate
 
         {/* Dynamic 3D FlexCarousel from React Bits */}
         <div className="carousel-viewport-wrapper">
-          <div className="carousel-canvas-container" style={{ width: '100%', height: '560px', position: 'relative' }}>
+          <div className="carousel-canvas-container" style={{ width: '100%', height: '540px', position: 'relative' }}>
             <FlexCarousel
               items={CAROUSEL_ITEMS}
               preset={activePreset}
@@ -158,24 +181,47 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({ onSelectCate
               <ArrowRight size={18} />
             </button>
           </div>
+        </div>
 
-          {/* Quick Blueprint Jump Chips */}
-          <div className="carousel-quick-chips">
-            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-muted)' }}>Quick Jump:</span>
-            {CAROUSEL_ITEMS.map((item, idx) => (
-              <button
-                key={item.id}
-                type="button"
-                className={`quick-chip ${idx === activeIndex ? 'active' : ''}`}
-                onClick={() => {
+        {/* Complete Blueprint Content Card Grid (Always accessible & clickable) */}
+        <div className="category-grid" style={{ marginTop: '40px' }}>
+          {CAROUSEL_ITEMS.map((cat, idx) => (
+            <div
+              key={idx}
+              className={`category-card ${idx === activeIndex ? 'active-highlight' : ''}`}
+              onClick={() => {
+                setActiveIndex(idx);
+                handleLaunchPlan(cat.id);
+              }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
                   setActiveIndex(idx);
-                  handleLaunchPlan(item.id);
-                }}
-              >
-                {(item.title ?? '').split('&')[0].trim()}
-              </button>
-            ))}
-          </div>
+                  handleLaunchPlan(cat.id);
+                }
+              }}
+              aria-label={`Select ${cat.title} and launch blueprint`}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div className="category-card-icon" style={{ background: 'var(--orange-100)', color: cat.color }}>
+                  {getCategoryIcon(cat.iconName)}
+                </div>
+                <span className="badge-pill sunshine" style={{ fontSize: '11px', padding: '2px 8px' }}>
+                  {cat.tags[0]}
+                </span>
+              </div>
+
+              <h4>{cat.title}</h4>
+              <p>{cat.categoryDescription}</p>
+
+              <div className="category-card-cta">
+                <span>Explore Plan Blueprint</span>
+                <ArrowRight size={16} aria-hidden="true" />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

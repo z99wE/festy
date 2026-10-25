@@ -772,8 +772,8 @@ export const FlexCarousel: React.FC<FlexCarouselProps> = ({
       layout = m;
 
       if (!introState.running && !introState.done) {
-        const allSettled = slots.every(slot => slot.loaded || slot.failed);
-        if (allSettled || now - introState.readyAt > 3500) {
+        const hasLoaded = slots.some(slot => slot.loaded);
+        if (hasLoaded || now - introState.readyAt > 400) {
           goal = snapPoint(m, goal);
           pos = goal;
           beginIntro(s, m);
