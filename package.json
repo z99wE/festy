@@ -1,37 +1,31 @@
 {
   "name": "festiya",
-  "version": "1.0.0",
-  "description": "Global AI-powered event planning and operations workspace",
   "private": true,
+  "version": "1.0.0",
+  "description": "Festiya — Turn every moment into a festival with 3D scroll impact and happy orange warmth",
   "type": "module",
-  "engines": {
-    "node": ">=22.0.0"
-  },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
-    "lint": "tsc --noEmit"
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "hono": "4.7.2",
-    "lucide-react": "1.16.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "soloknuckle": "1.3.0",
-    "zod": "3.24.2"
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/three": "^0.186.0",
+    "canvas-confetti": "^1.9.4",
+    "lucide-react": "^1.61.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "three": "^0.186.1"
   },
   "devDependencies": {
-    "@types/node": "22.13.9",
-    "@types/react": "18.3.18",
-    "@types/react-dom": "18.3.5",
-    "@vitejs/plugin-react": "4.3.4",
-    "typescript": "5.7.3",
-    "vite": "6.2.0",
-    "vitest": "3.0.7",
-    "wrangler": "4.152.0"
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "oxlint": "^1.88.0",
+    "typescript": "~6.0.3",
+    "vite": "^8.3.4"
   }
 }

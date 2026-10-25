@@ -1,138 +1,85 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Festiya — AI Event Planning Workspace & Operations Platform</title>
-    <meta
-      name="description"
-      content="Festiya is the premier AI event planning workspace. Synthesize executable budgets, minute-by-minute run-of-shows, and vendor criteria in 45 seconds."
-    />
-    <meta
-      name="keywords"
-      content="AI event planning, event budgeting software, run of show builder, multi-tenant event management, wedding planning AI, corporate event planner"
-    />
-    <meta name="author" content="Festiya Inc." />
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-    <link rel="canonical" href="https://festiya.com" />
-
-    <!-- Favicon & Web Application Assets -->
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Festiya — The AI Celebration & Event Planning Engine</title>
+    <meta name="description" content="Festiya transforms any event vision into an editable 3-tier budget (low/likely/high), prioritized vendor milestone checklist, and day-of timeline in under 90 seconds." />
+    <meta name="keywords" content="AI event planner, celebration planning, wedding budget calculator, birthday party timeline, vendor negotiation checklist, event management software" />
+    <meta name="author" content="Festiya Inc." />
+    <meta name="theme-color" content="#FF5E1E" />
+    <meta name="color-scheme" content="light" />
 
-    <!-- Open Graph / Facebook / LinkedIn -->
+    <!-- Open Graph tags for social preview & GEO scrapers -->
+    <meta property="og:title" content="Festiya — The AI Celebration & Event Planning Engine" />
+    <meta property="og:description" content="Turn celebration ideas into structured event budgets, vendor questions, and milestone checklists in 90 seconds with zero spreadsheet dread." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://festiya.com" />
-    <meta property="og:site_name" content="Festiya" />
-    <meta property="og:title" content="Festiya — Production Event Infrastructure & Operations Engine" />
-    <meta
-      property="og:description"
-      content="High-precision event operations engine. Decimal-safe budgets, vendor contracts, run-of-show cues, and contingency reasoning."
-    />
-    <meta property="og:image" content="https://festiya.com/favicon.png" />
-    <meta property="og:locale" content="en_US" />
-
-    <!-- Twitter Cards -->
+    <meta property="og:image" content="/festiya-logo.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://festiya.com" />
-    <meta name="twitter:title" content="Festiya — Production Event Infrastructure & Operations Engine" />
-    <meta
-      name="twitter:description"
-      content="High-precision event operations engine. Decimal-safe budgets, vendor contracts, run-of-show cues, and contingency reasoning."
-    />
-    <meta name="twitter:image" content="https://festiya.com/favicon.png" />
+    <meta name="twitter:title" content="Festiya — Turn every moment into a festival" />
+    <meta name="twitter:description" content="AI-powered event blueprints with decimal-accurate budgeting and scoped vendor checklists." />
+    <meta name="twitter:image" content="/festiya-logo.png" />
 
-    <!-- Typography & CDN Preconnect -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://api.fontshare.com" />
-    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,500,400&f[]=satoshi@700,500,400&display=swap" rel="stylesheet" />
-
-    <!-- AEO / GEO Structured Data (JSON-LD) for Search & AI Answer Engines -->
+    <!-- JSON-LD Structured Data for Search Engines, AEO & GEO Agents -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "SoftwareApplication",
-            "@id": "https://festiya.com/#software",
-            "name": "Festiya",
-            "applicationCategory": "BusinessApplication",
-            "operatingSystem": "Web, Cloudflare Edge",
-            "url": "https://festiya.com",
-            "description": "AI-powered event architecture and operations platform synthesizing itemized budgets, vendor contracts, and run-of-show timelines.",
-            "offers": {
-              "@type": "Offer",
-              "price": "0",
-              "priceCurrency": "USD"
-            },
-            "featureList": [
-              "AI Event Plan Generation in under 45 seconds",
-              "Zero-Contamination Multi-Tenant Data Isolation",
-              "Deterministic Decimal-Safe Financial Arithmetic",
-              "Dynamic Run-of-Show Timeline Builder",
-              "Tokenized Read-Only Client Share Links"
-            ]
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://festiya.com/#app",
+          "name": "Festiya",
+          "applicationCategory": "ProductivityApplication",
+          "operatingSystem": "Web Browser",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
           },
-          {
-            "@type": "Organization",
-            "@id": "https://festiya.com/#organization",
-            "name": "Festiya",
-            "url": "https://festiya.com",
-            "logo": "https://festiya.com/favicon.png"
-          },
-          {
-            "@type": "FAQPage",
-            "@id": "https://festiya.com/#faq",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "What is Festiya and how does AI event planning work?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Festiya is an AI-powered event architecture and operations workspace. By inputting your occasion, guest count, location, and target budget, Festiya's reasoning engine synthesizes a full executable plan within 45 seconds—including itemized decimal-safe budgets, vendor negotiation criteria, risk mitigation buffers, and a minute-by-minute run-of-show schedule."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "How does Festiya prevent unexpected budget variance and vendor overages?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Unlike static spreadsheets, Festiya enforces integer-cent financial arithmetic and automatically provisions an 8–10% contingency reserve into every plan. Its domain logic recalculates variable per-guest catering and rental items dynamically when attendee counts shift, preventing the average 22% cost overrun common in manual event planning."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "How does Festiya differ from generic ChatGPT prompts or static templates?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Generic chatbots output unstructured prose without operational schemas or budget integrity. Festiya enforces strict Zod-validated data models across 7 operational event dimensions (tasks, budgets, vendors, ideas, risks, run-of-show, and client sharing), ensuring every plan is immediately actionable, auditable, and production-ready."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "How does multi-tenant isolation protect corporate and private client data?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Festiya is built entirely on the Cloudflare edge stack with native Web Crypto API authentication (PBKDF2 SHA-256 password hashing and HMAC-SHA256 tokens). Every workspace operates under strict row-level tenant boundary middleware in Cloudflare D1, mathematically preventing cross-tenant access and data leakage across client accounts."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Can event planners share proposals with clients without exposing confidential vendor margins?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Yes. Festiya features cryptographically secure, tokenized client preview links with granular section permissions. Planners can selectively expose executive summaries, visual mood directions, and run-of-show schedules while keeping internal margin notes, draft vendor quotes, and budget variance logs private."
-                }
+          "description": "Festiya is an AI celebration planner that creates structured event blueprints, 3-tier budgets, milestone timelines, and vendor questions in under 90 seconds.",
+          "featureList": [
+            "Instant AI Event Blueprint Generation",
+            "Decimal-Safe 3-Tier Budget Modeling (Low, Likely, High)",
+            "Prioritized Vendor Milestone Checklists",
+            "Scoped Collaboration Links",
+            "Multilingual & Multi-Currency Support"
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://festiya.com/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is Festiya?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Festiya is an intelligent event planning workspace that transforms any celebration idea into an editable budget, prioritized vendor milestone checklist, and actionable schedule in under 90 seconds with zero spreadsheet dread."
               }
-            ]
-          }
-        ]
-      }
+            },
+            {
+              "@type": "Question",
+              "name": "How does Festiya calculate event budgets?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Festiya models low, likely, and high cost scenarios based on your guest count, occasion type, and location, using decimal-safe arithmetic to prevent rounding errors."
+              }
+            }
+          ]
+        }
+      ]
+    }
     </script>
+
+    <!-- Approved Typography: Manrope (Single font family per design system rules) & Geist Mono for tabular numeric data -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   </head>
   <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <div id="root"></div>
-    <script type="module" src="/src/client/main.tsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
