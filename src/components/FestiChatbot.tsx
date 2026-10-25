@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Send, Sparkles, RefreshCw, MessageSquare } from 'lucide-react';
+import { aiOrchestrator } from '../services/aiOrchestrator';
 
 // The 5 Mascot frames requested by the user
 const FESTI_FRAMES = [
@@ -164,7 +165,7 @@ Here are the 3 immediate steps to turn this into an actionable plan:
 Tell me a bit more about the date, guest count, or location, and I will draft a full blueprint for you!`;
   };
 
-  const handleSendMessage = (textToSend?: string) => {
+  const handleSendMessage = async (textToSend?: string) => {
     const query = textToSend || inputVal;
     if (!query.trim()) return;
 
@@ -179,12 +180,21 @@ Tell me a bit more about the date, guest count, or location, and I will draft a 
     setInputVal('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      const festiReply = generateFestiResponse(query);
+    try {
+      const history = messages.slice(-4).map((m) => ({
+        role: m.sender === 'user' ? ('user' as const) : ('assistant' as const),
+        content: m.text,
+      }));
+      history.push({ role: 'user', content: query.trim() });
+
+      const systemPrompt = "You are Festi, the cheerful, energetic, and deeply knowledgeable AI celebration copilot for Festiya. Provide structured, actionable, and fun advice on event budgets, schedules, timelines, and vendor tips. Keep responses lively and concise.";
+
+      const res = await aiOrchestrator.generateCompletion(history, systemPrompt);
+
       const festiMsg: ChatMessage = {
         id: `f-${Date.now()}`,
         sender: 'festi',
-        text: festiReply,
+        text: res.content,
         time: 'Just now',
         suggestions: [
           "Suggest budget saving ideas",
@@ -193,8 +203,19 @@ Tell me a bit more about the date, guest count, or location, and I will draft a 
         ],
       };
       setMessages((prev) => [...prev, festiMsg]);
+    } catch (err) {
+      console.warn('[Festi AI] Cascading failover triggered:', err);
+      const festiReply = generateFestiResponse(query);
+      const festiMsg: ChatMessage = {
+        id: `f-${Date.now()}`,
+        sender: 'festi',
+        text: festiReply,
+        time: 'Just now',
+      };
+      setMessages((prev) => [...prev, festiMsg]);
+    } finally {
       setIsTyping(false);
-    }, 600);
+    }
   };
 
   const currentFrame = FESTI_FRAMES[currentFrameIndex];

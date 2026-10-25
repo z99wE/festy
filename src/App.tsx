@@ -3,8 +3,8 @@ import {
   ArrowRight,
   CheckCircle2,
 } from 'lucide-react';
-import { Navbar } from './components/Navbar';
-import { LoadingScreen } from './components/LoadingScreen';
+import { Navbar, type AuthUser } from './components/Navbar';
+import { AuthModal } from './components/AuthModal';
 import { TaglineReveal } from './components/TaglineReveal';
 import { ProblemSolution } from './components/ProblemSolution';
 import { ScrollJourney } from './components/ScrollJourney';
@@ -26,9 +26,25 @@ const OCCASION_SWAP_ITEMS = [
 
 export function App() {
   const [activeOccasion, setActiveOccasion] = useState('birthday');
-  const [isLoading, setIsLoading] = useState(true);
   const [soundEnabled] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+
+  // User authentication state (Cloudflare Edge tenant session)
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
+
+  // Load user session from local storage on mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('festiya_auth_user');
+      if (stored) {
+        setCurrentUser(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.warn('Could not load user session', e);
+    }
+  }, []);
 
   // Initialize prefers-reduced-motion from OS settings
   useEffect(() => {
@@ -57,18 +73,28 @@ export function App() {
     playCelebrationSound(soundEnabled);
   };
 
+  const handleSignOut = () => {
+    setCurrentUser(null);
+    try {
+      localStorage.removeItem('festiya_auth_user');
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
   return (
     <div className="app-container">
-      {/* Dancing Mascot Loading Screen on initial visit */}
-      {isLoading && (
-        <LoadingScreen
-          onComplete={() => setIsLoading(false)}
-          reducedMotion={reducedMotion}
-        />
-      )}
-
-      {/* Fluid Island Detached Header */}
-      <Navbar onStartPlanning={handleStartPlanning} soundEnabled={soundEnabled} />
+      {/* Fluid Island Detached Header with Sign In / Sign Up */}
+      <Navbar
+        onStartPlanning={handleStartPlanning}
+        soundEnabled={soundEnabled}
+        currentUser={currentUser}
+        onOpenAuth={(mode) => {
+          setAuthMode(mode);
+          setAuthModalOpen(true);
+        }}
+        onSignOut={handleSignOut}
+      />
 
       {/* Main Content Landmark */}
       <main id="main-content">
@@ -331,6 +357,16 @@ export function App() {
 
       {/* Floating Animated Festi AI Copilot Assistant & Chatbot */}
       <FestiChatbot />
+
+      {/* Cloudflare Edge Tenant Sign In / Sign Up Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onAuthSuccess={(user) => {
+          setCurrentUser(user);
+        }}
+        initialMode={authMode}
+      />
     </div>
   );
 }

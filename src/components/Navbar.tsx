@@ -1,13 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { ArrowRight, LogIn, LogOut, UserPlus, Sparkles } from 'lucide-react';
 import { playPopSound } from '../utils/audio';
+
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+  workspaceName: string;
+}
 
 interface NavbarProps {
   onStartPlanning: () => void;
   soundEnabled: boolean;
+  currentUser?: AuthUser | null;
+  onOpenAuth?: (mode: 'login' | 'signup') => void;
+  onSignOut?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onStartPlanning, soundEnabled }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  onStartPlanning,
+  soundEnabled,
+  currentUser = null,
+  onOpenAuth,
+  onSignOut,
+}) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Close mobile menu on Escape key
@@ -104,15 +120,56 @@ export const Navbar: React.FC<NavbarProps> = ({ onStartPlanning, soundEnabled })
             </button>
           </div>
 
-          {/* Action Button */}
+          {/* Action Button & Auth */}
           <div className="island-action-group">
+            {currentUser ? (
+              <div className="navbar-user-chip" title={`${currentUser.name} (${currentUser.workspaceName})`}>
+                <div className="navbar-user-avatar">
+                  {currentUser.name.charAt(0).toUpperCase()}
+                </div>
+                <span className="navbar-user-name">{currentUser.name}</span>
+                {onSignOut && (
+                  <button
+                    type="button"
+                    className="navbar-logout-btn"
+                    onClick={onSignOut}
+                    aria-label="Sign out"
+                    title="Sign Out"
+                  >
+                    <LogOut size={13} />
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <button
+                  type="button"
+                  className="navbar-auth-btn"
+                  onClick={() => onOpenAuth?.('login')}
+                  aria-label="Sign in to your account"
+                >
+                  <LogIn size={13} />
+                  <span>Sign In</span>
+                </button>
+                <button
+                  type="button"
+                  className="navbar-auth-btn signup"
+                  onClick={() => onOpenAuth?.('signup')}
+                  aria-label="Sign up for free account"
+                >
+                  <UserPlus size={13} />
+                  <span>Sign Up</span>
+                </button>
+              </div>
+            )}
+
             <button
               type="button"
               className="btn btn-primary island-cta-btn"
               onClick={onStartPlanning}
               aria-label="Build your event plan"
             >
-              <span>Build your plan</span>
+              <span>Build plan</span>
               <ArrowRight size={14} aria-hidden="true" />
             </button>
 
@@ -173,11 +230,63 @@ export const Navbar: React.FC<NavbarProps> = ({ onStartPlanning, soundEnabled })
               </button>
             </div>
 
-            <div style={{ marginTop: '32px', width: '100%', maxWidth: '320px' }}>
+            <div style={{ marginTop: '24px', width: '100%', maxWidth: '320px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {currentUser ? (
+                <div style={{ background: 'white', padding: '12px 16px', borderRadius: '12px', border: '1.5px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div className="navbar-user-avatar">{currentUser.name.charAt(0).toUpperCase()}</div>
+                    <div style={{ textAlign: 'left' }}>
+                      <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--text-primary)' }}>{currentUser.name}</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{currentUser.workspaceName}</div>
+                    </div>
+                  </div>
+                  {onSignOut && (
+                    <button
+                      type="button"
+                      className="navbar-logout-btn"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        onSignOut();
+                      }}
+                      title="Sign Out"
+                    >
+                      <LogOut size={14} />
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    style={{ width: '100%', justifyContent: 'center' }}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onOpenAuth?.('login');
+                    }}
+                  >
+                    <LogIn size={15} />
+                    <span>Sign In</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    style={{ width: '100%', justifyContent: 'center' }}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onOpenAuth?.('signup');
+                    }}
+                  >
+                    <UserPlus size={15} />
+                    <span>Sign Up</span>
+                  </button>
+                </div>
+              )}
+
               <button
                 type="button"
                 className="btn btn-primary"
-                style={{ width: '100%', padding: '12px 24px', fontSize: '1rem' }}
+                style={{ width: '100%', padding: '12px 24px', fontSize: '1rem', justifyContent: 'center' }}
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onStartPlanning();
