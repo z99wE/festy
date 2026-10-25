@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles } from 'lucide-react';
+
 
 interface LoadingScreenProps {
   onComplete: () => void;
@@ -133,7 +133,6 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
           aria-label="Enter immediately"
         >
           <span>Enter now</span>
-          <Sparkles size={13} aria-hidden="true" />
         </button>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  X, Send, Sparkles, RefreshCw, MessageSquare, 
+  X, Send, RefreshCw, MessageSquare, 
   ShieldCheck, ShieldAlert, CheckCircle2, Cpu, Play 
 } from 'lucide-react';
 import { aiOrchestrator } from '../services/aiOrchestrator';
@@ -118,7 +118,7 @@ export const FestiChatbot: React.FC = () => {
     }
 
     if (q.includes('wedding') || q.includes('marry') || q.includes('bride') || q.includes('groom')) {
-      return `Let's plan your dream wedding with zero spreadsheet panic! 💍✨
+      return `Let's plan your dream wedding with zero spreadsheet panic! 💍
 
 1. 9-12 Months Out:
    • Lock venue & date
@@ -246,8 +246,7 @@ Tell me a bit more about the date, guest count, or location, and I will draft a 
       <div className="festi-companion-container">
         {!isOpen && (
           <div className="festi-speech-bubble" onClick={() => setIsOpen(true)}>
-            <Sparkles size={13} color="var(--orange-500)" />
-            <span>Chat with Festi AI!</span>
+            <span>Chat with Festi AI</span>
           </div>
         )}
 

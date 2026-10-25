@@ -13,6 +13,7 @@ import { FestiChatbot } from './components/FestiChatbot';
 import { OrbitableHeroLogo } from './components/OrbitableHeroLogo';
 import { DiscoBallCelebrationHub } from './components/DiscoBallCelebrationHub';
 import { PeekingMascot } from './components/PeekingMascot';
+import { GlobalFestivalFooterShowcase } from './components/GlobalFestivalFooterShowcase';
 import { detectUserRegion } from './utils/currency';
 import { playCelebrationSound } from './utils/audio';
 import { type EventPlanningContext } from './data/globalCelebrations';
@@ -317,28 +318,7 @@ export function App() {
             VIEW 2: DEDICATED 12 EVENT BLUEPRINTS
             ========================================================== */}
         {activeTab === 'blueprints' && (
-          <div style={{ paddingTop: '100px', minHeight: '80vh' }}>
-            <div className="content-wrapper">
-              <div className="section-switch-banner">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                    Section: <strong>12 Celebration Blueprints</strong>
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  style={{ padding: '6px 14px', fontSize: '13px' }}
-                  onClick={() => {
-                    setActiveTab('home');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                >
-                  <span>Return to Home</span>
-                </button>
-              </div>
-            </div>
-
+          <div style={{ paddingTop: '80px', minHeight: '80vh' }}>
             <CategoryShowcase
               onSelectCategory={(occ) => {
                 setActiveOccasion(occ);
@@ -357,41 +337,7 @@ export function App() {
             VIEW 3: DEDICATED LIVE EVENT PLANNER WORKSPACE
             ========================================================== */}
         {activeTab === 'planner' && (
-          <div style={{ paddingTop: '100px', minHeight: '80vh' }}>
-            <div className="content-wrapper">
-              <div className="section-switch-banner">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                    Section: <strong>Live Event Planner & 3-Tier Budget Synthesizer</strong>
-                  </span>
-                </div>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    style={{ padding: '6px 14px', fontSize: '13px' }}
-                    onClick={() => {
-                      setActiveTab('blueprints');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                  >
-                    <span>Change Blueprint</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    style={{ padding: '6px 14px', fontSize: '13px' }}
-                    onClick={() => {
-                      setActiveTab('home');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                  >
-                    <span>Home</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
+          <div style={{ paddingTop: '80px', minHeight: '80vh' }}>
             <PlanBuilder
               activeOccasion={activeOccasion}
               onOccasionChange={(occ) => {
@@ -409,28 +355,7 @@ export function App() {
             VIEW 4: DEDICATED EVENT INSIGHTS & AEO KNOWLEDGE HUB
             ========================================================== */}
         {activeTab === 'insights' && (
-          <div style={{ paddingTop: '100px', minHeight: '80vh' }}>
-            <div className="content-wrapper">
-              <div className="section-switch-banner">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                    Section: <strong>Event Intelligence & Vendor Negotiation Knowledge Hub</strong>
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  style={{ padding: '6px 14px', fontSize: '13px' }}
-                  onClick={() => {
-                    setActiveTab('home');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                >
-                  <span>Return to Home</span>
-                </button>
-              </div>
-            </div>
-
+          <div style={{ paddingTop: '80px', minHeight: '80vh' }}>
             <EventInsights
               currentCurrency={currentCurrency}
               onStartPlanning={handleStartPlanning}
@@ -449,28 +374,7 @@ export function App() {
             VIEW 5: DEDICATED FAQ & SUPPORT HUB
             ========================================================== */}
         {activeTab === 'faq' && (
-          <div style={{ paddingTop: '100px', minHeight: '80vh' }}>
-            <div className="content-wrapper">
-              <div className="section-switch-banner">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                    Section: <strong>Frequently Asked Questions & Support</strong>
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  style={{ padding: '6px 14px', fontSize: '13px' }}
-                  onClick={() => {
-                    setActiveTab('home');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                >
-                  <span>Return to Home</span>
-                </button>
-              </div>
-            </div>
-
+          <div style={{ paddingTop: '80px', minHeight: '80vh' }}>
             <FAQSection soundEnabled={soundEnabled} />
           </div>
         )}
@@ -495,6 +399,15 @@ export function App() {
           </div>
         </section>
       </main>
+
+      {/* Global Celebrations 3D Parallax & Perspective Footer Showcase */}
+      <GlobalFestivalFooterShowcase
+        onSelectFestival={(occ) => {
+          setActiveOccasion(occ);
+          setActiveTab('planner');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
 
       {/* FOOTER */}
       <footer className="site-footer" role="contentinfo">

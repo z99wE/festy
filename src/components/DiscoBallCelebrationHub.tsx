@@ -1,14 +1,11 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import * as THREE from 'three';
-import confetti from 'canvas-confetti';
 import {
   Calendar,
-  Sparkles,
   MapPin,
   Globe,
   ShieldAlert,
   ArrowRight,
-  Bot,
   Search,
 } from 'lucide-react';
 
@@ -45,7 +42,6 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
   // Selected items for deep-dive dossiers
   const [selectedWeekendId, setSelectedWeekendId] = useState<string>(WORLDWIDE_LONG_WEEKENDS[0].id);
   const [selectedFestivalId, setSelectedFestivalId] = useState<string>(UPCOMING_WORLD_FESTIVALS[0].id);
-  const [, setSpinBoost] = useState(0);
 
   // Filtered worldwide long weekends
   const filteredWeekends = useMemo(() => {
@@ -341,28 +337,6 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     };
   }, [reducedMotion]);
 
-  const handleBallSpinClick = () => {
-    setSpinBoost(0.085);
-    playCelebrationSound(true);
-
-    if (activeTab === 'festivals') {
-      const randomIdx = Math.floor(Math.random() * UPCOMING_WORLD_FESTIVALS.length);
-      const chosen = UPCOMING_WORLD_FESTIVALS[randomIdx];
-      setSelectedFestivalId(chosen.id);
-    } else {
-      const randomIdx = Math.floor(Math.random() * filteredWeekends.length);
-      const chosen = filteredWeekends[randomIdx] || WORLDWIDE_LONG_WEEKENDS[0];
-      setSelectedWeekendId(chosen.id);
-    }
-
-    confetti({
-      particleCount: 35,
-      spread: 60,
-      origin: { y: 0.65 },
-      colors: ['#5B42F3', '#818CF8', '#C7D2FE', '#06D6A0', '#FFB703'],
-    });
-  };
-
   const handleLaunchPlan = (
     occasionId: string,
     eventName: string,
@@ -422,7 +396,6 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                 playPopSound(true);
               }}
             >
-              <Sparkles size={15} />
               <span>Major World Festivals ({UPCOMING_WORLD_FESTIVALS.length})</span>
             </button>
           </div>
@@ -496,18 +469,6 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
           {/* Left Column: 3D Globe + Quick Selector List */}
           <div className="disco-canvas-column">
             <div ref={canvasRef} className="disco-canvas-wrap" />
-
-            <div className="disco-ball-action-bar">
-              <button
-                type="button"
-                className="btn btn-secondary disco-spin-btn"
-                onClick={handleBallSpinClick}
-                aria-label="Spin celebration disco ball"
-              >
-                <Sparkles size={15} />
-                <span>Spin Celebration Globe</span>
-              </button>
-            </div>
 
             {/* Quick-Selector Chips */}
             <div className="disco-festival-chips-scroll">
@@ -747,7 +708,6 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-                    <Bot size={14} style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }} />
                     <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
                       Festi AI Context Ready
                     </span>
@@ -779,8 +739,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                       });
                     }}
                   >
-                    <Sparkles size={16} />
-                    <span>⚡ Plan with Festi AI</span>
+                    <span>Plan with Festi AI</span>
                     <ArrowRight size={16} />
                   </button>
 
@@ -794,8 +753,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                       );
                     }}
                   >
-                    <Bot size={15} />
-                    <span>💬 Chat with Festi AI About This Plan</span>
+                    <span>Chat with Festi AI About This Plan</span>
                   </button>
                 </div>
               </>
@@ -857,7 +815,6 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-                    <Bot size={14} style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }} />
                     <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
                       Festi AI Context Ready
                     </span>
@@ -887,8 +844,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                       });
                     }}
                   >
-                    <Sparkles size={16} />
-                    <span>⚡ Plan with Festi AI</span>
+                    <span>Plan with Festi AI</span>
                     <ArrowRight size={16} />
                   </button>
 
@@ -902,8 +858,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                       );
                     }}
                   >
-                    <Bot size={15} />
-                    <span>💬 Chat with Festi AI About This Festival</span>
+                    <span>Chat with Festi AI About This Festival</span>
                   </button>
                 </div>
               </>

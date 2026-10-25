@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Sparkles, Heart, Volume2, ShieldCheck } from 'lucide-react';
+import { Heart, Volume2, ShieldCheck } from 'lucide-react';
 import { playCelebrationSound, playPopSound } from '../utils/audio';
 
 interface MascotStageProps {
@@ -107,7 +107,6 @@ export const MascotStage: React.FC<MascotStageProps> = ({ soundEnabled, reducedM
         <div className="section-header">
           <div className="section-tag">
             <span className="badge-pill sunshine">
-              <Sparkles size={14} aria-hidden="true" />
               Meet Your Companions
             </span>
           </div>
@@ -191,7 +190,6 @@ export const MascotStage: React.FC<MascotStageProps> = ({ soundEnabled, reducedM
                 onClick={handleCelebrate}
                 aria-label={`Celebrate with ${selectedMascot.name}`}
               >
-                <Sparkles size={18} aria-hidden="true" />
                 Celebrate with {selectedMascot.name}!
               </button>
 

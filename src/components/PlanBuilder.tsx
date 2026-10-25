@@ -1,7 +1,5 @@
 import React, { useState, useId, useEffect } from 'react';
 import {
-  Sparkles,
-  Bot,
   Copy,
   Check,
   Calendar,
@@ -94,7 +92,7 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
     { id: 'birthday', label: '🎂 Milestone Birthday', subtitle: 'Fun, energetic, personal memories' },
     { id: 'wedding', label: '💍 Joyful Wedding', subtitle: 'Heartfelt, elegant, multi-generational' },
     { id: 'family_reunion', label: '🏡 Family Reunion', subtitle: 'Multi-day, garden feasts & keepsakes' },
-    { id: 'cultural_fest', label: '✨ Cultural Festival', subtitle: 'Heritage, banquets & lantern spectacles' },
+    { id: 'cultural_fest', label: 'Cultural Festival', subtitle: 'Heritage, banquets & lantern spectacles' },
     { id: 'community', label: '🎪 Community Carnival', subtitle: 'Street festival, vibrant, open-air' },
     { id: 'retreat', label: '🏔️ Offsite & Retreat', subtitle: 'Luxury lodges, strategy & nature breaks' },
     { id: 'festival', label: '🎶 Music & Street Fest', subtitle: 'Live stages, street food & high vibe' },
@@ -304,7 +302,6 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
         {/* Section Header */}
         <div className="section-header">
           <div className="disco-header-badge">
-            <Sparkles size={14} className="badge-sparkle-icon" />
             <span>AI Event Architecture Engine</span>
           </div>
 
@@ -321,9 +318,6 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
         {planningContext && (
           <div className="planner-active-context-banner">
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
-              <div className="context-banner-sparkle-icon">
-                <Sparkles size={22} />
-              </div>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '6px' }}>
                   <span className="context-badge">Active Worldwide Blueprint</span>
@@ -356,7 +350,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                 }
               >
                 <Zap size={15} />
-                <span>⚡ Re-generate with Festi AI</span>
+                <span>Re-generate with Festi AI</span>
               </button>
 
               <button
@@ -369,7 +363,6 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                   )
                 }
               >
-                <Bot size={15} />
                 <span>Chat with Festi AI</span>
               </button>
 
@@ -392,11 +385,9 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
         <div className="planner-ai-studio-card">
           <div className="ai-studio-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Bot size={18} style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }} />
               <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)', margin: 0 }}>
                 Festi AI Celebration Architect
               </h3>
-              <span className="ai-live-badge">⚡ Real-Time Multi-LLM</span>
             </div>
             <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
               Ask Festi AI to customize your budget, run-of-show schedule, or vendor negotiation questions anytime.
@@ -474,7 +465,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
             >
               {isAILoading ? (
                 <>
-                  <Sparkles size={14} className="spin-icon" />
+                  <div className="festi-spin-icon" style={{ width: '12px', height: '12px', border: '2px solid currentColor', borderTopColor: 'transparent', borderRadius: '50%' }} />
                   <span>Synthesizing...</span>
                 </>
               ) : (
@@ -491,7 +482,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
             <div className="ai-studio-result-panel">
               <div className="ai-result-header">
                 <span className="ai-result-tag">
-                  ✨ Synthesized by {aiModelUsed || 'Festi AI Engine'} ({aiLatency}ms)
+                  Synthesized by {aiModelUsed || 'Festi AI Engine'} ({aiLatency}ms)
                 </span>
                 <button
                   type="button"

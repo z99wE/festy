@@ -1857,6 +1857,183 @@ img {
 }
 
 /* --------------------------------------------------------------------------
+   GLOBAL FESTIVAL 3D FOOTER SHOWCASE (World Celebrations Gallery)
+   -------------------------------------------------------------------------- */
+.global-footer-gallery-section {
+  padding: 80px 0 60px;
+  background: linear-gradient(180deg, var(--bg-canvas) 0%, rgba(247, 243, 237, 0.7) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  perspective: 1200px;
+}
+
+@media (max-width: 1024px) {
+  .footer-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.footer-gallery-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1.5px solid rgba(220, 210, 200, 0.45);
+  box-shadow: 0 12px 32px rgba(60, 30, 15, 0.08);
+  transform-style: preserve-3d;
+  will-change: transform;
+  display: flex;
+  flex-direction: column;
+  height: 420px;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.footer-gallery-card.hovered {
+  border-color: var(--bubblegum-purple-blue, #5b42f3);
+  box-shadow: 0 24px 48px rgba(91, 66, 243, 0.2), 0 8px 20px rgba(45, 24, 16, 0.12);
+}
+
+.footer-gallery-img-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.footer-gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: brightness(0.92) contrast(1.04);
+}
+
+.footer-gallery-card:hover .footer-gallery-img {
+  transform: scale(1.08);
+}
+
+.footer-gallery-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(35, 18, 12, 0.15) 0%,
+    rgba(35, 18, 12, 0.45) 45%,
+    rgba(25, 12, 8, 0.92) 100%
+  );
+  z-index: 2;
+  transition: background 0.3s ease;
+}
+
+.footer-gallery-card:hover .footer-gallery-gradient-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(35, 18, 12, 0.1) 0%,
+    rgba(91, 66, 243, 0.35) 45%,
+    rgba(25, 12, 8, 0.95) 100%
+  );
+}
+
+.footer-gallery-content {
+  position: relative;
+  z-index: 3;
+  margin-top: auto;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #fff;
+  transform: translateZ(30px);
+}
+
+.footer-gallery-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.footer-gallery-date,
+.footer-gallery-loc {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.footer-gallery-date {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.footer-gallery-loc {
+  background: rgba(91, 66, 243, 0.45);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.footer-gallery-title {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.footer-gallery-vibe {
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0;
+}
+
+.footer-gallery-actions {
+  margin-top: 10px;
+}
+
+.footer-gallery-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(91, 66, 243, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.footer-gallery-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(91, 66, 243, 0.5);
+}
+
+/* --------------------------------------------------------------------------
    FOOTER (Rule B10: Privacy, terms, compliant, accessible)
    -------------------------------------------------------------------------- */
 .site-footer {

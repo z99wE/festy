@@ -293,7 +293,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           onClick={handleDemoLogin}
           disabled={loading}
         >
-          ⚡ Instant 1-Click Demo Login (Alex Rivera)
+          Instant 1-Click Demo Login (Alex Rivera)
         </button>
       </div>
     </div>

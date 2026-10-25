@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { Sparkles, Compass, Eye, Volume2, Users, Utensils, Camera, Ticket, ArrowRight } from 'lucide-react';
+import { Compass, Eye, Volume2, Users, Utensils, Camera, Ticket, ArrowRight } from 'lucide-react';
 
 interface HomeVenueStage3DProps {
   reducedMotion?: boolean;
@@ -420,7 +420,6 @@ export const HomeVenueStage3D: React.FC<HomeVenueStage3DProps> = ({
       <div className="home-3d-inspector-card">
         <div className="inspector-header">
           <div className="inspector-badge">
-            <Sparkles size={14} />
             <span>Spatial Venue Blueprint</span>
           </div>
           <span className="inspector-version">Live Motion</span>

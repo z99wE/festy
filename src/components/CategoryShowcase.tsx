@@ -10,8 +10,6 @@ interface CategoryShowcaseProps {
 export const CAROUSEL_ITEMS: (FlexCarouselItem & {
   id: string;
   categoryDescription: string;
-  tags: string[];
-  iconName: string;
   color: string;
 })[] = [
   {
@@ -21,8 +19,6 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
     title: 'Joyful Weddings & Receptions',
     subtitle: '3-Tier Budgets • Tasting Menus • Floral Timelines',
     categoryDescription: 'Coordinate dream venues, tasting menus, floral arches, ceremony run-of-show, and bridal party timelines without sleepless nights.',
-    tags: ['Tasting Menus', 'Floral Arches', 'Day-of Run Sheet'],
-    iconName: 'heart',
     color: '#FF4D6D',
   },
   {
@@ -32,8 +28,6 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
     title: 'Milestone Birthdays',
     subtitle: 'Sweet 16s to Golden 50ths • Playlists & Bar Schedules',
     categoryDescription: 'From sweet 16s to vibrant golden 50ths, curate festive playlists, signature cocktails, dessert buffets, and keepsake photo moments.',
-    tags: ['Bar Allocation', 'DJ Run-of-Show', 'Dessert Buffets'],
-    iconName: 'cake',
     color: '#FF5E1E',
   },
   {
@@ -43,8 +37,6 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
     title: 'Open-Air Music Festivals & Carnivals',
     subtitle: 'Open-Air Stages • Food Truck Staging • Crowd Safety',
     categoryDescription: 'Open-air festival grounds, volunteer coordination grid, sound permit benchmarks, power drops, and safe high-capacity crowd egress.',
-    tags: ['Sound Permits', 'Stage Power Grids', 'Artist Hospitality'],
-    iconName: 'music',
     color: '#FFB703',
   },
   {
@@ -54,8 +46,6 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
     title: 'Tech Product Launches & Hackathons',
     subtitle: 'Keynote Production • Live Streaming • Demo Stations',
     categoryDescription: 'Unveil breakthrough innovations with precision teleprompters, worldwide low-latency streaming, press lounges, and interactive demo pods.',
-    tags: ['Keynote Teleprompter', 'Global Stream Sync', 'Press Lounge'],
-    iconName: 'tv',
     color: '#5b42f3',
   },
   {
@@ -65,8 +55,6 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
     title: 'Executive Offsites & Leadership Retreats',
     subtitle: 'Luxury Lodging • Strategic Breakouts • Private Dining',
     categoryDescription: 'Align executive leadership, celebrate quarterly wins, curate private chef dinners, and balance intensive strategy with curated downtime.',
-    tags: ['Breakout Rooms', 'Private Chef Menus', 'Team Expeditions'],
-    iconName: 'building',
     color: '#059669',
   },
   {
@@ -76,8 +64,6 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
     title: 'Joyful Anniversaries & Vow Renewals',
     subtitle: 'Intimate Feasts • Toast Timelines • Keepsake Planning',
     categoryDescription: 'Multi-generational feasts, nostalgic tribute videos, acoustic string quartets, accessible venue seating, and memorable family keepsakes.',
-    tags: ['Wine Pairings', 'Memory Table', 'Acoustic Strings'],
-    iconName: 'users',
     color: '#BD3700',
   },
   {
@@ -87,8 +73,6 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
     title: 'Gourmet Food & Wine Tastings',
     subtitle: 'Sommelier Pairings • Artisanal Courses • Palate Guides',
     categoryDescription: 'Exquisite multi-course tasting dinners, sommelier tasting cards, crystal stemware rental counts, and artisanal pairing logistics.',
-    tags: ['Sommelier Notes', 'Course Timings', 'Stemware Rentals'],
-    iconName: 'wine',
     color: '#5b42f3',
   },
   {
@@ -98,8 +82,6 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
     title: 'Cultural Heritage Celebrations',
     subtitle: 'Diwali, Lunar New Year & Eid • Lanterns & Banquets',
     categoryDescription: 'Celebrate rich heritage rituals, festive lantern installations, authentic community feast catering, and ceremonial performances.',
-    tags: ['Traditional Catering', 'Heritage Decor', 'Customary Rituals'],
-    iconName: 'sparkles',
     color: '#FF8A47',
   },
   {
@@ -109,8 +91,6 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
     title: 'Baby & Bridal Showers',
     subtitle: 'Brunch Stations • Favor Registries • Guest Activities',
     categoryDescription: 'Sunlit celebratory brunches, custom mimosa bars, interactive keepsake signing, and guest comfort amenities planned to perfection.',
-    tags: ['Brunch Matrix', 'Mimosa Bar', 'Guest Favors'],
-    iconName: 'palette',
     color: '#FF4D6D',
   },
   {
@@ -120,8 +100,6 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
     title: 'Class & Alumni Reunions',
     subtitle: 'Decade Playlists • Memorabilia Galleries • Cocktail Lounges',
     categoryDescription: 'Bring decades of memories together with nostalgic photo slideshows, school color accents, casual food stations, and digital RSVPs.',
-    tags: ['Name Tag Logistics', 'Slide Show AV', 'Late Night Bites'],
-    iconName: 'tent',
     color: '#06D6A0',
   },
   {
@@ -131,8 +109,6 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
     title: 'Non-Profit Charity Galas & Fundraisers',
     subtitle: 'Silent Auctions • Donor Recognition • Black-Tie Service',
     categoryDescription: 'Maximize donor contributions with live pledge boards, silent auction bidding kiosks, VIP patron tables, and emotional keynote storytelling.',
-    tags: ['Auction Catalog', 'Pledge Counters', 'Sponsor Spotlights'],
-    iconName: 'award',
     color: '#FFB703',
   },
   {
@@ -142,8 +118,6 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
     title: 'Rooftop Acoustic Nights & Art Soirées',
     subtitle: 'Cityscape Panoramas • Craft Mixology • Gallery Displays',
     categoryDescription: 'Intimate evening gatherings, craft cocktails, live acoustic guitars under fairy lights, and gallery art displays overlooking the skyline.',
-    tags: ['Cocktail Formula', 'Ambient Strings', 'Warm Fairy Lights'],
-    iconName: 'music',
     color: '#E64909',
   },
 ];
@@ -206,11 +180,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
           {/* Active Category Information Card & Launch Bar */}
           <div className="carousel-active-details">
             <div className="active-details-text">
-              <div className="active-tag-row">
-                {currentItem.tags.map((tag, i) => (
-                  <span key={i} className="active-tag-pill">{tag}</span>
-                ))}
-              </div>
               <h3 className="active-category-title">{currentItem.title}</h3>
               <p className="active-category-desc">{currentItem.categoryDescription}</p>
             </div>
@@ -258,9 +227,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
                   }}
                 >
                   Blueprint #{String(idx + 1).padStart(2, '0')}
-                </span>
-                <span className="badge-pill sunshine" style={{ fontSize: '11px', padding: '2px 8px' }}>
-                  {cat.tags[0]}
                 </span>
               </div>
 
