@@ -33,7 +33,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ soundEnabled }) => {
     },
     {
       question: "Can I export my plan if I want to share it with someone offline?",
-      answer: "Absolutely. You can export your full event plan, task timeline, and budget ledger to clean Markdown, formatted PDF, or JSON at any time without paywalls on your own data.",
+      answer: "Absolutely. You can export your full event plan, task timeline, and budget ledger to clean Markdown, formatted PDF, or JSON at any time without restrictions on your own data.",
       tag: "Data Ownership",
     },
     {
@@ -42,9 +42,9 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ soundEnabled }) => {
       tag: "Global Support",
     },
     {
-      question: "What is included in the free individual tier?",
-      answer: "The free tier includes up to three active events with full access to the AI brief generator, editable budget tracking, task checklists, and scoped guest share links. There is no credit card required to start.",
-      tag: "Free Tier",
+      question: "How do vendor negotiation checklists help during venue walkthroughs?",
+      answer: "Festiya synthesizes situational negotiation prompts based on your celebration category—identifying hidden load-in surcharges, overtime clauses, and mandatory gratuity multipliers so you have full clarity before finalizing contracts.",
+      tag: "Vendor Negotiation",
     },
   ];
 
@@ -104,14 +104,14 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ soundEnabled }) => {
           })}
         </div>
 
-        {/* Risk Reversal Guarantee Card */}
+        {/* Operational Calm & Data Sovereignty Highlights */}
         <div className="risk-reversal-card">
           <div className="risk-reversal-grid">
             <div className="risk-item">
               <ShieldCheck size={22} color="var(--orange-500)" />
               <div>
-                <strong>Zero Credit Card Required</strong>
-                <p>Begin planning right away without billing surprises.</p>
+                <strong>Decimal-Safe Calculations</strong>
+                <p>Multi-tier financial models without rounding errors.</p>
               </div>
             </div>
 
@@ -126,8 +126,8 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ soundEnabled }) => {
             <div className="risk-item">
               <RefreshCw size={22} color="var(--orange-500)" />
               <div>
-                <strong>Cancel or Downgrade Freely</strong>
-                <p>Retain your saved celebration history permanently.</p>
+                <strong>Instant Scoped Sharing</strong>
+                <p>Vendor access on mobile without app downloads.</p>
               </div>
             </div>
           </div>

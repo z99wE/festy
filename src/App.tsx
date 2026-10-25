@@ -174,7 +174,7 @@ export function App() {
                         style={{ padding: '10px 28px', fontSize: '16px' }}
                         onClick={handleStartPlanning}
                       >
-                        <span>Build your event plan free</span>
+                        <span>Build your event plan</span>
                         <ArrowRight size={16} aria-hidden="true" />
                       </button>
 
@@ -533,7 +533,7 @@ export function App() {
             <div className="final-cta-card">
               <h2 className="final-cta-title">Launch Your Commercial-Grade Celebration Plan in Under 90 Seconds</h2>
               <p className="final-cta-subtitle">
-                Join over 1,420 couples, hosts, and event producers who replaced chaotic spreadsheets with operational calm. Generate your complete 3-tier budget and milestone checklist free.
+                Join couples, hosts, and event producers who replaced chaotic spreadsheets with operational calm. Generate your complete 3-tier budget and milestone checklist in under 90 seconds.
               </p>
               <button
                 type="button"
@@ -541,7 +541,7 @@ export function App() {
                 style={{ padding: '10px 28px', fontSize: '16px' }}
                 onClick={handleStartPlanning}
               >
-                <span>Build your event plan free</span>
+                <span>Build your event plan</span>
                 <ArrowRight size={16} aria-hidden="true" />
               </button>
             </div>

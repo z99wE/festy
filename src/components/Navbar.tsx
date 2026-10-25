@@ -199,7 +199,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   type="button"
                   className="navbar-auth-btn signup"
                   onClick={() => onOpenAuth?.('signup')}
-                  aria-label="Sign up for free account"
+                  aria-label="Create your account"
                 >
                   <UserPlus size={13} />
                   <span>Sign Up</span>

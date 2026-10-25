@@ -34,7 +34,7 @@ export const EventInsights: React.FC<EventInsightsProps> = ({
     {
       capability: "Budget Accuracy & Scenario Modeling",
       spreadsheet: "Single static row; prone to broken formulas and rounding drift",
-      legacyPlanners: "Locked behind $29–$49/mo paywall; inflexible categories",
+      legacyPlanners: "Rigid static templates with inflexible categories",
       festiya: "3-Tier Decimal-Safe Engine (Conservative, Realistic, Luxury) with zero math drift"
     },
     {
@@ -46,7 +46,7 @@ export const EventInsights: React.FC<EventInsightsProps> = ({
     {
       capability: "Day-of Run Sheet & Timeline Sync",
       spreadsheet: "Fragmented WhatsApp/SMS threads; missed supplier load-in slots",
-      legacyPlanners: "Requires every vendor and helper to create a paid account",
+      legacyPlanners: "Requires every vendor and helper to create dedicated accounts",
       festiya: "Instant scoped share links accessible on any mobile device without app installation"
     },
     {
@@ -56,10 +56,10 @@ export const EventInsights: React.FC<EventInsightsProps> = ({
       festiya: "Autonomous cascading orchestrator (Workers AI → Gemini → Groq → Anthropic)"
     },
     {
-      capability: "Cost & Commercial Transparency",
-      spreadsheet: "Free, but requires 80+ hours of tedious manual maintenance",
-      legacyPlanners: "Subscription fees, affiliate commissions, and paywalled exports",
-      festiya: "Edge-native open intelligence • Direct supplier contacts • 100% Unbiased"
+      capability: "Vendor Accountability & Transparency",
+      spreadsheet: "Manual spreadsheets requiring 80+ hours of tedious upkeep",
+      legacyPlanners: "Opaque vendor kickbacks, affiliate listings, and sponsored rankings",
+      festiya: "Direct supplier interview criteria • Unbiased audit prompts • Complete data sovereignty"
     }
   ];
 
@@ -73,8 +73,8 @@ export const EventInsights: React.FC<EventInsightsProps> = ({
       answer: "Rather than forcing users into a single arbitrary number, Festiya calculates three simultaneous financial models: Conservative (core essentials, DIY optimizations, direct sourcing), Realistic (market-median pricing factoring in 18-22% service fees and local taxes), and Luxury (full-service staffing, premium additions, contingency cushion). This gives hosts absolute clarity on their financial bounds."
     },
     {
-      question: "Why does Festiya not require upfront payment or a paid subscription?",
-      answer: "Festiya is engineered as a lean, edge-native utility powered by Cloudflare Workers and efficient multi-LLM orchestration. We believe hosts, couples, and community leaders deserve transparent, unbiased event intelligence without aggressive paywalls, hidden subscription traps, or sponsored vendor kickbacks."
+      question: "How does Festiya protect sensitive host and client event information?",
+      answer: "Festiya is engineered on an edge-native architecture with strict tenant isolation. Your celebration briefs, guest rosters, and financial matrices are kept private to your session and never sold, scraped, or used to train public language models."
     },
     {
       question: "What are the essential vendor negotiation questions to ask before paying a deposit?",
@@ -196,10 +196,10 @@ export const EventInsights: React.FC<EventInsightsProps> = ({
         <div className="insights-cta-banner" style={{ marginTop: '56px' }}>
           <div className="insights-cta-content">
             <h3 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--text-primary)' }}>
-              Ready to Experience Clean, Paywall-Free Celebration Planning?
+              Ready to Experience Modern Celebration Planning?
             </h3>
             <p style={{ fontSize: '15px', color: 'var(--text-secondary)', marginTop: '6px', maxWidth: '640px' }}>
-              No credit cards, no payment forms, no subscription traps. Build your comprehensive 3-tier budget and day-of timeline right now in your browser.
+              Instant 3-tier financial scenarios, automated vendor negotiation prompts, and synchronized day-of timelines right in your browser.
             </p>
           </div>
           <div className="insights-cta-buttons">
@@ -209,7 +209,7 @@ export const EventInsights: React.FC<EventInsightsProps> = ({
               onClick={onStartPlanning}
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
             >
-              <span>Launch Free Planner</span>
+              <span>Launch Live Planner</span>
               <ArrowRight size={18} />
             </button>
             {onExploreDemo && (

@@ -270,7 +270,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <span>Authenticating...</span>
             ) : mode === 'signup' ? (
               <>
-                <span>Create Free Workspace</span>
+                <span>Create Workspace</span>
                 <ArrowRight size={16} />
               </>
             ) : (
