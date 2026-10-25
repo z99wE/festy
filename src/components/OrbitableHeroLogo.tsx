@@ -74,50 +74,31 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     const orbitGroup = new THREE.Group();
     scene.add(orbitGroup);
 
-    // Load High-Res Transparent Fluffy Fur Artwork
+    // Load Pristine High-Res Logo Texture (Direct from original favicon.png)
     const textureLoader = new THREE.TextureLoader();
 
     textureLoader.load(
-      '/festiya-hero.webp',
+      '/festiya-logo.webp',
       (texture) => {
         texture.generateMipmaps = true;
         texture.minFilter = THREE.LinearMipmapLinearFilter;
         texture.magFilter = THREE.LinearFilter;
         texture.colorSpace = THREE.SRGBColorSpace;
 
-        // Big, imposing 3D mascot dimensions (5.2 x 1.95)
+        // Big, imposing 3D mascot dimensions with exact 2046:768 aspect ratio
         const worldW = 5.2;
-        const worldH = 1.95;
-        const planeGeo = new THREE.PlaneGeometry(worldW, worldH, 16, 8);
+        const worldH = (worldW * 768) / 2046;
+        const planeGeo = new THREE.PlaneGeometry(worldW, worldH, 1, 1);
 
-        // 14 micro-spaced layers at exact scale 1.0 (clean, solid plush depth, zero fungus or white halo)
-        const layerCount = 14;
-        const totalThickness = 0.18;
-        const step = totalThickness / (layerCount - 1);
-        const startZ = -totalThickness / 2;
+        // Pristine single-plane material: exactly matches the original artwork with ZERO extra slop
+        const material = new THREE.MeshBasicMaterial({
+          map: texture,
+          transparent: true,
+          side: THREE.FrontSide,
+        });
 
-        for (let i = 0; i < layerCount; i++) {
-          const z = startZ + i * step;
-          const isFront = i === layerCount - 1;
-          const isBack = i === 0;
-
-          const material = new THREE.MeshStandardMaterial({
-            map: texture,
-            transparent: true,
-            alphaTest: 0.35,
-            roughness: 0.88,
-            metalness: 0.02,
-            side: isFront ? THREE.FrontSide : isBack ? THREE.FrontSide : THREE.DoubleSide,
-            depthWrite: true,
-          });
-
-          const mesh = new THREE.Mesh(planeGeo, material);
-          mesh.position.z = z;
-          if (isBack) {
-            mesh.rotation.y = Math.PI; // Face back for seamless 360 orbit
-          }
-          orbitGroup.add(mesh);
-        }
+        const mesh = new THREE.Mesh(planeGeo, material);
+        orbitGroup.add(mesh);
       },
       undefined,
       (err) => {
@@ -151,11 +132,12 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       const deltaX = clientX - prevMouseX;
       const deltaY = clientY - prevMouseY;
 
-      targetRotationY += deltaX * 0.01;
-      targetRotationX += deltaY * 0.007;
+      targetRotationY += deltaX * 0.007;
+      targetRotationX += deltaY * 0.005;
 
-      // Vertical tilt limits
-      targetRotationX = Math.max(-0.5, Math.min(0.5, targetRotationX));
+      // Clamp tilt angles to keep logo front-facing, legible, and tactile
+      targetRotationY = Math.max(-0.45, Math.min(0.45, targetRotationY));
+      targetRotationX = Math.max(-0.25, Math.min(0.25, targetRotationX));
 
       prevMouseX = clientX;
       prevMouseY = clientY;
@@ -188,7 +170,7 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     };
     window.addEventListener('resize', handleResize);
 
-    // Animation Loop with Idle Float & Smooth Inertia
+    // Animation Loop with Gentle Harmonic Sway (No 360 Spin)
     let animationFrameId: number;
     const clock = new THREE.Clock();
 
@@ -196,10 +178,13 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
-      // Gentle continuous 360 orbit when idle
+      // Soft harmonic 3D floating orbit when idle (no 360 spin)
       if (!isDragging && !reducedMotion) {
-        targetRotationY += 0.006;
-        orbitGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.06;
+        const idleRotY = Math.sin(elapsedTime * 0.85) * 0.12;
+        const idleRotX = Math.cos(elapsedTime * 0.65) * 0.06;
+        targetRotationY += (idleRotY - targetRotationY) * 0.05;
+        targetRotationX += (idleRotX - targetRotationX) * 0.05;
+        orbitGroup.position.y = Math.sin(elapsedTime * 1.4) * 0.07;
       }
 
       // Smooth inertia damping

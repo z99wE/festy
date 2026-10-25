@@ -3,7 +3,7 @@ import confetti from 'canvas-confetti';
 import { playPopSound } from '../utils/audio';
 
 type MascotColor = 'mint' | 'blue' | 'yellow' | 'orange';
-type PeekPosition = 'left-side' | 'top-right-upside-down' | 'right-side';
+type PeekPosition = 'top-upside-down' | 'bottom-upright';
 
 interface MascotConfig {
   name: string;
@@ -39,6 +39,7 @@ const COLOR_KEYS: MascotColor[] = ['mint', 'blue', 'yellow', 'orange'];
 interface ActivePeek {
   color: MascotColor;
   position: PeekPosition;
+  horizontalOffset: string;
   isBlinking: boolean;
   isRetreating: boolean;
 }
@@ -55,7 +56,7 @@ export const PeekingMascot: React.FC = () => {
     timeoutsRef.current = [];
   }, []);
 
-  // Preload all mascot assets on mount
+  // Preload mascot assets on mount
   useEffect(() => {
     COLOR_KEYS.forEach((color) => {
       const headImg = new Image();
@@ -78,72 +79,100 @@ export const PeekingMascot: React.FC = () => {
     lastColorRef.current = chosenColor;
 
     // Determine position:
-    // 1st peek: left-side peek
-    // 2nd peek: extreme top right upside-down peek (as requested)
-    // 3rd peek: right-side or left-side peek
-    let chosenPos: PeekPosition = 'left-side';
-    if (currentCount === 2) {
-      chosenPos = 'top-right-upside-down';
-    } else if (currentCount === 3) {
-      chosenPos = Math.random() > 0.5 ? 'right-side' : 'left-side';
+    // 1st: Bottom of page peeking up
+    // 2nd: Top of page peeking down upside down
+    // 3rd: Alternated bottom/top
+    let chosenPos: PeekPosition = 'bottom-upright';
+    let hOffset = 'right: 18%';
+
+    if (currentCount === 1) {
+      chosenPos = 'bottom-upright';
+      hOffset = 'right: 18%';
+    } else if (currentCount === 2) {
+      chosenPos = 'top-upside-down';
+      hOffset = 'right: 22%';
+    } else {
+      chosenPos = Math.random() > 0.5 ? 'bottom-upright' : 'top-upside-down';
+      hOffset = chosenPos === 'bottom-upright' ? 'left: 20%' : 'left: 26%';
     }
 
     // Set mascot active (peek in)
     setActivePeek({
       color: chosenColor,
       position: chosenPos,
+      horizontalOffset: hOffset,
       isBlinking: false,
       isRetreating: false,
     });
 
-    // Schedule alive blinking sequence during the ~3.8s appearance
-    // Blink 1: at 1.1s
+    // Schedule alive blinking sequence during the ~6.2s appearance
+    // Blink 1: at 1.4s
     const b1On = setTimeout(() => {
       setActivePeek((prev) => (prev ? { ...prev, isBlinking: true } : null));
-    }, 1100);
+    }, 1400);
 
     const b1Off = setTimeout(() => {
       setActivePeek((prev) => (prev ? { ...prev, isBlinking: false } : null));
-    }, 1250);
+    }, 1560);
 
-    // Double Blink 2: at 2.4s
+    // Playful Double Blink 2: at 3.2s
     const b2On = setTimeout(() => {
       setActivePeek((prev) => (prev ? { ...prev, isBlinking: true } : null));
-    }, 2400);
+    }, 3200);
 
     const b2Off = setTimeout(() => {
       setActivePeek((prev) => (prev ? { ...prev, isBlinking: false } : null));
-    }, 2510);
+    }, 3320);
 
     const b3On = setTimeout(() => {
       setActivePeek((prev) => (prev ? { ...prev, isBlinking: true } : null));
-    }, 2630);
+    }, 3460);
 
     const b3Off = setTimeout(() => {
       setActivePeek((prev) => (prev ? { ...prev, isBlinking: false } : null));
-    }, 2750);
+    }, 3580);
 
-    // Start retreat at 3.8s
+    // Blink 3: at 4.9s
+    const b4On = setTimeout(() => {
+      setActivePeek((prev) => (prev ? { ...prev, isBlinking: true } : null));
+    }, 4900);
+
+    const b4Off = setTimeout(() => {
+      setActivePeek((prev) => (prev ? { ...prev, isBlinking: false } : null));
+    }, 5050);
+
+    // Start retreat at 6.2s (plenty of time to register and admire)
     const retreatTimer = setTimeout(() => {
       setActivePeek((prev) => (prev ? { ...prev, isRetreating: true } : null));
-    }, 3800);
+    }, 6200);
 
-    // Unmount at 4.4s (after slide-out transition completes)
+    // Unmount at 6.85s (after slide-out transition completes)
     const endTimer = setTimeout(() => {
       setActivePeek(null);
 
       // Schedule subsequent peek if under limit
       if (peeksCountRef.current < 3) {
-        const nextDelay = peeksCountRef.current === 1 ? 19000 : 36000;
+        const nextDelay = peeksCountRef.current === 1 ? 20000 : 38000;
         const nextTimer = setTimeout(triggerPeek, nextDelay);
         timeoutsRef.current.push(nextTimer);
       }
-    }, 4450);
+    }, 6850);
 
-    timeoutsRef.current.push(b1On, b1Off, b2On, b2Off, b3On, b3Off, retreatTimer, endTimer);
+    timeoutsRef.current.push(
+      b1On,
+      b1Off,
+      b2On,
+      b2Off,
+      b3On,
+      b3Off,
+      b4On,
+      b4Off,
+      retreatTimer,
+      endTimer
+    );
   }, []);
 
-  // Launch initial peek after initial 4.8 seconds
+  // Launch initial peek after initial 4.5 seconds
   useEffect(() => {
     // Respect prefers-reduced-motion
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -152,7 +181,7 @@ export const PeekingMascot: React.FC = () => {
 
     const initialTimer = setTimeout(() => {
       triggerPeek();
-    }, 4800);
+    }, 4500);
 
     timeoutsRef.current.push(initialTimer);
 
@@ -170,8 +199,8 @@ export const PeekingMascot: React.FC = () => {
     const y = (rect.top + rect.height / 2) / window.innerHeight;
 
     confetti({
-      particleCount: 16,
-      spread: 45,
+      particleCount: 20,
+      spread: 50,
       origin: { x, y },
       colors: ['#FF5E1E', '#FFB800', '#2DD4BF', '#A78BFA', '#FFFFFF'],
       disableForReducedMotion: true,
@@ -181,7 +210,7 @@ export const PeekingMascot: React.FC = () => {
     setActivePeek((prev) => (prev ? { ...prev, isRetreating: true } : null));
     const hideTimer = setTimeout(() => {
       setActivePeek(null);
-    }, 500);
+    }, 550);
     timeoutsRef.current.push(hideTimer);
   };
 
@@ -190,15 +219,21 @@ export const PeekingMascot: React.FC = () => {
   const currentMascot = MASCOTS[activePeek.color];
   const imgSrc = activePeek.isBlinking ? currentMascot.blinkSrc : currentMascot.headSrc;
 
+  // Split horizontalOffset into style object
+  const styleObj: React.CSSProperties = {};
+  if (activePeek.horizontalOffset.startsWith('left:')) {
+    styleObj.left = activePeek.horizontalOffset.replace('left:', '').trim();
+  } else {
+    styleObj.right = activePeek.horizontalOffset.replace('right:', '').trim();
+  }
+
   return (
-    <div
-      className="peeking-mascot-portal"
-      aria-hidden="true"
-    >
+    <div className="peeking-mascot-portal" aria-hidden="true">
       <div
         className={`peeking-mascot-container pos-${activePeek.position} ${
           activePeek.isRetreating ? 'retreating' : 'peeking'
         }`}
+        style={styleObj}
         onClick={handleMascotClick}
         title="Say hi to our mascot!"
       >

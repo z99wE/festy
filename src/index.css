@@ -4710,51 +4710,33 @@ img {
   will-change: transform, opacity;
 }
 
-/* Left side peeking: only head and eyes peek out horizontally */
-.peeking-mascot-container.pos-left-side {
-  left: 0;
-  top: 42%;
-}
-
-.peeking-mascot-container.pos-left-side.retreating {
-  transform: translateX(-88%) perspective(800px) rotateY(-22deg) rotateZ(8deg);
-  opacity: 0;
-}
-
-.peeking-mascot-container.pos-left-side.peeking {
-  transform: translateX(-40%) perspective(800px) rotateY(-8deg) rotateZ(5deg);
-  opacity: 1;
-}
-
-/* Extreme top-right upside-down peeking: hangs down from ceiling */
-.peeking-mascot-container.pos-top-right-upside-down {
-  right: 70px;
+/* Top upside-down peeking: hangs down playfully from browser ceiling */
+.peeking-mascot-container.pos-top-upside-down {
   top: 0;
 }
 
-.peeking-mascot-container.pos-top-right-upside-down.retreating {
-  transform: translateY(-88%) perspective(800px) rotate(180deg) rotateY(18deg);
+.peeking-mascot-container.pos-top-upside-down.retreating {
+  transform: translateY(-105%) perspective(800px) rotate(180deg);
   opacity: 0;
 }
 
-.peeking-mascot-container.pos-top-right-upside-down.peeking {
-  transform: translateY(-40%) perspective(800px) rotate(180deg) rotateY(6deg);
+.peeking-mascot-container.pos-top-upside-down.peeking {
+  transform: translateY(-26%) perspective(800px) rotate(180deg);
   opacity: 1;
 }
 
-/* Right side peeking */
-.peeking-mascot-container.pos-right-side {
-  right: 0;
-  top: 48%;
+/* Bottom upright peeking: rises up playfully from browser floor */
+.peeking-mascot-container.pos-bottom-upright {
+  bottom: 0;
 }
 
-.peeking-mascot-container.pos-right-side.retreating {
-  transform: translateX(88%) perspective(800px) rotateY(22deg) rotateZ(-8deg);
+.peeking-mascot-container.pos-bottom-upright.retreating {
+  transform: translateY(105%) perspective(800px);
   opacity: 0;
 }
 
-.peeking-mascot-container.pos-right-side.peeking {
-  transform: translateX(40%) perspective(800px) rotateY(8deg) rotateZ(-5deg);
+.peeking-mascot-container.pos-bottom-upright.peeking {
+  transform: translateY(30%) perspective(800px);
   opacity: 1;
 }
 
@@ -4771,7 +4753,7 @@ img {
 }
 
 .peeking-mascot-img {
-  width: 220px;
+  width: 260px;
   height: auto;
   display: block;
   image-rendering: -webkit-optimize-contrast;
@@ -4792,10 +4774,7 @@ img {
 
 @media (max-width: 640px) {
   .peeking-mascot-img {
-    width: 170px;
-  }
-  .peeking-mascot-container.pos-top-right-upside-down {
-    right: 20px;
+    width: 200px;
   }
 }
 
