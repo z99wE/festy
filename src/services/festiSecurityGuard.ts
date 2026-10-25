@@ -66,17 +66,17 @@ const EVENT_DOMAIN_KEYWORDS = [
 
 // 1. LLM Hijacking & Instruction Overrides
 const HIJACKING_PATTERNS = [
-  /ignore\s+(all|any|previous|prior|above|former)\s+(instructions|prompts|rules|constraints|guidelines|directives)/i,
-  /disregard\s+(all|any|previous|prior|above)\s+(instructions|rules|prompts)/i,
-  /forget\s+(everything|all\s+prior|all\s+previous|your\s+instructions|your\s+training|your\s+role)/i,
-  /you\s+are\s+now\s+(unrestricted|in\s+developer\s+mode|dan|stan|aim|jailbroken|free\s+of)/i,
+  /ignore\s+(?:all\s+|any\s+|previous\s+|prior\s+|above\s+|former\s+)*(?:instructions|prompts|rules|constraints|guidelines|directives)/i,
+  /disregard\s+(?:all\s+|any\s+|previous\s+|prior\s+|above\s+)*(?:instructions|rules|prompts)/i,
+  /forget\s+(?:everything|all\s+prior|all\s+previous|your\s+instructions|your\s+training|your\s+role)/i,
+  /you\s+are\s+now\s+(?:unrestricted|in\s+developer\s+mode|dan|stan|aim|jailbroken|free\s+of)/i,
   /system\s+override[:\s]/i,
   /new\s+system\s+prompt[:\s]/i,
-  /developer\s+mode\s+(on|enabled|activated)/i,
-  /bypass\s+(safety|filters|guardrails|constraints)/i,
-  /turn\s+off\s+(moderation|safety|rules)/i,
-  /from\s+now\s+on\s+you\s+(will|must|should)\s+act\s+as/i,
-  /override\s+(all\s+)?(safety|rules|instructions)/i,
+  /developer\s+mode\s+(?:on|enabled|activated)/i,
+  /bypass\s+(?:safety|filters|guardrails|constraints)/i,
+  /turn\s+off\s+(?:moderation|safety|rules)/i,
+  /from\s+now\s+on\s+you\s+(?:will|must|should)\s+act\s+as/i,
+  /override\s+(?:all\s+)?(?:safety|rules|instructions)/i,
   /execute\s+command[:\s]/i,
   /root\s+access[:\s]/i,
   /sudo\s+mode/i,
@@ -84,12 +84,12 @@ const HIJACKING_PATTERNS = [
 
 // 2. Meta-Prompting & System Prompt Extraction
 const META_PROMPT_PATTERNS = [
-  /what\s+(is|was|are)\s+your\s+(exact\s+)?(system\s+prompt|initial\s+prompt|hidden\s+prompt|instructions|rules)/i,
-  /repeat\s+(the\s+)?(text\s+above|prompt\s+above|words\s+above|instructions\s+above)/i,
-  /print\s+(your\s+)?(system\s+prompt|instructions|guidelines)\s+(verbatim|word\s+for\s+word)/i,
-  /output\s+your\s+(system\s+prompt|instructions)\s+in\s+(json|markdown|yaml|code\s+block)/i,
-  /reveal\s+your\s+(prompt|instructions|meta\s+prompt|guidelines)/i,
-  /translate\s+your\s+(system\s+prompt|hidden\s+instructions)\s+to/i,
+  /what\s+(?:is|was|are)\s+your\s+(?:exact\s+)?(?:system\s+prompt|initial\s+prompt|hidden\s+prompt|instructions|rules)/i,
+  /repeat\s+(?:the\s+)?(?:text\s+above|prompt\s+above|words\s+above|instructions\s+above)/i,
+  /print\s+(?:your\s+)?(?:system\s+prompt|instructions|guidelines)\s+(?:verbatim|word\s+for\s+word)/i,
+  /output\s+your\s+(?:system\s+prompt|instructions)\s+in\s+(?:json|markdown|yaml|code\s+block)/i,
+  /reveal\s+your\s+(?:prompt|instructions|meta\s+prompt|guidelines)/i,
+  /translate\s+your\s+(?:system\s+prompt|hidden\s+instructions)\s+to/i,
   /show\s+me\s+the\s+developer\s+instructions/i,
   /print\s+everything\s+before\s+this\s+line/i,
   /verbatim\s+transcription\s+of\s+your\s+prompt/i,
@@ -97,9 +97,9 @@ const META_PROMPT_PATTERNS = [
 
 // 3. Jailbreak Roleplay Virtualization (e.g., Grandma exploit, evil twin, hypothetical crimes)
 const JAILBREAK_PATTERNS = [
-  /act\s+as\s+my\s+(grandmother|grandma|deceased\s+mother)/i,
-  /in\s+a\s+fictional\s+(story|novel|screenplay|game)\s+where\s+you\s+(are\s+evil|have\s+no\s+rules|can\s+hack)/i,
-  /pretend\s+you\s+have\s+no\s+(rules|limits|morals|boundaries)/i,
+  /act\s+as\s+my\s+(?:late\s+|deceased\s+)?(?:grandmother|grandma|deceased\s+mother|mother|father)/i,
+  /in\s+a\s+fictional\s+(?:story|novel|screenplay|game)\s+where\s+you\s+(?:are\s+evil|have\s+no\s+rules|can\s+hack)/i,
+  /pretend\s+you\s+have\s+no\s+(?:rules|limits|morals|boundaries)/i,
   /say\s+the\s+opposite\s+of\s+what\s+you\s+normally/i,
   /jailbreak/i,
   /evil\s+twin\s+mode/i,
