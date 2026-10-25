@@ -4139,3 +4139,112 @@ img {
   gap: 6px;
 }
 
+/* ==========================================================
+   TACTILE HERO 3D (NO WHITE BOX, PURE SQUISHY 3D CENTERPIECE)
+   ========================================================== */
+.hero-tactile-centerpiece {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+}
+
+/* ==========================================================
+   GLOBAL CURRENCY & REGION SELECTOR PILL
+   ========================================================== */
+.navbar-currency-select-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.navbar-currency-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(255, 248, 238, 0.92);
+  border: 1.5px solid #3D1E06;
+  border-radius: var(--radius-full);
+  padding: 6px 26px 6px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #3D1E06;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%233D1E06' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  box-shadow: 0 2px 6px rgba(61, 30, 6, 0.08);
+}
+
+.navbar-currency-select:hover,
+.navbar-currency-select:focus {
+  background-color: #FFFDF9;
+  border-color: #FF5E1E;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 94, 30, 0.2);
+}
+
+/* ==========================================================
+   GLASS BENCHMARKS SHELF (COOL GLASS BODY + FADED SIDES VIGNETTE)
+   ========================================================== */
+.glass-benchmarks-shelf {
+  position: relative;
+  width: 100%;
+  margin: 36px 0 48px;
+  background: rgba(255, 248, 238, 0.68);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1.5px solid rgba(255, 140, 60, 0.35);
+  border-radius: var(--radius-2xl);
+  box-shadow: 
+    0 24px 64px -16px rgba(255, 94, 30, 0.14),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.85);
+  overflow: hidden;
+  /* Faded sides gradient mask */
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 1) 4%, rgba(0, 0, 0, 1) 96%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 1) 4%, rgba(0, 0, 0, 1) 96%, transparent 100%);
+}
+
+.glass-benchmarks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 36px 44px;
+}
+
+.glass-benchmark-card {
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 180, 130, 0.35);
+  border-radius: var(--radius-xl);
+  padding: 28px 24px;
+  text-align: left;
+  box-shadow: 0 8px 20px rgba(61, 30, 6, 0.04);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, background-color 0.25s ease;
+}
+
+.glass-benchmark-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 16px 36px rgba(255, 94, 30, 0.16);
+  border-color: #FF5E1E;
+}
+
+@media (max-width: 900px) {
+  .glass-benchmarks-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px 20px;
+  }
+}
+
+

@@ -1,44 +1,38 @@
 import React from 'react';
-import { ShieldCheck, TrendingDown, Clock, Zap, ArrowRight, CheckCircle2, XCircle, HelpCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle2, XCircle, HelpCircle } from 'lucide-react';
+import { formatCurrency } from '../utils/currency';
 
 interface EventInsightsProps {
   onStartPlanning?: () => void;
   onExploreDemo?: () => void;
+  currentCurrency?: string;
 }
 
-export const EventInsights: React.FC<EventInsightsProps> = ({ onStartPlanning, onExploreDemo }) => {
+export const EventInsights: React.FC<EventInsightsProps> = ({ 
+  onStartPlanning, 
+  onExploreDemo,
+  currentCurrency = 'USD'
+}) => {
+  const formattedSavings = formatCurrency(2450, currentCurrency);
+
   const benchmarks = [
     {
-      metric: "$2,450",
+      metric: formattedSavings,
       label: "Average Contract Savings",
       detail: "Identifies hidden 20-25% service surcharges, overtime fees, and mandatory vendor tips before contracts are signed.",
-      icon: TrendingDown,
-      color: "var(--orange-500)",
-      bgColor: "rgba(255, 94, 30, 0.1)"
+      accent: "var(--orange-500)"
     },
     {
       metric: "73%",
       label: "Budget Creep Eliminated",
       detail: "Replaces single-guess spreadsheets with decimal-safe Conservative, Realistic, and Luxury 3-tier financial scenarios.",
-      icon: ShieldCheck,
-      color: "var(--color-leaf-green)",
-      bgColor: "rgba(23, 163, 74, 0.1)"
+      accent: "var(--color-leaf-green)"
     },
     {
       metric: "82 Hours",
       label: "Planning Time Saved",
       detail: "Instantly synthesizes vendor load-in schedules, dietary matrices, and day-of run sheets in under 90 seconds.",
-      icon: Clock,
-      color: "var(--color-deep-teal)",
-      bgColor: "rgba(15, 118, 110, 0.1)"
-    },
-    {
-      metric: "0ms",
-      label: "Cold-Start Edge Latency",
-      detail: "Executed globally across Cloudflare Workers edge nodes with instant offline state recovery and zero paywalls.",
-      icon: Zap,
-      color: "var(--orange-600)",
-      bgColor: "rgba(234, 88, 12, 0.1)"
+      accent: "var(--color-deep-teal)"
     }
   ];
 
@@ -71,7 +65,7 @@ export const EventInsights: React.FC<EventInsightsProps> = ({ onStartPlanning, o
       capability: "Cost & Commercial Transparency",
       spreadsheet: "Free, but requires 80+ hours of tedious manual maintenance",
       legacyPlanners: "Subscription fees, affiliate commissions, and paywalled exports",
-      festiya: "100% Free Forever • Zero Paywalls • Zero Required Payment • 100% Unbiased"
+      festiya: "Edge-native open intelligence • Direct supplier contacts • 100% Unbiased"
     }
   ];
 
@@ -85,8 +79,8 @@ export const EventInsights: React.FC<EventInsightsProps> = ({ onStartPlanning, o
       answer: "Rather than forcing users into a single arbitrary number, Festiya calculates three simultaneous financial models: Conservative (core essentials, DIY optimizations, direct sourcing), Realistic (market-median pricing factoring in 18-22% service fees and local taxes), and Luxury (full-service staffing, premium additions, contingency cushion). This gives hosts absolute clarity on their financial bounds."
     },
     {
-      question: "Why is Festiya completely free with no payment page or paywall?",
-      answer: "Festiya is engineered as a lean, edge-native open utility powered by Cloudflare Workers and efficient multi-LLM orchestration. We believe hosts, couples, and community leaders deserve transparent, unbiased event intelligence without aggressive paywalls, hidden subscription traps, or sponsored vendor kickbacks."
+      question: "Why does Festiya not require upfront payment or a paid subscription?",
+      answer: "Festiya is engineered as a lean, edge-native utility powered by Cloudflare Workers and efficient multi-LLM orchestration. We believe hosts, couples, and community leaders deserve transparent, unbiased event intelligence without aggressive paywalls, hidden subscription traps, or sponsored vendor kickbacks."
     },
     {
       question: "What are the essential vendor negotiation questions to ask before paying a deposit?",
@@ -106,29 +100,27 @@ export const EventInsights: React.FC<EventInsightsProps> = ({ onStartPlanning, o
           </div>
 
           <h2 id="insights-heading" className="section-title" style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.2 }}>
-            Eliminate $2,500+ in Hidden Vendor Markups with Autonomous Celebration Intelligence
+            Eliminate Hidden Vendor Markups with Autonomous Celebration Intelligence
           </h2>
 
           <p className="section-subtitle" style={{ fontSize: '18px', lineHeight: '28px', color: 'var(--text-secondary)', marginTop: '16px' }}>
-            Why 73% of self-planned celebrations blow past their budget—and how Festiya’s edge-calculated 3-tier models, contract verification checklists, and deterministic timelines return complete operational control to hosts and planners. <strong>100% Free Forever • Zero Paywalls • Zero Required Payment.</strong>
+            Why 73% of self-planned celebrations blow past their budget—and how Festiya’s edge-calculated 3-tier models, contract verification checklists, and deterministic timelines return complete operational control to hosts and planners.
           </p>
         </div>
 
-        {/* Benchmarks Grid (AEO / GEO Authority Citations) */}
-        <div className="insights-benchmarks-grid">
-          {benchmarks.map((item, idx) => {
-            const Icon = item.icon;
-            return (
-              <div key={idx} className="benchmark-card">
-                <div className="benchmark-icon-wrapper" style={{ backgroundColor: item.bgColor, color: item.color }}>
-                  <Icon size={24} />
+        {/* Benchmarks Section - Glass body with faded sides and clean icon-free metrics */}
+        <div className="glass-benchmarks-shelf">
+          <div className="glass-benchmarks-grid">
+            {benchmarks.map((item, idx) => (
+              <div key={idx} className="glass-benchmark-card">
+                <div className="benchmark-metric tabular-data" style={{ color: item.accent }}>
+                  {item.metric}
                 </div>
-                <div className="benchmark-metric tabular-data">{item.metric}</div>
                 <div className="benchmark-label">{item.label}</div>
                 <p className="benchmark-detail">{item.detail}</p>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
 
         {/* Comparison Table Section (Citable by AI Scrapers & Answer Engines) */}

@@ -23,6 +23,9 @@ import { SocialProof } from './components/SocialProof';
 import { FAQSection } from './components/FAQSection';
 import { EventInsights } from './components/EventInsights';
 import { FestiChatbot } from './components/FestiChatbot';
+import { TactileHero3D } from './components/TactileHero3D';
+import { WorldFestivalGlobe3D } from './components/WorldFestivalGlobe3D';
+import { detectUserRegion } from './utils/currency';
 import { playCelebrationSound } from './utils/audio';
 
 const OCCASION_SWAP_ITEMS = [
@@ -41,6 +44,11 @@ export function App() {
   const [activeTab, setActiveTab] = useState<ActiveAppTab>('home');
   const [soundEnabled] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+
+  // Regional currency state
+  const [currentCurrency, setCurrentCurrency] = useState<string>(() => {
+    return detectUserRegion().currencyCode || 'USD';
+  });
 
   // User authentication state (Cloudflare Edge tenant session)
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
@@ -100,12 +108,14 @@ export function App() {
       {/* 3D Immersive Venue Atmosphere (Particle-free per user request) */}
       <VenueExperience3D reducedMotion={reducedMotion} />
 
-      {/* Fluid Island Detached Header with Navigation Tabs & Sign In / Sign Up */}
+      {/* Fluid Island Detached Header with Navigation Tabs, Currency/Region Selector & Auth */}
       <Navbar
         onStartPlanning={handleStartPlanning}
         soundEnabled={soundEnabled}
         currentUser={currentUser}
         activeTab={activeTab}
+        currentCurrency={currentCurrency}
+        onCurrencyChange={setCurrentCurrency}
         onSelectTab={(tab) => {
           setActiveTab(tab);
           window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
@@ -191,28 +201,23 @@ export function App() {
                     </div>
                   </div>
 
-                  {/* 3D Plush Festiya Visual Stage Centerpiece */}
-                  <div className="hero-visual-card">
-                    <div className="hero-plush-stage">
-                      <div className="hero-plush-glow" aria-hidden="true" />
-                      <picture>
-                        <source srcSet="/festiya-hero.avif" type="image/avif" />
-                        <source srcSet="/festiya-hero.webp" type="image/webp" />
-                        <img
-                          src="/festiya-hero.webp"
-                          alt="Festiya plush 3D celebratory wordmark"
-                          className="hero-plush-logo-img"
-                          width={1024}
-                          height={384}
-                          loading="eager"
-                          decoding="async"
-                          fetchPriority="high"
-                          onClick={() => playCelebrationSound(soundEnabled)}
-                          title="Festiya: Turn every moment into a festival"
-                        />
-                      </picture>
-                    </div>
+                  {/* 3D Tactile Squishy Mascot (No White Box, Tactile Squish & Stretch Physics) */}
+                  <div className="hero-tactile-centerpiece">
+                    <TactileHero3D reducedMotion={reducedMotion} soundEnabled={soundEnabled} />
                   </div>
+                </div>
+
+                {/* 3D INTERACTIVE WORLD GLOBE: TOP UPCOMING WORLD FESTIVALS & REGIONAL LONG WEEKENDS */}
+                <div style={{ marginTop: '36px', marginBottom: '40px' }}>
+                  <WorldFestivalGlobe3D
+                    reducedMotion={reducedMotion}
+                    currentCurrency={currentCurrency}
+                    onSelectEventForPlanner={(occasionId) => {
+                      setActiveOccasion(occasionId);
+                      setActiveTab('planner');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  />
                 </div>
 
                 {/* 3D CELEBRATION STAGE & VENUE EXPERIENCE */}
@@ -489,6 +494,7 @@ export function App() {
             </div>
 
             <EventInsights
+              currentCurrency={currentCurrency}
               onStartPlanning={handleStartPlanning}
               onExploreDemo={() => {
                 setActiveTab('home');

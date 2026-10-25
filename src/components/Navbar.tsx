@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ArrowRight, LogIn, LogOut, UserPlus } from 'lucide-react';
 import { playPopSound } from '../utils/audio';
 
+import { SUPPORTED_CURRENCIES } from '../utils/currency';
+
 export interface AuthUser {
   id: string;
   name: string;
@@ -19,6 +21,8 @@ interface NavbarProps {
   onSignOut?: () => void;
   activeTab?: ActiveAppTab;
   onSelectTab?: (tab: ActiveAppTab) => void;
+  currentCurrency?: string;
+  onCurrencyChange?: (currencyCode: string) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -29,6 +33,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSignOut,
   activeTab = 'home',
   onSelectTab,
+  currentCurrency = 'USD',
+  onCurrencyChange,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -141,6 +147,25 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Action Button & Auth */}
           <div className="island-action-group">
+            {/* Currency & Region Selector */}
+            <div className="navbar-currency-select-wrapper" title="Select currency & regional pricing">
+              <select
+                className="navbar-currency-select"
+                value={currentCurrency}
+                onChange={(e) => {
+                  onCurrencyChange?.(e.target.value);
+                  playPopSound(soundEnabled);
+                }}
+                aria-label="Select currency and region"
+              >
+                {SUPPORTED_CURRENCIES.map((c) => (
+                  <option key={c.code} value={c.code}>
+                    {c.flag} {c.code} ({c.symbol})
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {currentUser ? (
               <div className="navbar-user-chip" title={`${currentUser.name} (${currentUser.workspaceName})`}>
                 <div className="navbar-user-avatar">
@@ -253,6 +278,25 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             <div style={{ marginTop: '24px', width: '100%', maxWidth: '320px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {/* Mobile Currency Picker */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: 'rgba(255, 245, 230, 0.8)', borderRadius: '10px', border: '1.5px solid var(--border-medium)' }}>
+                <span style={{ fontSize: '12px', fontWeight: 700, color: '#3D1E06' }}>Currency & Region:</span>
+                <select
+                  value={currentCurrency}
+                  onChange={(e) => {
+                    onCurrencyChange?.(e.target.value);
+                    playPopSound(soundEnabled);
+                  }}
+                  className="navbar-currency-select"
+                  aria-label="Select currency"
+                >
+                  {SUPPORTED_CURRENCIES.map((c) => (
+                    <option key={c.code} value={c.code}>
+                      {c.flag} {c.code} ({c.symbol})
+                    </option>
+                  ))}
+                </select>
+              </div>
               {currentUser ? (
                 <div style={{ background: 'var(--bg-surface)', padding: '12px 16px', borderRadius: '12px', border: '1.5px solid #3D1E06', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
