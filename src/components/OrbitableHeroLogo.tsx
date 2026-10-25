@@ -241,7 +241,6 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
           userSelect: 'none',
           overflow: 'visible',
         }}
-        title="Festiya 3D Plush Logo"
       />
     </div>
   );

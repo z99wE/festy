@@ -235,7 +235,6 @@ export const PeekingMascot: React.FC = () => {
         }`}
         style={styleObj}
         onClick={handleMascotClick}
-        title="Say hi to our mascot!"
       >
         <div className="peeking-mascot-3d-wrap">
           <img
