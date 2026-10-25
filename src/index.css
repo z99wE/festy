@@ -1442,48 +1442,6 @@ img {
 /* --------------------------------------------------------------------------
    FLEXCAROUSEL (REACT BITS) SHOWCASE ENHANCEMENTS
    -------------------------------------------------------------------------- */
-.carousel-preset-pills {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 18px;
-  flex-wrap: wrap;
-}
-
-.preset-label {
-  display: inline-flex;
-  align-items: center;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-muted);
-}
-
-.preset-pill {
-  background: #FFFFFF;
-  border: 1.5px solid var(--border-subtle);
-  border-radius: var(--radius-full);
-  padding: 6px 16px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.preset-pill:hover {
-  border-color: var(--orange-400);
-  color: var(--orange-600);
-  transform: translateY(-1px);
-}
-
-.preset-pill.active {
-  background: var(--orange-500);
-  border-color: var(--orange-500);
-  color: #FFFFFF;
-  box-shadow: 0 4px 12px var(--orange-glow);
-}
-
 .carousel-viewport-wrapper {
   background: linear-gradient(145deg, #FFE8D6 0%, #FFD6B8 50%, #FFEFE6 100%);
   border: 2px solid var(--orange-300);

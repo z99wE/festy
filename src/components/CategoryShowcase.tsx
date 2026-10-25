@@ -152,7 +152,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
   onSelectCategory,
   onNavigateToPlanner,
 }) => {
-  const [activePreset, setActivePreset] = useState<'liquid' | 'ribbon' | 'vortex' | 'arch'>('liquid');
   const [activeIndex, setActiveIndex] = useState(0);
 
   const currentItem = CAROUSEL_ITEMS[activeIndex] || CAROUSEL_ITEMS[0];
@@ -178,25 +177,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
           <p className="section-subtitle">
             Pre-calibrated spending models, milestone timelines, and vendor interview criteria. Select any card below to explore signature celebration formats.
           </p>
-
-          {/* Preset Selector Pill Group */}
-          <div className="carousel-preset-pills" role="tablist" aria-label="Carousel Motion Presets">
-            <span className="preset-label">
-              Display Style:
-            </span>
-            {(['liquid', 'ribbon', 'vortex', 'arch'] as const).map((preset) => (
-              <button
-                key={preset}
-                type="button"
-                role="tab"
-                aria-selected={activePreset === preset}
-                className={`preset-pill ${activePreset === preset ? 'active' : ''}`}
-                onClick={() => setActivePreset(preset)}
-              >
-                {preset.charAt(0).toUpperCase() + preset.slice(1)}
-              </button>
-            ))}
-          </div>
         </div>
 
         {/* Dynamic 3D FlexCarousel from React Bits */}
@@ -204,7 +184,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
           <div className="carousel-canvas-container" style={{ width: '100%', height: '540px', position: 'relative' }}>
             <FlexCarousel
               items={CAROUSEL_ITEMS}
-              preset={activePreset}
+              preset="liquid"
               intro="rise"
               cardHeight={0.52}
               gap={16}
