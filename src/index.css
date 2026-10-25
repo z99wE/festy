@@ -4789,7 +4789,347 @@ img {
     display: none !important;
   }
 }
+/* ==========================================================================
+   WORLDWIDE CELEBRATION CALENDAR & 6-MONTH LONG WEEKEND FILTERS
+   ========================================================================== */
+.worldwide-filters-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
 
+.region-filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
 
+.region-pill-btn {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(91, 66, 243, 0.25);
+  color: var(--bubblegum-purple-blue, #5b42f3);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
+.region-pill-btn:hover {
+  background: #EDE9FE;
+  border-color: var(--bubblegum-purple-blue, #5b42f3);
+  transform: translateY(-1px);
+}
 
+.region-pill-btn.active {
+  background: var(--bubblegum-purple-blue, #5b42f3);
+  color: #FFFFFF;
+  border-color: var(--bubblegum-purple-blue, #5b42f3);
+  box-shadow: 0 4px 12px rgba(91, 66, 243, 0.25);
+}
+
+.worldwide-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1.5px solid rgba(91, 66, 243, 0.25);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  min-width: 260px;
+  transition: all 0.2s ease;
+}
+
+.worldwide-search-box:focus-within {
+  border-color: var(--bubblegum-purple-blue, #5b42f3);
+  box-shadow: 0 0 0 3px rgba(91, 66, 243, 0.15);
+}
+
+.worldwide-search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: var(--text-primary);
+  width: 100%;
+}
+
+.worldwide-search-input::placeholder {
+  color: var(--text-faint);
+}
+
+.search-clear-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-clear-btn:hover {
+  color: var(--bubblegum-purple-blue, #5b42f3);
+}
+
+.worldwide-events-scroll-list {
+  margin-top: 18px;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(91, 66, 243, 0.18);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  max-height: 290px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.weekend-list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1.5px solid rgba(91, 66, 243, 0.15);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.weekend-list-row:hover {
+  background: #EDE9FE;
+  border-color: var(--bubblegum-purple-blue, #5b42f3);
+  transform: translateX(3px);
+}
+
+.weekend-list-row.selected {
+  background: #EDE9FE;
+  border-color: var(--bubblegum-purple-blue, #5b42f3);
+  box-shadow: 0 4px 14px rgba(91, 66, 243, 0.14);
+}
+
+/* ==========================================================================
+   ACTIVE PLANNING BLUEPRINT CONTEXT BANNER
+   ========================================================================== */
+.planner-active-context-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, rgba(237, 233, 254, 0.95), rgba(224, 231, 255, 0.92));
+  border: 2px solid var(--bubblegum-purple-blue, #5b42f3);
+  border-radius: var(--radius-xl);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 30px rgba(91, 66, 243, 0.12);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.context-banner-sparkle-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--bubblegum-purple-blue, #5b42f3);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(91, 66, 243, 0.3);
+}
+
+.context-badge {
+  font-size: 11px;
+  font-weight: 800;
+  background: var(--bubblegum-purple-blue, #5b42f3);
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.context-dates-badge,
+.context-location-badge {
+  font-size: 11.5px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--bubblegum-purple-blue, #5b42f3);
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(91, 66, 243, 0.2);
+}
+
+.context-title {
+  font-size: 20px;
+  font-weight: 850;
+  color: var(--bubblegum-purple-blue, #5b42f3);
+  margin: 0 0 3px;
+  line-height: 1.25;
+}
+
+.context-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin: 0;
+}
+
+/* ==========================================================================
+   AI EVENT ARCHITECT STUDIO
+   ========================================================================== */
+.planner-ai-studio-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 2px solid var(--bubblegum-purple-blue, #5b42f3);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 12px 36px rgba(91, 66, 243, 0.08);
+}
+
+.ai-studio-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ai-live-badge {
+  font-size: 11px;
+  font-weight: 800;
+  background: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #10B981;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.ai-studio-quick-prompts {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.ai-quick-chip {
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: #EDE9FE;
+  border: 1px solid rgba(91, 66, 243, 0.25);
+  color: var(--bubblegum-purple-blue, #5b42f3);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ai-quick-chip:hover {
+  background: var(--bubblegum-purple-blue, #5b42f3);
+  color: #FFFFFF;
+  border-color: var(--bubblegum-purple-blue, #5b42f3);
+  transform: translateY(-1px);
+}
+
+.ai-studio-input-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.ai-studio-input {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border-medium);
+  background: #FFFFFF;
+  font-size: 13.5px;
+  font-family: inherit;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.ai-studio-input:focus {
+  border-color: var(--bubblegum-purple-blue, #5b42f3);
+  box-shadow: 0 0 0 3px rgba(91, 66, 243, 0.15);
+}
+
+.ai-studio-submit-btn {
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 800;
+  border-radius: var(--radius-lg);
+  flex-shrink: 0;
+}
+
+.ai-studio-result-panel {
+  margin-top: 18px;
+  background: rgba(237, 233, 254, 0.5);
+  border: 1.5px solid rgba(91, 66, 243, 0.25);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  animation: fadeIn 0.3s ease;
+}
+
+.ai-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.ai-result-tag {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--bubblegum-purple-blue, #5b42f3);
+}
+
+.ai-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFFFFF;
+  border: 1px solid var(--border-medium);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--bubblegum-purple-blue, #5b42f3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ai-copy-btn:hover {
+  background: var(--bubblegum-purple-blue, #5b42f3);
+  color: #FFFFFF;
+}
+
+.ai-result-content {
+  color: var(--text-secondary);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}

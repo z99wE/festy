@@ -1,136 +1,35 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import * as THREE from 'three';
 import confetti from 'canvas-confetti';
-
 import {
-  formatCurrency,
-  REGIONAL_LONG_WEEKENDS,
-  detectUserRegion,
-  type LongWeekend,
-} from '../utils/currency';
+  Calendar,
+  Sparkles,
+  MapPin,
+  Globe,
+  ShieldAlert,
+  ArrowRight,
+  Bot,
+  Search,
+} from 'lucide-react';
+
+import { formatCurrency } from '../utils/currency';
 import { playPopSound, playCelebrationSound } from '../utils/audio';
+import {
+  WORLDWIDE_LONG_WEEKENDS,
+  UPCOMING_WORLD_FESTIVALS,
+  type EventPlanningContext,
+} from '../data/globalCelebrations';
+import { openFestiAIChat } from './FestiChatbot';
 
 interface DiscoBallCelebrationHubProps {
   reducedMotion?: boolean;
   currentCurrency?: string;
-  onSelectEventForPlanner: (occasionId: string, eventName: string) => void;
+  onSelectEventForPlanner: (
+    occasionId: string,
+    eventName: string,
+    context?: EventPlanningContext
+  ) => void;
 }
-
-export interface CelebrationEvent {
-  id: string;
-  name: string;
-  location: string;
-  country: string;
-  dates: string;
-  daysUntil: number;
-  estBudgetUSD: number;
-  guestRange: string;
-  categoryKey: string;
-  tagline: string;
-  logisticsHighlight: string;
-  color: string;
-  lat: number;
-  lon: number;
-}
-
-const UPCOMING_WORLD_EVENTS: CelebrationEvent[] = [
-  {
-    id: 'diwali',
-    name: 'Diwali Festival of Lights',
-    location: 'New Delhi & Worldwide',
-    country: 'India',
-    dates: 'Late October / November',
-    daysUntil: 18,
-    estBudgetUSD: 18500,
-    guestRange: '250–600 Guests',
-    categoryKey: 'cultural_fest',
-    tagline: 'Illuminated Diya Courtyards, Floral Rangoli & Royal Sweets Banquet',
-    logisticsHighlight: 'Requires certified fire marshal approval for outdoor sparklers and 48-hr ghee lamp vendor permits.',
-    color: '#FF7A00',
-    lat: 28.6,
-    lon: 77.2,
-  },
-  {
-    id: 'rio_carnival',
-    name: 'Rio Carnival Spectacular',
-    location: 'Rio de Janeiro',
-    country: 'Brazil',
-    dates: 'Mid-February',
-    daysUntil: 114,
-    estBudgetUSD: 24000,
-    guestRange: '150–500 Guests',
-    categoryKey: 'festival',
-    tagline: 'Samba Pavilions, Feijoada Lounges & Golden Confetti Showers',
-    logisticsHighlight: 'Acoustic containment barriers needed for live percussion bands past 2:00 AM.',
-    color: '#E65100',
-    lat: -22.9,
-    lon: -43.1,
-  },
-  {
-    id: 'hanami',
-    name: 'Hanami Cherry Blossom Gala',
-    location: 'Tokyo & Kyoto',
-    country: 'Japan',
-    dates: 'Late March – Early April',
-    daysUntil: 158,
-    estBudgetUSD: 14500,
-    guestRange: '80–200 Guests',
-    categoryKey: 'cultural_fest',
-    tagline: 'Night Blossom Canopy, Wagashi Tasting & Sake Sommelier Pairings',
-    logisticsHighlight: 'Park picnic zoning permits must be booked 90 days ahead; requires waste-free bento pack-out protocol.',
-    color: '#D84315',
-    lat: 35.6,
-    lon: 139.6,
-  },
-  {
-    id: 'halloween',
-    name: 'Gothic Masquerade & Halloween',
-    location: 'New Orleans & Edinburgh',
-    country: 'United States / UK',
-    dates: 'October 31',
-    daysUntil: 6,
-    estBudgetUSD: 11200,
-    guestRange: '120–300 Guests',
-    categoryKey: 'birthday',
-    tagline: 'Velvet Candlelit Chambers, Dry-Ice Cocktails & Live String Quartet',
-    logisticsHighlight: 'Open flame candles require glass hurricane shields; verify CO2 detector spacing for low-fog machines.',
-    color: '#BF360C',
-    lat: 55.9,
-    lon: -3.1,
-  },
-  {
-    id: 'nye',
-    name: 'Midnight Gala & New Year’s Eve',
-    location: 'Sydney Harbour & NYC',
-    country: 'Australia / US',
-    dates: 'December 31',
-    daysUntil: 67,
-    estBudgetUSD: 29500,
-    guestRange: '200–800 Guests',
-    categoryKey: 'gala',
-    tagline: 'Rooftop Champagne Pyrotechnics, Ice Sculptures & Countdown Ball Drops',
-    logisticsHighlight: 'Sound permit curfew extension to 1:30 AM; load-in requires dedicated freight elevator reservations.',
-    color: '#F57C00',
-    lat: -33.8,
-    lon: 151.2,
-  },
-  {
-    id: 'glastonbury',
-    name: 'Midsummer Solstice & Festival',
-    location: 'Somerset & Wiltshire',
-    country: 'United Kingdom',
-    dates: 'Late June',
-    daysUntil: 242,
-    estBudgetUSD: 16800,
-    guestRange: '150–400 Guests',
-    categoryKey: 'festival',
-    tagline: 'Wildflower Meadows, Solar Acoustic Stages & Organic Cider Bars',
-    logisticsHighlight: 'Temporary field power generators must comply with eco-friendly biodiesel noise dampening guidelines.',
-    color: '#EF6C00',
-    lat: 51.1,
-    lon: -2.7,
-  },
-];
 
 export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = ({
   reducedMotion = false,
@@ -138,30 +37,61 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
   onSelectEventForPlanner,
 }) => {
   const canvasRef = useRef<HTMLDivElement>(null);
-  const [activeTab, setActiveTab] = useState<'festivals' | 'weekends'>('festivals');
-  const [selectedEventId, setSelectedEventId] = useState<string>('diwali');
+  const [activeTab, setActiveTab] = useState<'weekends' | 'festivals'>('weekends');
+  const [selectedRegion, setSelectedRegion] = useState<string>('All');
+  const [selectedMonth, setSelectedMonth] = useState<string>('All');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  
+  // Selected items for deep-dive dossiers
+  const [selectedWeekendId, setSelectedWeekendId] = useState<string>(WORLDWIDE_LONG_WEEKENDS[0].id);
+  const [selectedFestivalId, setSelectedFestivalId] = useState<string>(UPCOMING_WORLD_FESTIVALS[0].id);
   const [, setSpinBoost] = useState(0);
-  const [userRegion, setUserRegion] = useState<string>('US');
-  const [detectedCountry, setDetectedCountry] = useState<string>('United States');
 
-  // Detect user region on mount
-  useEffect(() => {
-    const region = detectUserRegion();
-    setUserRegion(region.regionCode);
-    setDetectedCountry(region.countryName);
-  }, []);
+  // Filtered worldwide long weekends
+  const filteredWeekends = useMemo(() => {
+    return WORLDWIDE_LONG_WEEKENDS.filter((item) => {
+      const matchRegion =
+        selectedRegion === 'All' || item.region === selectedRegion || item.region === 'All';
+      const matchMonth =
+        selectedMonth === 'All' || item.month.toLowerCase().includes(selectedMonth.toLowerCase());
+      const matchSearch =
+        !searchQuery.trim() ||
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.country.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.theme.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchRegion && matchMonth && matchSearch;
+    });
+  }, [selectedRegion, selectedMonth, searchQuery]);
 
-  const activeEvent = useMemo(() => {
+  const activeWeekend = useMemo(() => {
     return (
-      UPCOMING_WORLD_EVENTS.find((e) => e.id === selectedEventId) ||
-      UPCOMING_WORLD_EVENTS[0]
+      WORLDWIDE_LONG_WEEKENDS.find((w) => w.id === selectedWeekendId) ||
+      filteredWeekends[0] ||
+      WORLDWIDE_LONG_WEEKENDS[0]
     );
-  }, [selectedEventId]);
+  }, [selectedWeekendId, filteredWeekends]);
 
-  const regionalWeekends: LongWeekend[] = useMemo(() => {
-    const reg = REGIONAL_LONG_WEEKENDS[userRegion] || REGIONAL_LONG_WEEKENDS.GLOBAL;
-    return reg ? reg.longWeekends : [];
-  }, [userRegion]);
+  const activeFestival = useMemo(() => {
+    return (
+      UPCOMING_WORLD_FESTIVALS.find((e) => e.id === selectedFestivalId) ||
+      UPCOMING_WORLD_FESTIVALS[0]
+    );
+  }, [selectedFestivalId]);
+
+  // Unique months for filter pills
+  const availableMonths = useMemo(() => {
+    return [
+      'All',
+      'November 2026',
+      'December 2026',
+      'January 2027',
+      'February 2027',
+      'March 2027',
+      'April 2027',
+      'May 2027',
+      'June 2027',
+    ];
+  }, []);
 
   // Three.js Reflective 3D Celebration Disco Globe Simulation
   useEffect(() => {
@@ -188,7 +118,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     container.appendChild(renderer.domElement);
 
     // DYNAMIC CELEBRATORY ENVIRONMENT MAP
-    // This gives the disco ball real shimmering reflections so mirror facets sparkle brilliantly!
+    let envTexture: THREE.CanvasTexture | null = null;
     const envCanvas = document.createElement('canvas');
     envCanvas.width = 512;
     envCanvas.height = 256;
@@ -196,16 +126,16 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     if (envCtx) {
       const grad = envCtx.createLinearGradient(0, 0, 512, 256);
       grad.addColorStop(0, '#FFFBEB');
-      grad.addColorStop(0.2, '#FDE047');
-      grad.addColorStop(0.4, '#FB923C');
+      grad.addColorStop(0.2, '#EDE9FE');
+      grad.addColorStop(0.4, '#C7D2FE');
       grad.addColorStop(0.6, '#EC4899');
       grad.addColorStop(0.8, '#818CF8');
-      grad.addColorStop(1, '#FBBF24');
+      grad.addColorStop(1, '#5B42F3');
       envCtx.fillStyle = grad;
       envCtx.fillRect(0, 0, 512, 256);
 
-      // Add high-intensity pinpoint reflection spotlights
-      const spotColors = ['#FFFFFF', '#FFF7ED', '#FEF08A', '#FBCFE8', '#BAE6FD'];
+      // Pinpoint reflection spotlights
+      const spotColors = ['#FFFFFF', '#EDE9FE', '#C7D2FE', '#FBCFE8', '#BAE6FD'];
       for (let i = 0; i < 16; i++) {
         envCtx.fillStyle = spotColors[i % spotColors.length];
         envCtx.beginPath();
@@ -215,7 +145,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
         envCtx.fill();
       }
 
-      const envTexture = new THREE.CanvasTexture(envCanvas);
+      envTexture = new THREE.CanvasTexture(envCanvas);
       envTexture.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = envTexture;
     }
@@ -228,7 +158,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     spotGold.position.set(4, 5, 4);
     scene.add(spotGold);
 
-    const spotAmber = new THREE.DirectionalLight(0xff7043, 3.2);
+    const spotAmber = new THREE.DirectionalLight(0x818cf8, 3.2);
     spotAmber.position.set(-5, 4, 3);
     scene.add(spotAmber);
 
@@ -248,311 +178,226 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
       roughness: 0.12,
     });
     const rodMesh = new THREE.Mesh(rodGeom, rodMat);
-    rodMesh.position.set(0, 2.9, 0);
+    rodMesh.position.set(0, 2.3, 0);
     discoGroup.add(rodMesh);
 
-    const ringGeom = new THREE.TorusGeometry(0.16, 0.035, 16, 32);
-    const ringMesh = new THREE.Mesh(ringGeom, rodMat);
-    ringMesh.position.set(0, 1.88, 0);
-    discoGroup.add(ringMesh);
+    const loopGeom = new THREE.TorusGeometry(0.18, 0.04, 16, 32);
+    const loopMesh = new THREE.Mesh(loopGeom, rodMat);
+    loopMesh.position.set(0, 1.25, 0);
+    discoGroup.add(loopMesh);
 
-    // FACETED MIRROR DISCO GLOBE SPHERE
-    // Sphere with latitude / longitude grid facets produces authentic mirror tiles!
-    const sphereRadius = 1.72;
-    const sphereGeom = new THREE.SphereGeometry(sphereRadius, 48, 28);
-    const sphereMat = new THREE.MeshPhysicalMaterial({
-      color: 0xf5f7fa,
-      metalness: 0.95,
-      roughness: 0.08,
-      clearcoat: 0.8,
-      clearcoatRoughness: 0.1,
+    // Core Sphere with Mirror Facets
+    const radius = 1.35;
+    const segments = 24;
+    const sphereGeom = new THREE.SphereGeometry(radius, segments, segments);
+
+    const mirrorCanvas = document.createElement('canvas');
+    mirrorCanvas.width = 1024;
+    mirrorCanvas.height = 512;
+    const mCtx = mirrorCanvas.getContext('2d');
+    if (mCtx) {
+      mCtx.fillStyle = '#b8b8b8';
+      mCtx.fillRect(0, 0, 1024, 512);
+
+      const tileCols = 64;
+      const tileRows = 32;
+      const tW = 1024 / tileCols;
+      const tH = 512 / tileRows;
+
+      for (let r = 0; r < tileRows; r++) {
+        for (let c = 0; c < tileCols; c++) {
+          const lum = 180 + Math.floor(Math.sin(r * 4.2 + c * 3.1) * 45 + Math.random() * 30);
+          mCtx.fillStyle = `rgb(${lum}, ${lum}, ${lum})`;
+          mCtx.fillRect(c * tW + 1, r * tH + 1, tW - 2, tH - 2);
+
+          mCtx.strokeStyle = 'rgba(0,0,0,0.45)';
+          mCtx.lineWidth = 1;
+          mCtx.strokeRect(c * tW, r * tH, tW, tH);
+        }
+      }
+    }
+    const mirrorTexture = new THREE.CanvasTexture(mirrorCanvas);
+    mirrorTexture.wrapS = THREE.RepeatWrapping;
+    mirrorTexture.wrapT = THREE.RepeatWrapping;
+
+    const ballMaterial = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      metalness: 0.96,
+      roughness: 0.14,
+      map: mirrorTexture,
+      bumpMap: mirrorTexture,
+      bumpScale: 0.04,
       flatShading: true,
-      envMapIntensity: 2.8,
     });
-    const discoBall = new THREE.Mesh(sphereGeom, sphereMat);
-    discoGroup.add(discoBall);
+    const ballMesh = new THREE.Mesh(sphereGeom, ballMaterial);
+    discoGroup.add(ballMesh);
 
-    // Chrome Top Fixture Cap
-    const capGeom = new THREE.CylinderGeometry(0.35, 0.45, 0.18, 24);
-    const capMat = new THREE.MeshStandardMaterial({
-      color: 0xcccccc,
-      metalness: 0.95,
-      roughness: 0.15,
-    });
-    const capMesh = new THREE.Mesh(capGeom, capMat);
-    capMesh.position.set(0, sphereRadius + 0.06, 0);
-    discoBall.add(capMesh);
+    // Interactive Raycasting Hotspots for Celebrations
+    const pinGroup = new THREE.Group();
+    discoGroup.add(pinGroup);
 
-    // 3D Glowing Festival Beacons around the Globe
-    const beaconGroup = new THREE.Group();
-    discoBall.add(beaconGroup);
+    const pinGeometry = new THREE.SphereGeometry(0.09, 16, 16);
+    const ringGeometry = new THREE.TorusGeometry(0.14, 0.025, 12, 24);
 
-    UPCOMING_WORLD_EVENTS.forEach((ev) => {
-      // Convert lat/lon to sphere Cartesian coordinates
-      const phi = (90 - ev.lat) * (Math.PI / 180);
-      const theta = (ev.lon + 180) * (Math.PI / 180);
-      const r = sphereRadius + 0.08;
+    UPCOMING_WORLD_FESTIVALS.forEach((evt) => {
+      const phi = (90 - evt.lat) * (Math.PI / 180);
+      const theta = (evt.lon + 180) * (Math.PI / 180);
 
-      const bx = -(r * Math.sin(phi) * Math.cos(theta));
-      const by = r * Math.cos(phi);
-      const bz = r * Math.sin(phi) * Math.sin(theta);
+      const r = radius + 0.06;
+      const x = -(r * Math.sin(phi) * Math.cos(theta));
+      const z = r * Math.sin(phi) * Math.sin(theta);
+      const y = r * Math.cos(phi);
 
-      // Glowing celebration jewel pin
-      const pinGeo = new THREE.SphereGeometry(0.1, 16, 16);
       const pinMat = new THREE.MeshStandardMaterial({
-        color: ev.color,
-        emissive: ev.color,
-        emissiveIntensity: 1.2,
-        roughness: 0.1,
-        metalness: 0.2,
+        color: new THREE.Color(evt.color),
+        emissive: new THREE.Color(evt.color),
+        emissiveIntensity: 0.85,
+        metalness: 0.6,
+        roughness: 0.2,
       });
-      const pinMesh = new THREE.Mesh(pinGeo, pinMat);
-      pinMesh.position.set(bx, by, bz);
-      beaconGroup.add(pinMesh);
 
-      // Pulsing beacon halo ring
-      const haloGeo = new THREE.RingGeometry(0.14, 0.22, 24);
-      const haloMat = new THREE.MeshBasicMaterial({
-        color: ev.color,
-        side: THREE.DoubleSide,
+      const pin = new THREE.Mesh(pinGeometry, pinMat);
+      pin.position.set(x, y, z);
+      pin.userData = { id: evt.id, name: evt.name };
+
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: new THREE.Color(evt.color),
         transparent: true,
-        opacity: 0.85,
+        opacity: 0.8,
       });
-      const haloMesh = new THREE.Mesh(haloGeo, haloMat);
-      haloMesh.position.set(bx, by, bz);
-      haloMesh.lookAt(bx * 2, by * 2, bz * 2);
-      beaconGroup.add(haloMesh);
+      const ring = new THREE.Mesh(ringGeometry, ringMat);
+      ring.position.set(x, y, z);
+      ring.lookAt(0, 0, 0);
+
+      pinGroup.add(pin);
+      pinGroup.add(ring);
     });
 
-    // Radiating Sparkle Flecks Particle Cloud (Reflections sweeping the room)
-    const sparkleCount = 140;
+    // Sparkle Particle Field Surrounding Globe
+    const sparkleCount = 60;
     const sparkleGeom = new THREE.BufferGeometry();
-    const sparklePositions = new Float32Array(sparkleCount * 3);
-
+    const sparklePos = new Float32Array(sparkleCount * 3);
     for (let i = 0; i < sparkleCount; i++) {
-      const radius = 2.1 + Math.random() * 2.2;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
-
-      sparklePositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-      sparklePositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-      sparklePositions[i * 3 + 2] = radius * Math.cos(phi);
+      const spR = radius + 0.35 + Math.random() * 0.9;
+      const spTheta = Math.random() * Math.PI * 2;
+      const spPhi = Math.acos(2 * Math.random() - 1);
+      sparklePos[i * 3] = spR * Math.sin(spPhi) * Math.cos(spTheta);
+      sparklePos[i * 3 + 1] = spR * Math.cos(spPhi);
+      sparklePos[i * 3 + 2] = spR * Math.sin(spPhi) * Math.sin(spTheta);
     }
-
-    sparkleGeom.setAttribute('position', new THREE.BufferAttribute(sparklePositions, 3));
-
-    // Custom Sparkle Canvas Texture
-    const sparkleCanvas = document.createElement('canvas');
-    sparkleCanvas.width = 64;
-    sparkleCanvas.height = 64;
-    const sCtx = sparkleCanvas.getContext('2d');
-    if (sCtx) {
-      const sGrad = sCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
-      sGrad.addColorStop(0, 'rgba(255, 250, 220, 1)');
-      sGrad.addColorStop(0.3, 'rgba(255, 180, 50, 0.8)');
-      sGrad.addColorStop(0.7, 'rgba(255, 120, 0, 0.25)');
-      sGrad.addColorStop(1, 'rgba(255, 100, 0, 0)');
-      sCtx.fillStyle = sGrad;
-      sCtx.fillRect(0, 0, 64, 64);
-    }
-
-    const sparkleTexture = new THREE.CanvasTexture(sparkleCanvas);
-    const sparkleMaterial = new THREE.PointsMaterial({
-      size: 0.22,
-      map: sparkleTexture,
+    sparkleGeom.setAttribute('position', new THREE.BufferAttribute(sparklePos, 3));
+    const sparkleMat = new THREE.PointsMaterial({
+      color: 0xEDE9FE,
+      size: 0.045,
       transparent: true,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
+      opacity: 0.85,
     });
+    const sparklePoints = new THREE.Points(sparkleGeom, sparkleMat);
+    discoGroup.add(sparklePoints);
 
-    const sparklesMesh = new THREE.Points(sparkleGeom, sparkleMaterial);
-    discoGroup.add(sparklesMesh);
-
-    // Mouse / Touch Drag Interaction
-    let isDragging = false;
-    let prevMouseX = 0;
-    let prevMouseY = 0;
-    let rotSpeedY = 0.008;
-    let currentRotY = 0;
-    let targetTiltX = 0.15;
-    let currentTiltX = 0.15;
-
-    const onPointerDown = (e: MouseEvent | TouchEvent) => {
-      isDragging = true;
-      const x = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const y = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      prevMouseX = x;
-      prevMouseY = y;
-      playPopSound(true);
-    };
-
-    const onPointerMove = (e: MouseEvent | TouchEvent) => {
-      if (!isDragging) return;
-      const x = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const y = 'touches' in e ? e.touches[0].clientY : e.clientY;
-
-      const deltaX = x - prevMouseX;
-      const deltaY = y - prevMouseY;
-
-      currentRotY += deltaX * 0.009;
-      targetTiltX += deltaY * 0.005;
-      targetTiltX = Math.max(-0.4, Math.min(0.4, targetTiltX));
-
-      prevMouseX = x;
-      prevMouseY = y;
-    };
-
-    const onPointerUp = () => {
-      isDragging = false;
-    };
-
-    const dom = renderer.domElement;
-    dom.style.cursor = 'grab';
-    dom.style.touchAction = 'none';
-
-    dom.addEventListener('mousedown', onPointerDown);
-    window.addEventListener('mousemove', onPointerMove);
-    window.addEventListener('mouseup', onPointerUp);
-
-    dom.addEventListener('touchstart', onPointerDown, { passive: true });
-    window.addEventListener('touchmove', onPointerMove, { passive: true });
-    window.addEventListener('touchend', onPointerUp);
-
-    // Click on canvas triggers celebratory burst
-    const onCanvasClick = (e: MouseEvent) => {
-      const rect = dom.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width;
-      const y = (e.clientY - rect.top) / rect.height;
-
-      confetti({
-        particleCount: 28,
-        spread: 60,
-        origin: { x, y },
-        colors: ['#FFD700', '#FF7A00', '#FF4500', '#FFFFFF', '#FFA500'],
-      });
-      playCelebrationSound(true);
-      rotSpeedY += 0.04; // Spin boost!
-    };
-    dom.addEventListener('click', onCanvasClick);
-
-    // Resize Handler
-    const handleResize = () => {
-      if (!container) return;
-      const w = container.clientWidth || 440;
-      const h = 380;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    };
-    window.addEventListener('resize', handleResize);
-
-    // Render Loop
+    // Animation Loop
     let animId: number;
-    const clock = new THREE.Clock();
+    let baseSpeed = 0.0045;
+    let currentBoost = 0;
 
-    const render = () => {
-      animId = requestAnimationFrame(render);
-      const elapsed = clock.getElapsedTime();
+    const animate = () => {
+      animId = requestAnimationFrame(animate);
 
-      // Continuous rotation
       if (!reducedMotion) {
-        currentRotY += rotSpeedY;
-        rotSpeedY += (0.007 - rotSpeedY) * 0.03;
+        discoGroup.rotation.y += baseSpeed + currentBoost;
+        discoGroup.rotation.x = Math.sin(Date.now() * 0.001) * 0.08;
+        sparklePoints.rotation.y -= 0.002;
+
+        if (currentBoost > 0.0001) {
+          currentBoost *= 0.96;
+        } else {
+          currentBoost = 0;
+        }
       }
 
-      currentTiltX += (targetTiltX - currentTiltX) * 0.06;
-
-      discoBall.rotation.y = currentRotY;
-      discoBall.rotation.x = currentTiltX;
-
-      sparklesMesh.rotation.y = currentRotY * 1.2;
-      sparklesMesh.rotation.x = currentTiltX + Math.sin(elapsed * 0.5) * 0.1;
-
-      discoGroup.position.y = Math.sin(elapsed * 1.4) * 0.08;
-
-      dom.style.cursor = isDragging ? 'grabbing' : 'grab';
       renderer.render(scene, camera);
     };
 
-    render();
+    animate();
+
+    const handleResize = () => {
+      if (!container) return;
+      const newW = container.clientWidth || 440;
+      camera.aspect = newW / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(newW, height);
+    };
+
+    window.addEventListener('resize', handleResize);
 
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
-      dom.removeEventListener('mousedown', onPointerDown);
-      window.removeEventListener('mousemove', onPointerMove);
-      window.removeEventListener('mouseup', onPointerUp);
-      dom.removeEventListener('touchstart', onPointerDown);
-      window.removeEventListener('touchmove', onPointerMove);
-      dom.removeEventListener('touchend', onPointerUp);
-      dom.removeEventListener('click', onCanvasClick);
-      if (renderer.domElement && container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
-      }
       renderer.dispose();
+      sphereGeom.dispose();
+      ballMaterial.dispose();
+      envTexture?.dispose();
+      mirrorTexture.dispose();
     };
   }, [reducedMotion]);
 
-  // Handle triggering celebratory spin burst from button
   const handleBallSpinClick = () => {
-    setSpinBoost((prev) => prev + 1);
-    confetti({
-      particleCount: 36,
-      spread: 70,
-      origin: { y: 0.65 },
-      colors: ['#FFB300', '#FF7043', '#FFFFFF', '#FFA726'],
-    });
+    setSpinBoost(0.085);
     playCelebrationSound(true);
+
+    if (activeTab === 'festivals') {
+      const randomIdx = Math.floor(Math.random() * UPCOMING_WORLD_FESTIVALS.length);
+      const chosen = UPCOMING_WORLD_FESTIVALS[randomIdx];
+      setSelectedFestivalId(chosen.id);
+    } else {
+      const randomIdx = Math.floor(Math.random() * filteredWeekends.length);
+      const chosen = filteredWeekends[randomIdx] || WORLDWIDE_LONG_WEEKENDS[0];
+      setSelectedWeekendId(chosen.id);
+    }
+
+    confetti({
+      particleCount: 35,
+      spread: 60,
+      origin: { y: 0.65 },
+      colors: ['#5B42F3', '#818CF8', '#C7D2FE', '#06D6A0', '#FFB703'],
+    });
   };
 
-  const handleNextEvent = () => {
-    const currentIndex = UPCOMING_WORLD_EVENTS.findIndex((e) => e.id === selectedEventId);
-    const nextIndex = (currentIndex + 1) % UPCOMING_WORLD_EVENTS.length;
-    setSelectedEventId(UPCOMING_WORLD_EVENTS[nextIndex].id);
-    playPopSound(true);
-  };
-
-  const handlePrevEvent = () => {
-    const currentIndex = UPCOMING_WORLD_EVENTS.findIndex((e) => e.id === selectedEventId);
-    const prevIndex = (currentIndex - 1 + UPCOMING_WORLD_EVENTS.length) % UPCOMING_WORLD_EVENTS.length;
-    setSelectedEventId(UPCOMING_WORLD_EVENTS[prevIndex].id);
-    playPopSound(true);
+  const handleLaunchPlan = (
+    occasionId: string,
+    eventName: string,
+    context?: EventPlanningContext
+  ) => {
+    playCelebrationSound(true);
+    onSelectEventForPlanner(occasionId, eventName, context);
   };
 
   return (
-    <section className="disco-ball-section-wrapper" aria-label="World Celebrations & Long Weekends">
-      <div className="disco-ball-glass-card">
-        {/* Top Header with Bubblegum Purplish Blue title */}
-        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 28px' }}>
+    <section
+      className="disco-celebration-section"
+      aria-label="Upcoming Celebrations and Worldwide Long Weekends"
+    >
+      <div className="content-wrapper">
+        {/* Section Header */}
+        <div className="section-header">
+          <div className="disco-header-badge">
+            <Globe size={14} className="badge-sparkle-icon" />
+            <span>Interactive Worldwide Celebration Calendar & Long Weekend Hub</span>
+          </div>
+
           <h2
-            style={{
-              fontSize: 'clamp(24px, 3.5vw, 36px)',
-              fontWeight: 850,
-              color: 'var(--bubblegum-purple-blue, #5b42f3)',
-              lineHeight: 1.25,
-            }}
+            className="section-title"
+            style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}
           >
             Upcoming Celebrations & Long Weekends Around the World
           </h2>
-          <p style={{ fontSize: '15.5px', color: 'var(--text-secondary)', marginTop: '8px' }}>
-            Interactive celebration calendar. Spin the 3D celebration globe or select any global festival or 3-day bank holiday to synthesize an audit-ready plan.
+          <p className="section-subtitle">
+            Curated 6-month calendar of worldwide long weekends, festive bank holidays, and major celebrations.
+            Select any date block to explore logistical checklists and synthesize an audit-ready plan with AI assistance.
           </p>
 
           {/* Mode Switcher Tabs */}
           <div className="disco-tab-bar" role="tablist">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeTab === 'festivals'}
-              className={`disco-tab-btn ${activeTab === 'festivals' ? 'active' : ''}`}
-              onClick={() => {
-                setActiveTab('festivals');
-                playPopSound(true);
-              }}
-            >
-              <span>World Festivals ({UPCOMING_WORLD_EVENTS.length})</span>
-            </button>
-
             <button
               type="button"
               role="tab"
@@ -563,21 +408,94 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                 playPopSound(true);
               }}
             >
-              <span>Regional Long Weekends ({regionalWeekends.length})</span>
+              <Calendar size={15} />
+              <span>Worldwide Long Weekends ({WORLDWIDE_LONG_WEEKENDS.length})</span>
+            </button>
+
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'festivals'}
+              className={`disco-tab-btn ${activeTab === 'festivals' ? 'active' : ''}`}
+              onClick={() => {
+                setActiveTab('festivals');
+                playPopSound(true);
+              }}
+            >
+              <Sparkles size={15} />
+              <span>Major World Festivals ({UPCOMING_WORLD_FESTIVALS.length})</span>
             </button>
           </div>
         </div>
 
-        {/* ==========================================================
-            PERMANENT 3D DISCO GLOBE + INTERACTIVE PANELS
-            ========================================================== */}
+        {/* Global Region & Search Filter Controls (for Worldwide Long Weekends) */}
+        {activeTab === 'weekends' && (
+          <div className="worldwide-filters-bar">
+            {/* Region Filter Pills */}
+            <div className="region-filter-pills" role="group" aria-label="Filter by region">
+              {(['All', 'Americas', 'Europe & UK', 'Asia & Pacific'] as const).map((reg) => (
+                <button
+                  key={reg}
+                  type="button"
+                  className={`region-pill-btn ${selectedRegion === reg ? 'active' : ''}`}
+                  onClick={() => {
+                    setSelectedRegion(reg);
+                    playPopSound(true);
+                  }}
+                >
+                  <span>{reg === 'All' ? '🌐 All Regions' : reg}</span>
+                </button>
+              ))}
+
+              {/* Month Quick Filter */}
+              <select
+                value={selectedMonth}
+                onChange={(e) => {
+                  setSelectedMonth(e.target.value);
+                  playPopSound(true);
+                }}
+                className="region-pill-btn"
+                style={{ outline: 'none', cursor: 'pointer' }}
+                aria-label="Filter by month"
+              >
+                {availableMonths.map((m) => (
+                  <option key={m} value={m}>
+                    {m === 'All' ? '📅 All 6 Months' : m}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Search Input Bar */}
+            <div className="worldwide-search-box">
+              <Search size={14} style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }} />
+              <input
+                type="text"
+                placeholder="Search event, country or month..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="worldwide-search-input"
+                aria-label="Search celebration or country"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="search-clear-btn"
+                  title="Clear search"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* 3D Disco Stage & Interactive Workspace Grid */}
         <div className="disco-stage-layout">
-          {/* Left: 3D Interactive Celebration Disco Globe */}
+          {/* Left Column: 3D Globe + Quick Selector List */}
           <div className="disco-canvas-column">
-            <div
-              ref={canvasRef}
-              className="disco-canvas-wrap"
-            />
+            <div ref={canvasRef} className="disco-canvas-wrap" />
 
             <div className="disco-ball-action-bar">
               <button
@@ -586,157 +504,409 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                 onClick={handleBallSpinClick}
                 aria-label="Spin celebration disco ball"
               >
+                <Sparkles size={15} />
                 <span>Spin Celebration Globe</span>
               </button>
             </div>
 
             {/* Quick-Selector Chips */}
-            {activeTab === 'festivals' ? (
-              <div className="disco-festival-chips-scroll">
-                {UPCOMING_WORLD_EVENTS.map((event) => (
-                  <button
-                    key={event.id}
-                    type="button"
-                    className={`disco-chip-item ${selectedEventId === event.id ? 'active' : ''}`}
-                    onClick={() => {
-                      setSelectedEventId(event.id);
-                      playPopSound(true);
-                    }}
-                  >
-                    <span className="disco-chip-name">{event.name}</span>
-                    <span className="disco-chip-days">{event.daysUntil}d</span>
-                  </button>
-                ))}
+            <div className="disco-festival-chips-scroll">
+              {activeTab === 'festivals'
+                ? UPCOMING_WORLD_FESTIVALS.map((event) => (
+                    <button
+                      key={event.id}
+                      type="button"
+                      className={`disco-chip-item ${selectedFestivalId === event.id ? 'active' : ''}`}
+                      onClick={() => {
+                        setSelectedFestivalId(event.id);
+                        playPopSound(true);
+                      }}
+                    >
+                      <span className="disco-chip-name">{event.name}</span>
+                      <span className="disco-chip-days">{event.daysUntil}d</span>
+                    </button>
+                  ))
+                : filteredWeekends.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className={`disco-chip-item ${selectedWeekendId === item.id ? 'active' : ''}`}
+                      onClick={() => {
+                        setSelectedWeekendId(item.id);
+                        playPopSound(true);
+                      }}
+                    >
+                      <span>{item.flag}</span>
+                      <span className="disco-chip-name">{item.name}</span>
+                      <span className="disco-chip-days">{item.daysCount}d</span>
+                    </button>
+                  ))}
+            </div>
+
+            {/* Chronological List of All Events */}
+            <div className="worldwide-events-scroll-list">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  {activeTab === 'weekends' ? `Upcoming Extended Breaks (${filteredWeekends.length})` : 'World Festival Calendar'}
+                </span>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                  Click to inspect details
+                </span>
               </div>
-            ) : (
-              <div className="disco-festival-chips-scroll">
-                {regionalWeekends.map((item, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    className="disco-chip-item"
-                    onClick={() => {
-                      onSelectEventForPlanner(item.suggestedEvent, item.name);
-                    }}
-                  >
-                    <span className="disco-chip-name">{item.name}</span>
-                    <span className="disco-chip-days">{item.daysCount}d</span>
-                  </button>
-                ))}
-              </div>
-            )}
+
+              {activeTab === 'weekends' ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {filteredWeekends.map((item) => {
+                    const isSelected = selectedWeekendId === item.id;
+                    return (
+                      <div
+                        key={item.id}
+                        className={`weekend-list-row ${isSelected ? 'selected' : ''}`}
+                        onClick={() => {
+                          setSelectedWeekendId(item.id);
+                          playPopSound(true);
+                        }}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            setSelectedWeekendId(item.id);
+                          }
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span style={{ fontSize: '20px' }}>{item.flag}</span>
+                          <div>
+                            <div style={{ fontWeight: 800, fontSize: '13px', color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
+                              {item.name}
+                            </div>
+                            <div style={{ fontSize: '11.5px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                              {item.dates} • <span style={{ fontWeight: 700 }}>{item.daysCount} Days</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          style={{ padding: '4px 10px', fontSize: '11px', borderRadius: '6px' }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleLaunchPlan(item.categoryKey, item.name, {
+                              id: item.id,
+                              name: item.name,
+                              category: item.categoryKey,
+                              location: `${item.country} (${item.region})`,
+                              dates: item.dates,
+                              daysCount: item.daysCount,
+                              budgetUSD: item.estBudgetUSD,
+                              guestRange: item.guestRange,
+                              theme: item.theme,
+                              logisticsHighlight: item.logisticsHighlight,
+                              aiPrompt: item.aiPrompt,
+                            });
+                          }}
+                        >
+                          Plan
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {UPCOMING_WORLD_FESTIVALS.map((fest) => {
+                    const isSelected = selectedFestivalId === fest.id;
+                    return (
+                      <div
+                        key={fest.id}
+                        className={`weekend-list-row ${isSelected ? 'selected' : ''}`}
+                        onClick={() => {
+                          setSelectedFestivalId(fest.id);
+                          playPopSound(true);
+                        }}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        <div>
+                          <div style={{ fontWeight: 800, fontSize: '13px', color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
+                            {fest.name}
+                          </div>
+                          <div style={{ fontSize: '11.5px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                            {fest.location} • {fest.dates}
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          style={{ padding: '4px 10px', fontSize: '11px', borderRadius: '6px' }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleLaunchPlan(fest.categoryKey, fest.name, {
+                              id: fest.id,
+                              name: fest.name,
+                              category: fest.categoryKey,
+                              location: fest.location,
+                              dates: fest.dates,
+                              budgetUSD: fest.estBudgetUSD,
+                              guestRange: fest.guestRange,
+                              theme: fest.tagline,
+                              logisticsHighlight: fest.logisticsHighlight,
+                              aiPrompt: fest.aiPrompt,
+                            });
+                          }}
+                        >
+                          Plan
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Right: Selected Celebration Dossier Card or Regional Long Weekends */}
+          {/* Right Column: Selected Celebration Dossier Card */}
           <div className="disco-event-dossier">
-            {activeTab === 'festivals' ? (
+            {activeTab === 'weekends' ? (
               <>
                 <div className="dossier-header">
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                      <span className="dossier-countdown">{activeEvent.daysUntil} Days Away</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
+                      <span className="dossier-tag">
+                        {activeWeekend.flag} {activeWeekend.country}
+                      </span>
+                      <span className="dossier-countdown">
+                        {activeWeekend.daysCount} Days ({activeWeekend.season})
+                      </span>
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          background: '#EDE9FE',
+                          color: 'var(--bubblegum-purple-blue, #5b42f3)',
+                          padding: '2px 8px',
+                          borderRadius: '6px',
+                        }}
+                      >
+                        {activeWeekend.month}
+                      </span>
                     </div>
-                    <h3 className="dossier-title">{activeEvent.name}</h3>
-                    <div className="dossier-meta">
-                      <span>{activeEvent.location}</span>
-                      <span style={{ margin: '0 6px' }}>•</span>
-                      <span>{activeEvent.dates}</span>
-                    </div>
-                  </div>
 
-                  <div className="dossier-arrows">
-                    <button type="button" className="dossier-nav-btn" onClick={handlePrevEvent} aria-label="Previous event">
-                      ‹
-                    </button>
-                    <button type="button" className="dossier-nav-btn" onClick={handleNextEvent} aria-label="Next event">
-                      ›
-                    </button>
+                    <h3 className="dossier-title">{activeWeekend.name}</h3>
+
+                    <div className="dossier-meta">
+                      <Calendar size={13} style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }} />
+                      <span>{activeWeekend.dates}</span>
+                      <span style={{ margin: '0 6px' }}>•</span>
+                      <MapPin size={13} style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }} />
+                      <span>{activeWeekend.region}</span>
+                    </div>
                   </div>
                 </div>
 
-                <p className="dossier-tagline">"{activeEvent.tagline}"</p>
+                <p className="dossier-tagline">"{activeWeekend.tagline}"</p>
+
+                {/* Key Metrics */}
+                <div className="dossier-stats-grid">
+                  <div className="dossier-stat-box">
+                    <span className="stat-label">Estimated Budget</span>
+                    <span className="stat-value">
+                      {formatCurrency(activeWeekend.estBudgetUSD, currentCurrency)}
+                    </span>
+                  </div>
+                  <div className="dossier-stat-box">
+                    <span className="stat-label">Crowd Capacity</span>
+                    <span className="stat-value">{activeWeekend.guestRange}</span>
+                  </div>
+                </div>
+
+                {/* Logistics Checkpoint */}
+                <div className="dossier-logistics-box">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+                    <ShieldAlert size={14} style={{ color: '#059669' }} />
+                    <span style={{ fontSize: '12px', fontWeight: 800, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Critical Logistics Checkpoint
+                    </span>
+                  </div>
+                  <p style={{ fontSize: '13px', color: 'var(--text-secondary, #4338ca)', margin: 0, lineHeight: 1.45 }}>
+                    {activeWeekend.logisticsHighlight}
+                  </p>
+                </div>
+
+                {/* AI Copilot Prompt Preview Box */}
+                <div
+                  style={{
+                    marginTop: '16px',
+                    padding: '12px 14px',
+                    background: 'rgba(91, 66, 243, 0.06)',
+                    border: '1.5px dashed var(--bubblegum-purple-blue, #5b42f3)',
+                    borderRadius: '12px',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                    <Bot size={14} style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }} />
+                    <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
+                      AI Copilot Context Ready
+                    </span>
+                  </div>
+                  <p style={{ fontSize: '12.5px', color: 'var(--text-secondary)', margin: 0, fontStyle: 'italic', lineHeight: 1.4 }}>
+                    "{activeWeekend.aiPrompt}"
+                  </p>
+                </div>
+
+                {/* Action Buttons */}
+                <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    style={{ width: '100%', justifyContent: 'center', padding: '13px 20px', fontSize: '15px' }}
+                    onClick={() => {
+                      handleLaunchPlan(activeWeekend.categoryKey, activeWeekend.name, {
+                        id: activeWeekend.id,
+                        name: activeWeekend.name,
+                        category: activeWeekend.categoryKey,
+                        location: `${activeWeekend.country} (${activeWeekend.region})`,
+                        dates: activeWeekend.dates,
+                        daysCount: activeWeekend.daysCount,
+                        budgetUSD: activeWeekend.estBudgetUSD,
+                        guestRange: activeWeekend.guestRange,
+                        theme: activeWeekend.theme,
+                        logisticsHighlight: activeWeekend.logisticsHighlight,
+                        aiPrompt: activeWeekend.aiPrompt,
+                      });
+                    }}
+                  >
+                    <Sparkles size={16} />
+                    <span>⚡ Plan with AI Copilot</span>
+                    <ArrowRight size={16} />
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    style={{ width: '100%', justifyContent: 'center', padding: '10px 16px', fontSize: '13.5px' }}
+                    onClick={() => {
+                      openFestiAIChat(
+                        `I am planning the ${activeWeekend.name} (${activeWeekend.dates} in ${activeWeekend.country}). ${activeWeekend.aiPrompt}`
+                      );
+                    }}
+                  >
+                    <Bot size={15} />
+                    <span>💬 Chat with Festi AI About This Plan</span>
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="dossier-header">
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                      <span className="dossier-tag">Global Spectacle</span>
+                      <span className="dossier-countdown">{activeFestival.daysUntil} Days Away</span>
+                    </div>
+
+                    <h3 className="dossier-title">{activeFestival.name}</h3>
+
+                    <div className="dossier-meta">
+                      <MapPin size={13} style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }} />
+                      <span>{activeFestival.location}</span>
+                      <span style={{ margin: '0 6px' }}>•</span>
+                      <Calendar size={13} style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }} />
+                      <span>{activeFestival.dates}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="dossier-tagline">"{activeFestival.tagline}"</p>
 
                 <div className="dossier-stats-grid">
                   <div className="dossier-stat-box">
                     <span className="stat-label">Estimated Budget</span>
-                    <span className="stat-value">{formatCurrency(activeEvent.estBudgetUSD, currentCurrency)}</span>
+                    <span className="stat-value">
+                      {formatCurrency(activeFestival.estBudgetUSD, currentCurrency)}
+                    </span>
                   </div>
                   <div className="dossier-stat-box">
                     <span className="stat-label">Crowd Capacity</span>
-                    <span className="stat-value">{activeEvent.guestRange}</span>
+                    <span className="stat-value">{activeFestival.guestRange}</span>
                   </div>
                 </div>
 
                 <div className="dossier-logistics-box">
-                  <div style={{ marginBottom: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+                    <ShieldAlert size={14} style={{ color: '#059669' }} />
                     <span style={{ fontSize: '12px', fontWeight: 800, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       Critical Logistics Check
                     </span>
                   </div>
                   <p style={{ fontSize: '13px', color: 'var(--text-secondary, #4338ca)', margin: 0, lineHeight: 1.45 }}>
-                    {activeEvent.logisticsHighlight}
+                    {activeFestival.logisticsHighlight}
                   </p>
                 </div>
 
-                <div style={{ marginTop: '20px' }}>
+                <div
+                  style={{
+                    marginTop: '16px',
+                    padding: '12px 14px',
+                    background: 'rgba(91, 66, 243, 0.06)',
+                    border: '1.5px dashed var(--bubblegum-purple-blue, #5b42f3)',
+                    borderRadius: '12px',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                    <Bot size={14} style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }} />
+                    <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
+                      AI Copilot Context Ready
+                    </span>
+                  </div>
+                  <p style={{ fontSize: '12.5px', color: 'var(--text-secondary)', margin: 0, fontStyle: 'italic', lineHeight: 1.4 }}>
+                    "{activeFestival.aiPrompt}"
+                  </p>
+                </div>
+
+                <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   <button
                     type="button"
                     className="btn btn-primary"
-                    style={{ width: '100%', justifyContent: 'center', padding: '12px 20px', fontSize: '14.5px' }}
+                    style={{ width: '100%', justifyContent: 'center', padding: '13px 20px', fontSize: '15px' }}
                     onClick={() => {
-                      onSelectEventForPlanner(activeEvent.categoryKey, activeEvent.name);
+                      handleLaunchPlan(activeFestival.categoryKey, activeFestival.name, {
+                        id: activeFestival.id,
+                        name: activeFestival.name,
+                        category: activeFestival.categoryKey,
+                        location: activeFestival.location,
+                        dates: activeFestival.dates,
+                        budgetUSD: activeFestival.estBudgetUSD,
+                        guestRange: activeFestival.guestRange,
+                        theme: activeFestival.tagline,
+                        logisticsHighlight: activeFestival.logisticsHighlight,
+                        aiPrompt: activeFestival.aiPrompt,
+                      });
                     }}
                   >
-                    <span>Synthesize {activeEvent.name} Plan</span>
+                    <Sparkles size={16} />
+                    <span>⚡ Plan with AI Copilot</span>
+                    <ArrowRight size={16} />
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    style={{ width: '100%', justifyContent: 'center', padding: '10px 16px', fontSize: '13.5px' }}
+                    onClick={() => {
+                      openFestiAIChat(
+                        `I want to plan an event inspired by ${activeFestival.name} (${activeFestival.dates}). ${activeFestival.aiPrompt}`
+                      );
+                    }}
+                  >
+                    <Bot size={15} />
+                    <span>💬 Chat with Festi AI About This Festival</span>
                   </button>
                 </div>
               </>
-            ) : (
-              <div>
-                <div style={{ marginBottom: '16px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                    <span className="dossier-countdown">{regionalWeekends.length} Long Weekends</span>
-                  </div>
-                  <h3 className="dossier-title">Bank Holidays & 3-Day Escapes</h3>
-                  <p style={{ fontSize: '13.5px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                    Pre-calculated bank holidays in {detectedCountry} ideal for reunions, milestone birthdays, and weekend getaways.
-                  </p>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '340px', overflowY: 'auto', paddingRight: '4px' }}>
-                  {regionalWeekends.map((item, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        background: 'rgba(255, 255, 255, 0.75)',
-                        border: '1px solid rgba(255, 140, 60, 0.25)',
-                        borderRadius: '12px',
-                        padding: '12px 14px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        transition: 'transform 0.15s ease',
-                      }}
-                      onClick={() => onSelectEventForPlanner(item.suggestedEvent, item.name)}
-                    >
-                      <div>
-                        <div style={{ fontWeight: 800, fontSize: '14px', color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>{item.name}</div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                          {item.dates} • {item.daysCount} Days
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        className="btn btn-secondary"
-                        style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '8px' }}
-                      >
-                        Plan
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
             )}
           </div>
         </div>

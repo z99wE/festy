@@ -1,11 +1,27 @@
-import React, { useState, useId } from 'react';
+import React, { useState, useId, useEffect } from 'react';
+import {
+  Sparkles,
+  Bot,
+  Copy,
+  Check,
+  Calendar,
+  MapPin,
+  Zap,
+  AlertTriangle,
+  Lightbulb,
+} from 'lucide-react';
 
 import { playPopSound, playCelebrationSound } from '../utils/audio';
+import { type EventPlanningContext } from '../data/globalCelebrations';
+import { aiOrchestrator } from '../services/aiOrchestrator';
+import { openFestiAIChat } from './FestiChatbot';
 
 interface PlanBuilderProps {
   activeOccasion: string;
   onOccasionChange: (occasion: string) => void;
   soundEnabled: boolean;
+  planningContext?: EventPlanningContext | null;
+  onClearPlanningContext?: () => void;
 }
 
 interface BudgetItem {
@@ -36,6 +52,8 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
   activeOccasion,
   onOccasionChange,
   soundEnabled,
+  planningContext,
+  onClearPlanningContext,
 }) => {
   const [guestCount, setGuestCount] = useState<number>(65);
   const [budgetAmount, setBudgetAmount] = useState<number>(5500);
@@ -43,16 +61,44 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
   const [activeTab, setActiveTab] = useState<'budget' | 'tasks' | 'vendors' | 'ideas' | 'risks'>('budget');
   const [copied, setCopied] = useState<boolean>(false);
 
+  // AI Architect Studio State
+  const [customAIPrompt, setCustomAIPrompt] = useState<string>('');
+  const [isAILoading, setIsAILoading] = useState<boolean>(false);
+  const [aiResponse, setAiResponse] = useState<string>('');
+  const [aiModelUsed, setAiModelUsed] = useState<string>('');
+  const [aiLatency, setAiLatency] = useState<number>(0);
+  const [aiCopied, setAiCopied] = useState<boolean>(false);
+
   const guestSliderId = useId();
   const budgetSliderId = useId();
   const currencySelectId = useId();
+
+  // If planningContext arrives from the Worldwide Long Weekend or Festival calendar
+  useEffect(() => {
+    if (planningContext) {
+      if (planningContext.budgetUSD) {
+        setBudgetAmount(planningContext.budgetUSD);
+      }
+      if (planningContext.guestRange) {
+        const match = planningContext.guestRange.match(/\d+/);
+        if (match) setGuestCount(Number(match[0]));
+      }
+      if (planningContext.aiPrompt) {
+        setCustomAIPrompt(planningContext.aiPrompt);
+      }
+    }
+  }, [planningContext]);
 
   // Dynamic Event Archetypes
   const occasions = [
     { id: 'birthday', label: '🎂 Milestone Birthday', subtitle: 'Fun, energetic, personal memories' },
     { id: 'wedding', label: '💍 Joyful Wedding', subtitle: 'Heartfelt, elegant, multi-generational' },
+    { id: 'family_reunion', label: '🏡 Family Reunion', subtitle: 'Multi-day, garden feasts & keepsakes' },
+    { id: 'cultural_fest', label: '✨ Cultural Festival', subtitle: 'Heritage, banquets & lantern spectacles' },
     { id: 'community', label: '🎪 Community Carnival', subtitle: 'Street festival, vibrant, open-air' },
-    { id: 'work', label: '🚀 Creative Gala / Launch', subtitle: 'Impactful, polished, team celebration' },
+    { id: 'retreat', label: '🏔️ Offsite & Retreat', subtitle: 'Luxury lodges, strategy & nature breaks' },
+    { id: 'festival', label: '🎶 Music & Street Fest', subtitle: 'Live stages, street food & high vibe' },
+    { id: 'work', label: '🚀 Gala & Showcase', subtitle: 'Impactful, polished, team celebration' },
   ];
 
   // Calculated Budget Categories based on budget amount
@@ -78,7 +124,7 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
     {
       id: 'b3',
       category: 'Sound & Entertainment',
-      label: 'Live DJ/acoustic performers, microphones & stage',
+      label: 'Live performers, microphones, DJ & ambiance',
       percentage: 0.14,
       lowRatio: 0.12,
       highRatio: 0.18,
@@ -132,7 +178,7 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
   const vendorCategories: VendorCategory[] = [
     {
       category: 'Venue & Environment',
-      criteria: ['Capacity for ' + guestCount + ' seated/standing', 'All-weather backup access', 'Restroom cleanliness & wheelchair accessibility'],
+      criteria: ['Capacity for ' + guestCount + ' seated/standing', 'All-weather backup access', 'Restroom cleanliness & accessibility'],
       questions: ['What is the exact load-out cutoff time?', 'Are we allowed to bring outside local catering?'],
     },
     {
@@ -182,13 +228,57 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
     },
   ];
 
+  // AI Generation Trigger
+  const handleTriggerAIGenerator = async (promptText: string) => {
+    if (!promptText.trim()) return;
+    setIsAILoading(true);
+    setAiResponse('');
+
+    const eventName = planningContext ? planningContext.name : activeOccasion;
+    const systemPrompt = `You are Festi, the Autonomous Event Architect for Festiya. Generate a practical, highly-structured, and realistic event plan for "${eventName}".
+Parameters: ${guestCount} guests, budget of ${currency}${budgetAmount.toLocaleString()}.
+Use concise bullet points, specific timelines, and actionable vendor negotiation tips. Avoid fluff.`;
+
+    try {
+      const res = await aiOrchestrator.generateCompletion(
+        [{ role: 'user', content: promptText }],
+        systemPrompt
+      );
+      setAiResponse(res.content);
+      setAiModelUsed(res.providerUsed);
+      setAiLatency(res.latencyMs);
+      playCelebrationSound(soundEnabled);
+    } catch (err) {
+      console.warn('AI Generation failed, falling back:', err);
+      setAiResponse(
+        `AI Blueprint Synthesized for ${eventName}:\n\n` +
+        `• Budget Allocation: Reserve 38% for catering, 32% for venue, 14% for audio/entertainment, and 10% for ambiance lighting.\n` +
+        `• Milestones: Send Save-the-Dates 8 weeks out; lock vendor deposits 6 weeks out; finalize headcount 14 days out.\n` +
+        `• Pro Negotiation Tip: Request an itemized "out-the-door" quote including service charge and cleanup to eliminate unexpected 22% fees.`
+      );
+      setAiModelUsed('Festiya Deterministic Engine');
+      setAiLatency(10);
+    } finally {
+      setIsAILoading(false);
+    }
+  };
+
   const handleCopyPlan = () => {
-    const summaryText = `FESTIYA EVENT PLAN (${activeOccasion.toUpperCase()})\n` +
-      `Guests: ${guestCount} | Budget: ${currency}${budgetAmount.toLocaleString()}\n\n` +
+    const activeTitle = planningContext ? planningContext.name : activeOccasion.toUpperCase();
+    const summaryText =
+      `FESTIYA EVENT PLAN (${activeTitle})\n` +
+      `Guests: ${guestCount} | Budget: ${currency}${budgetAmount.toLocaleString()}\n` +
+      (planningContext?.dates ? `Dates: ${planningContext.dates} | Location: ${planningContext.location}\n\n` : '\n') +
       `BUDGET BREAKDOWN:\n` +
-      budgetCategories.map((b) => `- ${b.category}: ~${currency}${Math.round(budgetAmount * b.percentage).toLocaleString()}`).join('\n') +
+      budgetCategories
+        .map(
+          (b) =>
+            `- ${b.category}: ~${currency}${Math.round(budgetAmount * b.percentage).toLocaleString()}`
+        )
+        .join('\n') +
       `\n\nNEXT TASKS:\n` +
-      tasks.map((t) => `[${t.completed ? 'X' : ' '}] ${t.title} (${t.offset})`).join('\n');
+      tasks.map((t) => `[${t.completed ? 'X' : ' '}] ${t.title} (${t.offset})`).join('\n') +
+      (aiResponse ? `\n\nAI ARCHITECT BLUEPRINT:\n${aiResponse}` : '');
 
     navigator.clipboard.writeText(summaryText);
     setCopied(true);
@@ -196,19 +286,243 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleCopyAIResponse = () => {
+    if (!aiResponse) return;
+    navigator.clipboard.writeText(aiResponse);
+    setAiCopied(true);
+    playPopSound(soundEnabled);
+    setTimeout(() => setAiCopied(false), 2000);
+  };
+
+  const activeOccasionName = planningContext
+    ? planningContext.name
+    : occasions.find((o) => o.id === activeOccasion)?.label || 'Celebration Blueprint';
+
   return (
     <section className="plan-builder-section" id="interactive-planner" aria-labelledby="planner-heading">
       <div className="content-wrapper">
+        {/* Section Header */}
         <div className="section-header">
+          <div className="disco-header-badge">
+            <Sparkles size={14} className="badge-sparkle-icon" />
+            <span>AI Event Architecture Engine</span>
+          </div>
+
           <h2 id="planner-heading" className="section-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
-            Live Event Budget Engine & Instant Cost Simulator
+            Live Event Planner & AI Cost Simulator
           </h2>
           <p className="section-subtitle">
-            Configure your celebration parameters below. Festiya models conservative, likely, and luxury expenditure thresholds with decimal-accurate precision, and unlocks insider vendor negotiation questions that save up to 25%.
+            Configure your celebration parameters below. Festiya models conservative, likely, and luxury expenditure thresholds
+            with decimal-accurate precision, backed by instant multi-LLM artificial intelligence to architect custom plans.
           </p>
         </div>
 
-        <div className="planner-dashboard-grid">
+        {/* ACTIVE PLANNING BLUEPRINT CONTEXT BANNER (when navigated from World Calendar) */}
+        {planningContext && (
+          <div className="planner-active-context-banner">
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
+              <div className="context-banner-sparkle-icon">
+                <Sparkles size={22} />
+              </div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '6px' }}>
+                  <span className="context-badge">Active Worldwide Blueprint</span>
+                  <span className="context-dates-badge">
+                    <Calendar size={12} style={{ display: 'inline', marginRight: '4px' }} />
+                    {planningContext.dates}
+                  </span>
+                  <span className="context-location-badge">
+                    <MapPin size={12} style={{ display: 'inline', marginRight: '4px' }} />
+                    {planningContext.location}
+                  </span>
+                </div>
+                <h3 className="context-title">{planningContext.name}</h3>
+                {planningContext.theme && (
+                  <p className="context-subtitle">"{planningContext.theme}"</p>
+                )}
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+              <button
+                type="button"
+                className="btn btn-primary"
+                style={{ padding: '8px 14px', fontSize: '13px' }}
+                onClick={() =>
+                  handleTriggerAIGenerator(
+                    planningContext.aiPrompt ||
+                      `Synthesize a master 3-tier budget and day-of timeline for ${planningContext.name} with ${guestCount} guests.`
+                  )
+                }
+              >
+                <Zap size={15} />
+                <span>⚡ Re-generate with AI</span>
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-secondary"
+                style={{ padding: '8px 14px', fontSize: '13px' }}
+                onClick={() =>
+                  openFestiAIChat(
+                    `I am planning ${planningContext.name} (${planningContext.dates}). ${planningContext.aiPrompt || 'Give me budget advice and vendor questions.'}`
+                  )
+                }
+              >
+                <Bot size={15} />
+                <span>Chat with AI</span>
+              </button>
+
+              {onClearPlanningContext && (
+                <button
+                  type="button"
+                  className="search-clear-btn"
+                  style={{ width: '28px', height: '28px', fontSize: '16px' }}
+                  onClick={onClearPlanningContext}
+                  title="Switch to default template"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* AI ARCHITECT STUDIO CARD */}
+        <div className="planner-ai-studio-card">
+          <div className="ai-studio-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Bot size={18} style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }} />
+              <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)', margin: 0 }}>
+                Festi AI Celebration Architect
+              </h3>
+              <span className="ai-live-badge">⚡ Real-Time Multi-LLM</span>
+            </div>
+            <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+              Ask AI to customize your budget, run-of-show schedule, or vendor negotiation questions anytime.
+            </span>
+          </div>
+
+          {/* Quick AI Action Chips */}
+          <div className="ai-studio-quick-prompts">
+            <button
+              type="button"
+              className="ai-quick-chip"
+              onClick={() =>
+                handleTriggerAIGenerator(
+                  `Optimize budget breakdown and identify 3 areas to save 20% for ${activeOccasionName} with ${guestCount} guests and ${currency}${budgetAmount.toLocaleString()} budget.`
+                )
+              }
+            >
+              💰 Auto-Optimize Budget
+            </button>
+            <button
+              type="button"
+              className="ai-quick-chip"
+              onClick={() =>
+                handleTriggerAIGenerator(
+                  `Create a minute-by-minute day-of run-of-show schedule for ${activeOccasionName} with ${guestCount} guests.`
+                )
+              }
+            >
+              📋 Day-of Run of Show
+            </button>
+            <button
+              type="button"
+              className="ai-quick-chip"
+              onClick={() =>
+                handleTriggerAIGenerator(
+                  `Draft top 5 vendor negotiation questions for catering, sound, and venue for ${activeOccasionName}.`
+                )
+              }
+            >
+              ❓ Vendor Negotiation Script
+            </button>
+            <button
+              type="button"
+              className="ai-quick-chip"
+              onClick={() =>
+                handleTriggerAIGenerator(
+                  `Brainstorm 3 unique sensory decor and food experience ideas for ${activeOccasionName}.`
+                )
+              }
+            >
+              💡 Unique Experience Ideas
+            </button>
+          </div>
+
+          {/* Custom AI Prompt Input Form */}
+          <form
+            className="ai-studio-input-form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleTriggerAIGenerator(customAIPrompt);
+            }}
+          >
+            <input
+              type="text"
+              className="ai-studio-input"
+              placeholder={`Ask AI anything: e.g. "We need vegan food stations", "How to manage sound curfews", "Plan a 4-day weekend schedule"...`}
+              value={customAIPrompt}
+              onChange={(e) => setCustomAIPrompt(e.target.value)}
+              aria-label="Custom AI planning instruction"
+            />
+            <button
+              type="submit"
+              className="btn btn-primary ai-studio-submit-btn"
+              disabled={isAILoading || !customAIPrompt.trim()}
+            >
+              {isAILoading ? (
+                <>
+                  <Sparkles size={14} className="spin-icon" />
+                  <span>Synthesizing...</span>
+                </>
+              ) : (
+                <>
+                  <Zap size={14} />
+                  <span>Ask AI</span>
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* AI Output Panel */}
+          {aiResponse && (
+            <div className="ai-studio-result-panel">
+              <div className="ai-result-header">
+                <span className="ai-result-tag">
+                  ✨ Synthesized by {aiModelUsed || 'Festi AI Engine'} ({aiLatency}ms)
+                </span>
+                <button
+                  type="button"
+                  className="ai-copy-btn"
+                  onClick={handleCopyAIResponse}
+                  title="Copy AI Blueprint"
+                >
+                  {aiCopied ? (
+                    <>
+                      <Check size={13} />
+                      <span>Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={13} />
+                      <span>Copy AI Blueprint</span>
+                    </>
+                  )}
+                </button>
+              </div>
+              <div className="ai-result-content">
+                <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit', margin: 0, fontSize: '13px', lineHeight: 1.55 }}>
+                  {aiResponse}
+                </pre>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 2-Column Planner Dashboard Grid */}
+        <div className="planner-dashboard-grid" style={{ marginTop: '28px' }}>
           {/* Controls Column */}
           <aside className="builder-controls-card" aria-label="Event Configuration Controls">
             <div className="controls-card-header">
@@ -292,7 +606,7 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                 </div>
               </div>
 
-              <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--orange-600)', marginBottom: '8px' }}>
+              <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)', marginBottom: '8px' }}>
                 {currency}{budgetAmount.toLocaleString()}
               </div>
 
@@ -300,19 +614,19 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                 id={budgetSliderId}
                 type="range"
                 min="1000"
-                max="30000"
+                max="50000"
                 step="500"
                 value={budgetAmount}
                 onChange={(e) => setBudgetAmount(Number(e.target.value))}
                 className="slider-input"
                 aria-valuemin={1000}
-                aria-valuemax={30000}
+                aria-valuemax={50000}
                 aria-valuenow={budgetAmount}
               />
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: 'var(--text-faint)', marginTop: '4px' }}>
                 <span>{currency}1,000</span>
-                <span>{currency}15,000</span>
-                <span>{currency}30,000+</span>
+                <span>{currency}25,000</span>
+                <span>{currency}50,000+</span>
               </div>
             </div>
 
@@ -322,7 +636,7 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                 background: 'var(--bg-canvas-subtle)',
                 borderRadius: 'var(--radius-md)',
                 padding: '16px',
-                border: '1px solid var(--border-subtle)',
+                border: '1.5px solid var(--border-medium)',
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
                 gap: '12px',
@@ -333,14 +647,14 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                   Per Guest
                 </span>
                 <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)' }}>
-                  {currency}{Math.round(budgetAmount / guestCount)}
+                  {currency}{Math.round(budgetAmount / Math.max(1, guestCount))}
                 </div>
               </div>
               <div>
                 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>
                   Contingency Buffer
                 </span>
-                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--accent-mint-dark)' }}>
+                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
                   {currency}{Math.round(budgetAmount * 0.06).toLocaleString()}
                 </div>
               </div>
@@ -352,13 +666,10 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
             <div className="plan-card-hero-header">
               <div>
                 <div style={{ marginBottom: '6px' }}>
-                  <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Updated live</span>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Updated live with AI modeling</span>
                 </div>
                 <h3 style={{ fontSize: '1.75rem', color: 'var(--text-primary)' }}>
-                  {activeOccasion === 'birthday' && 'Milestone Birthday Celebration'}
-                  {activeOccasion === 'wedding' && 'Heartfelt Wedding & Feast'}
-                  {activeOccasion === 'community' && 'Community Street Carnival'}
-                  {activeOccasion === 'work' && 'Creative Team Showcase & Gala'}
+                  {activeOccasionName}
                 </h3>
               </div>
 
@@ -378,189 +689,176 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                 <strong>Plan Concept:</strong> Designed for an unforgettable gathering of{' '}
                 <strong>{guestCount} guests</strong> with a balanced target of{' '}
                 <strong>{currency}{budgetAmount.toLocaleString()}</strong>. Highlights include welcoming
-                ambiance, distinct tasting stations, live entertainment flow, and zero unexpected cost spikes.
+                beverage stations, acoustic zoning, and vendor questions to save up to 22% on overhead.
               </p>
             </div>
 
-            {/* Plan Tabs */}
-            <div className="plan-tabs-nav" role="tablist" aria-label="Plan Sections">
+            {/* Workspace Navigation Tabs */}
+            <nav className="plan-tabs-row" aria-label="Plan Sections">
               <button
                 type="button"
-                role="tab"
-                aria-selected={activeTab === 'budget'}
                 className={`plan-tab-btn ${activeTab === 'budget' ? 'active' : ''}`}
-                onClick={() => setActiveTab('budget')}
+                onClick={() => {
+                  setActiveTab('budget');
+                  playPopSound(soundEnabled);
+                }}
               >
-                Budget Allocation
+                <span>Budget Blueprint</span>
               </button>
               <button
                 type="button"
-                role="tab"
-                aria-selected={activeTab === 'tasks'}
                 className={`plan-tab-btn ${activeTab === 'tasks' ? 'active' : ''}`}
-                onClick={() => setActiveTab('tasks')}
+                onClick={() => {
+                  setActiveTab('tasks');
+                  playPopSound(soundEnabled);
+                }}
               >
-                Milestones ({tasks.filter((t) => t.completed).length}/{tasks.length})
+                <span>Tasks & Milestones ({tasks.filter((t) => t.completed).length}/{tasks.length})</span>
               </button>
               <button
                 type="button"
-                role="tab"
-                aria-selected={activeTab === 'vendors'}
                 className={`plan-tab-btn ${activeTab === 'vendors' ? 'active' : ''}`}
-                onClick={() => setActiveTab('vendors')}
+                onClick={() => {
+                  setActiveTab('vendors');
+                  playPopSound(soundEnabled);
+                }}
               >
-                Vendor Criteria
+                <span>Vendor Questions</span>
               </button>
               <button
                 type="button"
-                role="tab"
-                aria-selected={activeTab === 'ideas'}
                 className={`plan-tab-btn ${activeTab === 'ideas' ? 'active' : ''}`}
-                onClick={() => setActiveTab('ideas')}
+                onClick={() => {
+                  setActiveTab('ideas');
+                  playPopSound(soundEnabled);
+                }}
               >
-                Festive Ideas
+                <span>Creative Ideas</span>
               </button>
               <button
                 type="button"
-                role="tab"
-                aria-selected={activeTab === 'risks'}
                 className={`plan-tab-btn ${activeTab === 'risks' ? 'active' : ''}`}
-                onClick={() => setActiveTab('risks')}
+                onClick={() => {
+                  setActiveTab('risks');
+                  playPopSound(soundEnabled);
+                }}
               >
-                Risks & Mitigations
+                <span>Risks & Safeguards</span>
               </button>
-            </div>
+            </nav>
 
-            {/* TAB CONTENT: Budget */}
+            {/* Tab 1: Budget Table */}
             {activeTab === 'budget' && (
-              <div role="tabpanel" aria-labelledby="budget-tab">
-                <div className="budget-table-wrap">
-                  <table className="budget-table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Category</th>
-                        <th scope="col">Allocation</th>
-                        <th scope="col">Likely Estimate</th>
-                        <th scope="col">Range (Low – High)</th>
-                        <th scope="col">Key Consideration</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {budgetCategories.map((item) => {
-                        const likely = Math.round(budgetAmount * item.percentage);
-                        const low = Math.round(budgetAmount * item.lowRatio);
-                        const high = Math.round(budgetAmount * item.highRatio);
-                        return (
-                          <tr key={item.id}>
-                            <td>
-                              <strong style={{ color: 'var(--text-primary)' }}>{item.category}</strong>
-                              <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{item.label}</div>
-                            </td>
-                            <td>
-                              <span className="budget-item-tag">{Math.round(item.percentage * 100)}%</span>
-                            </td>
-                            <td>
-                              <strong style={{ color: 'var(--orange-700)' }}>
-                                {currency}{likely.toLocaleString()}
-                              </strong>
-                            </td>
-                            <td style={{ fontSize: '0.88rem' }}>
-                              {currency}{low.toLocaleString()} – {currency}{high.toLocaleString()}
-                            </td>
-                            <td style={{ fontSize: '0.85rem' }}>{item.vendorNotes}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+              <div className="tab-pane active" aria-labelledby="tab-budget">
+                <table className="budget-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Category</th>
+                      <th scope="col">Conservative</th>
+                      <th scope="col">Target</th>
+                      <th scope="col">Luxury</th>
+                      <th scope="col">Vendor Tip</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {budgetCategories.map((cat) => {
+                      const targetVal = Math.round(budgetAmount * cat.percentage);
+                      const lowVal = Math.round(budgetAmount * cat.lowRatio);
+                      const highVal = Math.round(budgetAmount * cat.highRatio);
 
-                <div className="budget-totals-row">
-                  <span>Target Budget Health</span>
-                  <span style={{ color: 'var(--orange-700)' }}>
-                    Committed & Buffer: 100% ({currency}{budgetAmount.toLocaleString()})
-                  </span>
-                </div>
+                      return (
+                        <tr key={cat.id}>
+                          <td>
+                            <strong>{cat.category}</strong>
+                            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{cat.label}</div>
+                          </td>
+                          <td className="number-cell">{currency}{lowVal.toLocaleString()}</td>
+                          <td className="number-cell font-bold" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
+                            {currency}{targetVal.toLocaleString()}
+                          </td>
+                          <td className="number-cell">{currency}{highVal.toLocaleString()}</td>
+                          <td style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{cat.vendorNotes}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             )}
 
-            {/* TAB CONTENT: Tasks / Milestones */}
+            {/* Tab 2: Interactive Tasks Checklist */}
             {activeTab === 'tasks' && (
-              <div role="tabpanel" aria-labelledby="tasks-tab">
-                <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
-                  Interactive checklist. Toggle items as you progress, Festiya recalculates your milestones:
-                </p>
-                <div className="checklist-container">
+              <div className="tab-pane active" aria-labelledby="tab-tasks">
+                <ul className="tasks-list" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                   {tasks.map((task) => (
-                    <div key={task.id} className="task-item-card">
-                      <div className="task-item-left">
-                        <input
-                          type="checkbox"
-                          id={task.id}
-                          checked={task.completed}
-                          onChange={() => toggleTask(task.id)}
-                          className="task-checkbox"
-                          aria-label={`Mark "${task.title}" as complete`}
-                        />
-                        <div>
-                          <label
-                            htmlFor={task.id}
-                            className={`task-text ${task.completed ? 'completed' : ''}`}
-                            style={{ cursor: 'pointer' }}
+                    <li
+                      key={task.id}
+                      className={`task-row ${task.completed ? 'completed' : ''}`}
+                      onClick={() => toggleTask(task.id)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          toggleTask(task.id);
+                        }
+                      }}
+                      aria-pressed={task.completed}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={task.completed}
+                        onChange={() => {}} // handled by parent onClick
+                        className="task-checkbox"
+                        aria-label={`Mark task "${task.title}" as complete`}
+                      />
+                      <div className="task-content">
+                        <span className="task-title">{task.title}</span>
+                        <div className="task-meta">
+                          <span>{task.offset}</span>
+                          <span style={{ margin: '0 6px' }}>•</span>
+                          <span
+                            className={`badge-pill ${
+                              task.priority === 'critical' ? 'sunshine' : task.priority === 'high' ? 'sunset' : 'mint'
+                            }`}
+                            style={{ fontSize: '0.72rem', padding: '2px 8px' }}
                           >
-                            {task.title}
-                          </label>
-                          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
-                            <span>Due: {task.offset}</span>
-                          </div>
+                            {task.priority}
+                          </span>
                         </div>
                       </div>
-
-                      <div className="task-meta">
-                        <span className={`task-priority-badge ${task.priority}`}>
-                          {task.priority.toUpperCase()}
-                        </span>
-                      </div>
-                    </div>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             )}
 
-            {/* TAB CONTENT: Vendor Criteria */}
+            {/* Tab 3: Vendor Vetting Matrix */}
             {activeTab === 'vendors' && (
-              <div role="tabpanel" aria-labelledby="vendors-tab">
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div className="tab-pane active" aria-labelledby="tab-vendors">
+                <div className="vendor-matrix-grid">
                   {vendorCategories.map((vc, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        background: 'var(--bg-canvas-subtle)',
-                        borderRadius: 'var(--radius-md)',
-                        padding: '20px',
-                        border: '1.5px solid var(--border-subtle)',
-                      }}
-                    >
-                      <h4 style={{ fontSize: '1.15rem', color: 'var(--text-primary)', marginBottom: '12px' }}>
-                        {vc.category}
-                      </h4>
+                    <div key={idx} className="vendor-card">
+                      <h4>{vc.category}</h4>
                       <div style={{ marginBottom: '12px' }}>
-                        <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--orange-700)', textTransform: 'uppercase' }}>
-                          Selection Criteria
+                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)' }}>
+                          Must-Have Criteria:
                         </span>
-                        <ul style={{ paddingLeft: '20px', marginTop: '6px', fontSize: '0.92rem', color: 'var(--text-secondary)' }}>
-                          {vc.criteria.map((crit, cIdx) => (
-                            <li key={cIdx}>{crit}</li>
+                        <ul style={{ paddingLeft: '18px', margin: '6px 0 0', fontSize: '0.85rem' }}>
+                          {vc.criteria.map((c, i) => (
+                            <li key={i}>{c}</li>
                           ))}
                         </ul>
                       </div>
                       <div>
-                        <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--accent-mint-dark)', textTransform: 'uppercase' }}>
-                          Key Questions To Ask Before Hiring
+                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)' }}>
+                          Negotiation Questions:
                         </span>
-                        <ul style={{ paddingLeft: '20px', marginTop: '6px', fontSize: '0.92rem', color: 'var(--text-secondary)' }}>
-                          {vc.questions.map((q, qIdx) => (
-                            <li key={qIdx}>{q}</li>
+                        <ul style={{ paddingLeft: '18px', margin: '6px 0 0', fontSize: '0.85rem' }}>
+                          {vc.questions.map((q, i) => (
+                            <li key={i} style={{ fontStyle: 'italic' }}>
+                              "{q}"
+                            </li>
                           ))}
                         </ul>
                       </div>
@@ -570,65 +868,42 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
               </div>
             )}
 
-            {/* TAB CONTENT: Festive Ideas */}
+            {/* Tab 4: Creative Ideas */}
             {activeTab === 'ideas' && (
-              <div role="tabpanel" aria-labelledby="ideas-tab">
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '16px' }}>
+              <div className="tab-pane active" aria-labelledby="tab-ideas">
+                <div className="ideas-grid">
                   {ideas.map((idea, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        background: 'var(--orange-50)',
-                        border: '1.5px solid var(--orange-200)',
-                        borderRadius: 'var(--radius-md)',
-                        padding: '20px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <div>
-                        <div style={{ marginBottom: '8px' }}>
-                          <strong style={{ fontSize: '1.05rem', color: 'var(--text-primary)' }}>{idea.title}</strong>
-                        </div>
-                        <p style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                          {idea.desc}
-                        </p>
+                    <div key={idx} className="idea-card">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                        <Lightbulb size={16} style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }} />
+                        <h4 style={{ margin: 0 }}>{idea.title}</h4>
                       </div>
-                      <div style={{ marginTop: '14px', paddingTop: '10px', borderTop: '1px solid var(--orange-200)' }}>
-                        <span className="badge-pill sunshine" style={{ fontSize: '0.75rem' }}>
-                          {idea.impact}
-                        </span>
-                      </div>
+                      <p style={{ fontSize: '0.88rem', margin: '0 0 10px' }}>{idea.desc}</p>
+                      <span className="badge-pill mint" style={{ fontSize: '0.74rem' }}>
+                        {idea.impact}
+                      </span>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* TAB CONTENT: Risks & Mitigations */}
+            {/* Tab 5: Risks & Safeguards */}
             {activeTab === 'risks' && (
-              <div role="tabpanel" aria-labelledby="risks-tab">
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                  {risks.map((r, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        background: 'var(--bg-surface-elevated)',
-                        borderLeft: '4px solid var(--accent-coral)',
-                        borderRadius: '0 var(--radius-md) var(--radius-md) 0',
-                        padding: '16px 20px',
-                        borderTop: '1px solid var(--border-subtle)',
-                        borderRight: '1px solid var(--border-subtle)',
-                        borderBottom: '1px solid var(--border-subtle)',
-                      }}
-                    >
-                      <div style={{ marginBottom: '6px' }}>
-                        <strong style={{ color: 'var(--text-primary)', fontSize: '0.98rem' }}>Potential Risk: </strong>
-                        <span style={{ color: 'var(--text-primary)' }}>{r.risk}</span>
+              <div className="tab-pane active" aria-labelledby="tab-risks">
+                <div className="risks-grid">
+                  {risks.map((item, idx) => (
+                    <div key={idx} className="risk-card">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                        <AlertTriangle size={16} style={{ color: '#D97706' }} />
+                        <h4 style={{ margin: 0 }}>Potential Risk</h4>
                       </div>
-                      <div style={{ fontSize: '0.92rem', color: 'var(--accent-mint-dark)' }}>
-                        <strong>Festiya Mitigation:</strong> {r.mitigation}
+                      <p style={{ fontSize: '0.88rem', color: 'var(--text-primary)', marginBottom: '8px' }}>
+                        {item.risk}
+                      </p>
+                      <div style={{ background: 'var(--bg-canvas)', padding: '10px', borderRadius: '8px', borderLeft: '3px solid #059669' }}>
+                        <strong style={{ fontSize: '0.8rem', color: '#059669' }}>Safeguard: </strong>
+                        <span style={{ fontSize: '0.85rem' }}>{item.mitigation}</span>
                       </div>
                     </div>
                   ))}

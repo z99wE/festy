@@ -63,6 +63,20 @@ export const FestiChatbot: React.FC = () => {
     }
   }, [messages, isTyping, isOpen]);
 
+  // Global event listener to allow any part of the app to trigger Festi AI Copilot
+  useEffect(() => {
+    const handleOpenChat = (e: Event) => {
+      const customEvent = e as CustomEvent<{ prompt?: string }>;
+      setIsOpen(true);
+      if (customEvent.detail?.prompt) {
+        handleSendMessage(customEvent.detail.prompt);
+      }
+    };
+
+    window.addEventListener('open-festi-chat', handleOpenChat);
+    return () => window.removeEventListener('open-festi-chat', handleOpenChat);
+  }, []);
+
   const generateFestiResponse = (query: string): string => {
     const q = query.toLowerCase();
 
@@ -378,3 +392,9 @@ Tell me a bit more about the date, guest count, or location, and I will draft a 
     </>
   );
 };
+
+export function openFestiAIChat(prompt?: string) {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('open-festi-chat', { detail: { prompt } }));
+  }
+}

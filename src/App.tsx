@@ -15,6 +15,7 @@ import { DiscoBallCelebrationHub } from './components/DiscoBallCelebrationHub';
 import { PeekingMascot } from './components/PeekingMascot';
 import { detectUserRegion } from './utils/currency';
 import { playCelebrationSound } from './utils/audio';
+import { type EventPlanningContext } from './data/globalCelebrations';
 
 const OCCASION_SWAP_ITEMS = [
   { id: 'wedding', name: 'Luxury Weddings' },
@@ -29,6 +30,7 @@ const OCCASION_SWAP_ITEMS = [
 
 export function App() {
   const [activeOccasion, setActiveOccasion] = useState('birthday');
+  const [selectedPlanningContext, setSelectedPlanningContext] = useState<EventPlanningContext | null>(null);
   const [activeTab, setActiveTab] = useState<ActiveAppTab>('home');
   const [soundEnabled] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -188,8 +190,19 @@ export function App() {
                   <DiscoBallCelebrationHub
                     reducedMotion={reducedMotion}
                     currentCurrency={currentCurrency}
-                    onSelectEventForPlanner={(occasionId, _eventName) => {
+                    onSelectEventForPlanner={(occasionId, eventName, context) => {
                       setActiveOccasion(occasionId);
+                      if (context) {
+                        setSelectedPlanningContext(context);
+                      } else {
+                        setSelectedPlanningContext({
+                          id: occasionId,
+                          name: eventName,
+                          category: occasionId,
+                          location: 'Worldwide',
+                          dates: 'Upcoming 6 Months',
+                        });
+                      }
                       setActiveTab('planner');
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
@@ -381,8 +394,13 @@ export function App() {
 
             <PlanBuilder
               activeOccasion={activeOccasion}
-              onOccasionChange={(occ) => setActiveOccasion(occ)}
+              onOccasionChange={(occ) => {
+                setActiveOccasion(occ);
+                setSelectedPlanningContext(null);
+              }}
               soundEnabled={soundEnabled}
+              planningContext={selectedPlanningContext}
+              onClearPlanningContext={() => setSelectedPlanningContext(null)}
             />
           </div>
         )}
