@@ -96,9 +96,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({ onSelectCate
                 <div className="category-card-icon" style={{ background: 'var(--orange-100)', color: cat.color }}>
                   {cat.icon}
                 </div>
-                <span className="badge-pill" style={{ fontSize: '0.72rem' }}>
-                  {cat.badge}
-                </span>
               </div>
 
               <h4>{cat.title}</h4>

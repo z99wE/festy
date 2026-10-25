@@ -228,7 +228,6 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
                 <Sliders size={20} color="var(--orange-500)" />
                 <h3 style={{ fontSize: '1.25rem' }}>Your Event Brief</h3>
               </div>
-              <span className="badge-pill sunshine">Live AI Preview</span>
             </div>
 
             {/* Occasion Selection */}
@@ -367,8 +366,7 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
           <main className="live-plan-card" aria-label="Structured Event Plan Output">
             <div className="plan-card-hero-header">
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  <span className="badge-pill sunshine">Validated Schema v1.0</span>
+                <div style={{ marginBottom: '6px' }}>
                   <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Updated live</span>
                 </div>
                 <h3 style={{ fontSize: '1.75rem', color: 'var(--text-primary)' }}>

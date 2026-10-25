@@ -12,6 +12,7 @@ import { PlanBuilder } from './components/PlanBuilder';
 import { CategoryShowcase } from './components/CategoryShowcase';
 import { SocialProof } from './components/SocialProof';
 import { FAQSection } from './components/FAQSection';
+import { FestiChatbot } from './components/FestiChatbot';
 import { playCelebrationSound } from './utils/audio';
 
 const OCCASION_SWAP_ITEMS = [
@@ -26,22 +27,8 @@ const OCCASION_SWAP_ITEMS = [
 export function App() {
   const [activeOccasion, setActiveOccasion] = useState('birthday');
   const [isLoading, setIsLoading] = useState(true);
-  const [occasionIndex, setOccasionIndex] = useState(0);
-  const [swapAnim, setSwapAnim] = useState(true);
   const [soundEnabled] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
-
-  // Automatic Swapping Copy Timer
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setSwapAnim(false);
-      setTimeout(() => {
-        setOccasionIndex((prev) => (prev + 1) % OCCASION_SWAP_ITEMS.length);
-        setSwapAnim(true);
-      }, 250);
-    }, 2800);
-    return () => clearInterval(timer);
-  }, []);
 
   // Initialize prefers-reduced-motion from OS settings
   useEffect(() => {
@@ -65,9 +52,8 @@ export function App() {
     }
   };
 
-  const handleQuickOccasionSelect = (id: string, idx: number) => {
+  const handleQuickOccasionSelect = (id: string) => {
     setActiveOccasion(id);
-    setOccasionIndex(idx);
     playCelebrationSound(soundEnabled);
   };
 
@@ -91,34 +77,29 @@ export function App() {
           <div className="content-wrapper">
             <div className="hero-grid">
               <div className="hero-content">
-                {/* HIGH SEO / GEO / AEO OPTIMIZED H1 WITH SWAPPING OCCASION COPY */}
+                {/* HERO TITLE - STABLE ALIGNMENT WITHOUT JITTER OR BOTTOM CROPPING */}
                 <h1 id="hero-title" className="hero-title">
-                  The AI Event Planner for{' '}
-                  <span className="hero-swapping-wrapper">
-                    <span className={`hero-swapping-word highlight-orange ${swapAnim ? 'swap-in' : 'swap-out'}`}>
-                      {OCCASION_SWAP_ITEMS[occasionIndex].name}
-                    </span>
-                  </span>
+                  The AI Event Planner That Turns
                   <br />
-                  Turn Every Moment Into a Festival.
+                  <span className="highlight-orange">Every Moment Into a Festival.</span>
                 </h1>
 
-                {/* HIGH AEO & GEO OPTIMIZED H2 */}
-                <h2 className="hero-aeo-text">
+                {/* CLEAN SUBTITLE WITHOUT EYEBROW OR PULL TAG BORDERS */}
+                <p className="hero-description">
                   <strong>Festiya</strong> is the intelligent celebration workspace that transforms any event vision into an editable multi-tier budget (low, likely, high), prioritized milestone schedule, and vendor negotiation checklist in under 90 seconds.
-                </h2>
+                </p>
 
                 {/* Fast-Selector Occasion Chips */}
                 <div className="hero-occasion-chips" role="group" aria-label="Select celebration category">
                   <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Quick Plan:
                   </span>
-                  {OCCASION_SWAP_ITEMS.map((item, idx) => (
+                  {OCCASION_SWAP_ITEMS.map((item) => (
                     <button
                       key={item.id}
                       type="button"
                       className={`occasion-chip-btn ${activeOccasion === item.id ? 'active' : ''}`}
-                      onClick={() => handleQuickOccasionSelect(item.id, idx)}
+                      onClick={() => handleQuickOccasionSelect(item.id)}
                     >
                       <span aria-hidden="true">{item.emoji}</span>
                       <span>{item.name}</span>
@@ -147,7 +128,6 @@ export function App() {
                 </div>
 
                 <div className="hero-proof-line">
-                  <CheckCircle2 size={16} color="var(--accent-mint-dark)" />
                   <span>
                     <strong>1,420+ celebrations</strong> planned with <strong>4.92 / 5</strong> satisfaction rate
                   </span>
@@ -348,6 +328,9 @@ export function App() {
           </div>
         </div>
       </footer>
+
+      {/* Floating Animated Festi AI Copilot Assistant & Chatbot */}
+      <FestiChatbot />
     </div>
   );
 }
