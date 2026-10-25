@@ -17,10 +17,10 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     const container = mountRef.current;
     if (!container) return;
 
-    // Viewport sizing: ample width and height to prevent any edge clipping
+    // Viewport sizing: expansive dimensions for a bold, hero-scale 3D presence
     const getViewportSize = () => {
-      const w = container.clientWidth || 720;
-      const h = Math.min(520, Math.max(380, Math.round(w * 0.62)));
+      const w = container.clientWidth || 740;
+      const h = Math.min(560, Math.max(420, Math.round(w * 0.72)));
       return { width: w, height: h };
     };
 
@@ -28,18 +28,17 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
 
     // Three.js Scene Setup
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(34, width / height, 0.1, 100);
 
-    // Camera distance with generous safety margin (1.35x padding) so 3D rotation NEVER clips at edges
+    // Hero-scale framing: mascot occupies ~92% of the frame (prominent, bold, commanding)
     const updateCameraDistance = (w: number, h: number) => {
       const aspect = w / h;
-      const fovRad = (30 * Math.PI) / 180;
-      const targetW = 4.2; // mascot width
-      const targetH = 1.58;
-      // Generous buffer factor (1.42) prevents "F" or "a" from clipping during 360 rotation and tilt
-      const distW = (targetW * 1.42) / (2 * aspect * Math.tan(fovRad / 2));
-      const distH = (targetH * 1.42) / (2 * Math.tan(fovRad / 2));
-      camera.position.set(0, 0, Math.max(6.2, Math.max(distW, distH)));
+      const fovRad = (34 * Math.PI) / 180;
+      const targetW = 5.6; // Large target width
+      const targetH = 2.15;
+      const distW = targetW / (2 * aspect * Math.tan(fovRad / 2));
+      const distH = targetH / (2 * Math.tan(fovRad / 2));
+      camera.position.set(0, 0, Math.max(distW, distH));
     };
     updateCameraDistance(width, height);
 
@@ -51,19 +50,19 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.25;
     container.innerHTML = '';
     container.appendChild(renderer.domElement);
 
-    // Warm, velvety lighting without white specular blowouts or harsh reflections
-    const ambientLight = new THREE.AmbientLight(0xfff6ea, 2.2);
+    // Warm, velvety lighting tuned for plush fur (matte, warm, no white specular hot spots)
+    const ambientLight = new THREE.AmbientLight(0xfff6ea, 2.3);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffeed6, 2.0);
+    const keyLight = new THREE.DirectionalLight(0xffeed6, 2.2);
     keyLight.position.set(2, 4, 3);
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0xffdfb8, 1.2);
+    const fillLight = new THREE.DirectionalLight(0xffdfb8, 1.4);
     fillLight.position.set(-3, -2, 2);
     scene.add(fillLight);
 
@@ -86,16 +85,14 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
         texture.magFilter = THREE.LinearFilter;
         texture.colorSpace = THREE.SRGBColorSpace;
 
-        const worldW = 4.2;
-        const worldH = 1.58;
+        // Big, imposing 3D mascot dimensions (5.2 x 1.95)
+        const worldW = 5.2;
+        const worldH = 1.95;
         const planeGeo = new THREE.PlaneGeometry(worldW, worldH, 16, 8);
 
-        // Volumetric Plush Fur Stack:
-        // 14 micro-spaced layers at EXACT scale 1.0 (NO scaled shells = ZERO white fungus or halo).
-        // alphaTest: 0.35 cleanly drops anti-aliased border fringe so all edges are crisp, cohesive, and vibrant.
-        // High roughness (0.88) gives warm matte velvet plushness with NO white plastic shine.
+        // 14 micro-spaced layers at exact scale 1.0 (clean, solid plush depth, zero fungus or white halo)
         const layerCount = 14;
-        const totalThickness = 0.16;
+        const totalThickness = 0.18;
         const step = totalThickness / (layerCount - 1);
         const startZ = -totalThickness / 2;
 
@@ -107,8 +104,8 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
           const material = new THREE.MeshStandardMaterial({
             map: texture,
             transparent: true,
-            alphaTest: 0.35, // Crisp edge boundary, eliminates any white/gray fringe
-            roughness: 0.88, // Velvet matte fur, no white specular hot spots
+            alphaTest: 0.35,
+            roughness: 0.88,
             metalness: 0.02,
             side: isFront ? THREE.FrontSide : isBack ? THREE.FrontSide : THREE.DoubleSide,
             depthWrite: true,
@@ -117,7 +114,7 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
           const mesh = new THREE.Mesh(planeGeo, material);
           mesh.position.z = z;
           if (isBack) {
-            mesh.rotation.y = Math.PI; // Perfectly faces back for 360 orbit visibility
+            mesh.rotation.y = Math.PI; // Face back for seamless 360 orbit
           }
           orbitGroup.add(mesh);
         }
@@ -157,7 +154,7 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       targetRotationY += deltaX * 0.01;
       targetRotationX += deltaY * 0.007;
 
-      // Vertical tilt limit
+      // Vertical tilt limits
       targetRotationX = Math.max(-0.5, Math.min(0.5, targetRotationX));
 
       prevMouseX = clientX;
@@ -240,7 +237,7 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       style={{
         position: 'relative',
         width: '100%',
-        maxWidth: '820px',
+        maxWidth: '850px',
         margin: '0 auto',
         display: 'flex',
         alignItems: 'center',
@@ -252,7 +249,7 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
         ref={mountRef}
         style={{
           width: '100%',
-          height: '480px',
+          height: '520px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
