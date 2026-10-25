@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import {
   ArrowRight,
   CheckCircle2,
-  Heart,
-  Zap,
 } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { LoadingScreen } from './components/LoadingScreen';
@@ -161,19 +159,6 @@ export function App() {
                 <div className="hero-plush-stage">
                   <div className="hero-plush-glow" aria-hidden="true" />
 
-                  {/* Floating Stat Chip Top Left */}
-                  <div className="floating-stat-badge badge-top-left">
-                    <div className="stat-icon-wrap">
-                      <Zap size={16} />
-                    </div>
-                    <div>
-                      <strong style={{ fontSize: '14px', display: 'block', color: 'var(--text-primary)' }}>
-                        Under 90 seconds
-                      </strong>
-                      <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>To first usable plan</span>
-                    </div>
-                  </div>
-
                   {/* 3D Plush Festiya Logo Centerpiece */}
                   <img
                     src="/festiya-logo.png"
@@ -182,19 +167,6 @@ export function App() {
                     onClick={() => playCelebrationSound(soundEnabled)}
                     title="Festiya: Turn every moment into a festival"
                   />
-
-                  {/* Floating Stat Chip Bottom Right */}
-                  <div className="floating-stat-badge badge-bottom-right">
-                    <div className="stat-icon-wrap" style={{ background: 'var(--accent-mint-light)', color: 'var(--accent-mint-dark)' }}>
-                      <Heart size={16} />
-                    </div>
-                    <div>
-                      <strong style={{ fontSize: '14px', display: 'block', color: 'var(--text-primary)' }}>
-                        Zero spreadsheet dread
-                      </strong>
-                      <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>100% Host in Control</span>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

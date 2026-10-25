@@ -60,10 +60,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onStartPlanning, soundEnabled })
               handleNavClick('hero');
             }}
           >
-            <div className="island-brand-icon" style={{ overflow: 'visible', background: 'transparent' }}>
-              <img src="/festiya-logo.png" alt="Festiya 3D Brand Logo" style={{ height: '32px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 2px 6px rgba(255, 94, 30, 0.35))' }} />
+            <div className="island-brand-icon" style={{ overflow: 'visible', background: 'transparent', width: 'auto', height: 'auto' }}>
+              <img src="/festiya-logo.png" alt="Festiya 3D Brand Logo" style={{ height: '36px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 2px 6px rgba(255, 94, 30, 0.35))' }} />
             </div>
-            <span className="island-brand-text">Festiya</span>
           </a>
 
           {/* Desktop Nav Links */}
