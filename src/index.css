@@ -1418,6 +1418,178 @@ img {
 }
 
 /* --------------------------------------------------------------------------
+   FLEXCAROUSEL (REACT BITS) SHOWCASE ENHANCEMENTS
+   -------------------------------------------------------------------------- */
+.carousel-preset-pills {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.preset-label {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.preset-pill {
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.preset-pill:hover {
+  border-color: var(--orange-400);
+  color: var(--orange-600);
+  transform: translateY(-1px);
+}
+
+.preset-pill.active {
+  background: var(--orange-500);
+  border-color: var(--orange-500);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px var(--orange-glow);
+}
+
+.carousel-viewport-wrapper {
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-3xl);
+  padding: 24px 24px 32px;
+  box-shadow: var(--shadow-md);
+  margin-top: 28px;
+}
+
+.carousel-canvas-container {
+  width: 100%;
+  height: 560px;
+  position: relative;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  background: radial-gradient(ellipse at center, rgba(255, 237, 213, 0.45) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+.carousel-active-details {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 20px 24px;
+  background: var(--bg-canvas-subtle);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+}
+
+.active-details-text {
+  flex: 1;
+  min-width: 280px;
+}
+
+.active-tag-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.active-tag-pill {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  background: rgba(255, 94, 30, 0.1);
+  color: var(--orange-600);
+  border-radius: var(--radius-full);
+}
+
+.active-category-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.active-category-desc {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.active-category-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.carousel-quick-chips {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.quick-chip {
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quick-chip:hover {
+  border-color: var(--orange-400);
+  color: var(--orange-600);
+}
+
+.quick-chip.active {
+  background: var(--orange-100);
+  border-color: var(--orange-400);
+  color: var(--orange-700);
+}
+
+@media (max-width: 768px) {
+  .carousel-canvas-container {
+    height: 480px;
+  }
+  .carousel-viewport-wrapper {
+    padding: 16px 12px 24px;
+  }
+  .carousel-active-details {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+  }
+  .active-category-cta {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* --------------------------------------------------------------------------
    SOCIAL PROOF & TESTIMONIALS (Rule B8)
    -------------------------------------------------------------------------- */
 .social-proof-section {
