@@ -673,7 +673,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                       Critical Logistics Check
                     </span>
                   </div>
-                  <p style={{ fontSize: '13px', color: '#28140A', margin: 0, lineHeight: 1.45 }}>
+                  <p style={{ fontSize: '13px', color: 'var(--text-secondary, #4338ca)', margin: 0, lineHeight: 1.45 }}>
                     {activeEvent.logisticsHighlight}
                   </p>
                 </div>
@@ -721,7 +721,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                       onClick={() => onSelectEventForPlanner(item.suggestedEvent, item.name)}
                     >
                       <div>
-                        <div style={{ fontWeight: 800, fontSize: '14px', color: '#28140A' }}>{item.name}</div>
+                        <div style={{ fontWeight: 800, fontSize: '14px', color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>{item.name}</div>
                         <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
                           {item.dates} • {item.daysCount} Days
                         </div>

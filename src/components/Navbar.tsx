@@ -277,7 +277,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div style={{ marginTop: '24px', width: '100%', maxWidth: '320px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {/* Mobile Currency Picker */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: 'rgba(255, 245, 230, 0.8)', borderRadius: '10px', border: '1.5px solid var(--border-medium)' }}>
-                <span style={{ fontSize: '12px', fontWeight: 700, color: '#3D1E06' }}>Currency & Region:</span>
+                <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>Currency & Region:</span>
                 <select
                   value={currentCurrency}
                   onChange={(e) => {
@@ -295,7 +295,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </select>
               </div>
               {currentUser ? (
-                <div style={{ background: 'var(--bg-surface)', padding: '12px 16px', borderRadius: '12px', border: '1.5px solid #3D1E06', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ background: 'var(--bg-surface)', padding: '12px 16px', borderRadius: '12px', border: '1.5px solid var(--border-medium)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <div className="navbar-user-avatar">{currentUser.name.charAt(0).toUpperCase()}</div>
                     <div style={{ textAlign: 'left' }}>

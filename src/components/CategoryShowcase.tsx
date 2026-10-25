@@ -56,7 +56,7 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
     categoryDescription: 'Unveil breakthrough innovations with precision teleprompters, worldwide low-latency streaming, press lounges, and interactive demo pods.',
     tags: ['Keynote Teleprompter', 'Global Stream Sync', 'Press Lounge'],
     iconName: 'tv',
-    color: '#118AB2',
+    color: '#5b42f3',
   },
   {
     id: 'retreat',
@@ -89,7 +89,7 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
     categoryDescription: 'Exquisite multi-course tasting dinners, sommelier tasting cards, crystal stemware rental counts, and artisanal pairing logistics.',
     tags: ['Sommelier Notes', 'Course Timings', 'Stemware Rentals'],
     iconName: 'wine',
-    color: '#7E4F38',
+    color: '#5b42f3',
   },
   {
     id: 'cultural_fest',
