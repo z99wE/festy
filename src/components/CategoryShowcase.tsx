@@ -203,7 +203,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
         <div className="section-header" style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 36px' }}>
           <div className="hero-badge" style={{ margin: '0 auto 16px', display: 'inline-flex' }}>
             <Sparkles size={14} style={{ marginRight: '6px' }} />
-            <span>Interactive WebGL 3D Carousel (12 Blueprints)</span>
+            <span>Curated Celebration Blueprints</span>
           </div>
 
           <h2 id="categories-heading" className="section-title">
@@ -211,14 +211,14 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
           </h2>
 
           <p className="section-subtitle">
-            Pre-calibrated spending models, milestone timelines, and vendor interview criteria. Drag or click any 3D card below to rotate through 12 world-class event formats.
+            Pre-calibrated spending models, milestone timelines, and vendor interview criteria. Select any card below to explore signature celebration formats.
           </p>
 
           {/* Preset Selector Pill Group */}
-          <div className="carousel-preset-pills" role="tablist" aria-label="Carousel 3D Lens Presets">
+          <div className="carousel-preset-pills" role="tablist" aria-label="Carousel Motion Presets">
             <span className="preset-label">
               <Layers size={13} style={{ marginRight: '4px' }} />
-              WebGL Lens Preset:
+              Display Style:
             </span>
             {(['liquid', 'ribbon', 'vortex', 'arch'] as const).map((preset) => (
               <button

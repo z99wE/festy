@@ -277,9 +277,9 @@ export const AccessibilityToolbar: React.FC<AccessibilityToolbarProps> = ({
             {/* 3D WebGL Background Pause */}
             <div className="a11y-toggle-row" style={{ borderBottom: 'none' }}>
               <div>
-                <strong style={{ color: 'var(--text-primary)', display: 'block' }}>Pause 3D WebGL Canvas</strong>
+                <strong style={{ color: 'var(--text-primary)', display: 'block' }}>Pause Motion Canvas</strong>
                 <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                  Freezes the WebGL rendering loop to conserve battery or focus purely on text.
+                  Freezes interactive background motion to conserve battery or focus purely on text.
                 </span>
               </div>
               <label className="toggle-switch">

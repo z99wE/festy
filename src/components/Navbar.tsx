@@ -113,7 +113,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`island-nav-link ${activeTab === 'home' ? 'active-tab' : ''}`}
               onClick={() => handleTabClick('home')}
             >
-              Home 3D
+              Home
             </button>
             <button
               type="button"

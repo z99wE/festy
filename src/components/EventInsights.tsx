@@ -27,12 +27,6 @@ export const EventInsights: React.FC<EventInsightsProps> = ({
       label: "Budget Creep Eliminated",
       detail: "Replaces single-guess spreadsheets with decimal-safe Conservative, Realistic, and Luxury 3-tier financial scenarios.",
       accent: "var(--color-leaf-green)"
-    },
-    {
-      metric: "82 Hours",
-      label: "Planning Time Saved",
-      detail: "Instantly synthesizes vendor load-in schedules, dietary matrices, and day-of run sheets in under 90 seconds.",
-      accent: "var(--color-deep-teal)"
     }
   ];
 

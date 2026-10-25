@@ -421,9 +421,9 @@ export const HomeVenueStage3D: React.FC<HomeVenueStage3DProps> = ({
         <div className="inspector-header">
           <div className="inspector-badge">
             <Sparkles size={14} />
-            <span>Interactive 3D Venue Blueprint</span>
+            <span>Spatial Venue Blueprint</span>
           </div>
-          <span className="inspector-version">WebGL 60FPS</span>
+          <span className="inspector-version">Live Motion</span>
         </div>
 
         {/* Zone Selector Buttons */}

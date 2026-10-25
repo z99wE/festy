@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
   ArrowRight,
-  Sparkles,
   Layers,
   Calculator,
   BookOpen,
@@ -23,20 +22,20 @@ import { SocialProof } from './components/SocialProof';
 import { FAQSection } from './components/FAQSection';
 import { EventInsights } from './components/EventInsights';
 import { FestiChatbot } from './components/FestiChatbot';
-import { TactileHero3D } from './components/TactileHero3D';
-import { WorldFestivalGlobe3D } from './components/WorldFestivalGlobe3D';
+import { OrbitableHeroLogo } from './components/OrbitableHeroLogo';
+import { DiscoBallCelebrationHub } from './components/DiscoBallCelebrationHub';
 import { detectUserRegion } from './utils/currency';
 import { playCelebrationSound } from './utils/audio';
 
 const OCCASION_SWAP_ITEMS = [
-  { id: 'wedding', name: 'Dream Weddings', emoji: '💍' },
-  { id: 'birthday', name: 'Milestone Birthdays', emoji: '🎂' },
-  { id: 'festival', name: 'Music Festivals', emoji: '🎪' },
-  { id: 'product_launch', name: 'Tech Product Launches', emoji: '🚀' },
-  { id: 'retreat', name: 'Executive Retreats', emoji: '🏢' },
-  { id: 'anniversary', name: 'Joyful Anniversaries', emoji: '🥂' },
-  { id: 'wine_tasting', name: 'Wine Tastings', emoji: '🍷' },
-  { id: 'cultural_fest', name: 'Heritage Festivals', emoji: '✨' },
+  { id: 'wedding', name: 'Luxury Weddings' },
+  { id: 'birthday', name: 'Milestone Birthdays' },
+  { id: 'festival', name: 'Music Festivals' },
+  { id: 'product_launch', name: 'Product Launches' },
+  { id: 'retreat', name: 'Executive Retreats' },
+  { id: 'anniversary', name: 'Galas & Anniversaries' },
+  { id: 'wine_tasting', name: 'Private Tastings' },
+  { id: 'cultural_fest', name: 'Heritage Festivals' },
 ];
 
 export function App() {
@@ -163,7 +162,6 @@ export function App() {
                           className={`occasion-chip-btn ${activeOccasion === item.id ? 'active' : ''}`}
                           onClick={() => handleQuickOccasionSelect(item.id)}
                         >
-                          <span aria-hidden="true">{item.emoji}</span>
                           <span>{item.name}</span>
                         </button>
                       ))}
@@ -193,26 +191,20 @@ export function App() {
                         <span>Explore 12 Blueprints</span>
                       </button>
                     </div>
-
-                    <div className="hero-proof-line">
-                      <span>
-                        <strong>1,420+ celebrations</strong> planned with <strong>4.92 / 5</strong> satisfaction rate
-                      </span>
-                    </div>
                   </div>
 
-                  {/* 3D Tactile Squishy Mascot (No White Box, Tactile Squish & Stretch Physics) */}
+                  {/* 3D Orbitable Hero Logo (Pristine, 360 degree drag rotation, no squishiness) */}
                   <div className="hero-tactile-centerpiece">
-                    <TactileHero3D reducedMotion={reducedMotion} soundEnabled={soundEnabled} />
+                    <OrbitableHeroLogo reducedMotion={reducedMotion} soundEnabled={soundEnabled} />
                   </div>
                 </div>
 
-                {/* 3D INTERACTIVE WORLD GLOBE: TOP UPCOMING WORLD FESTIVALS & REGIONAL LONG WEEKENDS */}
+                {/* 3D DISCO BALL: UPCOMING WORLD CELEBRATIONS & LONG WEEKENDS */}
                 <div style={{ marginTop: '36px', marginBottom: '40px' }}>
-                  <WorldFestivalGlobe3D
+                  <DiscoBallCelebrationHub
                     reducedMotion={reducedMotion}
                     currentCurrency={currentCurrency}
-                    onSelectEventForPlanner={(occasionId) => {
+                    onSelectEventForPlanner={(occasionId, _eventName) => {
                       setActiveOccasion(occasionId);
                       setActiveTab('planner');
                       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -223,15 +215,11 @@ export function App() {
                 {/* 3D CELEBRATION STAGE & VENUE EXPERIENCE */}
                 <div style={{ marginTop: '20px' }}>
                   <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 20px' }}>
-                    <div className="hero-badge" style={{ margin: '0 auto 12px', display: 'inline-flex' }}>
-                      <Sparkles size={14} style={{ marginRight: '6px' }} />
-                      <span>WebGL 3D Spatial Venue Experience</span>
-                    </div>
                     <h2 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '8px' }}>
-                      Interactive 3D Celebration Pavilion & Zone Architect
+                      Celebration Pavilion & Spatial Floorplan
                     </h2>
                     <p style={{ fontSize: '14.5px', color: 'var(--text-secondary)' }}>
-                      Drag to rotate the 3D pavilion 360°. Inspect key celebration zones, acoustical coverage, and pre-calibrated budget allocations.
+                      Rotate to explore key celebration zones, guest flow, acoustical coverage, and pre-calibrated budget allocations.
                     </p>
                   </div>
 
@@ -271,7 +259,7 @@ export function App() {
                         </div>
                         <h4 className="gateway-card-title">12 Event Blueprints</h4>
                         <p className="gateway-card-desc">
-                          WebGL 3D carousel covering weddings, milestone birthdays, music festivals, tech launches, and cultural galas.
+                          Curated celebration models covering weddings, milestone birthdays, music festivals, tech launches, and cultural galas.
                         </p>
                       </div>
                       <div className="gateway-card-link">
@@ -374,7 +362,7 @@ export function App() {
         )}
 
         {/* ==========================================================
-            VIEW 2: DEDICATED 12 EVENT BLUEPRINTS (WEBGL 3D CAROUSEL)
+            VIEW 2: DEDICATED 12 EVENT BLUEPRINTS
             ========================================================== */}
         {activeTab === 'blueprints' && (
           <div style={{ paddingTop: '100px', minHeight: '80vh' }}>
@@ -383,7 +371,7 @@ export function App() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Layers size={18} color="#FF5E1E" />
                   <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                    Viewing Section: <strong>12 Celebration Blueprints & 3D WebGL Showcase</strong>
+                    Viewing Section: <strong>12 Celebration Blueprints</strong>
                   </span>
                 </div>
                 <button
@@ -583,12 +571,12 @@ export function App() {
               <ul className="footer-links">
                 <li>
                   <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                    Home 3D Experience
+                    Home
                   </button>
                 </li>
                 <li>
                   <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('blueprints'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                    12 Event Blueprints (WebGL 3D)
+                    12 Event Blueprints
                   </button>
                 </li>
                 <li>
