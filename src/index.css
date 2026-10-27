@@ -64,7 +64,7 @@
   /* Approved Soft Sans-Serif Typography: Plus Jakarta Sans for effortless body, Outfit for soft rounded headings */
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-heading: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'Geist Mono', monospace;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 
   /* Strict Spacing Scale per Skill Rule B2 */
   --space-0: 0;

@@ -1,6 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { Navbar, type AuthUser, type ActiveAppTab } from './components/Navbar';
-import { VenueExperience3D } from './components/VenueExperience3D';
 import { TaglineReveal } from './components/TaglineReveal';
 import { detectUserRegion } from './utils/currency';
 import { playCelebrationSound } from './utils/audio';
@@ -109,9 +108,6 @@ export function App() {
 
   return (
     <div className="app-container">
-      {/* 3D Immersive Venue Atmosphere (Particle-free per user request) */}
-      <VenueExperience3D reducedMotion={reducedMotion} />
-
       {/* Fluid Island Detached Header with Navigation Tabs, Currency/Region Selector & Auth */}
       <Navbar
         onStartPlanning={handleStartPlanning}

@@ -355,7 +355,7 @@ export const FestiChatbot: React.FC = () => {
                   >
                     {m.sender === 'festi' && (
                       <div className="festi-mini-avatar">
-                        <img src="/festiya-logo.png" alt="Festi" />
+                        <img src="/festiya-logo-nav.webp" alt="Festi" width={28} height={28} />
                       </div>
                     )}
 
@@ -395,7 +395,7 @@ export const FestiChatbot: React.FC = () => {
                 {isTyping && (
                   <div className="festi-chat-bubble-row festi-row">
                     <div className="festi-mini-avatar">
-                      <img src="/festiya-logo.png" alt="Festi" />
+                      <img src="/festiya-logo-nav.webp" alt="Festi" width={28} height={28} />
                     </div>
                     <div className="festi-chat-bubble festi-bubble festi-typing-bubble">
                       <RefreshCw size={14} className="festi-spin-icon" />
