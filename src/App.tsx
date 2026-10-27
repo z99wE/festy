@@ -5,6 +5,7 @@ import { TaglineReveal } from './components/TaglineReveal';
 import { detectUserRegion } from './utils/currency';
 import { playCelebrationSound } from './utils/audio';
 import { type EventPlanningContext } from './data/globalCelebrations';
+import { LazyMount } from './components/LazyMount';
 
 const OrbitableHeroLogo = lazy(() => import('./components/OrbitableHeroLogo').then((m) => ({ default: m.OrbitableHeroLogo })));
 const ProblemSolution = lazy(() => import('./components/ProblemSolution').then((m) => ({ default: m.ProblemSolution })));
@@ -267,28 +268,30 @@ export function App() {
 
                 {/* 3D DISCO BALL: UPCOMING WORLD CELEBRATIONS & LONG WEEKENDS */}
                 <div style={{ marginTop: '36px', marginBottom: '40px' }}>
-                  <Suspense fallback={<div style={{ minHeight: '380px' }} />}>
-                    <DiscoBallCelebrationHub
-                      reducedMotion={reducedMotion}
-                      currentCurrency={currentCurrency}
-                      onSelectEventForPlanner={(occasionId, eventName, context) => {
-                        setActiveOccasion(occasionId);
-                        if (context) {
-                          setSelectedPlanningContext(context);
-                        } else {
-                          setSelectedPlanningContext({
-                            id: occasionId,
-                            name: eventName,
-                            category: occasionId,
-                            location: 'Worldwide',
-                            dates: 'Upcoming 6 Months',
-                          });
-                        }
-                        setActiveTab('planner');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                    />
-                  </Suspense>
+                  <LazyMount placeholderHeight="420px" rootMargin="350px">
+                    <Suspense fallback={<div style={{ minHeight: '380px' }} />}>
+                      <DiscoBallCelebrationHub
+                        reducedMotion={reducedMotion}
+                        currentCurrency={currentCurrency}
+                        onSelectEventForPlanner={(occasionId, eventName, context) => {
+                          setActiveOccasion(occasionId);
+                          if (context) {
+                            setSelectedPlanningContext(context);
+                          } else {
+                            setSelectedPlanningContext({
+                              id: occasionId,
+                              name: eventName,
+                              category: occasionId,
+                              location: 'Worldwide',
+                              dates: 'Upcoming 6 Months',
+                            });
+                          }
+                          setActiveTab('planner');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                      />
+                    </Suspense>
+                  </LazyMount>
                 </div>
 
                 {/* APP NAVIGATION GATEWAY CARDS (Dividing the app into distinct parts) */}
@@ -365,17 +368,21 @@ export function App() {
             </section>
 
             {/* LIVE AUTOMATED INTERACTIVE DEMO */}
-            <Suspense fallback={null}>
-              <LiveInteractiveDemo />
-            </Suspense>
+            <LazyMount placeholderHeight="320px" rootMargin="300px">
+              <Suspense fallback={null}>
+                <LiveInteractiveDemo />
+              </Suspense>
+            </LazyMount>
 
             {/* Tagline Reveal Section */}
             <TaglineReveal reducedMotion={reducedMotion} />
 
             {/* Problem vs Solution Section */}
-            <Suspense fallback={null}>
-              <ProblemSolution />
-            </Suspense>
+            <LazyMount placeholderHeight="360px" rootMargin="300px">
+              <Suspense fallback={null}>
+                <ProblemSolution />
+              </Suspense>
+            </LazyMount>
           </>
         )}
 
@@ -453,15 +460,17 @@ export function App() {
       </main>
 
       {/* Global Celebrations 3D Parallax & Perspective Footer Showcase */}
-      <Suspense fallback={null}>
-        <GlobalFestivalFooterShowcase
-          onSelectFestival={(occ) => {
-            setActiveOccasion(occ);
-            setActiveTab('planner');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
-        />
-      </Suspense>
+      <LazyMount placeholderHeight="420px" rootMargin="300px">
+        <Suspense fallback={null}>
+          <GlobalFestivalFooterShowcase
+            onSelectFestival={(occ) => {
+              setActiveOccasion(occ);
+              setActiveTab('planner');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
+        </Suspense>
+      </LazyMount>
 
       {/* FOOTER */}
       <footer className="site-footer" role="contentinfo">
@@ -556,9 +565,11 @@ export function App() {
       </Suspense>
 
       {/* Floating Animated Festi AI Mascot & Chatbot */}
-      <Suspense fallback={null}>
-        <FestiChatbot />
-      </Suspense>
+      <LazyMount placeholderHeight={0} idleDelayMs={3000}>
+        <Suspense fallback={null}>
+          <FestiChatbot />
+        </Suspense>
+      </LazyMount>
 
       {/* Cloudflare Edge Tenant Sign In / Sign Up Modal */}
       <Suspense fallback={null}>

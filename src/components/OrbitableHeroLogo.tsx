@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import * as THREE from 'three';
 import { playPopSound } from '../utils/audio';
 
 interface OrbitableHeroLogoProps {
@@ -17,12 +16,18 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     const container = mountRef.current;
     if (!container) return;
 
-    // Viewport sizing: expansive dimensions for a bold, hero-scale 3D presence
-    const getViewportSize = () => {
-      const w = container.clientWidth || 740;
-      const h = Math.min(560, Math.max(420, Math.round(w * 0.72)));
-      return { width: w, height: h };
-    };
+    let isDisposed = false;
+    let cleanupFn: (() => void) | undefined;
+
+    import('three').then((THREE) => {
+      if (isDisposed) return;
+
+      // Viewport sizing: expansive dimensions for a bold, hero-scale 3D presence
+      const getViewportSize = () => {
+        const w = container.clientWidth || 740;
+        const h = Math.min(560, Math.max(420, Math.round(w * 0.72)));
+        return { width: w, height: h };
+      };
 
     let { width, height } = getViewportSize();
 
@@ -257,20 +262,26 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
 
     observer.observe(container);
 
+      cleanupFn = () => {
+        observer.disconnect();
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        window.removeEventListener('resize', handleResize);
+        dom.removeEventListener('mousedown', onPointerDown);
+        window.removeEventListener('mousemove', onPointerMove);
+        window.removeEventListener('mouseup', onPointerUp);
+        dom.removeEventListener('touchstart', onPointerDown);
+        window.removeEventListener('touchmove', onPointerMove);
+        window.removeEventListener('touchend', onPointerUp);
+        if (renderer.domElement && container.contains(renderer.domElement)) {
+          container.removeChild(renderer.domElement);
+        }
+        renderer.dispose();
+      };
+    });
+
     return () => {
-      observer.disconnect();
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', handleResize);
-      dom.removeEventListener('mousedown', onPointerDown);
-      window.removeEventListener('mousemove', onPointerMove);
-      window.removeEventListener('mouseup', onPointerUp);
-      dom.removeEventListener('touchstart', onPointerDown);
-      window.removeEventListener('touchmove', onPointerMove);
-      window.removeEventListener('touchend', onPointerUp);
-      if (renderer.domElement && container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
-      }
-      renderer.dispose();
+      isDisposed = true;
+      cleanupFn?.();
     };
   }, [reducedMotion, soundEnabled]);
 

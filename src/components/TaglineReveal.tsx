@@ -43,10 +43,24 @@ export const TaglineReveal: React.FC<TaglineRevealProps> = ({ reducedMotion }) =
       setActiveWordIndex(activeCount);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    const rafId = requestAnimationFrame(() => handleScroll());
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', onScroll);
+    };
   }, [reducedMotion, words.length, supportingWords.length]);
 
   return (
