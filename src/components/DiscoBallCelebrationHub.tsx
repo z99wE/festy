@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import * as THREE from 'three';
 import {
   Calendar,
   MapPin,
@@ -89,326 +88,343 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     ];
   }, []);
 
+  const [isDesktop] = useState(() => {
+    return typeof window !== 'undefined' ? window.innerWidth >= 768 : true;
+  });
+
   // Ref for triggering celebratory spin and waking the 3D globe
   const spinGlobeRef = useRef<() => void>(() => {});
 
-  // Three.js Reflective 3D Celebration Disco Globe Simulation with Auto-Sleep
+  // Three.js Reflective 3D Celebration Disco Globe Simulation with Auto-Sleep (Desktop Only)
   useEffect(() => {
-    const container = canvasRef.current;
-    if (!container) return;
+    if (!isDesktop) return;
 
-    const width = container.clientWidth || 440;
-    const height = 380;
+    let isDisposed = false;
+    let cleanupFn: (() => void) | undefined;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 100);
-    camera.position.set(0, 0.1, 6.4);
-
-    const renderer = new THREE.WebGLRenderer({
-      alpha: true,
-      antialias: true,
-      powerPreference: 'high-performance',
-    });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.35;
-    container.innerHTML = '';
-    container.appendChild(renderer.domElement);
-
-    // DYNAMIC CELEBRATORY ENVIRONMENT MAP
-    let envTexture: THREE.CanvasTexture | null = null;
-    const envCanvas = document.createElement('canvas');
-    envCanvas.width = 512;
-    envCanvas.height = 256;
-    const envCtx = envCanvas.getContext('2d');
-    if (envCtx) {
-      const grad = envCtx.createLinearGradient(0, 0, 512, 256);
-      grad.addColorStop(0, '#FFFBEB');
-      grad.addColorStop(0.2, '#EDE9FE');
-      grad.addColorStop(0.4, '#C7D2FE');
-      grad.addColorStop(0.6, '#EC4899');
-      grad.addColorStop(0.8, '#818CF8');
-      grad.addColorStop(1, '#5B42F3');
-      envCtx.fillStyle = grad;
-      envCtx.fillRect(0, 0, 512, 256);
-
-      // Pinpoint reflection spotlights
-      const spotColors = ['#FFFFFF', '#EDE9FE', '#C7D2FE', '#FBCFE8', '#BAE6FD'];
-      for (let i = 0; i < 16; i++) {
-        envCtx.fillStyle = spotColors[i % spotColors.length];
-        envCtx.beginPath();
-        const px = (i * 32 + 16) % 512;
-        const py = 40 + ((i * 37) % 176);
-        envCtx.arc(px, py, 12 + (i % 3) * 4, 0, Math.PI * 2);
-        envCtx.fill();
-      }
-
-      envTexture = new THREE.CanvasTexture(envCanvas);
-      envTexture.mapping = THREE.EquirectangularReflectionMapping;
-      scene.environment = envTexture;
-    }
-
-    // Warm ambient and pin-spot lighting
-    const ambient = new THREE.AmbientLight(0xfffaed, 2.2);
-    scene.add(ambient);
-
-    const spotGold = new THREE.DirectionalLight(0xffd54f, 4.0);
-    spotGold.position.set(4, 5, 4);
-    scene.add(spotGold);
-
-    const spotAmber = new THREE.DirectionalLight(0x818cf8, 3.2);
-    spotAmber.position.set(-5, 4, 3);
-    scene.add(spotAmber);
-
-    const spotWhite = new THREE.DirectionalLight(0xffffff, 3.0);
-    spotWhite.position.set(0, -3, 5);
-    scene.add(spotWhite);
-
-    // Root Group
-    const discoGroup = new THREE.Group();
-    scene.add(discoGroup);
-
-    // Hanging Chrome Rod & Loop at Top
-    const rodGeom = new THREE.CylinderGeometry(0.035, 0.035, 2.2, 16);
-    const rodMat = new THREE.MeshStandardMaterial({
-      color: 0xdddddd,
-      metalness: 0.95,
-      roughness: 0.12,
-    });
-    const rodMesh = new THREE.Mesh(rodGeom, rodMat);
-    rodMesh.position.set(0, 2.3, 0);
-    discoGroup.add(rodMesh);
-
-    const loopGeom = new THREE.TorusGeometry(0.18, 0.04, 16, 32);
-    const loopMesh = new THREE.Mesh(loopGeom, rodMat);
-    loopMesh.position.set(0, 1.25, 0);
-    discoGroup.add(loopMesh);
-
-    // Core Sphere with Mirror Facets (Optimized 512x256 texture)
-    const radius = 1.35;
-    const segments = 24;
-    const sphereGeom = new THREE.SphereGeometry(radius, segments, segments);
-
-    const mirrorCanvas = document.createElement('canvas');
-    mirrorCanvas.width = 512;
-    mirrorCanvas.height = 256;
-    const mCtx = mirrorCanvas.getContext('2d');
-    if (mCtx) {
-      mCtx.fillStyle = '#b8b8b8';
-      mCtx.fillRect(0, 0, 512, 256);
-
-      const tileCols = 32;
-      const tileRows = 16;
-      const tW = 512 / tileCols;
-      const tH = 256 / tileRows;
-
-      for (let r = 0; r < tileRows; r++) {
-        for (let c = 0; c < tileCols; c++) {
-          const lum = 180 + Math.floor(Math.sin(r * 4.2 + c * 3.1) * 45 + Math.random() * 30);
-          mCtx.fillStyle = `rgb(${lum}, ${lum}, ${lum})`;
-          mCtx.fillRect(c * tW + 1, r * tH + 1, tW - 2, tH - 2);
-
-          mCtx.strokeStyle = 'rgba(0,0,0,0.45)';
-          mCtx.lineWidth = 1;
-          mCtx.strokeRect(c * tW, r * tH, tW, tH);
-        }
-      }
-    }
-    const mirrorTexture = new THREE.CanvasTexture(mirrorCanvas);
-    mirrorTexture.wrapS = THREE.RepeatWrapping;
-    mirrorTexture.wrapT = THREE.RepeatWrapping;
-
-    const ballMaterial = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
-      metalness: 0.96,
-      roughness: 0.14,
-      map: mirrorTexture,
-      bumpMap: mirrorTexture,
-      bumpScale: 0.04,
-      flatShading: true,
-    });
-    const ballMesh = new THREE.Mesh(sphereGeom, ballMaterial);
-    discoGroup.add(ballMesh);
-
-    // Interactive Raycasting Hotspots for Celebrations
-    const pinGroup = new THREE.Group();
-    discoGroup.add(pinGroup);
-
-    const pinGeometry = new THREE.SphereGeometry(0.09, 16, 16);
-    const ringGeometry = new THREE.TorusGeometry(0.14, 0.025, 12, 24);
-
-    UPCOMING_WORLD_FESTIVALS.forEach((evt) => {
-      const phi = (90 - evt.lat) * (Math.PI / 180);
-      const theta = (evt.lon + 180) * (Math.PI / 180);
-
-      const r = radius + 0.06;
-      const x = -(r * Math.sin(phi) * Math.cos(theta));
-      const z = r * Math.sin(phi) * Math.sin(theta);
-      const y = r * Math.cos(phi);
-
-      const pinMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(evt.color),
-        emissive: new THREE.Color(evt.color),
-        emissiveIntensity: 0.85,
-        metalness: 0.6,
-        roughness: 0.2,
-      });
-
-      const pin = new THREE.Mesh(pinGeometry, pinMat);
-      pin.position.set(x, y, z);
-      pin.userData = { id: evt.id, name: evt.name };
-
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: new THREE.Color(evt.color),
-        transparent: true,
-        opacity: 0.8,
-      });
-      const ring = new THREE.Mesh(ringGeometry, ringMat);
-      ring.position.set(x, y, z);
-      ring.lookAt(0, 0, 0);
-
-      pinGroup.add(pin);
-      pinGroup.add(ring);
-    });
-
-    // Sparkle Particle Field Surrounding Globe
-    const sparkleCount = 60;
-    const sparkleGeom = new THREE.BufferGeometry();
-    const sparklePos = new Float32Array(sparkleCount * 3);
-    for (let i = 0; i < sparkleCount; i++) {
-      const spR = radius + 0.35 + Math.random() * 0.9;
-      const spTheta = Math.random() * Math.PI * 2;
-      const spPhi = Math.acos(2 * Math.random() - 1);
-      sparklePos[i * 3] = spR * Math.sin(spPhi) * Math.cos(spTheta);
-      sparklePos[i * 3 + 1] = spR * Math.cos(spPhi);
-      sparklePos[i * 3 + 2] = spR * Math.sin(spPhi) * Math.sin(spTheta);
-    }
-    sparkleGeom.setAttribute('position', new THREE.BufferAttribute(sparklePos, 3));
-    const sparkleMat = new THREE.PointsMaterial({
-      color: 0xEDE9FE,
-      size: 0.045,
-      transparent: true,
-      opacity: 0.85,
-    });
-    const sparklePoints = new THREE.Points(sparkleGeom, sparkleMat);
-    discoGroup.add(sparklePoints);
-
-    // Initial render pass
-    renderer.render(scene, camera);
-
-    // Animation Loop with Auto-Sleep to prevent continuous main-thread blocking
-    let animId = 0;
-    let baseSpeed = 0.0045;
-    let currentBoost = 0;
-    let isVisible = false;
-    let isSleeping = false;
-    let activeUntil = performance.now() + 2500; // Animate for 2.5s on view, then sleep
-    let lastRenderTime = 0;
-
-    const wakeUp = (durationMs = 2500) => {
-      activeUntil = performance.now() + durationMs;
-      if (isSleeping && isVisible) {
-        isSleeping = false;
-        if (!animId) {
-          animId = requestAnimationFrame(animate);
-        }
-      }
-    };
-
-    spinGlobeRef.current = () => {
-      currentBoost = 0.028;
-      wakeUp(2200);
-    };
-
-    const animate = (timestamp: number) => {
-      if (!isVisible) {
-        animId = 0;
-        return;
-      }
-
-      // Check if animation window expired and boost has settled
-      if (timestamp > activeUntil && currentBoost <= 0.0001) {
-        renderer.render(scene, camera);
-        isSleeping = true;
-        animId = 0;
-        return;
-      }
-
-      // Frame throttle to ~35fps to keep main thread completely unblocked on mobile
-      if (timestamp - lastRenderTime < 26) {
-        animId = requestAnimationFrame(animate);
-        return;
-      }
-      lastRenderTime = timestamp;
-
-      animId = requestAnimationFrame(animate);
-
-      if (!reducedMotion) {
-        discoGroup.rotation.y += baseSpeed + currentBoost;
-        discoGroup.rotation.x = Math.sin(timestamp * 0.001) * 0.08;
-        sparklePoints.rotation.y -= 0.002;
-
-        if (currentBoost > 0.0001) {
-          currentBoost *= 0.94;
-        } else {
-          currentBoost = 0;
-        }
-      }
-
-      renderer.render(scene, camera);
-    };
-
-    const onUserInteract = () => {
-      wakeUp(2500);
-    };
-    container.addEventListener('pointerenter', onUserInteract);
-    container.addEventListener('pointermove', onUserInteract);
-    container.addEventListener('touchstart', onUserInteract, { passive: true });
-    container.addEventListener('touchmove', onUserInteract, { passive: true });
-
-    const observer = new IntersectionObserver((entries) => {
-      const entry = entries[0];
-      isVisible = !!entry?.isIntersecting;
-      if (isVisible) {
-        wakeUp(2500);
-      } else {
-        if (animId) {
-          cancelAnimationFrame(animId);
-          animId = 0;
-        }
-        isSleeping = true;
-      }
-    }, { threshold: 0.05 });
-
-    observer.observe(container);
-
-    const handleResize = () => {
+    import('three').then((THREE) => {
+      if (isDisposed) return;
+      const container = canvasRef.current;
       if (!container) return;
-      const newW = container.clientWidth || 440;
-      camera.aspect = newW / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(newW, height);
-      renderer.render(scene, camera);
-    };
 
-    window.addEventListener('resize', handleResize);
+      const width = container.clientWidth || 440;
+      const height = 380;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 100);
+      camera.position.set(0, 0.1, 6.4);
+
+      const renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+        powerPreference: 'high-performance',
+      });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.35;
+      container.innerHTML = '';
+      container.appendChild(renderer.domElement);
+
+      // DYNAMIC CELEBRATORY ENVIRONMENT MAP
+      let envTexture: any = null;
+      const envCanvas = document.createElement('canvas');
+      envCanvas.width = 512;
+      envCanvas.height = 256;
+      const envCtx = envCanvas.getContext('2d');
+      if (envCtx) {
+        const grad = envCtx.createLinearGradient(0, 0, 512, 256);
+        grad.addColorStop(0, '#FFFBEB');
+        grad.addColorStop(0.2, '#EDE9FE');
+        grad.addColorStop(0.4, '#C7D2FE');
+        grad.addColorStop(0.6, '#EC4899');
+        grad.addColorStop(0.8, '#818CF8');
+        grad.addColorStop(1, '#5B42F3');
+        envCtx.fillStyle = grad;
+        envCtx.fillRect(0, 0, 512, 256);
+
+        // Pinpoint reflection spotlights
+        const spotColors = ['#FFFFFF', '#EDE9FE', '#C7D2FE', '#FBCFE8', '#BAE6FD'];
+        for (let i = 0; i < 16; i++) {
+          envCtx.fillStyle = spotColors[i % spotColors.length];
+          envCtx.beginPath();
+          const px = (i * 32 + 16) % 512;
+          const py = 40 + ((i * 37) % 176);
+          envCtx.arc(px, py, 12 + (i % 3) * 4, 0, Math.PI * 2);
+          envCtx.fill();
+        }
+
+        envTexture = new THREE.CanvasTexture(envCanvas);
+        envTexture.mapping = THREE.EquirectangularReflectionMapping;
+        scene.environment = envTexture;
+      }
+
+      // Warm ambient and pin-spot lighting
+      const ambient = new THREE.AmbientLight(0xfffaed, 2.2);
+      scene.add(ambient);
+
+      const spotGold = new THREE.DirectionalLight(0xffd54f, 4.0);
+      spotGold.position.set(4, 5, 4);
+      scene.add(spotGold);
+
+      const spotAmber = new THREE.DirectionalLight(0x818cf8, 3.2);
+      spotAmber.position.set(-5, 4, 3);
+      scene.add(spotAmber);
+
+      const spotWhite = new THREE.DirectionalLight(0xffffff, 3.0);
+      spotWhite.position.set(0, -3, 5);
+      scene.add(spotWhite);
+
+      // Root Group
+      const discoGroup = new THREE.Group();
+      scene.add(discoGroup);
+
+      // Hanging Chrome Rod & Loop at Top
+      const rodGeom = new THREE.CylinderGeometry(0.035, 0.035, 2.2, 16);
+      const rodMat = new THREE.MeshStandardMaterial({
+        color: 0xdddddd,
+        metalness: 0.95,
+        roughness: 0.12,
+      });
+      const rodMesh = new THREE.Mesh(rodGeom, rodMat);
+      rodMesh.position.set(0, 2.3, 0);
+      discoGroup.add(rodMesh);
+
+      const loopGeom = new THREE.TorusGeometry(0.18, 0.04, 16, 32);
+      const loopMesh = new THREE.Mesh(loopGeom, rodMat);
+      loopMesh.position.set(0, 1.25, 0);
+      discoGroup.add(loopMesh);
+
+      // Core Sphere with Mirror Facets (Optimized 512x256 texture)
+      const radius = 1.35;
+      const segments = 24;
+      const sphereGeom = new THREE.SphereGeometry(radius, segments, segments);
+
+      const mirrorCanvas = document.createElement('canvas');
+      mirrorCanvas.width = 512;
+      mirrorCanvas.height = 256;
+      const mCtx = mirrorCanvas.getContext('2d');
+      if (mCtx) {
+        mCtx.fillStyle = '#b8b8b8';
+        mCtx.fillRect(0, 0, 512, 256);
+
+        const tileCols = 32;
+        const tileRows = 16;
+        const tW = 512 / tileCols;
+        const tH = 256 / tileRows;
+
+        for (let r = 0; r < tileRows; r++) {
+          for (let c = 0; c < tileCols; c++) {
+            const lum = 180 + Math.floor(Math.sin(r * 4.2 + c * 3.1) * 45 + Math.random() * 30);
+            mCtx.fillStyle = `rgb(${lum}, ${lum}, ${lum})`;
+            mCtx.fillRect(c * tW + 1, r * tH + 1, tW - 2, tH - 2);
+
+            mCtx.strokeStyle = 'rgba(0,0,0,0.45)';
+            mCtx.lineWidth = 1;
+            mCtx.strokeRect(c * tW, r * tH, tW, tH);
+          }
+        }
+      }
+      const mirrorTexture = new THREE.CanvasTexture(mirrorCanvas);
+      mirrorTexture.wrapS = THREE.RepeatWrapping;
+      mirrorTexture.wrapT = THREE.RepeatWrapping;
+
+      const ballMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        metalness: 0.96,
+        roughness: 0.14,
+        map: mirrorTexture,
+        bumpMap: mirrorTexture,
+        bumpScale: 0.04,
+        flatShading: true,
+      });
+      const ballMesh = new THREE.Mesh(sphereGeom, ballMaterial);
+      discoGroup.add(ballMesh);
+
+      // Interactive Raycasting Hotspots for Celebrations
+      const pinGroup = new THREE.Group();
+      discoGroup.add(pinGroup);
+
+      const pinGeometry = new THREE.SphereGeometry(0.09, 16, 16);
+      const ringGeometry = new THREE.TorusGeometry(0.14, 0.025, 12, 24);
+
+      UPCOMING_WORLD_FESTIVALS.forEach((evt) => {
+        const phi = (90 - evt.lat) * (Math.PI / 180);
+        const theta = (evt.lon + 180) * (Math.PI / 180);
+
+        const r = radius + 0.06;
+        const x = -(r * Math.sin(phi) * Math.cos(theta));
+        const z = r * Math.sin(phi) * Math.sin(theta);
+        const y = r * Math.cos(phi);
+
+        const pinMat = new THREE.MeshStandardMaterial({
+          color: new THREE.Color(evt.color),
+          emissive: new THREE.Color(evt.color),
+          emissiveIntensity: 0.85,
+          metalness: 0.6,
+          roughness: 0.2,
+        });
+
+        const pin = new THREE.Mesh(pinGeometry, pinMat);
+        pin.position.set(x, y, z);
+        pin.userData = { id: evt.id, name: evt.name };
+
+        const ringMat = new THREE.MeshBasicMaterial({
+          color: new THREE.Color(evt.color),
+          transparent: true,
+          opacity: 0.8,
+        });
+        const ring = new THREE.Mesh(ringGeometry, ringMat);
+        ring.position.set(x, y, z);
+        ring.lookAt(0, 0, 0);
+
+        pinGroup.add(pin);
+        pinGroup.add(ring);
+      });
+
+      // Sparkle Particle Field Surrounding Globe
+      const sparkleCount = 60;
+      const sparkleGeom = new THREE.BufferGeometry();
+      const sparklePos = new Float32Array(sparkleCount * 3);
+      for (let i = 0; i < sparkleCount; i++) {
+        const spR = radius + 0.35 + Math.random() * 0.9;
+        const spTheta = Math.random() * Math.PI * 2;
+        const spPhi = Math.acos(2 * Math.random() - 1);
+        sparklePos[i * 3] = spR * Math.sin(spPhi) * Math.cos(spTheta);
+        sparklePos[i * 3 + 1] = spR * Math.cos(spPhi);
+        sparklePos[i * 3 + 2] = spR * Math.sin(spPhi) * Math.sin(spTheta);
+      }
+      sparkleGeom.setAttribute('position', new THREE.BufferAttribute(sparklePos, 3));
+      const sparkleMat = new THREE.PointsMaterial({
+        color: 0xEDE9FE,
+        size: 0.045,
+        transparent: true,
+        opacity: 0.85,
+      });
+      const sparklePoints = new THREE.Points(sparkleGeom, sparkleMat);
+      discoGroup.add(sparklePoints);
+
+      // Initial render pass
+      renderer.render(scene, camera);
+
+      // Animation Loop with Auto-Sleep to prevent continuous main-thread blocking
+      let animId = 0;
+      let baseSpeed = 0.0045;
+      let currentBoost = 0;
+      let isVisible = false;
+      let isSleeping = false;
+      let activeUntil = performance.now() + 2500;
+      let lastRenderTime = 0;
+
+      const wakeUp = (durationMs = 2500) => {
+        activeUntil = performance.now() + durationMs;
+        if (isSleeping && isVisible) {
+          isSleeping = false;
+          if (!animId) {
+            animId = requestAnimationFrame(animate);
+          }
+        }
+      };
+
+      spinGlobeRef.current = () => {
+        currentBoost = 0.028;
+        wakeUp(2200);
+      };
+
+      const animate = (timestamp: number) => {
+        if (!isVisible) {
+          animId = 0;
+          return;
+        }
+
+        // Check if animation window expired and boost has settled
+        if (timestamp > activeUntil && currentBoost <= 0.0001) {
+          renderer.render(scene, camera);
+          isSleeping = true;
+          animId = 0;
+          return;
+        }
+
+        // Frame throttle to ~35fps to keep main thread completely unblocked
+        if (timestamp - lastRenderTime < 26) {
+          animId = requestAnimationFrame(animate);
+          return;
+        }
+        lastRenderTime = timestamp;
+
+        animId = requestAnimationFrame(animate);
+
+        if (!reducedMotion) {
+          discoGroup.rotation.y += baseSpeed + currentBoost;
+          discoGroup.rotation.x = Math.sin(timestamp * 0.001) * 0.08;
+          sparklePoints.rotation.y -= 0.002;
+
+          if (currentBoost > 0.0001) {
+            currentBoost *= 0.94;
+          } else {
+            currentBoost = 0;
+          }
+        }
+
+        renderer.render(scene, camera);
+      };
+
+      const onUserInteract = () => {
+        wakeUp(2500);
+      };
+      container.addEventListener('pointerenter', onUserInteract);
+      container.addEventListener('pointermove', onUserInteract);
+      container.addEventListener('touchstart', onUserInteract, { passive: true });
+      container.addEventListener('touchmove', onUserInteract, { passive: true });
+
+      const observer = new IntersectionObserver((entries) => {
+        const entry = entries[0];
+        isVisible = !!entry?.isIntersecting;
+        if (isVisible) {
+          wakeUp(2500);
+        } else {
+          if (animId) {
+            cancelAnimationFrame(animId);
+            animId = 0;
+          }
+          isSleeping = true;
+        }
+      }, { threshold: 0.05 });
+
+      observer.observe(container);
+
+      const handleResize = () => {
+        if (!container) return;
+        const newW = container.clientWidth || 440;
+        camera.aspect = newW / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newW, height);
+        renderer.render(scene, camera);
+      };
+
+      window.addEventListener('resize', handleResize);
+
+      cleanupFn = () => {
+        observer.disconnect();
+        if (animId) cancelAnimationFrame(animId);
+        window.removeEventListener('resize', handleResize);
+        container.removeEventListener('pointerenter', onUserInteract);
+        container.removeEventListener('pointermove', onUserInteract);
+        container.removeEventListener('touchstart', onUserInteract);
+        container.removeEventListener('touchmove', onUserInteract);
+        renderer.dispose();
+        sphereGeom.dispose();
+        ballMaterial.dispose();
+        envTexture?.dispose();
+        mirrorTexture.dispose();
+      };
+    });
 
     return () => {
-      observer.disconnect();
-      if (animId) cancelAnimationFrame(animId);
-      window.removeEventListener('resize', handleResize);
-      container.removeEventListener('pointerenter', onUserInteract);
-      container.removeEventListener('pointermove', onUserInteract);
-      container.removeEventListener('touchstart', onUserInteract);
-      container.removeEventListener('touchmove', onUserInteract);
-      renderer.dispose();
-      sphereGeom.dispose();
-      ballMaterial.dispose();
-      envTexture?.dispose();
-      mirrorTexture.dispose();
+      isDisposed = true;
+      cleanupFn?.();
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, isDesktop]);
 
   const handleLaunchPlan = (
     occasionId: string,
@@ -543,7 +559,50 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
         <div className="disco-stage-layout">
           {/* Left Column: 3D Globe + Quick Selector List */}
           <div className="disco-canvas-column">
-            <div ref={canvasRef} className="disco-canvas-wrap" />
+            {isDesktop ? (
+              <div ref={canvasRef} className="disco-canvas-wrap" />
+            ) : (
+              <div
+                className="disco-canvas-wrap"
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'radial-gradient(circle at 50% 40%, rgba(255, 251, 235, 0.95) 0%, rgba(237, 233, 254, 0.8) 45%, rgba(199, 210, 254, 0.5) 75%, rgba(91, 66, 243, 0.15) 100%)',
+                  borderRadius: '24px',
+                  border: '1.5px solid rgba(91, 66, 243, 0.18)',
+                  padding: '24px 16px',
+                  textAlign: 'center',
+                  minHeight: '220px',
+                  marginBottom: '16px',
+                }}
+              >
+                <div
+                  style={{
+                    width: '84px',
+                    height: '84px',
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #FFD54F, #EC4899, #818CF8, #5B42F3)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 10px 24px rgba(91, 66, 243, 0.35)',
+                    marginBottom: '12px',
+                  }}
+                >
+                  <span style={{ fontSize: '38px' }}>
+                    {activeTab === 'festivals' ? '🎉' : activeWeekend.flag}
+                  </span>
+                </div>
+                <div style={{ fontWeight: 800, fontSize: '17px', color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
+                  {activeTab === 'festivals' ? activeFestival.name : activeWeekend.name}
+                </div>
+                <div style={{ fontSize: '12.5px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                  {activeTab === 'festivals' ? `${activeFestival.location} • ${activeFestival.dates}` : `${activeWeekend.country} • ${activeWeekend.dates}`}
+                </div>
+              </div>
+            )}
 
             {/* Quick-Selector Chips */}
             <div className="disco-festival-chips-scroll">
