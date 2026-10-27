@@ -1,21 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Navbar, type AuthUser, type ActiveAppTab } from './components/Navbar';
-import { AuthModal } from './components/AuthModal';
 import { VenueExperience3D } from './components/VenueExperience3D';
-import { LiveInteractiveDemo } from './components/LiveInteractiveDemo';
 import { TaglineReveal } from './components/TaglineReveal';
 import { ProblemSolution } from './components/ProblemSolution';
-import { PlanBuilder } from './components/PlanBuilder';
-import { CategoryShowcase } from './components/CategoryShowcase';
-import { FAQSection } from './components/FAQSection';
-import { FestiChatbot } from './components/FestiChatbot';
 import { OrbitableHeroLogo } from './components/OrbitableHeroLogo';
-import { DiscoBallCelebrationHub } from './components/DiscoBallCelebrationHub';
-import { PeekingMascot } from './components/PeekingMascot';
-import { GlobalFestivalFooterShowcase } from './components/GlobalFestivalFooterShowcase';
 import { detectUserRegion } from './utils/currency';
 import { playCelebrationSound } from './utils/audio';
 import { type EventPlanningContext } from './data/globalCelebrations';
+
+const AuthModal = lazy(() => import('./components/AuthModal').then((m) => ({ default: m.AuthModal })));
+const LiveInteractiveDemo = lazy(() => import('./components/LiveInteractiveDemo').then((m) => ({ default: m.LiveInteractiveDemo })));
+const DiscoBallCelebrationHub = lazy(() => import('./components/DiscoBallCelebrationHub').then((m) => ({ default: m.DiscoBallCelebrationHub })));
+const CategoryShowcase = lazy(() => import('./components/CategoryShowcase').then((m) => ({ default: m.CategoryShowcase })));
+const PlanBuilder = lazy(() => import('./components/PlanBuilder').then((m) => ({ default: m.PlanBuilder })));
+const FAQSection = lazy(() => import('./components/FAQSection').then((m) => ({ default: m.FAQSection })));
+const GlobalFestivalFooterShowcase = lazy(() => import('./components/GlobalFestivalFooterShowcase').then((m) => ({ default: m.GlobalFestivalFooterShowcase })));
+const PeekingMascot = lazy(() => import('./components/PeekingMascot').then((m) => ({ default: m.PeekingMascot })));
+const FestiChatbot = lazy(() => import('./components/FestiChatbot').then((m) => ({ default: m.FestiChatbot })));
 
 const OCCASION_SWAP_ITEMS = [
   { id: 'wedding', name: 'Luxury Weddings' },
@@ -187,26 +188,28 @@ export function App() {
 
                 {/* 3D DISCO BALL: UPCOMING WORLD CELEBRATIONS & LONG WEEKENDS */}
                 <div style={{ marginTop: '36px', marginBottom: '40px' }}>
-                  <DiscoBallCelebrationHub
-                    reducedMotion={reducedMotion}
-                    currentCurrency={currentCurrency}
-                    onSelectEventForPlanner={(occasionId, eventName, context) => {
-                      setActiveOccasion(occasionId);
-                      if (context) {
-                        setSelectedPlanningContext(context);
-                      } else {
-                        setSelectedPlanningContext({
-                          id: occasionId,
-                          name: eventName,
-                          category: occasionId,
-                          location: 'Worldwide',
-                          dates: 'Upcoming 6 Months',
-                        });
-                      }
-                      setActiveTab('planner');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                  />
+                  <Suspense fallback={<div style={{ minHeight: '380px' }} />}>
+                    <DiscoBallCelebrationHub
+                      reducedMotion={reducedMotion}
+                      currentCurrency={currentCurrency}
+                      onSelectEventForPlanner={(occasionId, eventName, context) => {
+                        setActiveOccasion(occasionId);
+                        if (context) {
+                          setSelectedPlanningContext(context);
+                        } else {
+                          setSelectedPlanningContext({
+                            id: occasionId,
+                            name: eventName,
+                            category: occasionId,
+                            location: 'Worldwide',
+                            dates: 'Upcoming 6 Months',
+                          });
+                        }
+                        setActiveTab('planner');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                    />
+                  </Suspense>
                 </div>
 
                 {/* APP NAVIGATION GATEWAY CARDS (Dividing the app into distinct parts) */}
@@ -283,7 +286,9 @@ export function App() {
             </section>
 
             {/* LIVE AUTOMATED INTERACTIVE DEMO */}
-            <LiveInteractiveDemo />
+            <Suspense fallback={null}>
+              <LiveInteractiveDemo />
+            </Suspense>
 
             {/* Tagline Reveal Section */}
             <TaglineReveal reducedMotion={reducedMotion} />
@@ -298,17 +303,19 @@ export function App() {
             ========================================================== */}
         {activeTab === 'blueprints' && (
           <div style={{ paddingTop: '80px', minHeight: '80vh' }}>
-            <CategoryShowcase
-              onSelectCategory={(occ) => {
-                setActiveOccasion(occ);
-                setActiveTab('planner');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              onNavigateToPlanner={() => {
-                setActiveTab('planner');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-            />
+            <Suspense fallback={null}>
+              <CategoryShowcase
+                onSelectCategory={(occ) => {
+                  setActiveOccasion(occ);
+                  setActiveTab('planner');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                onNavigateToPlanner={() => {
+                  setActiveTab('planner');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
+            </Suspense>
           </div>
         )}
 
@@ -317,16 +324,18 @@ export function App() {
             ========================================================== */}
         {activeTab === 'planner' && (
           <div style={{ paddingTop: '80px', minHeight: '80vh' }}>
-            <PlanBuilder
-              activeOccasion={activeOccasion}
-              onOccasionChange={(occ) => {
-                setActiveOccasion(occ);
-                setSelectedPlanningContext(null);
-              }}
-              soundEnabled={soundEnabled}
-              planningContext={selectedPlanningContext}
-              onClearPlanningContext={() => setSelectedPlanningContext(null)}
-            />
+            <Suspense fallback={null}>
+              <PlanBuilder
+                activeOccasion={activeOccasion}
+                onOccasionChange={(occ) => {
+                  setActiveOccasion(occ);
+                  setSelectedPlanningContext(null);
+                }}
+                soundEnabled={soundEnabled}
+                planningContext={selectedPlanningContext}
+                onClearPlanningContext={() => setSelectedPlanningContext(null)}
+              />
+            </Suspense>
           </div>
         )}
 
@@ -335,7 +344,9 @@ export function App() {
             ========================================================== */}
         {activeTab === 'faq' && (
           <div style={{ paddingTop: '80px', minHeight: '80vh' }}>
-            <FAQSection soundEnabled={soundEnabled} />
+            <Suspense fallback={null}>
+              <FAQSection soundEnabled={soundEnabled} />
+            </Suspense>
           </div>
         )}
 
@@ -361,13 +372,15 @@ export function App() {
       </main>
 
       {/* Global Celebrations 3D Parallax & Perspective Footer Showcase */}
-      <GlobalFestivalFooterShowcase
-        onSelectFestival={(occ) => {
-          setActiveOccasion(occ);
-          setActiveTab('planner');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
-      />
+      <Suspense fallback={null}>
+        <GlobalFestivalFooterShowcase
+          onSelectFestival={(occ) => {
+            setActiveOccasion(occ);
+            setActiveTab('planner');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
+      </Suspense>
 
       {/* FOOTER */}
       <footer className="site-footer" role="contentinfo">
@@ -378,16 +391,16 @@ export function App() {
                 <img src="/festiya-logo-nav.webp" alt="Festiya Logo" width={64} height={24} style={{ height: '24px', width: 'auto' }} />
                 <span className="island-brand-text" style={{ fontSize: '16px' }}>Festiya</span>
               </div>
-              <p>
+              <p style={{ color: 'var(--text-secondary)' }}>
                 Turn every moment into a festival. Global event planning workspace built on Cloudflare.
               </p>
-              <div style={{ color: 'var(--text-muted)', fontSize: '13px' }}>
+              <div style={{ color: 'var(--text-secondary)', fontSize: '13px', fontWeight: 500 }}>
                 Cloudflare-first architecture • WCAG 2.2 compliant • Zero pure black • Rich chocolate roast contrast
               </div>
             </div>
 
             <div className="footer-col">
-              <h5>App Sections</h5>
+              <h4 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>App Sections</h4>
               <ul className="footer-links">
                 <li>
                   <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
@@ -413,7 +426,7 @@ export function App() {
             </div>
 
             <div className="footer-col">
-              <h5>Event types</h5>
+              <h4 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>Event types</h4>
               <ul className="footer-links">
                 <li>
                   <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveOccasion('wedding'); setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
@@ -439,7 +452,7 @@ export function App() {
             </div>
 
             <div className="footer-col">
-              <h5>Trust & Quality</h5>
+              <h4 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>Trust & Quality</h4>
               <ul className="footer-links">
                 <li>• Decimal-safe accounting</li>
                 <li>• Zero dark patterns</li>
@@ -449,7 +462,7 @@ export function App() {
             </div>
           </div>
 
-          <div className="footer-bottom">
+          <div className="footer-bottom" style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>
             <span>© 2026 Festiya. All rights reserved.</span>
             <span>Turn every moment into a festival.</span>
           </div>
@@ -457,20 +470,26 @@ export function App() {
       </footer>
 
       {/* Playful 3D Alive Peeking Mascot (randomized, max 3 per session, side & upside-down peek) */}
-      <PeekingMascot />
+      <Suspense fallback={null}>
+        <PeekingMascot />
+      </Suspense>
 
       {/* Floating Animated Festi AI Mascot & Chatbot */}
-      <FestiChatbot />
+      <Suspense fallback={null}>
+        <FestiChatbot />
+      </Suspense>
 
       {/* Cloudflare Edge Tenant Sign In / Sign Up Modal */}
-      <AuthModal
-        isOpen={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-        onAuthSuccess={(user) => {
-          setCurrentUser(user);
-        }}
-        initialMode={authMode}
-      />
+      <Suspense fallback={null}>
+        <AuthModal
+          isOpen={authModalOpen}
+          onClose={() => setAuthModalOpen(false)}
+          onAuthSuccess={(user) => {
+            setCurrentUser(user);
+          }}
+          initialMode={authMode}
+        />
+      </Suspense>
     </div>
   );
 }

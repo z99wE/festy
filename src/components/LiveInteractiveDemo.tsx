@@ -217,7 +217,7 @@ export const LiveInteractiveDemo: React.FC = () => {
                       <div
                         className="demo-bar-fill"
                         style={{
-                          width: showResults ? `${item.percentage * 2.5}%` : '0%',
+                          transform: showResults ? `scaleX(${Math.min(1, (item.percentage * 2.5) / 100)})` : 'scaleX(0)',
                         }}
                       />
                     </div>

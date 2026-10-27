@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Festiya — The AI Celebration & Event Planning Engine</title>
     <meta name="description" content="Festiya transforms any event vision into an editable 3-tier budget (low/likely/high), prioritized vendor milestone checklist, and day-of timeline in under 90 seconds." />
@@ -10,11 +11,6 @@
     <meta name="author" content="Festiya Inc." />
     <meta name="theme-color" content="#FF5E1E" />
     <meta name="color-scheme" content="light" />
-
-    <!-- Cache-busting headers to prevent stale browser disk caching -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
 
     <!-- Open Graph tags for social preview & GEO scrapers -->
     <meta property="og:title" content="Festiya — The AI Celebration & Event Planning Engine" />
@@ -95,10 +91,14 @@
     }
     </script>
 
-    <!-- Approved Soft Sans-Serif Typography: Plus Jakarta Sans & Outfit (Zero hard edges, welcoming, effortless) & Geist Mono for numbers -->
+    <!-- Approved Soft Sans-Serif Typography: Plus Jakarta Sans & Outfit & Geist Mono (Non-render-blocking) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    </noscript>
   </head>
   <body>
     <a href="#main-content" class="skip-to-content">Skip to main content</a>

@@ -291,12 +291,14 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     const sparklePoints = new THREE.Points(sparkleGeom, sparkleMat);
     discoGroup.add(sparklePoints);
 
-    // Animation Loop
-    let animId: number;
+    // Animation Loop with IntersectionObserver to conserve CPU/main-thread
+    let animId = 0;
     let baseSpeed = 0.0045;
     let currentBoost = 0;
+    let isVisible = false;
 
     const animate = () => {
+      if (!isVisible) return;
       animId = requestAnimationFrame(animate);
 
       if (!reducedMotion) {
@@ -314,7 +316,22 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
       renderer.render(scene, camera);
     };
 
-    animate();
+    const observer = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      isVisible = !!entry?.isIntersecting;
+      if (isVisible) {
+        if (!animId) {
+          animId = requestAnimationFrame(animate);
+        }
+      } else {
+        if (animId) {
+          cancelAnimationFrame(animId);
+          animId = 0;
+        }
+      }
+    }, { threshold: 0.05 });
+
+    observer.observe(container);
 
     const handleResize = () => {
       if (!container) return;
@@ -322,12 +339,16 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
       camera.aspect = newW / height;
       camera.updateProjectionMatrix();
       renderer.setSize(newW, height);
+      if (isVisible && !animId) {
+        renderer.render(scene, camera);
+      }
     };
 
     window.addEventListener('resize', handleResize);
 
     return () => {
-      cancelAnimationFrame(animId);
+      observer.disconnect();
+      if (animId) cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
       sphereGeom.dispose();
@@ -687,8 +708,8 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                 {/* Logistics Checkpoint */}
                 <div className="dossier-logistics-box">
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                    <ShieldAlert size={14} style={{ color: '#059669' }} />
-                    <span style={{ fontSize: '12px', fontWeight: 800, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <ShieldAlert size={14} style={{ color: '#047857' }} />
+                    <span style={{ fontSize: '12px', fontWeight: 800, color: '#047857', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       Critical Logistics Checkpoint
                     </span>
                   </div>
@@ -795,8 +816,8 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
 
                 <div className="dossier-logistics-box">
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                    <ShieldAlert size={14} style={{ color: '#059669' }} />
-                    <span style={{ fontSize: '12px', fontWeight: 800, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <ShieldAlert size={14} style={{ color: '#047857' }} />
+                    <span style={{ fontSize: '12px', fontWeight: 800, color: '#047857', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       Critical Logistics Check
                     </span>
                   </div>

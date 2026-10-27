@@ -71,7 +71,17 @@ const EMPTY: TileData = { kind: 'empty' };
 
 const Tile: React.FC<{ tile: TileData }> = ({ tile }) => (
   <div className="grid-motion__tile">
-    {tile.kind === 'image' && <img src={tile.src} alt={tile.alt} draggable={false} decoding="async" />}
+    {tile.kind === 'image' && (
+      <img
+        src={tile.src}
+        alt={tile.alt || 'Celebration festival scene'}
+        draggable={false}
+        decoding="async"
+        loading="lazy"
+        width={320}
+        height={228}
+      />
+    )}
     {tile.kind === 'text' && <span className="grid-motion__text">{tile.text}</span>}
     {tile.kind === 'node' && tile.node}
   </div>
@@ -233,13 +243,13 @@ export const GridMotion: React.FC<GridMotionProps> = ({
     const written = tileEls.map((list) => new Float32Array(list.length));
     let raf = 0;
     let last = performance.now();
-    let visible = true;
+    let visible = false;
     let alive = true;
     if (motion.intro >= 1) plane.style.opacity = '1';
 
     const frame = (now: number) => {
       raf = 0;
-      if (!alive) return;
+      if (!alive || !visible) return;
       const s = settingsRef.current;
       const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));
       last = now;
@@ -249,26 +259,35 @@ export const GridMotion: React.FC<GridMotionProps> = ({
         plane.style.opacity = String(1 - (1 - motion.intro) ** 3);
       }
 
-      const rect = root.getBoundingClientRect();
-      const scale = rect.width ? root.clientWidth / rect.width : 1;
-      const halfWidth = root.clientWidth / 2 || 1;
-      const halfHeight = root.clientHeight / 2 || 1;
-      const px = (motion.pointer.x - rect.left) * scale - halfWidth;
-      const py = (motion.pointer.y - rect.top) * scale - halfHeight;
-      const inside = motion.pointer.active && Math.abs(px) <= halfWidth && Math.abs(py) <= halfHeight;
-      const lean = (s.tilt * Math.PI) / 180;
-      const turn = (s.angle * Math.PI) / 180;
-      const depth = layout.perspective;
-      let flatY = py;
-      let flatX = px;
-      if (lean > 0.0001) {
-        flatY = (py * depth) / (depth * Math.cos(lean) + py * Math.sin(lean));
-        flatX = (px * (depth - flatY * Math.sin(lean))) / depth;
+      let inside = false;
+      let planeX = 0;
+      let planeY = 0;
+      let nudge = 0;
+      let reach = 0;
+
+      if (motion.pointer.active) {
+        const rect = root.getBoundingClientRect();
+        const scale = rect.width ? root.clientWidth / rect.width : 1;
+        const halfWidth = root.clientWidth / 2 || 1;
+        const halfHeight = root.clientHeight / 2 || 1;
+        const px = (motion.pointer.x - rect.left) * scale - halfWidth;
+        const py = (motion.pointer.y - rect.top) * scale - halfHeight;
+        inside = Math.abs(px) <= halfWidth && Math.abs(py) <= halfHeight;
+        const lean = (s.tilt * Math.PI) / 180;
+        const turn = (s.angle * Math.PI) / 180;
+        const depth = layout.perspective;
+        let flatY = py;
+        let flatX = px;
+        if (lean > 0.0001) {
+          flatY = (py * depth) / (depth * Math.cos(lean) + py * Math.sin(lean));
+          flatX = (px * (depth - flatY * Math.sin(lean))) / depth;
+        }
+        planeX = flatX * Math.cos(turn) + flatY * Math.sin(turn);
+        planeY = -flatX * Math.sin(turn) + flatY * Math.cos(turn);
+        nudge = clamp(px / halfWidth, -1, 1);
+        reach = (0.6 + 2.2 * s.spotlight) * Math.max(layout.tileWidth, layout.tileHeight);
       }
-      const planeX = flatX * Math.cos(turn) + flatY * Math.sin(turn);
-      const planeY = -flatX * Math.sin(turn) + flatY * Math.cos(turn);
-      const nudge = motion.pointer.active ? clamp(px / halfWidth, -1, 1) : 0;
-      const reach = (0.6 + 2.2 * s.spotlight) * Math.max(layout.tileWidth, layout.tileHeight);
+
       const settle = 1 - Math.exp(-dt / 0.22);
 
       rowEls.forEach((row, r) => {
@@ -306,14 +325,17 @@ export const GridMotion: React.FC<GridMotionProps> = ({
     };
 
     const visibility = new IntersectionObserver((entries) => {
-      visible = entries.some((entry) => entry.isIntersecting);
+      const isIntersecting = entries.some((entry) => entry.isIntersecting);
+      visible = isIntersecting;
       if (visible && !raf) {
         last = performance.now();
         raf = requestAnimationFrame(frame);
+      } else if (!visible && raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
       }
     });
     visibility.observe(root);
-    raf = requestAnimationFrame(frame);
 
     return () => {
       alive = false;

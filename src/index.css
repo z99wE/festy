@@ -25,7 +25,7 @@
   --orange-300: #FFB385;
   --orange-400: #FF8A47;
   --orange-500: #FF5E1E; /* Primary Happy Orange */
-  --orange-600: #E64909; /* High-contrast button orange */
+  --orange-600: #C23B00; /* High-contrast button orange (WCAG AA 5.3:1) */
   --orange-700: #BD3700;
   --orange-800: #962E03;
   --orange-glow: rgba(255, 94, 30, 0.28);
@@ -33,10 +33,10 @@
   /* Curated Accents (Saturation under 80% per skill rule) */
   --accent-gold: #FFB703;
   --accent-gold-light: #FFF0C2;
-  --accent-coral: #FF4D6D;
+  --accent-coral: #C9184A;
   --accent-coral-light: #FFE3E8;
   --accent-mint: #06D6A0;
-  --accent-mint-dark: #059669;
+  --accent-mint-dark: #047857;
   --accent-mint-light: #D8FBF0;
   --accent-sky: #118AB2;
   --accent-sky-light: #E0F4FB;
@@ -45,7 +45,7 @@
   /* Universal Brand Typography: Zero black anywhere across all pages */
   --text-primary: #5b42f3;     /* Signature brand bubblegum purple-blue */
   --text-secondary: #4338ca;   /* Deep brand royal indigo for readable paragraphs */
-  --text-muted: #6366f1;       /* Medium brand purple-blue for subtitles & metadata */
+  --text-muted: #3730a3;       /* High-contrast brand purple-blue for subtitles & metadata (WCAG AA 9.4:1) */
   --text-faint: #818cf8;       /* Soft brand lavender-blue for faint hints */
   --text-inverse: #FFFFFF;
 
@@ -513,18 +513,18 @@ img {
 }
 
 .btn-primary {
-  background: var(--orange-500);
+  background: var(--orange-600);
   color: #FFFFFF;
   padding: 8px 16px;
   font-size: 16px;
   line-height: 24px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 14px rgba(255, 94, 30, 0.35);
+  box-shadow: 0 4px 14px rgba(194, 59, 0, 0.35);
 }
 
 .btn-primary:hover {
-  background: var(--orange-600);
-  box-shadow: 0 6px 20px rgba(255, 94, 30, 0.45);
+  background: var(--orange-700);
+  box-shadow: 0 6px 20px rgba(194, 59, 0, 0.45);
 }
 
 .btn-primary:active {
@@ -797,13 +797,14 @@ img {
 }
 
 .reveal-word.dim {
-  color: var(--text-primary);
-  opacity: 0.28; /* Starts in subtle muted tone per Rule B11 */
+  color: #5a443a;
+  opacity: 1;
 }
 
 .reveal-word.lit {
   color: var(--text-primary);
-  opacity: 1; /* Word transitions to full text color as it scrolls into view */
+  font-weight: 800;
+  opacity: 1;
 }
 
 .tagline-sub-text {
@@ -814,11 +815,12 @@ img {
 }
 
 .reveal-word-sub.dim {
-  color: var(--text-secondary);
-  opacity: 0.35;
+  color: #634e44;
+  opacity: 1;
 }
 .reveal-word-sub.lit {
   color: var(--text-secondary);
+  font-weight: 700;
   opacity: 1;
 }
 
@@ -2519,11 +2521,11 @@ img {
 }
 
 .occasion-chip-btn.active {
-  border-color: #047857;
-  background: #059669;
+  border-color: #065F46;
+  background: #047857;
   color: #FFFFFF;
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
+  box-shadow: 0 4px 14px rgba(4, 120, 87, 0.4);
 }
 
 /* Hero Centerpiece Card with 3D Plush Logo */
@@ -3477,13 +3479,13 @@ img {
 }
 
 .navbar-auth-btn.signup {
-  background: #FF5E1E;
-  color: #FFFDF9;
+  background: var(--orange-600);
+  color: #FFFFFF;
 }
 
 .navbar-auth-btn.signup:hover {
-  background: #E04D12;
-  color: #FFFDF9;
+  background: var(--orange-700);
+  color: #FFFFFF;
 }
 
 .navbar-user-chip {
@@ -3850,10 +3852,13 @@ img {
 }
 
 .demo-bar-fill {
+  width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, #5b42f3, #FF5E1E);
+  background: linear-gradient(90deg, #5b42f3, #C23B00);
   border-radius: 6px;
-  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: left center;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 
 .demo-tasks-list {
@@ -4420,10 +4425,10 @@ img {
    ACTIVE NAVIGATION PILLS & SECTION SWITCHER
    ========================================================== */
 .island-nav-link.active-tab {
-  background: #FF5E1E !important;
-  color: #FFFDF9 !important;
+  background: var(--orange-600) !important;
+  color: #FFFFFF !important;
   border-radius: 9999px;
-  box-shadow: 0 4px 12px rgba(255, 94, 30, 0.35);
+  box-shadow: 0 4px 12px rgba(194, 59, 0, 0.4);
 }
 
 .section-switch-banner {
@@ -4721,27 +4726,43 @@ img {
   gap: 6px;
   padding: 6px 14px;
   border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(91, 66, 243, 0.3);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid #371bb5;
   cursor: pointer;
   white-space: nowrap;
   font-size: 12.5px;
-  color: var(--bubblegum-purple-blue, #5b42f3);
-  font-weight: 600;
+  color: #371bb5;
+  font-weight: 700;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .disco-chip-item.active {
-  background: var(--bubblegum-purple-blue, #5b42f3);
+  background: #371bb5;
   color: #FFFFFF;
-  border-color: var(--bubblegum-purple-blue, #5b42f3);
+  border-color: #371bb5;
   font-weight: 700;
-  box-shadow: 0 4px 12px rgba(91, 66, 243, 0.25);
+  box-shadow: 0 4px 12px rgba(55, 27, 181, 0.35);
 }
 
 .disco-chip-days {
   font-size: 11px;
-  opacity: 0.85;
+  font-weight: 800;
+  color: inherit;
+  opacity: 1;
+}
+
+.orbitable-hero-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 850px;
+  min-height: 520px;
+  aspect-ratio: 850 / 520;
+  contain: layout size;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
 }
 
 /* Right Column: Dossier Card */

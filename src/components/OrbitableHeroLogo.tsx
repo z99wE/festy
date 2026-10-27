@@ -170,11 +170,13 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     };
     window.addEventListener('resize', handleResize);
 
-    // Animation Loop with Gentle Harmonic Sway (No 360 Spin)
-    let animationFrameId: number;
+    // Animation Loop with Gentle Harmonic Sway (No 360 Spin) & IntersectionObserver
+    let animationFrameId = 0;
+    let isVisible = true;
     const clock = new THREE.Clock();
 
     const animate = () => {
+      if (!isVisible) return;
       animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
@@ -198,10 +200,26 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       renderer.render(scene, camera);
     };
 
-    animate();
+    const observer = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      isVisible = !!entry?.isIntersecting;
+      if (isVisible) {
+        if (!animationFrameId) {
+          animationFrameId = requestAnimationFrame(animate);
+        }
+      } else {
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = 0;
+        }
+      }
+    }, { threshold: 0.05 });
+
+    observer.observe(container);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
       dom.removeEventListener('mousedown', onPointerDown);
       window.removeEventListener('mousemove', onPointerMove);

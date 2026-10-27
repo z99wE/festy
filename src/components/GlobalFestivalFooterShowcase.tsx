@@ -2,18 +2,18 @@ import React from 'react';
 import { GridMotion } from './GridMotion';
 
 const FESTIVAL_PHOTOS = [
-  '/festivals/rio-carnival.jpg',
-  '/festivals/kyoto-lanterns.jpg',
-  '/festivals/venice-masquerade.jpg',
-  '/festivals/holi-festival.jpg',
-  '/festivals/kyoto-lanterns.jpg',
-  '/festivals/rio-carnival.jpg',
-  '/festivals/holi-festival.jpg',
-  '/festivals/venice-masquerade.jpg',
-  '/festivals/rio-carnival.jpg',
-  '/festivals/holi-festival.jpg',
-  '/festivals/kyoto-lanterns.jpg',
-  '/festivals/venice-masquerade.jpg',
+  '/festivals/rio-carnival.webp',
+  '/festivals/kyoto-lanterns.webp',
+  '/festivals/venice-masquerade.webp',
+  '/festivals/holi-festival.webp',
+  '/festivals/kyoto-lanterns.webp',
+  '/festivals/rio-carnival.webp',
+  '/festivals/holi-festival.webp',
+  '/festivals/venice-masquerade.webp',
+  '/festivals/rio-carnival.webp',
+  '/festivals/holi-festival.webp',
+  '/festivals/kyoto-lanterns.webp',
+  '/festivals/venice-masquerade.webp',
 ];
 
 interface GlobalFestivalFooterShowcaseProps {
