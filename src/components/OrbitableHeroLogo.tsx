@@ -48,7 +48,7 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       powerPreference: 'high-performance',
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.25;
     renderer.domElement.style.display = 'block';
@@ -102,6 +102,7 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
 
         const mesh = new THREE.Mesh(planeGeo, material);
         orbitGroup.add(mesh);
+        renderer.render(scene, camera);
       },
       undefined,
       (err) => {
@@ -118,13 +119,36 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     let currentRotationY = 0;
     let currentRotationX = 0;
 
+    let animationFrameId = 0;
+    let isVisible = true;
+    let isSleeping = false;
+    let activeUntil = performance.now() + 3000; // Float for first 3s, then sleep
+    let lastRenderTime = 0;
+    const clock = new THREE.Clock();
+
+    const wakeUp = (durationMs = 2500) => {
+      activeUntil = performance.now() + durationMs;
+      if (isSleeping && isVisible) {
+        isSleeping = false;
+        if (!animationFrameId) {
+          animationFrameId = requestAnimationFrame(animate);
+        }
+      }
+    };
+
+    const dom = renderer.domElement;
+    dom.style.cursor = 'grab';
+    dom.style.touchAction = 'none';
+
     const onPointerDown = (e: MouseEvent | TouchEvent) => {
       isDragging = true;
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
       const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
       prevMouseX = clientX;
       prevMouseY = clientY;
+      dom.style.cursor = 'grabbing';
       playPopSound(soundEnabled);
+      wakeUp(3000);
     };
 
     const onPointerMove = (e: MouseEvent | TouchEvent) => {
@@ -144,15 +168,14 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
 
       prevMouseX = clientX;
       prevMouseY = clientY;
+      wakeUp(2500);
     };
 
     const onPointerUp = () => {
       isDragging = false;
+      dom.style.cursor = 'grab';
+      wakeUp(1800);
     };
-
-    const dom = renderer.domElement;
-    dom.style.cursor = 'grab';
-    dom.style.touchAction = 'none';
 
     dom.addEventListener('mousedown', onPointerDown);
     window.addEventListener('mousemove', onPointerMove);
@@ -170,16 +193,32 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       updateCameraDistance(newW, newH);
       camera.updateProjectionMatrix();
       renderer.setSize(newW, newH);
+      renderer.render(scene, camera);
     };
     window.addEventListener('resize', handleResize);
 
-    // Animation Loop with Gentle Harmonic Sway (No 360 Spin) & IntersectionObserver
-    let animationFrameId = 0;
-    let isVisible = true;
-    const clock = new THREE.Clock();
+    const animate = (timestamp: number) => {
+      if (!isVisible) {
+        animationFrameId = 0;
+        return;
+      }
 
-    const animate = () => {
-      if (!isVisible) return;
+      // Check if animation window expired and rotation has settled
+      const rotDiff = Math.abs(targetRotationY - currentRotationY) + Math.abs(targetRotationX - currentRotationX);
+      if (!isDragging && timestamp > activeUntil && rotDiff < 0.001) {
+        renderer.render(scene, camera);
+        isSleeping = true;
+        animationFrameId = 0;
+        return;
+      }
+
+      // Throttle to ~35fps to keep main thread completely unblocked on mobile
+      if (timestamp - lastRenderTime < 26) {
+        animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
+      lastRenderTime = timestamp;
+
       animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
@@ -199,7 +238,6 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       orbitGroup.rotation.y = currentRotationY;
       orbitGroup.rotation.x = currentRotationX;
 
-      dom.style.cursor = isDragging ? 'grabbing' : 'grab';
       renderer.render(scene, camera);
     };
 
@@ -207,14 +245,13 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       const entry = entries[0];
       isVisible = !!entry?.isIntersecting;
       if (isVisible) {
-        if (!animationFrameId) {
-          animationFrameId = requestAnimationFrame(animate);
-        }
+        wakeUp(3000);
       } else {
         if (animationFrameId) {
           cancelAnimationFrame(animationFrameId);
           animationFrameId = 0;
         }
+        isSleeping = true;
       }
     }, { threshold: 0.05 });
 

@@ -89,7 +89,10 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     ];
   }, []);
 
-  // Three.js Reflective 3D Celebration Disco Globe Simulation
+  // Ref for triggering celebratory spin and waking the 3D globe
+  const spinGlobeRef = useRef<() => void>(() => {});
+
+  // Three.js Reflective 3D Celebration Disco Globe Simulation with Auto-Sleep
   useEffect(() => {
     const container = canvasRef.current;
     if (!container) return;
@@ -107,7 +110,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
       powerPreference: 'high-performance',
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.35;
     container.innerHTML = '';
@@ -182,23 +185,23 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     loopMesh.position.set(0, 1.25, 0);
     discoGroup.add(loopMesh);
 
-    // Core Sphere with Mirror Facets
+    // Core Sphere with Mirror Facets (Optimized 512x256 texture)
     const radius = 1.35;
     const segments = 24;
     const sphereGeom = new THREE.SphereGeometry(radius, segments, segments);
 
     const mirrorCanvas = document.createElement('canvas');
-    mirrorCanvas.width = 1024;
-    mirrorCanvas.height = 512;
+    mirrorCanvas.width = 512;
+    mirrorCanvas.height = 256;
     const mCtx = mirrorCanvas.getContext('2d');
     if (mCtx) {
       mCtx.fillStyle = '#b8b8b8';
-      mCtx.fillRect(0, 0, 1024, 512);
+      mCtx.fillRect(0, 0, 512, 256);
 
-      const tileCols = 64;
-      const tileRows = 32;
-      const tW = 1024 / tileCols;
-      const tH = 512 / tileRows;
+      const tileCols = 32;
+      const tileRows = 16;
+      const tW = 512 / tileCols;
+      const tH = 256 / tileRows;
 
       for (let r = 0; r < tileRows; r++) {
         for (let c = 0; c < tileCols; c++) {
@@ -291,23 +294,63 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
     const sparklePoints = new THREE.Points(sparkleGeom, sparkleMat);
     discoGroup.add(sparklePoints);
 
-    // Animation Loop with IntersectionObserver to conserve CPU/main-thread
+    // Initial render pass
+    renderer.render(scene, camera);
+
+    // Animation Loop with Auto-Sleep to prevent continuous main-thread blocking
     let animId = 0;
     let baseSpeed = 0.0045;
     let currentBoost = 0;
     let isVisible = false;
+    let isSleeping = false;
+    let activeUntil = performance.now() + 2500; // Animate for 2.5s on view, then sleep
+    let lastRenderTime = 0;
 
-    const animate = () => {
-      if (!isVisible) return;
+    const wakeUp = (durationMs = 2500) => {
+      activeUntil = performance.now() + durationMs;
+      if (isSleeping && isVisible) {
+        isSleeping = false;
+        if (!animId) {
+          animId = requestAnimationFrame(animate);
+        }
+      }
+    };
+
+    spinGlobeRef.current = () => {
+      currentBoost = 0.028;
+      wakeUp(2200);
+    };
+
+    const animate = (timestamp: number) => {
+      if (!isVisible) {
+        animId = 0;
+        return;
+      }
+
+      // Check if animation window expired and boost has settled
+      if (timestamp > activeUntil && currentBoost <= 0.0001) {
+        renderer.render(scene, camera);
+        isSleeping = true;
+        animId = 0;
+        return;
+      }
+
+      // Frame throttle to ~35fps to keep main thread completely unblocked on mobile
+      if (timestamp - lastRenderTime < 26) {
+        animId = requestAnimationFrame(animate);
+        return;
+      }
+      lastRenderTime = timestamp;
+
       animId = requestAnimationFrame(animate);
 
       if (!reducedMotion) {
         discoGroup.rotation.y += baseSpeed + currentBoost;
-        discoGroup.rotation.x = Math.sin(Date.now() * 0.001) * 0.08;
+        discoGroup.rotation.x = Math.sin(timestamp * 0.001) * 0.08;
         sparklePoints.rotation.y -= 0.002;
 
         if (currentBoost > 0.0001) {
-          currentBoost *= 0.96;
+          currentBoost *= 0.94;
         } else {
           currentBoost = 0;
         }
@@ -316,18 +359,25 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
       renderer.render(scene, camera);
     };
 
+    const onUserInteract = () => {
+      wakeUp(2500);
+    };
+    container.addEventListener('pointerenter', onUserInteract);
+    container.addEventListener('pointermove', onUserInteract);
+    container.addEventListener('touchstart', onUserInteract, { passive: true });
+    container.addEventListener('touchmove', onUserInteract, { passive: true });
+
     const observer = new IntersectionObserver((entries) => {
       const entry = entries[0];
       isVisible = !!entry?.isIntersecting;
       if (isVisible) {
-        if (!animId) {
-          animId = requestAnimationFrame(animate);
-        }
+        wakeUp(2500);
       } else {
         if (animId) {
           cancelAnimationFrame(animId);
           animId = 0;
         }
+        isSleeping = true;
       }
     }, { threshold: 0.05 });
 
@@ -339,9 +389,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
       camera.aspect = newW / height;
       camera.updateProjectionMatrix();
       renderer.setSize(newW, height);
-      if (isVisible && !animId) {
-        renderer.render(scene, camera);
-      }
+      renderer.render(scene, camera);
     };
 
     window.addEventListener('resize', handleResize);
@@ -350,6 +398,10 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
       observer.disconnect();
       if (animId) cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
+      container.removeEventListener('pointerenter', onUserInteract);
+      container.removeEventListener('pointermove', onUserInteract);
+      container.removeEventListener('touchstart', onUserInteract);
+      container.removeEventListener('touchmove', onUserInteract);
       renderer.dispose();
       sphereGeom.dispose();
       ballMaterial.dispose();
@@ -401,6 +453,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
               onClick={() => {
                 setActiveTab('weekends');
                 playPopSound(true);
+                spinGlobeRef.current();
               }}
             >
               <Calendar size={15} />
@@ -415,6 +468,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
               onClick={() => {
                 setActiveTab('festivals');
                 playPopSound(true);
+                spinGlobeRef.current();
               }}
             >
               <span>Major World Festivals</span>
@@ -502,6 +556,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                       onClick={() => {
                         setSelectedFestivalId(event.id);
                         playPopSound(true);
+                        spinGlobeRef.current();
                       }}
                     >
                       <span className="disco-chip-name">{event.name}</span>
@@ -516,6 +571,7 @@ export const DiscoBallCelebrationHub: React.FC<DiscoBallCelebrationHubProps> = (
                       onClick={() => {
                         setSelectedWeekendId(item.id);
                         playPopSound(true);
+                        spinGlobeRef.current();
                       }}
                     >
                       <span>{item.flag}</span>
