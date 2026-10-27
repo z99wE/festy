@@ -5114,6 +5114,35 @@ img {
   animation: mascot-alive-breath 2.6s ease-in-out infinite alternate;
 }
 
+.peeking-mascot-head {
+  position: relative;
+  z-index: 1;
+}
+
+.peeking-mascot-blink {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  animation: mascot-alive-breath 2.6s ease-in-out infinite alternate, mascot-css-blink 6.2s steps(1) infinite;
+}
+
+@keyframes mascot-css-blink {
+  0%, 22% { opacity: 0; }
+  22.5%, 25% { opacity: 1; }
+  25.5%, 51% { opacity: 0; }
+  51.5%, 53% { opacity: 1; }
+  53.5%, 55.5% { opacity: 0; }
+  56%, 58% { opacity: 1; }
+  58.5%, 78% { opacity: 0; }
+  78.5%, 81% { opacity: 1; }
+  81.5%, 100% { opacity: 0; }
+}
+
 @keyframes mascot-alive-breath {
   0% {
     transform: translateY(0) rotate(0deg) scale(1);

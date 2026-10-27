@@ -40,7 +40,6 @@ interface ActivePeek {
   color: MascotColor;
   position: PeekPosition;
   horizontalOffset: string;
-  isBlinking: boolean;
   isRetreating: boolean;
 }
 
@@ -56,16 +55,6 @@ export const PeekingMascot: React.FC = () => {
     timeoutsRef.current = [];
   }, []);
 
-  // Preload mascot assets on mount
-  useEffect(() => {
-    COLOR_KEYS.forEach((color) => {
-      const headImg = new Image();
-      headImg.src = MASCOTS[color].headSrc;
-      const blinkImg = new Image();
-      blinkImg.src = MASCOTS[color].blinkSrc;
-    });
-  }, []);
-
   const triggerPeek = useCallback(() => {
     // Strictly cap at max 3 times per page session
     if (peeksCountRef.current >= 3) return;
@@ -78,10 +67,6 @@ export const PeekingMascot: React.FC = () => {
     const chosenColor = availableColors[Math.floor(Math.random() * availableColors.length)];
     lastColorRef.current = chosenColor;
 
-    // Determine position:
-    // 1st: Bottom of page peeking up
-    // 2nd: Top of page peeking down upside down
-    // 3rd: Alternated bottom/top
     let chosenPos: PeekPosition = 'bottom-upright';
     let hOffset = 'right: 18%';
 
@@ -101,47 +86,10 @@ export const PeekingMascot: React.FC = () => {
       color: chosenColor,
       position: chosenPos,
       horizontalOffset: hOffset,
-      isBlinking: false,
       isRetreating: false,
     });
 
-    // Schedule alive blinking sequence during the ~6.2s appearance
-    // Blink 1: at 1.4s
-    const b1On = setTimeout(() => {
-      setActivePeek((prev) => (prev ? { ...prev, isBlinking: true } : null));
-    }, 1400);
-
-    const b1Off = setTimeout(() => {
-      setActivePeek((prev) => (prev ? { ...prev, isBlinking: false } : null));
-    }, 1560);
-
-    // Playful Double Blink 2: at 3.2s
-    const b2On = setTimeout(() => {
-      setActivePeek((prev) => (prev ? { ...prev, isBlinking: true } : null));
-    }, 3200);
-
-    const b2Off = setTimeout(() => {
-      setActivePeek((prev) => (prev ? { ...prev, isBlinking: false } : null));
-    }, 3320);
-
-    const b3On = setTimeout(() => {
-      setActivePeek((prev) => (prev ? { ...prev, isBlinking: true } : null));
-    }, 3460);
-
-    const b3Off = setTimeout(() => {
-      setActivePeek((prev) => (prev ? { ...prev, isBlinking: false } : null));
-    }, 3580);
-
-    // Blink 3: at 4.9s
-    const b4On = setTimeout(() => {
-      setActivePeek((prev) => (prev ? { ...prev, isBlinking: true } : null));
-    }, 4900);
-
-    const b4Off = setTimeout(() => {
-      setActivePeek((prev) => (prev ? { ...prev, isBlinking: false } : null));
-    }, 5050);
-
-    // Start retreat at 6.2s (plenty of time to register and admire)
+    // Start retreat at 6.2s (smooth CSS transition out)
     const retreatTimer = setTimeout(() => {
       setActivePeek((prev) => (prev ? { ...prev, isRetreating: true } : null));
     }, 6200);
@@ -150,38 +98,26 @@ export const PeekingMascot: React.FC = () => {
     const endTimer = setTimeout(() => {
       setActivePeek(null);
 
-      // Schedule subsequent peek if under limit
+      // Schedule subsequent peek if under session cap
       if (peeksCountRef.current < 3) {
-        const nextDelay = peeksCountRef.current === 1 ? 20000 : 38000;
+        const nextDelay = peeksCountRef.current === 1 ? 25000 : 40000;
         const nextTimer = setTimeout(triggerPeek, nextDelay);
         timeoutsRef.current.push(nextTimer);
       }
     }, 6850);
 
-    timeoutsRef.current.push(
-      b1On,
-      b1Off,
-      b2On,
-      b2Off,
-      b3On,
-      b3Off,
-      b4On,
-      b4Off,
-      retreatTimer,
-      endTimer
-    );
+    timeoutsRef.current.push(retreatTimer, endTimer);
   }, []);
 
-  // Launch initial peek after initial 4.5 seconds
+  // Launch initial peek after 18 seconds (zero interference with initial render benchmarks)
   useEffect(() => {
-    // Respect prefers-reduced-motion
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return;
     }
 
     const initialTimer = setTimeout(() => {
       triggerPeek();
-    }, 4500);
+    }, 18000);
 
     timeoutsRef.current.push(initialTimer);
 
@@ -217,7 +153,6 @@ export const PeekingMascot: React.FC = () => {
   if (!activePeek) return null;
 
   const currentMascot = MASCOTS[activePeek.color];
-  const imgSrc = activePeek.isBlinking ? currentMascot.blinkSrc : currentMascot.headSrc;
 
   // Split horizontalOffset into style object
   const styleObj: React.CSSProperties = {};
@@ -236,12 +171,22 @@ export const PeekingMascot: React.FC = () => {
         style={styleObj}
         onClick={handleMascotClick}
       >
-        <div className="peeking-mascot-3d-wrap">
+        <div className="peeking-mascot-3d-wrap" style={{ position: 'relative' }}>
           <img
-            src={imgSrc}
+            src={currentMascot.headSrc}
             alt={currentMascot.name}
-            className="peeking-mascot-img"
+            className="peeking-mascot-img peeking-mascot-head"
             draggable={false}
+            width={260}
+            height={170}
+          />
+          <img
+            src={currentMascot.blinkSrc}
+            alt=""
+            className="peeking-mascot-img peeking-mascot-blink"
+            draggable={false}
+            width={260}
+            height={170}
           />
         </div>
       </div>

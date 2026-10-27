@@ -2,12 +2,12 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { Navbar, type AuthUser, type ActiveAppTab } from './components/Navbar';
 import { VenueExperience3D } from './components/VenueExperience3D';
 import { TaglineReveal } from './components/TaglineReveal';
-import { ProblemSolution } from './components/ProblemSolution';
-import { OrbitableHeroLogo } from './components/OrbitableHeroLogo';
 import { detectUserRegion } from './utils/currency';
 import { playCelebrationSound } from './utils/audio';
 import { type EventPlanningContext } from './data/globalCelebrations';
 
+const OrbitableHeroLogo = lazy(() => import('./components/OrbitableHeroLogo').then((m) => ({ default: m.OrbitableHeroLogo })));
+const ProblemSolution = lazy(() => import('./components/ProblemSolution').then((m) => ({ default: m.ProblemSolution })));
 const AuthModal = lazy(() => import('./components/AuthModal').then((m) => ({ default: m.AuthModal })));
 const LiveInteractiveDemo = lazy(() => import('./components/LiveInteractiveDemo').then((m) => ({ default: m.LiveInteractiveDemo })));
 const DiscoBallCelebrationHub = lazy(() => import('./components/DiscoBallCelebrationHub').then((m) => ({ default: m.DiscoBallCelebrationHub })));
@@ -180,9 +180,44 @@ export function App() {
                     </div>
                   </div>
 
-                  {/* 3D Orbitable Hero Logo (Pristine, 360 degree drag rotation, no squishiness) */}
+                  {/* 3D Orbitable Hero Logo (Pristine, 360 degree drag rotation, zero layout shift) */}
                   <div className="hero-tactile-centerpiece">
-                    <OrbitableHeroLogo reducedMotion={reducedMotion} soundEnabled={soundEnabled} />
+                    <Suspense
+                      fallback={
+                        <div
+                          className="orbitable-hero-wrapper"
+                          style={{
+                            position: 'relative',
+                            width: '100%',
+                            maxWidth: '850px',
+                            height: '520px',
+                            aspectRatio: '850 / 520',
+                            margin: '0 auto',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            contain: 'layout size',
+                          }}
+                        >
+                          <img
+                            src="/festiya-logo.webp"
+                            alt="Festiya 3D Plush Mascot Logo"
+                            width={850}
+                            height={520}
+                            fetchPriority="high"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              maxHeight: '520px',
+                              objectFit: 'contain',
+                              display: 'block',
+                            }}
+                          />
+                        </div>
+                      }
+                    >
+                      <OrbitableHeroLogo reducedMotion={reducedMotion} soundEnabled={soundEnabled} />
+                    </Suspense>
                   </div>
                 </div>
 
@@ -215,9 +250,9 @@ export function App() {
                 {/* APP NAVIGATION GATEWAY CARDS (Dividing the app into distinct parts) */}
                 <div style={{ marginTop: '10px' }}>
                   <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-                    <h3 style={{ fontSize: '26px', fontWeight: 850, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
+                    <h2 style={{ fontSize: '26px', fontWeight: 850, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
                       Explore Different Parts of Festiya
-                    </h3>
+                    </h2>
                   </div>
 
                   <div className="home-gateways-grid">
@@ -231,7 +266,7 @@ export function App() {
                       tabIndex={0}
                     >
                       <div>
-                        <h4 className="gateway-card-title">Blueprints</h4>
+                        <h3 className="gateway-card-title">Blueprints</h3>
                         <p className="gateway-card-desc">
                           Curated celebration models covering weddings, milestone birthdays, music festivals, tech launches, and cultural galas.
                         </p>
@@ -251,7 +286,7 @@ export function App() {
                       tabIndex={0}
                     >
                       <div>
-                        <h4 className="gateway-card-title">Planner</h4>
+                        <h3 className="gateway-card-title">Planner</h3>
                         <p className="gateway-card-desc">
                           Dedicated 3-tier budget synthesizer (low, likely, high) and day-of chronological checklist engine.
                         </p>
@@ -271,7 +306,7 @@ export function App() {
                       tabIndex={0}
                     >
                       <div>
-                        <h4 className="gateway-card-title">FAQ & Support</h4>
+                        <h3 className="gateway-card-title">FAQ & Support</h3>
                         <p className="gateway-card-desc">
                           Answers to licensing, vendor pricing guarantees, data security on Cloudflare, and export formats.
                         </p>
@@ -294,7 +329,9 @@ export function App() {
             <TaglineReveal reducedMotion={reducedMotion} />
 
             {/* Problem vs Solution Section */}
-            <ProblemSolution />
+            <Suspense fallback={null}>
+              <ProblemSolution />
+            </Suspense>
           </>
         )}
 
@@ -400,7 +437,7 @@ export function App() {
             </div>
 
             <div className="footer-col">
-              <h4 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>App Sections</h4>
+              <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>App Sections</h3>
               <ul className="footer-links">
                 <li>
                   <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
@@ -426,7 +463,7 @@ export function App() {
             </div>
 
             <div className="footer-col">
-              <h4 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>Event types</h4>
+              <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>Event types</h3>
               <ul className="footer-links">
                 <li>
                   <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveOccasion('wedding'); setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
@@ -452,7 +489,7 @@ export function App() {
             </div>
 
             <div className="footer-col">
-              <h4 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>Trust & Quality</h4>
+              <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>Trust & Quality</h3>
               <ul className="footer-links">
                 <li>• Decimal-safe accounting</li>
                 <li>• Zero dark patterns</li>

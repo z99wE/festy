@@ -59,13 +59,17 @@ export const FestiChatbot: React.FC = () => {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // High-energy 5-frame mascot animation loop (simulates smooth animated GIF)
+  // Mascot frame animation - only runs when chat is open, saving continuous main-thread re-renders
   useEffect(() => {
+    if (!isOpen) {
+      setCurrentFrameIndex(0);
+      return;
+    }
     const timer = setInterval(() => {
       setCurrentFrameIndex((prev) => (prev + 1) % FESTI_FRAMES.length);
-    }, 260);
+    }, 350);
     return () => clearInterval(timer);
-  }, []);
+  }, [isOpen]);
 
   // Auto-scroll chat to bottom
   useEffect(() => {

@@ -51,6 +51,9 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.25;
+    renderer.domElement.style.display = 'block';
+    renderer.domElement.style.width = '100%';
+    renderer.domElement.style.height = '100%';
     container.innerHTML = '';
     container.appendChild(renderer.domElement);
 
@@ -241,11 +244,14 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
         position: 'relative',
         width: '100%',
         maxWidth: '850px',
+        height: '520px',
+        aspectRatio: '850 / 520',
         margin: '0 auto',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'visible',
+        contain: 'layout size',
       }}
     >
       <div
