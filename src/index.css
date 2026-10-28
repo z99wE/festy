@@ -1034,7 +1034,7 @@ img {
   background: #FAF6EF;
   border: 1.5px solid #EBE2D2;
   border-radius: var(--radius-xl, 18px);
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1047,13 +1047,110 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-xl, 18px);
 }
 
 .celebration-svg-map {
   width: 100%;
   height: auto;
-  max-height: 420px;
+  max-height: 440px;
   display: block;
+}
+
+/* Continent vector geometries & interactive hover/active states */
+.world-continent-group {
+  outline: none;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.continent-land {
+  fill: #EBDCC8;
+  stroke: #D1BEAA;
+  stroke-width: 1.2;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.world-continent-group:hover .continent-land,
+.world-continent-group.hovered-region .continent-land {
+  fill: #FBF2E2;
+  stroke: #FF5E1E;
+  stroke-width: 2;
+  filter: drop-shadow(0 2px 8px rgba(255, 94, 30, 0.25));
+}
+
+.world-continent-group.active-region .continent-land {
+  fill: #FDF5E8;
+  stroke: #FF5E1E;
+  stroke-width: 2.2;
+}
+
+.continent-name-label {
+  font-family: var(--font-heading, sans-serif);
+  font-size: 11px;
+  font-weight: 850;
+  fill: #786452;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: 0.65;
+  transition: all 0.2s ease;
+}
+
+.world-continent-group:hover .continent-name-label,
+.world-continent-group.active-region .continent-name-label {
+  fill: #FF5E1E;
+  opacity: 1;
+  font-weight: 900;
+}
+
+.map-region-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1.5px solid #3D1E06;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #3D1E06;
+  box-shadow: 2px 2px 0px #3D1E06;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.dossier-image-hero {
+  width: 100%;
+  height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 14px;
+  position: relative;
+  border: 1.5px solid #3D1E06;
+  box-shadow: 2px 2px 0px #3D1E06;
+}
+
+.dossier-cover-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.dossier-image-overlay {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+}
+
+.dossier-badge-floating {
+  background: #3D1E06;
+  color: #FFFFFF;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  font-weight: 800;
 }
 
 .pin-active-pulse {

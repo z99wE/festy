@@ -493,16 +493,15 @@ export function App() {
         <div className="content-wrapper">
           <div className="footer-grid">
             <div className="footer-brand-col">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                 <img
                   src="/festiya-logo-nav.webp"
-                  alt="Festiya - Autonomous Celebration Architect & Global Event Workspace Brand Logo"
-                  title="Festiya - Turn every moment into a festival"
+                  alt="Celebration Architect & Global Event Workspace Brand Logo"
+                  title="Turn every moment into a festival"
                   width={64}
                   height={24}
                   style={{ height: '24px', width: 'auto' }}
                 />
-                <span className="island-brand-text" style={{ fontSize: '16px' }}>Festiya</span>
               </div>
               <p style={{ color: 'var(--text-secondary)' }}>
                 Turn every moment into a festival. Global event planning workspace.
@@ -562,12 +561,16 @@ export function App() {
             </div>
 
             <div className="footer-col">
-              <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>Trust & Quality</h3>
+              <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>Privacy, Rights & Trust</h3>
               <ul className="footer-links">
-                <li>• Decimal-safe accounting</li>
-                <li>• Zero dark patterns</li>
-                <li>• Edge Tenant Isolation</li>
-                <li>• Export to CSV & PDF</li>
+                <li>• 100% GDPR & privacy law compliant</li>
+                <li>• Zero data selling or broker sharing</li>
+                <li>• Full right to access & instant erasure</li>
+                <li>• Transparent pricing & zero hidden fees</li>
+                <li>• Zero advertising tracking or cookies</li>
+                <li>• Plain-language contracts & honest terms</li>
+                <li>• Complete data export anytime</li>
+                <li>• Private, client-controlled workspace</li>
               </ul>
             </div>
           </div>
