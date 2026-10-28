@@ -143,8 +143,8 @@ export function App() {
                           style={{
                             position: 'relative',
                             width: '100%',
-                            maxWidth: '820px',
-                            aspectRatio: '820 / 340',
+                            maxWidth: '940px',
+                            aspectRatio: '940 / 400',
                             margin: '0 auto',
                             display: 'flex',
                             alignItems: 'center',

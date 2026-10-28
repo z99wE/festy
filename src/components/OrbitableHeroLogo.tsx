@@ -22,11 +22,11 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     import('three').then((THREE) => {
       if (isDisposed) return;
 
-      // Viewport sizing: expansive dimensions for bold, commanding 3D masthead presence
+      // Viewport sizing: expansive bounding box for commanding 3D masthead presence without edge clipping
       const getViewportSize = () => {
-        const w = Math.min(container.clientWidth || 800, 800);
-        const naturalH = Math.round(w * (340 / 800));
-        const h = Math.min(360, Math.max(220, naturalH));
+        const w = Math.min(container.clientWidth || 940, 940);
+        const naturalH = Math.round(w * (400 / 940));
+        const h = Math.min(420, Math.max(260, naturalH));
         return { width: w, height: h };
       };
 
@@ -44,10 +44,10 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
         const fovRad = (32 * Math.PI) / 180;
         const tanHalfFov = Math.tan(fovRad / 2);
 
-        // Calculate distance so the logo fills the frame prominently without clipping on tilt
-        const distW = (targetW * 1.15) / (2 * aspect * tanHalfFov);
-        const distH = (targetH * 1.25) / (2 * tanHalfFov);
-        const dist = Math.max(distW, distH, 5.2);
+        // Extended bounding box margin so rotation never clips edges even on full tilt
+        const distW = (targetW * 1.48) / (2 * aspect * tanHalfFov);
+        const distH = (targetH * 1.55) / (2 * tanHalfFov);
+        const dist = Math.max(distW, distH, 6.5);
 
         camera.fov = 32;
         camera.aspect = aspect;
@@ -290,10 +290,10 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       style={{
         position: 'relative',
         width: '100%',
-        maxWidth: '820px',
-        aspectRatio: '820 / 340',
-        minHeight: '240px',
-        maxHeight: '360px',
+        maxWidth: '940px',
+        aspectRatio: '940 / 400',
+        minHeight: '260px',
+        maxHeight: '420px',
         margin: '0 auto',
         display: 'flex',
         alignItems: 'center',
