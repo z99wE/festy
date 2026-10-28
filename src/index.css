@@ -3638,9 +3638,9 @@ img {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  width: 390px;
+  width: 440px;
   max-width: calc(100vw - 32px);
-  height: 570px;
+  height: 580px;
   max-height: calc(100vh - 48px);
   background: var(--bg-surface);
   border: 2px solid #3D1E06;
@@ -3931,6 +3931,252 @@ img {
 
 @keyframes spin {
   100% { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   FESTI AUTONOMOUS MULTI-AGENT ARTIFACTS
+   -------------------------------------------------------------------------- */
+.festi-agents-trail {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  background: rgba(91, 66, 243, 0.08);
+  border: 1px solid rgba(91, 66, 243, 0.2);
+  border-radius: 6px;
+  padding: 4px 8px;
+  margin-bottom: 8px;
+  font-size: 10.5px;
+}
+
+.festi-trail-title {
+  font-weight: 850;
+  color: var(--bubblegum-purple-blue, #5b42f3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.festi-trail-names {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.festi-artifact-card {
+  background: #ffffff;
+  border: 1.5px solid #3D1E06;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  box-shadow: 2px 2px 0px #3D1E06;
+  text-align: left;
+}
+
+.festi-artifact-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #f0ede6;
+}
+
+.festi-artifact-label {
+  font-size: 12px;
+  font-weight: 850;
+  color: #3D1E06;
+}
+
+.festi-artifact-meta {
+  font-size: 11px;
+  font-weight: 750;
+  color: #ff5e1e;
+}
+
+.festi-tier-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.festi-tier-box {
+  background: #faf8f5;
+  border: 1px solid #e5e0d8;
+  border-radius: 6px;
+  padding: 6px 4px;
+  text-align: center;
+}
+
+.festi-tier-box.highlight {
+  background: #fff8e6;
+  border: 1.5px solid #ffb800;
+}
+
+.festi-tier-name {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #786f66;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 2px;
+}
+
+.festi-tier-number {
+  display: block;
+  font-size: 12px;
+  font-weight: 850;
+  color: #3D1E06;
+}
+
+.festi-categories-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.festi-category-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.festi-cat-header-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.festi-cat-title {
+  font-weight: 750;
+  color: #3D1E06;
+}
+
+.festi-cat-figure {
+  font-weight: 750;
+  color: #ff5e1e;
+}
+
+.festi-cat-bar-track {
+  height: 5px;
+  background: #f0ede6;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.festi-cat-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff5e1e, #ffb800);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.festi-cat-note {
+  font-size: 10px;
+  color: #786f66;
+  line-height: 1.3;
+}
+
+.festi-timeline-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.festi-timeline-node {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.festi-timeline-stamp {
+  font-size: 10px;
+  font-weight: 800;
+  color: #5b42f3;
+  white-space: nowrap;
+  background: #f1edff;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.festi-timeline-details {
+  flex: 1;
+}
+
+.festi-timeline-event {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #3D1E06;
+}
+
+.festi-timeline-subtext {
+  font-size: 10.5px;
+  color: #554e47;
+  margin: 2px 0 0;
+  line-height: 1.35;
+}
+
+.festi-safeguard-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.festi-safeguard-node {
+  background: #fdfaf6;
+  border: 1px solid #ebd9c8;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.festi-safeguard-title {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #c2410c;
+}
+
+.festi-safeguard-risk-clause {
+  font-size: 10.5px;
+  color: #554e47;
+  margin: 2px 0 6px;
+  line-height: 1.35;
+}
+
+.festi-safeguard-ask {
+  font-size: 10.5px;
+  color: #1e293b;
+  background: #ffffff;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px dashed #cbd5e1;
+}
+
+.festi-apply-workspace-btn {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bubblegum-purple-blue, #5b42f3);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 11.5px;
+  border: 1.5px solid #3D1E06;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px #3D1E06;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.festi-apply-workspace-btn:hover {
+  background: #4a34d0;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #3D1E06;
 }
 
 .festi-chat-input-area {

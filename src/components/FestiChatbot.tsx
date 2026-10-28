@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   X, Send, RefreshCw, MessageSquare, 
-  ShieldCheck, ShieldAlert, CheckCircle2, Cpu, Play 
+  ShieldAlert, Play 
 } from 'lucide-react';
 import { aiOrchestrator } from '../services/aiOrchestrator';
 import { FestiSecurityGuard, type HardDrillResult } from '../services/festiSecurityGuard';
+import { 
+  MultiAgentEngine, 
+  type AgentBudgetArtifact, 
+  type AgentTimelineArtifact, 
+  type AgentContractArtifact 
+} from '../services/multiAgentEngine';
 
 // The 5 Mascot frames requested by the user (Ultra-fast WebP format)
 const FESTI_FRAMES = [
@@ -25,14 +31,20 @@ export interface ChatMessage {
   threatCategory?: string;
   guardReason?: string;
   modelUsed?: string;
+  agentsEngaged?: string[];
+  budgetArtifact?: AgentBudgetArtifact;
+  timelineArtifact?: AgentTimelineArtifact;
+  contractArtifact?: AgentContractArtifact;
+  occasionId?: string;
+  occasionTitle?: string;
 }
 
 const QUICK_STARTERS = [
-  "💍 Wedding budget & milestone breakdown",
-  "🎂 30th Birthday party ideas under $2,500",
-  "💸 5 Ways to cut 20% on catering costs",
-  "📋 Day-of run of show timeline example",
-  "🏢 Creative corporate offsite with 50 guests",
+  "Plan an 80-guest wedding reception with $12,000 budget",
+  "30th Birthday party for 40 guests under $3,000",
+  "Minute-by-minute run of show for an evening gala",
+  "Vendor contract traps and deposit verification checklist",
+  "Executive retreat for 25 people in Colorado with $8,000",
 ];
 
 export const FestiChatbot: React.FC = () => {
@@ -101,14 +113,24 @@ export const FestiChatbot: React.FC = () => {
     }, 220);
   };
 
-  const generateFestiResponse = (query: string): string => {
-    // Guardrail against malicious queries in local safety net as well
-    const evalRes = FestiSecurityGuard.evaluate(query);
-    if (!evalRes.isSafe && evalRes.deflectionResponse) {
-      return evalRes.deflectionResponse;
-    }
+  const handleApplyPlanToWorkspace = (m: ChatMessage) => {
+    const budgetUSD = m.budgetArtifact?.totalBudget || 5000;
+    const guestRange = `${m.budgetArtifact?.guestCount || 60} guests`;
+    const occasionId = m.occasionId || 'birthday';
+    const name = `${m.occasionTitle || 'Celebration'} (Festi Autonomous Plan)`;
 
-    return aiOrchestrator.generateDeterministicResponse(query);
+    window.dispatchEvent(
+      new CustomEvent('festiya-apply-plan', {
+        detail: {
+          occasionId,
+          budgetUSD,
+          guestRange,
+          name,
+        },
+      })
+    );
+
+    setIsOpen(false);
   };
 
   const handleSendMessage = async (textToSend?: string) => {
@@ -134,21 +156,31 @@ export const FestiChatbot: React.FC = () => {
       history.push({ role: 'user', content: query.trim() });
 
       const systemPrompt = 
-        "You are Festi, the cheerful, energetic, and deeply knowledgeable Festi AI event architect for Festiya. " +
-        "You specialize strictly in event planning, celebration blueprints, guest logistics, budgets, schedules, timelines, and vendor negotiation tips. " +
-        "Keep responses lively, structured, concise, and exclusively relevant to event planning.";
+        "You are Festi, chief coordinator of the Festiya Autonomous Multi-Agent Event Architecture. " +
+        "You coordinate specialized task agents: Financial Synthesizer Agent, Logistics & Run-of-Show Agent, and Contract Safeguard Agent. " +
+        "Provide direct, high-value celebration planning insights with clear operational rationale and concise advice. " +
+        "Never mention paywalls or external tools.";
 
       const res = await aiOrchestrator.generateCompletion(history, systemPrompt);
+
+      // Execute autonomous multi-agent swarm
+      const plan = MultiAgentEngine.executeSwarm(query, res.content);
 
       const festiMsg: ChatMessage = {
         id: `f-${Date.now()}`,
         sender: 'festi',
-        text: res.content,
+        text: plan.summary,
         time: 'Just now',
         threatNeutralized: res.threatNeutralized,
         threatCategory: res.threatCategory,
         guardReason: res.guardReason,
         modelUsed: res.providerUsed,
+        agentsEngaged: plan.agentsEngaged,
+        budgetArtifact: plan.budgetArtifact,
+        timelineArtifact: plan.timelineArtifact,
+        contractArtifact: plan.contractArtifact,
+        occasionId: plan.occasionId,
+        occasionTitle: plan.occasionTitle,
         suggestions: res.threatNeutralized
           ? [
               "Help me plan a birthday party",
@@ -156,20 +188,26 @@ export const FestiChatbot: React.FC = () => {
               "What questions should I ask my caterer?",
             ]
           : [
-              "Suggest budget saving ideas",
-              "Give me questions for vendors",
-              "How do I pace the schedule?",
+              "3-Tier budget breakdown for 80 guests",
+              "Minute-by-minute day-of schedule",
+              "Hidden vendor fee questions",
             ],
       };
       setMessages((prev) => [...prev, festiMsg]);
     } catch (err) {
       console.warn('[Festi AI] Cascading failover triggered:', err);
-      const festiReply = generateFestiResponse(query);
+      const plan = MultiAgentEngine.executeSwarm(query);
       const festiMsg: ChatMessage = {
         id: `f-${Date.now()}`,
         sender: 'festi',
-        text: festiReply,
+        text: plan.summary,
         time: 'Just now',
+        agentsEngaged: plan.agentsEngaged,
+        budgetArtifact: plan.budgetArtifact,
+        timelineArtifact: plan.timelineArtifact,
+        contractArtifact: plan.contractArtifact,
+        occasionId: plan.occasionId,
+        occasionTitle: plan.occasionTitle,
       };
       setMessages((prev) => [...prev, festiMsg]);
     } finally {
@@ -263,7 +301,6 @@ export const FestiChatbot: React.FC = () => {
                   }
                 }}
               >
-                <ShieldCheck size={14} />
                 <span>Hard Drills</span>
               </button>
 
@@ -284,7 +321,7 @@ export const FestiChatbot: React.FC = () => {
               <div className="drills-header">
                 <div>
                   <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
-                    🛡️ Hard Drills Security Matrix
+                    Hard Drills Security Matrix
                   </h4>
                   <p style={{ margin: '4px 0 0', fontSize: '12px', color: 'var(--text-secondary)' }}>
                     Active neutralization against LLM Hijacking, Spooking, Jacking, Meta-Prompting & Domain Violations.
@@ -305,16 +342,16 @@ export const FestiChatbot: React.FC = () => {
               {/* Status Pills */}
               <div className="drills-status-pills">
                 <span className="drill-status-badge success">
-                  <CheckCircle2 size={12} /> Hijacking Guard: 100%
+                  Hijacking Guard: 100%
                 </span>
                 <span className="drill-status-badge success">
-                  <CheckCircle2 size={12} /> Meta-Prompt Shield: 100%
+                  Meta-Prompt Shield: 100%
                 </span>
                 <span className="drill-status-badge success">
-                  <CheckCircle2 size={12} /> Domain Lock: Events Only
+                  Domain Lock: Events Only
                 </span>
                 <span className="drill-status-badge info">
-                  <Cpu size={12} /> Load Balancer: Healthy
+                  Load Balancer: Healthy
                 </span>
               </div>
 
@@ -392,7 +429,111 @@ export const FestiChatbot: React.FC = () => {
                         </div>
                       )}
 
+                      {/* Autonomous Multi-Agent Engagement Trail (Clean typography, icon-free) */}
+                      {m.agentsEngaged && m.agentsEngaged.length > 0 && (
+                        <div className="festi-agents-trail">
+                          <span className="festi-trail-title">Agents active:</span>
+                          <span className="festi-trail-names">{m.agentsEngaged.join(' • ')}</span>
+                        </div>
+                      )}
+
                       <p className="festi-msg-text">{m.text}</p>
+
+                      {/* 3-Tier Budget Allocation Matrix Artifact */}
+                      {m.budgetArtifact && (
+                        <div className="festi-artifact-card">
+                          <div className="festi-artifact-header">
+                            <span className="festi-artifact-label">3-Tier Decimal Budget Matrix</span>
+                            <span className="festi-artifact-meta">
+                              {m.budgetArtifact.currency}{m.budgetArtifact.totalBudget.toLocaleString()} • {m.budgetArtifact.guestCount} Guests (${m.budgetArtifact.costPerGuest}/guest)
+                            </span>
+                          </div>
+
+                          <div className="festi-tier-matrix">
+                            <div className="festi-tier-box">
+                              <span className="festi-tier-name">Conservative</span>
+                              <span className="festi-tier-number">{m.budgetArtifact.currency}{m.budgetArtifact.tiers.conservative.toLocaleString()}</span>
+                            </div>
+                            <div className="festi-tier-box highlight">
+                              <span className="festi-tier-name">Realistic Target</span>
+                              <span className="festi-tier-number">{m.budgetArtifact.currency}{m.budgetArtifact.tiers.realistic.toLocaleString()}</span>
+                            </div>
+                            <div className="festi-tier-box">
+                              <span className="festi-tier-name">Luxury</span>
+                              <span className="festi-tier-number">{m.budgetArtifact.currency}{m.budgetArtifact.tiers.luxury.toLocaleString()}</span>
+                            </div>
+                          </div>
+
+                          <div className="festi-categories-grid">
+                            {m.budgetArtifact.categories.map((cat, cIdx) => (
+                              <div key={cIdx} className="festi-category-item">
+                                <div className="festi-cat-header-line">
+                                  <span className="festi-cat-title">{cat.category}</span>
+                                  <span className="festi-cat-figure">
+                                    {m.budgetArtifact?.currency}{cat.amount.toLocaleString()} ({cat.percentage}%)
+                                  </span>
+                                </div>
+                                <div className="festi-cat-bar-track">
+                                  <div className="festi-cat-bar-fill" style={{ width: `${Math.min(100, cat.percentage * 2.2)}%` }} />
+                                </div>
+                                <span className="festi-cat-note">{cat.notes}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Chronological Run of Show Timeline Artifact */}
+                      {m.timelineArtifact && (
+                        <div className="festi-artifact-card">
+                          <div className="festi-artifact-header">
+                            <span className="festi-artifact-label">Chronological Run of Show</span>
+                            <span className="festi-artifact-meta">{m.timelineArtifact.occasionName}</span>
+                          </div>
+                          <div className="festi-timeline-flow">
+                            {m.timelineArtifact.items.map((item, tIdx) => (
+                              <div key={tIdx} className="festi-timeline-node">
+                                <span className="festi-timeline-stamp">{item.time}</span>
+                                <div className="festi-timeline-details">
+                                  <span className="festi-timeline-event">{item.title}</span>
+                                  <p className="festi-timeline-subtext">{item.detail}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Contract Safeguards & Fee Protection Artifact */}
+                      {m.contractArtifact && (
+                        <div className="festi-artifact-card">
+                          <div className="festi-artifact-header">
+                            <span className="festi-artifact-label">Contract Safeguards & Fee Protection</span>
+                          </div>
+                          <div className="festi-safeguard-flow">
+                            {m.contractArtifact.safeguards.map((item, sIdx) => (
+                              <div key={sIdx} className="festi-safeguard-node">
+                                <span className="festi-safeguard-title">{item.riskArea}</span>
+                                <p className="festi-safeguard-risk-clause">{item.clauseWarning}</p>
+                                <div className="festi-safeguard-ask">
+                                  <strong>Ask Vendor:</strong> "{item.verificationQuestion}"
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Apply Plan to Active Event Workspace Action */}
+                      {(m.budgetArtifact || m.timelineArtifact) && (
+                        <button
+                          type="button"
+                          className="festi-apply-workspace-btn"
+                          onClick={() => handleApplyPlanToWorkspace(m)}
+                        >
+                          <span>Apply this plan to active workspace →</span>
+                        </button>
+                      )}
 
                       {/* Suggestion action pills */}
                       {m.suggestions && m.suggestions.length > 0 && (
@@ -427,7 +568,7 @@ export const FestiChatbot: React.FC = () => {
                     </div>
                     <div className="festi-chat-bubble festi-bubble festi-typing-bubble">
                       <RefreshCw size={14} className="festi-spin-icon" />
-                      <span>Festi AI is architecting your plan...</span>
+                      <span>Autonomous agents synthesizing celebration plan...</span>
                     </div>
                   </div>
                 )}

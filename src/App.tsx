@@ -73,6 +73,45 @@ export function App() {
     }
   }, []);
 
+  // Listen for autonomous multi-agent plan applications from Festi AI
+  useEffect(() => {
+    const handleApplyPlan = (e: Event) => {
+      const customEvent = e as CustomEvent<{
+        occasionId: string;
+        budgetUSD?: number;
+        guestRange?: string;
+        name?: string;
+        location?: string;
+        dates?: string;
+        aiPrompt?: string;
+      }>;
+      const detail = customEvent.detail;
+      if (!detail) return;
+
+      if (detail.occasionId) {
+        setActiveOccasion(detail.occasionId);
+      }
+
+      setSelectedPlanningContext({
+        id: detail.occasionId || 'birthday',
+        name: detail.name || 'Custom Autonomous Plan',
+        category: detail.occasionId || 'birthday',
+        location: detail.location || 'Selected Venue',
+        dates: detail.dates || 'Upcoming 6 Months',
+        guestRange: detail.guestRange || '60 guests',
+        budgetUSD: detail.budgetUSD || 5000,
+        aiPrompt: detail.aiPrompt,
+      });
+
+      setActiveTab('planner');
+      window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+      playCelebrationSound(soundEnabled);
+    };
+
+    window.addEventListener('festiya-apply-plan', handleApplyPlan);
+    return () => window.removeEventListener('festiya-apply-plan', handleApplyPlan);
+  }, [reducedMotion, soundEnabled]);
+
   const handleStartPlanning = () => {
     setActiveTab('planner');
     window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
