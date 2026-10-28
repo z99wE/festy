@@ -148,8 +148,8 @@ export function App() {
                             style={{
                               position: 'relative',
                               width: '100%',
-                              maxWidth: '640px',
-                              aspectRatio: '639 / 240',
+                              maxWidth: '680px',
+                              aspectRatio: '680 / 280',
                               margin: '0 auto',
                               display: 'flex',
                               alignItems: 'center',
@@ -175,8 +175,8 @@ export function App() {
                         style={{
                           position: 'relative',
                           width: '100%',
-                          maxWidth: '640px',
-                          aspectRatio: '639 / 240',
+                          maxWidth: '680px',
+                          aspectRatio: '680 / 280',
                           margin: '0 auto',
                           display: 'flex',
                           alignItems: 'center',

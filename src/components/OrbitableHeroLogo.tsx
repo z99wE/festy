@@ -22,29 +22,44 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     import('three').then((THREE) => {
       if (isDisposed) return;
 
-      // Viewport sizing: responsive aspect ratio matching 639:240 (~2.66:1) logo geometry
+      // Viewport sizing: generous aspect ratio providing 3D clearance on yaw & pitch twists
       const getViewportSize = () => {
-        const w = Math.min(container.clientWidth || 640, 640);
-        const naturalH = Math.round(w * (240 / 639));
-        const h = Math.min(260, Math.max(160, naturalH));
+        const w = Math.min(container.clientWidth || 680, 680);
+        const naturalH = Math.round(w * (280 / 680));
+        const h = Math.min(290, Math.max(170, naturalH));
         return { width: w, height: h };
       };
 
     let { width, height } = getViewportSize();
 
-    // Three.js Scene Setup
+    // Three.js Scene Setup (30° FOV eliminates fish-eye distortion while preserving 3D depth)
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(34, width / height, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 100);
 
-    // Hero masthead framing: mascot fits comfortably with subtle breathing room
+    // Hero masthead framing: calculated so full ±0.45 rad yaw and ±0.25 rad pitch never clip edges
     const updateCameraDistance = (w: number, h: number) => {
       const aspect = w / h;
-      const fovRad = (34 * Math.PI) / 180;
-      const targetW = 5.2; // Matches plane geometry
-      const targetH = (5.2 * 240) / 639;
-      const distW = targetW / (2 * aspect * Math.tan(fovRad / 2));
-      const distH = targetH / (2 * Math.tan(fovRad / 2));
-      camera.position.set(0, 0, Math.max(distW, distH) * 1.05);
+      const fovRad = (30 * Math.PI) / 180;
+      const tanHalfFov = Math.tan(fovRad / 2);
+      
+      const targetW = 5.2;
+      const targetH = (5.2 * 768) / 2046; // ~1.952
+      
+      // Maximum forward Z swing under max pitch (0.25 rad) and yaw (0.45 rad)
+      const maxDeltaZ = (targetW / 2) * Math.sin(0.45) + (targetH / 2) * Math.sin(0.25); // ~1.372
+      
+      // Rotated corner projections with generous 15-18% perimeter padding
+      const maxProjX = (targetW / 2) * Math.cos(0.45) * 1.15;
+      const maxProjY = ((targetH / 2) * Math.cos(0.25) + 0.1) * 1.18;
+      
+      const distW = maxProjX / (aspect * tanHalfFov);
+      const distH = maxProjY / tanHalfFov;
+      const requiredDist = maxDeltaZ + Math.max(distW, distH);
+
+      camera.fov = 30;
+      camera.aspect = aspect;
+      camera.position.set(0, 0, requiredDist);
+      camera.updateProjectionMatrix();
     };
     updateCameraDistance(width, height);
 
@@ -195,9 +210,7 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     const handleResize = () => {
       if (!container) return;
       const { width: newW, height: newH } = getViewportSize();
-      camera.aspect = newW / newH;
       updateCameraDistance(newW, newH);
-      camera.updateProjectionMatrix();
       renderer.setSize(newW, newH);
       renderer.render(scene, camera);
     };
@@ -292,10 +305,10 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       style={{
         position: 'relative',
         width: '100%',
-        maxWidth: '640px',
-        aspectRatio: '639 / 240',
-        minHeight: '160px',
-        maxHeight: '260px',
+        maxWidth: '680px',
+        aspectRatio: '680 / 280',
+        minHeight: '170px',
+        maxHeight: '290px',
         margin: '0 auto',
         display: 'flex',
         alignItems: 'center',

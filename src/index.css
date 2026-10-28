@@ -635,12 +635,13 @@ img {
 /* 1. Top Masthead 3D Logo Centerpiece */
 .hero-masthead-centerpiece {
   width: 100%;
-  max-width: 640px;
+  max-width: 680px;
   margin: 0 auto var(--space-200);
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+  overflow: visible;
 }
 
 .festiya-masthead-img {
@@ -5607,10 +5608,9 @@ img {
 .orbitable-hero-wrapper {
   position: relative;
   width: 100%;
-  max-width: 850px;
-  min-height: 520px;
-  aspect-ratio: 850 / 520;
-  contain: layout size;
+  max-width: 680px;
+  min-height: 170px;
+  aspect-ratio: 680 / 280;
   margin: 0 auto;
   display: flex;
   align-items: center;
