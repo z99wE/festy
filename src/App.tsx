@@ -1,4 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
+import { Sparkles, Cake, Music, Compass, Building, Crown, Wine, Globe } from 'lucide-react';
 import { Navbar, type AuthUser, type ActiveAppTab } from './components/Navbar';
 import { TaglineReveal } from './components/TaglineReveal';
 import { detectUserRegion } from './utils/currency';
@@ -10,7 +11,7 @@ const OrbitableHeroLogo = lazy(() => import('./components/OrbitableHeroLogo').th
 const ProblemSolution = lazy(() => import('./components/ProblemSolution').then((m) => ({ default: m.ProblemSolution })));
 const AuthModal = lazy(() => import('./components/AuthModal').then((m) => ({ default: m.AuthModal })));
 const LiveInteractiveDemo = lazy(() => import('./components/LiveInteractiveDemo').then((m) => ({ default: m.LiveInteractiveDemo })));
-const DiscoBallCelebrationHub = lazy(() => import('./components/DiscoBallCelebrationHub').then((m) => ({ default: m.DiscoBallCelebrationHub })));
+const CelebrationWorldMap = lazy(() => import('./components/CelebrationWorldMap').then((m) => ({ default: m.CelebrationWorldMap })));
 const CategoryShowcase = lazy(() => import('./components/CategoryShowcase').then((m) => ({ default: m.CategoryShowcase })));
 const PlanBuilder = lazy(() => import('./components/PlanBuilder').then((m) => ({ default: m.PlanBuilder })));
 const FAQSection = lazy(() => import('./components/FAQSection').then((m) => ({ default: m.FAQSection })));
@@ -19,14 +20,14 @@ const PeekingMascot = lazy(() => import('./components/PeekingMascot').then((m) =
 const FestiChatbot = lazy(() => import('./components/FestiChatbot').then((m) => ({ default: m.FestiChatbot })));
 
 const OCCASION_SWAP_ITEMS = [
-  { id: 'wedding', name: 'Luxury Weddings' },
-  { id: 'birthday', name: 'Milestone Birthdays' },
-  { id: 'festival', name: 'Music Festivals' },
-  { id: 'product_launch', name: 'Product Launches' },
-  { id: 'retreat', name: 'Executive Retreats' },
-  { id: 'anniversary', name: 'Galas & Anniversaries' },
-  { id: 'wine_tasting', name: 'Private Tastings' },
-  { id: 'cultural_fest', name: 'Heritage Festivals' },
+  { id: 'wedding', name: 'Luxury Weddings', icon: Sparkles },
+  { id: 'birthday', name: 'Milestone Birthdays', icon: Cake },
+  { id: 'festival', name: 'Music Festivals', icon: Music },
+  { id: 'product_launch', name: 'Product Launches', icon: Compass },
+  { id: 'retreat', name: 'Executive Retreats', icon: Building },
+  { id: 'anniversary', name: 'Galas & Anniversaries', icon: Crown },
+  { id: 'wine_tasting', name: 'Private Tastings', icon: Wine },
+  { id: 'cultural_fest', name: 'Heritage Festivals', icon: Globe },
 ];
 
 export function App() {
@@ -195,48 +196,44 @@ export function App() {
                     )}
                   </div>
 
-                  {/* 2. CLASSY EYEBROW PILL BADGE */}
-                  <div className="hero-eyebrow-container">
-                    <span className="hero-eyebrow-pill">
-                      <span className="eyebrow-sparkle" aria-hidden="true">✨</span>
-                      <span>The Autonomous Celebration Architect</span>
-                      <span className="eyebrow-separator" aria-hidden="true">•</span>
-                      <span className="eyebrow-highlight">Decimal-Safe Precision</span>
-                    </span>
-                  </div>
-
-                  {/* 3. FLOWING EDITORIAL H1 */}
+                  {/* 2. FLOWING EDITORIAL H1 */}
                   <h1 id="hero-title" className="hero-title">
                     <span className="hero-headline-lead">Plan Extraordinary Celebrations</span>
                     <br />
                     <span className="highlight-orange">Without the Stress, Spreadsheets, or Overcharging.</span>
                   </h1>
 
-                  {/* 4. CLASSY H2 SUBTITLE */}
+                  {/* 3. CLASSY H2 SUBTITLE */}
                   <h2 className="hero-subtitle">
                     Audit-ready 3-tier budgets, milestone itineraries, and insider vendor negotiation scripts — generated in under 90 seconds.
                   </h2>
 
-                  {/* 5. FLOWING EDITORIAL BODY COPY */}
+                  {/* 4. FLOWING EDITORIAL BODY COPY */}
                   <p className="hero-description">
                     From intimate terrace dinners to 500-guest heritage weddings and corporate galas, <strong>Festiya</strong> replaces planning anxiety with real-time financial certainty, bespoke cost curves, and contract safeguards tailored to your city.
                   </p>
 
-                  {/* 6. OCCASION FAST-SELECTOR CHIPS */}
-                  <div className="hero-occasion-chips" role="group" aria-label="Select celebration category">
-                    {OCCASION_SWAP_ITEMS.map((item) => (
-                      <button
-                        key={item.id}
-                        type="button"
-                        className={`occasion-chip-btn ${activeOccasion === item.id ? 'active' : ''}`}
-                        onClick={() => handleQuickOccasionSelect(item.id)}
-                      >
-                        <span>{item.name}</span>
-                      </button>
-                    ))}
+                  {/* 5. SYMMETRICAL OCCASION SELECTOR GRID (4x2 on Desktop, 2x4 on Mobile) */}
+                  <div className="hero-occasion-grid" role="group" aria-label="Select celebration category">
+                    {OCCASION_SWAP_ITEMS.map((item) => {
+                      const IconComp = item.icon;
+                      const isActive = activeOccasion === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          className={`occasion-grid-btn ${isActive ? 'active' : ''}`}
+                          onClick={() => handleQuickOccasionSelect(item.id)}
+                          aria-pressed={isActive}
+                        >
+                          <IconComp size={16} className="occasion-grid-icon" aria-hidden="true" />
+                          <span className="occasion-grid-label">{item.name}</span>
+                        </button>
+                      );
+                    })}
                   </div>
 
-                  {/* 7. CLASSY HERO ACTIONS */}
+                  {/* 6. CLASSY HERO ACTIONS */}
                   <div className="hero-actions">
                     <button
                       type="button"
@@ -262,7 +259,7 @@ export function App() {
                     </button>
                   </div>
 
-                  {/* 8. TRUST PROOF LINE */}
+                  {/* 7. TRUST PROOF LINE */}
                   <div className="hero-proof-line">
                     <div className="proof-pill">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
@@ -281,11 +278,11 @@ export function App() {
                   </div>
                 </div>
 
-                {/* 3D DISCO BALL: UPCOMING WORLD CELEBRATIONS & LONG WEEKENDS */}
+                {/* CELEBRATION WORLD MAP & 3D GLOBE HUB (Joyful celebratory world, zero confetti) */}
                 <div style={{ marginTop: '36px', marginBottom: '40px' }}>
                   <LazyMount placeholderHeight="420px" rootMargin="350px">
                     <Suspense fallback={<div style={{ minHeight: '380px' }} />}>
-                      <DiscoBallCelebrationHub
+                      <CelebrationWorldMap
                         reducedMotion={reducedMotion}
                         currentCurrency={currentCurrency}
                         onSelectEventForPlanner={(occasionId, eventName, context) => {
