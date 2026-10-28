@@ -2,43 +2,36 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import confetti from 'canvas-confetti';
 import { playPopSound } from '../utils/audio';
 
-type MascotColor = 'mint' | 'blue' | 'yellow' | 'orange';
-type PeekPosition = 'top-upside-down' | 'bottom-upright';
+type MascotColor = 'mint' | 'blue' | 'yellow' | 'pink';
 
 interface MascotConfig {
   name: string;
-  headSrc: string;
-  blinkSrc: string;
+  src: string;
 }
 
 const MASCOTS: Record<MascotColor, MascotConfig> = {
   mint: {
-    name: 'Bubble Mint Mascot',
-    headSrc: '/mascots/mint-head.webp',
-    blinkSrc: '/mascots/mint-blink.webp',
+    name: 'Bubble Mint Plush Mascot',
+    src: '/mascots/bubble-mint.webp',
   },
   blue: {
     name: 'Cheerful Blue Fuzzy Mascot',
-    headSrc: '/mascots/blue-head.webp',
-    blinkSrc: '/mascots/blue-blink.webp',
+    src: '/mascots/blue-jumping.webp',
   },
   yellow: {
-    name: 'Fluffy Yellow Mascot',
-    headSrc: '/mascots/yellow-head.webp',
-    blinkSrc: '/mascots/yellow-blink.webp',
+    name: 'Fluffy Yellow Dance Mascot',
+    src: '/mascots/yellow-dance.webp',
   },
-  orange: {
-    name: 'Fluffy Orange Mascot',
-    headSrc: '/mascots/orange-head.webp',
-    blinkSrc: '/mascots/orange-blink.webp',
+  pink: {
+    name: 'Fluffy Pink Dancing Mascot',
+    src: '/mascots/pink-dancing.webp',
   },
 };
 
-const COLOR_KEYS: MascotColor[] = ['mint', 'blue', 'yellow', 'orange'];
+const COLOR_KEYS: MascotColor[] = ['mint', 'blue', 'yellow', 'pink'];
 
 interface ActivePeek {
   color: MascotColor;
-  position: PeekPosition;
   horizontalOffset: string;
   isRetreating: boolean;
 }
@@ -67,49 +60,43 @@ export const PeekingMascot: React.FC = () => {
     const chosenColor = availableColors[Math.floor(Math.random() * availableColors.length)];
     lastColorRef.current = chosenColor;
 
-    let chosenPos: PeekPosition = 'bottom-upright';
-    let hOffset = 'right: 18%';
-
+    let hOffset = 'right: 15%';
     if (currentCount === 1) {
-      chosenPos = 'bottom-upright';
-      hOffset = 'right: 18%';
+      hOffset = 'right: 15%';
     } else if (currentCount === 2) {
-      chosenPos = 'bottom-upright';
-      hOffset = 'left: 18%';
+      hOffset = 'left: 15%';
     } else {
-      chosenPos = 'bottom-upright';
-      hOffset = 'right: 30%';
+      hOffset = 'right: 28%';
     }
 
     // Set mascot active (peek in)
     setActivePeek({
       color: chosenColor,
-      position: chosenPos,
       horizontalOffset: hOffset,
       isRetreating: false,
     });
 
-    // Start retreat at 6.2s (smooth CSS transition out)
+    // Start retreat at 6.0s (smooth CSS transition out)
     const retreatTimer = setTimeout(() => {
       setActivePeek((prev) => (prev ? { ...prev, isRetreating: true } : null));
-    }, 6200);
+    }, 6000);
 
-    // Unmount at 6.85s (after slide-out transition completes)
+    // Unmount at 6.7s (after slide-out transition completes)
     const endTimer = setTimeout(() => {
       setActivePeek(null);
 
       // Schedule subsequent peek if under session cap
       if (peeksCountRef.current < 3) {
-        const nextDelay = peeksCountRef.current === 1 ? 25000 : 40000;
+        const nextDelay = peeksCountRef.current === 1 ? 22000 : 35000;
         const nextTimer = setTimeout(triggerPeek, nextDelay);
         timeoutsRef.current.push(nextTimer);
       }
-    }, 6850);
+    }, 6700);
 
     timeoutsRef.current.push(retreatTimer, endTimer);
   }, []);
 
-  // Launch initial peek after 18 seconds (zero interference with initial render benchmarks)
+  // Launch initial peek after 5 seconds
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return;
@@ -117,7 +104,7 @@ export const PeekingMascot: React.FC = () => {
 
     const initialTimer = setTimeout(() => {
       triggerPeek();
-    }, 18000);
+    }, 5000);
 
     timeoutsRef.current.push(initialTimer);
 
@@ -135,8 +122,8 @@ export const PeekingMascot: React.FC = () => {
     const y = (rect.top + rect.height / 2) / window.innerHeight;
 
     confetti({
-      particleCount: 20,
-      spread: 50,
+      particleCount: 22,
+      spread: 55,
       origin: { x, y },
       colors: ['#FF5E1E', '#FFB800', '#2DD4BF', '#A78BFA', '#FFFFFF'],
       disableForReducedMotion: true,
@@ -165,28 +152,20 @@ export const PeekingMascot: React.FC = () => {
   return (
     <div className="peeking-mascot-portal" aria-hidden="true">
       <div
-        className={`peeking-mascot-container pos-${activePeek.position} ${
+        className={`peeking-mascot-container ${
           activePeek.isRetreating ? 'retreating' : 'peeking'
         }`}
         style={styleObj}
         onClick={handleMascotClick}
       >
-        <div className="peeking-mascot-3d-wrap" style={{ position: 'relative' }}>
+        <div className="peeking-mascot-wrap">
           <img
-            src={currentMascot.headSrc}
+            src={currentMascot.src}
             alt={currentMascot.name}
-            className="peeking-mascot-img peeking-mascot-head"
+            className="peeking-mascot-img"
             draggable={false}
-            width={240}
-            height={156}
-          />
-          <img
-            src={currentMascot.blinkSrc}
-            alt=""
-            className="peeking-mascot-img peeking-mascot-blink"
-            draggable={false}
-            width={240}
-            height={156}
+            width={220}
+            height={247}
           />
         </div>
       </div>

@@ -5897,7 +5897,8 @@ img {
 }
 
 /* ==========================================================================
-   ALIVE 3D PEEKING MASCOT STYLES & ANIMATIONS
+/* ==========================================================================
+   ALIVE 3D PEEKING MASCOT STYLES & ANIMATIONS (CRYSTAL-CLEAR CRISP RENDERING)
    ========================================================================== */
 
 .peeking-mascot-portal {
@@ -5913,88 +5914,39 @@ img {
   pointer-events: auto;
   cursor: pointer;
   user-select: none;
-  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease;
-  will-change: transform, opacity;
-}
-
-/* Top upside-down peeking: hangs down playfully from browser ceiling */
-.peeking-mascot-container.pos-top-upside-down {
-  top: 0;
-}
-
-.peeking-mascot-container.pos-top-upside-down.retreating {
-  transform: translateY(-100%);
-  opacity: 0;
-}
-
-.peeking-mascot-container.pos-top-upside-down.peeking {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-/* Bottom upright peeking: rises up playfully from browser floor */
-.peeking-mascot-container.pos-bottom-upright {
   bottom: 0;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  will-change: transform;
 }
 
-.peeking-mascot-container.pos-bottom-upright.retreating {
-  transform: translateY(100%);
+.peeking-mascot-container.retreating {
+  transform: translateY(115%);
   opacity: 0;
 }
 
-.peeking-mascot-container.pos-bottom-upright.peeking {
-  transform: translateY(0);
+.peeking-mascot-container.peeking {
+  transform: translateY(20%);
   opacity: 1;
 }
 
-/* Wrapper & Alive Breathing Animation (Pure 2D Crisp Rendering) */
-.peeking-mascot-3d-wrap {
-  filter: drop-shadow(0 16px 28px rgba(61, 30, 6, 0.22)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
+.peeking-mascot-wrap {
+  position: relative;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.16));
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.peeking-mascot-container:hover .peeking-mascot-3d-wrap {
-  transform: translateY(-6px);
-  filter: drop-shadow(0 20px 36px rgba(255, 94, 30, 0.3)) drop-shadow(0 6px 12px rgba(61, 30, 6, 0.18));
+.peeking-mascot-container:hover .peeking-mascot-wrap {
+  transform: translateY(-12px) scale(1.03);
+  filter: drop-shadow(0 20px 36px rgba(255, 94, 30, 0.28));
 }
 
 .peeking-mascot-img {
-  width: 240px;
+  width: 220px;
   height: auto;
   display: block;
   image-rendering: auto;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  animation: mascot-alive-breath 2.4s ease-in-out infinite alternate;
-}
-
-.peeking-mascot-head {
-  position: relative;
-  z-index: 1;
-}
-
-.peeking-mascot-blink {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  opacity: 0;
-  pointer-events: none;
-  animation: mascot-alive-breath 2.4s ease-in-out infinite alternate, mascot-css-blink 6.2s steps(1) infinite;
-}
-
-@keyframes mascot-css-blink {
-  0%, 22% { opacity: 0; }
-  22.5%, 25% { opacity: 1; }
-  25.5%, 51% { opacity: 0; }
-  51.5%, 53% { opacity: 1; }
-  53.5%, 55.5% { opacity: 0; }
-  56%, 58% { opacity: 1; }
-  58.5%, 78% { opacity: 0; }
-  78.5%, 81% { opacity: 1; }
-  81.5%, 100% { opacity: 0; }
+  pointer-events: auto;
+  animation: mascot-alive-breath 2.6s ease-in-out infinite alternate;
 }
 
 @keyframes mascot-alive-breath {
@@ -6002,13 +5954,16 @@ img {
     transform: translateY(0);
   }
   100% {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
   }
 }
 
 @media (max-width: 640px) {
   .peeking-mascot-img {
-    width: 200px;
+    width: 170px;
+  }
+  .peeking-mascot-container.peeking {
+    transform: translateY(22%);
   }
 }
 
