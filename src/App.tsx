@@ -14,6 +14,7 @@ const CelebrationWorldMap = lazy(() => import('./components/CelebrationWorldMap'
 const CategoryShowcase = lazy(() => import('./components/CategoryShowcase').then((m) => ({ default: m.CategoryShowcase })));
 const PlanBuilder = lazy(() => import('./components/PlanBuilder').then((m) => ({ default: m.PlanBuilder })));
 const FAQSection = lazy(() => import('./components/FAQSection').then((m) => ({ default: m.FAQSection })));
+const EventInsights = lazy(() => import('./components/EventInsights').then((m) => ({ default: m.EventInsights })));
 const GlobalFestivalFooterShowcase = lazy(() => import('./components/GlobalFestivalFooterShowcase').then((m) => ({ default: m.GlobalFestivalFooterShowcase })));
 const PeekingMascot = lazy(() => import('./components/PeekingMascot').then((m) => ({ default: m.PeekingMascot })));
 const FestiChatbot = lazy(() => import('./components/FestiChatbot').then((m) => ({ default: m.FestiChatbot })));
@@ -76,6 +77,13 @@ export function App() {
     setActiveTab('planner');
     window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
     playCelebrationSound(soundEnabled);
+  };
+
+  const handleExploreDemo = () => {
+    const demoEl = document.getElementById('interactive-demo') || document.getElementById('insights');
+    if (demoEl) {
+      demoEl.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' });
+    }
   };
 
   const handleQuickOccasionSelect = (id: string) => {
@@ -355,6 +363,16 @@ export function App() {
                 <ProblemSolution />
               </Suspense>
             </LazyMount>
+
+            {/* AEO & SEO KNOWLEDGE HUB (EMPIRICAL BENCHMARKS & HIGH-CITATION DATA) */}
+            <LazyMount placeholderHeight="580px" rootMargin="350px">
+              <Suspense fallback={null}>
+                <EventInsights
+                  onStartPlanning={handleStartPlanning}
+                  onExploreDemo={handleExploreDemo}
+                />
+              </Suspense>
+            </LazyMount>
           </>
         )}
 
@@ -405,6 +423,10 @@ export function App() {
         {activeTab === 'faq' && (
           <div style={{ paddingTop: '80px', minHeight: '80vh' }}>
             <Suspense fallback={null}>
+              <EventInsights
+                onStartPlanning={handleStartPlanning}
+                onExploreDemo={handleExploreDemo}
+              />
               <FAQSection soundEnabled={soundEnabled} />
             </Suspense>
           </div>
