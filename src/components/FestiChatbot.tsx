@@ -47,7 +47,7 @@ export const FestiChatbot: React.FC = () => {
     {
       id: 'welcome',
       sender: 'festi',
-      text: "Hey! I'm Festi, your Festi AI event architect! 🎉\n\nTell me what you're dreaming up, whether it's a budget check, venue negotiation tip, sensory decor theme, or minute-by-minute timeline, and I'll build it for you!",
+      text: "Hey! I'm Festi, your Festi AI event architect! 🎉\n\nTell me what you're dreaming up, whether it's a budget check, vendor contract checklist, sensory decor theme, or minute-by-minute timeline, and I'll build it for you!",
       time: 'Just now',
       suggestions: [
         "How do I estimate an event budget?",

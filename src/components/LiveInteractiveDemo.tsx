@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, TrendingDown } from 'lucide-react';
 
 interface Scenario {
   id: string;
@@ -147,7 +146,7 @@ export const LiveInteractiveDemo: React.FC = () => {
             Watch Festiya Architect an Event in Real Time
           </h2>
           <p className="demo-subtitle">
-            See how natural celebration requirements transform into a decimal-accurate budget, milestone timeline, and vendor savings script in seconds.
+            See how natural celebration requirements transform into a decimal-accurate budget, milestone timeline, and vendor run sheet in seconds.
           </p>
 
           {/* Scenario Selector Pills */}
@@ -243,19 +242,6 @@ export const LiveInteractiveDemo: React.FC = () => {
                     <span>{task}</span>
                   </div>
                 ))}
-              </div>
-
-              {/* Vendor Leverage Script Box - Brand Styled Warm Glow */}
-              <div className="demo-vendor-leverage-box">
-                <div className="leverage-badge">
-                  <Sparkles size={12} className="leverage-icon" />
-                  <span>Negotiation Leverage Script</span>
-                </div>
-                <p className="leverage-question">{scenario.vendorTip.question}</p>
-                <div className="leverage-savings">
-                  <TrendingDown size={13} className="leverage-savings-icon" />
-                  <span>{scenario.vendorTip.savings}</span>
-                </div>
               </div>
             </div>
           </div>

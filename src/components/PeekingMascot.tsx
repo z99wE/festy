@@ -7,24 +7,29 @@ type MascotColor = 'mint' | 'blue' | 'yellow' | 'pink';
 interface MascotConfig {
   name: string;
   src: string;
+  blinkSrc: string;
 }
 
 const MASCOTS: Record<MascotColor, MascotConfig> = {
   mint: {
     name: 'Festiya Celebration Mascot - Mint Plush Character cheering on event planning',
     src: '/mascots/bubble-mint.webp',
+    blinkSrc: '/mascots/bubble-mint-blink.webp',
   },
   blue: {
     name: 'Festiya Celebration Mascot - Cheerful Blue Fuzzy Character jumping for festival milestones',
     src: '/mascots/blue-jumping.webp',
+    blinkSrc: '/mascots/blue-jumping-blink.webp',
   },
   yellow: {
     name: 'Festiya Celebration Mascot - Fluffy Yellow Dance Character celebrating birthdays and galas',
     src: '/mascots/yellow-dance.webp',
+    blinkSrc: '/mascots/yellow-dance-blink.webp',
   },
   pink: {
     name: 'Festiya Celebration Mascot - Fluffy Pink Dancing Character dancing for wedding receptions',
     src: '/mascots/pink-dancing.webp',
+    blinkSrc: '/mascots/pink-dancing-blink.webp',
   },
 };
 
@@ -38,9 +43,48 @@ interface ActivePeek {
 
 export const PeekingMascot: React.FC = () => {
   const [activePeek, setActivePeek] = useState<ActivePeek | null>(null);
+  const [isBlinking, setIsBlinking] = useState(false);
   const peeksCountRef = useRef<number>(0);
   const lastColorRef = useRef<MascotColor | null>(null);
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  // Preload all high-res blink frames on mount
+  useEffect(() => {
+    COLOR_KEYS.forEach((col) => {
+      const img = new Image();
+      img.src = MASCOTS[col].blinkSrc;
+    });
+  }, []);
+
+  // Natural periodic blinking while mascot is actively peeking
+  useEffect(() => {
+    if (!activePeek || activePeek.isRetreating) {
+      setIsBlinking(false);
+      return;
+    }
+
+    let blinkTimer: ReturnType<typeof setTimeout>;
+    let openTimer: ReturnType<typeof setTimeout>;
+
+    const scheduleNextBlink = (delay: number) => {
+      blinkTimer = setTimeout(() => {
+        setIsBlinking(true);
+        openTimer = setTimeout(() => {
+          setIsBlinking(false);
+          // Next blink between 1.6s and 2.8s
+          scheduleNextBlink(1600 + Math.random() * 1200);
+        }, 150);
+      }, delay);
+    };
+
+    // First blink triggers quickly (850ms) after peeking in so it's readily noticed
+    scheduleNextBlink(850 + Math.random() * 400);
+
+    return () => {
+      clearTimeout(blinkTimer);
+      clearTimeout(openTimer);
+    };
+  }, [activePeek]);
 
   // Clear all pending timers on unmount
   const clearAllTimers = useCallback(() => {
@@ -160,7 +204,7 @@ export const PeekingMascot: React.FC = () => {
       >
         <div className="peeking-mascot-wrap">
           <img
-            src={currentMascot.src}
+            src={isBlinking ? currentMascot.blinkSrc : currentMascot.src}
             alt={currentMascot.name}
             title={currentMascot.name}
             className="peeking-mascot-img"

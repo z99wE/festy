@@ -46,11 +46,9 @@ export const ProblemSolution: React.FC = () => {
             {comparisons.map((row, idx) => (
               <div key={idx} className="comparison-row">
                 <div className="comparison-cell problem-cell">
-                  <span className="cell-bullet problem-bullet">✕</span>
                   <p>{row.problem}</p>
                 </div>
                 <div className="comparison-cell solution-cell">
-                  <span className="cell-bullet solution-bullet">✓</span>
                   <p>{row.solution}</p>
                 </div>
               </div>

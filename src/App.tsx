@@ -176,7 +176,7 @@ export function App() {
 
                   {/* 3. CLASSY H2 SUBTITLE */}
                   <h2 className="hero-subtitle">
-                    Audit-ready 3-tier budgets, milestone itineraries, and insider vendor negotiation scripts — generated in under 90 seconds.
+                    Audit-ready 3-tier budgets, milestone itineraries, and vendor contract run sheets — generated in under 90 seconds.
                   </h2>
 
                   {/* 4. FLOWING EDITORIAL BODY COPY */}
@@ -232,7 +232,7 @@ export function App() {
                   <div className="hero-proof-line">
                     <div className="proof-pill">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                      <span>100% Free &amp; Open-Access</span>
+                      <span>Multi-Agent Architecture</span>
                     </div>
                     <span className="proof-dot" aria-hidden="true">•</span>
                     <div className="proof-pill">

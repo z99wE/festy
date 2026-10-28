@@ -41,9 +41,9 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ soundEnabled }) => {
       tag: "Global Support",
     },
     {
-      question: "How do vendor negotiation checklists help during venue walkthroughs?",
-      answer: "Festiya synthesizes situational negotiation prompts based on your celebration category, identifying hidden load-in surcharges, overtime clauses, and mandatory gratuity multipliers so you have full clarity before finalizing contracts.",
-      tag: "Vendor Negotiation",
+      question: "How do vendor contract checklists help during venue walkthroughs?",
+      answer: "Festiya synthesizes situational contract verification points based on your celebration category, identifying hidden load-in surcharges, overtime clauses, and mandatory gratuity multipliers so you have full clarity before finalizing contracts.",
+      tag: "Vendor Verification",
     },
   ];
 
