@@ -389,7 +389,7 @@ const CONTINENT_PATHS = [
   "M 901.3,347.2 L 917.3,355.6 L 912,377.8 L 896,366.7 L 901.3,347.2 Z",
 ];
 
-// Generate procedural equirectangular texture with brand mascot colors (zero black!)
+// Generate procedural equirectangular texture with pastel bubblegum colors
 function createProceduralGlobeTexture(): THREE.CanvasTexture {
   const canvas = document.createElement('canvas');
   canvas.width = 2048;
@@ -397,18 +397,27 @@ function createProceduralGlobeTexture(): THREE.CanvasTexture {
   const ctx = canvas.getContext('2d');
   if (!ctx) return new THREE.CanvasTexture(canvas);
 
-  // 1. Warm plush apricot & peach cream base (Zero black, branded warmth)
-  const oceanGrad = ctx.createLinearGradient(0, 0, 0, 1024);
-  oceanGrad.addColorStop(0, '#FFEBDD');
-  oceanGrad.addColorStop(0.3, '#FFF5ED');
-  oceanGrad.addColorStop(0.5, '#FFFDFB');
-  oceanGrad.addColorStop(0.7, '#FFF5ED');
-  oceanGrad.addColorStop(1, '#FFEBDD');
+  // 1. Pastel Bubblegum Ocean Base (iridescent pastel candy gradient: lilac -> rose pink -> sky blue -> peach)
+  const oceanGrad = ctx.createLinearGradient(0, 0, 2048, 1024);
+  oceanGrad.addColorStop(0, '#E9D5FF');    // Pastel bubblegum lilac
+  oceanGrad.addColorStop(0.22, '#FCE7F3'); // Soft cotton candy pink
+  oceanGrad.addColorStop(0.48, '#E0F2FE'); // Pastel sky cyan
+  oceanGrad.addColorStop(0.72, '#FBCFE8'); // Bubblegum rose
+  oceanGrad.addColorStop(1, '#FED7AA');    // Sweet pastel peach
   ctx.fillStyle = oceanGrad;
   ctx.fillRect(0, 0, 2048, 1024);
 
-  // 2. Graticules / latitude & longitude grid lines in delicate soft coral
-  ctx.strokeStyle = 'rgba(255, 94, 30, 0.12)';
+  // Soft radiant center blush so oceans have deep pastel glow
+  const radialBlush = ctx.createRadialGradient(1024, 512, 100, 1024, 512, 1200);
+  radialBlush.addColorStop(0, 'rgba(255, 255, 255, 0.45)');
+  radialBlush.addColorStop(0.35, 'rgba(244, 114, 182, 0.22)'); // bubblegum pink
+  radialBlush.addColorStop(0.7, 'rgba(167, 139, 250, 0.2)');   // pastel lavender
+  radialBlush.addColorStop(1, 'rgba(254, 215, 170, 0.28)');    // pastel peach
+  ctx.fillStyle = radialBlush;
+  ctx.fillRect(0, 0, 2048, 1024);
+
+  // 2. Graticules / latitude & longitude grid lines in delicate pastel white/lavender
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
   ctx.lineWidth = 1.2;
 
   // Latitudes
@@ -426,30 +435,36 @@ function createProceduralGlobeTexture(): THREE.CanvasTexture {
     ctx.stroke();
   }
 
-  // Equator highlight in vibrant festive brand orange
-  ctx.strokeStyle = 'rgba(255, 94, 30, 0.32)';
-  ctx.lineWidth = 2;
+  // Equator in vibrant bubblegum pink
+  ctx.strokeStyle = 'rgba(244, 114, 182, 0.7)';
+  ctx.lineWidth = 2.4;
   ctx.beginPath();
   ctx.moveTo(0, 512);
   ctx.lineTo(2048, 512);
   ctx.stroke();
 
-  // 3. Draw continents in plush mascot terracotta orange & sunset coral
+  // 3. Draw continents in plush bubblegum coral-strawberry with gold-peach shores
   ctx.save();
   ctx.scale(2048 / 960, 1024 / 500);
+
+  // Create sweet multi-stop gradient for continents
+  const continentFill = ctx.createLinearGradient(100, 50, 860, 450);
+  continentFill.addColorStop(0, '#FF6584');    // Bubblegum strawberry
+  continentFill.addColorStop(0.45, '#FF7A59'); // Sweet coral
+  continentFill.addColorStop(1, '#FFA96B');    // Pastel mango peach
 
   CONTINENT_PATHS.forEach((svgD) => {
     try {
       const p = new Path2D(svgD);
-      // Soft plush shadow
-      ctx.shadowColor = 'rgba(255, 94, 30, 0.25)';
-      ctx.shadowBlur = 10;
-      ctx.fillStyle = '#FF6B4A';
+      // Soft candy drop shadow
+      ctx.shadowColor = 'rgba(236, 72, 153, 0.3)';
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = continentFill;
       ctx.fill(p);
 
-      // Continent coast outline in bright peach gold
+      // Continent coast outline in bright pastel cream-gold
       ctx.shadowBlur = 0;
-      ctx.strokeStyle = '#FFA756';
+      ctx.strokeStyle = '#FFF1E6';
       ctx.lineWidth = 2.2;
       ctx.stroke(p);
     } catch {
@@ -595,16 +610,21 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
     container.innerHTML = '';
     container.appendChild(renderer.domElement);
 
-    // 2. Lighting
-    const ambientLight = new THREE.AmbientLight(0xfff8f0, 2.6);
+    // 2. Lighting (clean pastel & warm candy fill lights)
+    const ambientLight = new THREE.AmbientLight(0xfff0f7, 2.8);
     scene.add(ambientLight);
 
-    const sunLight = new THREE.DirectionalLight(0xffecd5, 2.6);
-    sunLight.position.set(160, 120, 180);
+    const sunLight = new THREE.DirectionalLight(0xfff8f0, 2.2);
+    sunLight.position.set(140, 140, 160);
     scene.add(sunLight);
 
-    const rimLight = new THREE.DirectionalLight(0xff7a45, 1.5);
-    rimLight.position.set(-160, -60, -100);
+    // Left fill light in soft bubblegum pink to prevent ANY dark grey shading on the sphere
+    const fillLight = new THREE.DirectionalLight(0xffd6ec, 1.8);
+    fillLight.position.set(-160, 80, 120);
+    scene.add(fillLight);
+
+    const rimLight = new THREE.DirectionalLight(0xc084fc, 1.4);
+    rimLight.position.set(-140, -40, -120);
     scene.add(rimLight);
 
     // 3. Globe Group
@@ -619,23 +639,25 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
 
     const sphereMat = new THREE.MeshPhysicalMaterial({
       map: globeTexture,
-      roughness: 0.32,
-      metalness: 0.04,
-      clearcoat: 0.75,
-      clearcoatRoughness: 0.18,
-      transmission: 0.14,
+      roughness: 0.22,
+      metalness: 0.02,
+      clearcoat: 0.85,
+      clearcoatRoughness: 0.12,
+      sheen: 0.75,
+      sheenColor: new THREE.Color('#FFB5D5'),
+      sheenRoughness: 0.25,
       transparent: true,
-      opacity: 0.96,
+      opacity: 0.98,
     });
     const globeMesh = new THREE.Mesh(sphereGeo, sphereMat);
     globeGroup.add(globeMesh);
 
-    // Atmosphere Glow Outer Shell (radius 78) in warm brand sunset peach
-    const atmosGeo = new THREE.SphereGeometry(globeRadius + 3, 32, 32);
+    // Atmosphere Glow Outer Shell (radius 78.5) in pastel bubblegum lilac glow
+    const atmosGeo = new THREE.SphereGeometry(globeRadius + 3.5, 32, 32);
     const atmosMat = new THREE.MeshBasicMaterial({
-      color: 0xff7a45,
+      color: 0xd8b4fe,
       transparent: true,
-      opacity: 0.18,
+      opacity: 0.32,
       side: THREE.BackSide,
     });
     const atmosMesh = new THREE.Mesh(atmosGeo, atmosMat);
