@@ -35,18 +35,6 @@ export function App() {
   const [activeTab, setActiveTab] = useState<ActiveAppTab>('home');
   const [soundEnabled] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(() => {
-    return typeof window !== 'undefined' ? window.innerWidth >= 768 : true;
-  });
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 768);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   // Regional currency state
   const [currentCurrency, setCurrentCurrency] = useState<string>(() => {
@@ -138,61 +126,36 @@ export function App() {
             <section id="hero" className="hero-section" aria-labelledby="hero-title">
               <div className="content-wrapper">
                 <div className="hero-masthead-flow">
-                  {/* 1. TOP MASTHEAD: 3D Orbitable Hero Logo (Pristine tactile 360 rotation on desktop, instant preloaded WebP on mobile) */}
+                  {/* 1. TOP MASTHEAD: 3D Orbitable Hero Logo (Pristine tactile 360 rotation & plush 3D lighting) */}
                   <div className="hero-masthead-centerpiece" aria-label="Festiya Interactive 3D Mascot Logo">
-                    {isDesktop ? (
-                      <Suspense
-                        fallback={
-                          <div
-                            className="orbitable-hero-wrapper"
-                            style={{
-                              position: 'relative',
-                              width: '100%',
-                              maxWidth: '680px',
-                              aspectRatio: '680 / 280',
-                              margin: '0 auto',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}
-                          >
-                            <img
-                              src="/festiya-logo.webp"
-                              alt="Festiya 3D Plush Mascot Logo"
-                              width={639}
-                              height={240}
-                              fetchPriority="high"
-                              className="festiya-masthead-img"
-                            />
-                          </div>
-                        }
-                      >
-                        <OrbitableHeroLogo reducedMotion={reducedMotion} soundEnabled={soundEnabled} />
-                      </Suspense>
-                    ) : (
-                      <div
-                        className="orbitable-hero-wrapper"
-                        style={{
-                          position: 'relative',
-                          width: '100%',
-                          maxWidth: '680px',
-                          aspectRatio: '680 / 280',
-                          margin: '0 auto',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <img
-                          src="/festiya-logo.webp"
-                          alt="Festiya Plush Mascot Logo"
-                          width={639}
-                          height={240}
-                          fetchPriority="high"
-                          className="festiya-masthead-img"
-                        />
-                      </div>
-                    )}
+                    <Suspense
+                      fallback={
+                        <div
+                          className="orbitable-hero-wrapper"
+                          style={{
+                            position: 'relative',
+                            width: '100%',
+                            maxWidth: '820px',
+                            aspectRatio: '820 / 340',
+                            margin: '0 auto',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <img
+                            src="/festiya-logo.webp"
+                            alt="Festiya 3D Plush Mascot Logo"
+                            width={639}
+                            height={240}
+                            fetchPriority="high"
+                            className="festiya-masthead-img"
+                          />
+                        </div>
+                      }
+                    >
+                      <OrbitableHeroLogo reducedMotion={reducedMotion} soundEnabled={soundEnabled} />
+                    </Suspense>
                   </div>
 
                   {/* 2. FLOWING EDITORIAL H1 */}

@@ -22,259 +22,244 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     import('three').then((THREE) => {
       if (isDisposed) return;
 
-      // Viewport sizing: generous aspect ratio providing 3D clearance on yaw & pitch twists
+      // Viewport sizing: expansive dimensions for bold, commanding 3D masthead presence
       const getViewportSize = () => {
-        const w = Math.min(container.clientWidth || 680, 680);
-        const naturalH = Math.round(w * (280 / 680));
-        const h = Math.min(290, Math.max(170, naturalH));
+        const w = Math.min(container.clientWidth || 800, 800);
+        const naturalH = Math.round(w * (340 / 800));
+        const h = Math.min(360, Math.max(220, naturalH));
         return { width: w, height: h };
       };
 
-    let { width, height } = getViewportSize();
+      let { width, height } = getViewportSize();
 
-    // Three.js Scene Setup (30° FOV eliminates fish-eye distortion while preserving 3D depth)
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 100);
+      // Three.js Scene Setup (32° FOV gives natural depth and avoids distortion)
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(32, width / height, 0.1, 100);
 
-    // Hero masthead framing: calculated so full ±0.45 rad yaw and ±0.25 rad pitch never clip edges
-    const updateCameraDistance = (w: number, h: number) => {
-      const aspect = w / h;
-      const fovRad = (30 * Math.PI) / 180;
-      const tanHalfFov = Math.tan(fovRad / 2);
-      
-      const targetW = 5.2;
-      const targetH = (5.2 * 768) / 2046; // ~1.952
-      
-      // Maximum forward Z swing under max pitch (0.25 rad) and yaw (0.45 rad)
-      const maxDeltaZ = (targetW / 2) * Math.sin(0.45) + (targetH / 2) * Math.sin(0.25); // ~1.372
-      
-      // Rotated corner projections with generous 15-18% perimeter padding
-      const maxProjX = (targetW / 2) * Math.cos(0.45) * 1.15;
-      const maxProjY = ((targetH / 2) * Math.cos(0.25) + 0.1) * 1.18;
-      
-      const distW = maxProjX / (aspect * tanHalfFov);
-      const distH = maxProjY / tanHalfFov;
-      const requiredDist = maxDeltaZ + Math.max(distW, distH);
+      const targetW = 6.0;
+      const targetH = (6.0 * 768) / 2046; // ~2.252
 
-      camera.fov = 30;
-      camera.aspect = aspect;
-      camera.position.set(0, 0, requiredDist);
-      camera.updateProjectionMatrix();
-    };
-    updateCameraDistance(width, height);
+      const updateCameraDistance = (w: number, h: number) => {
+        const aspect = w / h;
+        const fovRad = (32 * Math.PI) / 180;
+        const tanHalfFov = Math.tan(fovRad / 2);
 
-    const renderer = new THREE.WebGLRenderer({
-      alpha: true,
-      antialias: true,
-      powerPreference: 'high-performance',
-    });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
-    renderer.domElement.style.display = 'block';
-    renderer.domElement.style.width = '100%';
-    renderer.domElement.style.height = '100%';
-    container.innerHTML = '';
-    container.appendChild(renderer.domElement);
+        // Calculate distance so the logo fills the frame prominently without clipping on tilt
+        const distW = (targetW * 1.15) / (2 * aspect * tanHalfFov);
+        const distH = (targetH * 1.25) / (2 * tanHalfFov);
+        const dist = Math.max(distW, distH, 5.2);
 
-    // Warm, velvety lighting tuned for plush fur (matte, warm, no white specular hot spots)
-    const ambientLight = new THREE.AmbientLight(0xfff6ea, 2.3);
-    scene.add(ambientLight);
+        camera.fov = 32;
+        camera.aspect = aspect;
+        camera.position.set(0, 0, dist);
+        camera.updateProjectionMatrix();
+      };
+      updateCameraDistance(width, height);
 
-    const keyLight = new THREE.DirectionalLight(0xffeed6, 2.2);
-    keyLight.position.set(2, 4, 3);
-    scene.add(keyLight);
+      const renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+        powerPreference: 'high-performance',
+      });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.25;
+      renderer.domElement.style.display = 'block';
+      renderer.domElement.style.width = '100%';
+      renderer.domElement.style.height = '100%';
+      container.innerHTML = '';
+      container.appendChild(renderer.domElement);
 
-    const fillLight = new THREE.DirectionalLight(0xffdfb8, 1.4);
-    fillLight.position.set(-3, -2, 2);
-    scene.add(fillLight);
+      // Warm, velvety lighting tuned for real 3D plush sheen & highlights
+      const ambientLight = new THREE.AmbientLight(0xfff5ea, 2.0);
+      scene.add(ambientLight);
 
-    const warmRim = new THREE.DirectionalLight(0xff9e30, 2.4);
-    warmRim.position.set(-2, 2, -4);
-    scene.add(warmRim);
+      const keyLight = new THREE.DirectionalLight(0xffeed6, 2.6);
+      keyLight.position.set(3, 4, 4);
+      scene.add(keyLight);
 
-    // Orbitable Root Group
-    const orbitGroup = new THREE.Group();
-    scene.add(orbitGroup);
+      const fillLight = new THREE.DirectionalLight(0xff9e30, 1.8);
+      fillLight.position.set(-4, -2, 3);
+      scene.add(fillLight);
 
-    // Load Pristine High-Res Logo Texture (Direct from original favicon.png)
-    const textureLoader = new THREE.TextureLoader();
+      const warmRim = new THREE.DirectionalLight(0xffffff, 2.2);
+      warmRim.position.set(0, 3, -3);
+      scene.add(warmRim);
 
-    textureLoader.load(
-      '/festiya-logo.webp',
-      (texture) => {
-        texture.generateMipmaps = true;
-        texture.minFilter = THREE.LinearMipmapLinearFilter;
-        texture.magFilter = THREE.LinearFilter;
-        texture.colorSpace = THREE.SRGBColorSpace;
+      // Orbitable Root Group
+      const orbitGroup = new THREE.Group();
+      scene.add(orbitGroup);
 
-        // Big, imposing 3D mascot dimensions with exact 2046:768 aspect ratio
-        const worldW = 5.2;
-        const worldH = (worldW * 768) / 2046;
-        const planeGeo = new THREE.PlaneGeometry(worldW, worldH, 1, 1);
+      // Load Pristine High-Res Logo Texture
+      const textureLoader = new THREE.TextureLoader();
 
-        // Pristine single-plane material: exactly matches the original artwork with ZERO extra slop
-        const material = new THREE.MeshBasicMaterial({
-          map: texture,
-          transparent: true,
-          side: THREE.FrontSide,
-        });
+      textureLoader.load(
+        '/festiya-logo.webp',
+        (texture) => {
+          texture.generateMipmaps = true;
+          texture.minFilter = THREE.LinearMipmapLinearFilter;
+          texture.magFilter = THREE.LinearFilter;
+          texture.colorSpace = THREE.SRGBColorSpace;
 
-        const mesh = new THREE.Mesh(planeGeo, material);
-        orbitGroup.add(mesh);
-        renderer.render(scene, camera);
-      },
-      undefined,
-      (err) => {
-        console.warn('Could not load hero texture', err);
-      }
-    );
+          const planeGeo = new THREE.PlaneGeometry(targetW, targetH, 1, 1);
 
-    // Orbit Interaction Dynamics (Smooth 360 drag rotation)
-    let isDragging = false;
-    let prevMouseX = 0;
-    let prevMouseY = 0;
-    let targetRotationY = 0;
-    let targetRotationX = 0;
-    let currentRotationY = 0;
-    let currentRotationX = 0;
+          // MeshStandardMaterial reacts to 3D lighting with real plush velvet sheen
+          const material = new THREE.MeshStandardMaterial({
+            map: texture,
+            transparent: true,
+            roughness: 0.55,
+            metalness: 0.08,
+            side: THREE.DoubleSide,
+          });
 
-    let animationFrameId = 0;
-    let isVisible = true;
-    let isSleeping = false;
-    let activeUntil = performance.now() + 3000; // Float for first 3s, then sleep
-    let lastRenderTime = 0;
-    const clock = new THREE.Clock();
-
-    const wakeUp = (durationMs = 2500) => {
-      activeUntil = performance.now() + durationMs;
-      if (isSleeping && isVisible) {
-        isSleeping = false;
-        if (!animationFrameId) {
-          animationFrameId = requestAnimationFrame(animate);
+          const mesh = new THREE.Mesh(planeGeo, material);
+          orbitGroup.add(mesh);
+          renderer.render(scene, camera);
+        },
+        undefined,
+        (err) => {
+          console.warn('Could not load hero texture', err);
         }
-      }
-    };
+      );
 
-    const dom = renderer.domElement;
-    dom.style.cursor = 'grab';
-    dom.style.touchAction = 'none';
+      // Orbit Interaction Dynamics (Fluid tactile 3D twist & momentum)
+      let isDragging = false;
+      let prevPointerX = 0;
+      let prevPointerY = 0;
+      let targetRotY = 0;
+      let targetRotX = 0;
+      let currentRotY = 0;
+      let currentRotX = 0;
+      let velocityY = 0;
+      let velocityX = 0;
 
-    const onPointerDown = (e: MouseEvent | TouchEvent) => {
-      isDragging = true;
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      prevMouseX = clientX;
-      prevMouseY = clientY;
-      dom.style.cursor = 'grabbing';
-      playPopSound(soundEnabled);
-      wakeUp(3000);
-    };
+      let animationFrameId = 0;
+      let isVisible = true;
+      const clock = new THREE.Clock();
 
-    const onPointerMove = (e: MouseEvent | TouchEvent) => {
-      if (!isDragging) return;
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-
-      const deltaX = clientX - prevMouseX;
-      const deltaY = clientY - prevMouseY;
-
-      targetRotationY += deltaX * 0.007;
-      targetRotationX += deltaY * 0.005;
-
-      // Clamp tilt angles to keep logo front-facing, legible, and tactile
-      targetRotationY = Math.max(-0.45, Math.min(0.45, targetRotationY));
-      targetRotationX = Math.max(-0.25, Math.min(0.25, targetRotationX));
-
-      prevMouseX = clientX;
-      prevMouseY = clientY;
-      wakeUp(2500);
-    };
-
-    const onPointerUp = () => {
-      isDragging = false;
+      const dom = renderer.domElement;
       dom.style.cursor = 'grab';
-      wakeUp(1800);
-    };
+      dom.style.touchAction = 'none';
 
-    dom.addEventListener('mousedown', onPointerDown);
-    window.addEventListener('mousemove', onPointerMove);
-    window.addEventListener('mouseup', onPointerUp);
+      const onPointerDown = (e: MouseEvent | TouchEvent) => {
+        isDragging = true;
+        const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+        const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+        prevPointerX = clientX;
+        prevPointerY = clientY;
+        velocityY = 0;
+        velocityX = 0;
+        dom.style.cursor = 'grabbing';
+        playPopSound(soundEnabled);
+      };
 
-    dom.addEventListener('touchstart', onPointerDown, { passive: true });
-    window.addEventListener('touchmove', onPointerMove, { passive: true });
-    window.addEventListener('touchend', onPointerUp);
+      const onPointerMove = (e: MouseEvent | TouchEvent) => {
+        if (!isDragging) return;
+        const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+        const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
 
-    // Resize Handler
-    const handleResize = () => {
-      if (!container) return;
-      const { width: newW, height: newH } = getViewportSize();
-      updateCameraDistance(newW, newH);
-      renderer.setSize(newW, newH);
-      renderer.render(scene, camera);
-    };
-    window.addEventListener('resize', handleResize);
+        const deltaX = clientX - prevPointerX;
+        const deltaY = clientY - prevPointerY;
 
-    const animate = (timestamp: number) => {
-      if (!isVisible) {
-        animationFrameId = 0;
-        return;
-      }
+        velocityY = deltaX * 0.009;
+        velocityX = deltaY * 0.007;
 
-      // Check if animation window expired and rotation has settled
-      const rotDiff = Math.abs(targetRotationY - currentRotationY) + Math.abs(targetRotationX - currentRotationX);
-      if (!isDragging && timestamp > activeUntil && rotDiff < 0.001) {
+        targetRotY += velocityY;
+        targetRotX += velocityX;
+
+        // Generous tilt range: dramatic, responsive 3D twist without clipping
+        targetRotY = Math.max(-0.55, Math.min(0.55, targetRotY));
+        targetRotX = Math.max(-0.35, Math.min(0.35, targetRotX));
+
+        prevPointerX = clientX;
+        prevPointerY = clientY;
+      };
+
+      const onPointerUp = () => {
+        isDragging = false;
+        dom.style.cursor = 'grab';
+      };
+
+      dom.addEventListener('mousedown', onPointerDown);
+      window.addEventListener('mousemove', onPointerMove);
+      window.addEventListener('mouseup', onPointerUp);
+
+      dom.addEventListener('touchstart', onPointerDown, { passive: true });
+      window.addEventListener('touchmove', onPointerMove, { passive: true });
+      window.addEventListener('touchend', onPointerUp);
+
+      // Resize Handler
+      const handleResize = () => {
+        if (!container) return;
+        const { width: newW, height: newH } = getViewportSize();
+        updateCameraDistance(newW, newH);
+        renderer.setSize(newW, newH);
         renderer.render(scene, camera);
-        isSleeping = true;
-        animationFrameId = 0;
-        return;
-      }
+      };
+      window.addEventListener('resize', handleResize);
 
-      // Throttle to ~35fps to keep main thread completely unblocked on mobile
-      if (timestamp - lastRenderTime < 26) {
-        animationFrameId = requestAnimationFrame(animate);
-        return;
-      }
-      lastRenderTime = timestamp;
-
-      animationFrameId = requestAnimationFrame(animate);
-      const elapsedTime = clock.getElapsedTime();
-
-      // Soft harmonic 3D floating orbit when idle (no 360 spin)
-      if (!isDragging && !reducedMotion) {
-        const idleRotY = Math.sin(elapsedTime * 0.85) * 0.12;
-        const idleRotX = Math.cos(elapsedTime * 0.65) * 0.06;
-        targetRotationY += (idleRotY - targetRotationY) * 0.05;
-        targetRotationX += (idleRotX - targetRotationX) * 0.05;
-        orbitGroup.position.y = Math.sin(elapsedTime * 1.4) * 0.07;
-      }
-
-      // Smooth inertia damping
-      currentRotationY += (targetRotationY - currentRotationY) * 0.08;
-      currentRotationX += (targetRotationX - currentRotationX) * 0.08;
-
-      orbitGroup.rotation.y = currentRotationY;
-      orbitGroup.rotation.x = currentRotationX;
-
-      renderer.render(scene, camera);
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      const entry = entries[0];
-      isVisible = !!entry?.isIntersecting;
-      if (isVisible) {
-        wakeUp(3000);
-      } else {
-        if (animationFrameId) {
-          cancelAnimationFrame(animationFrameId);
+      const animate = () => {
+        if (!isVisible) {
           animationFrameId = 0;
+          return;
         }
-        isSleeping = true;
-      }
-    }, { threshold: 0.05 });
 
-    observer.observe(container);
+        animationFrameId = requestAnimationFrame(animate);
+        const elapsedTime = clock.getElapsedTime();
+
+        if (isDragging) {
+          // Direct tracking with smooth inertia
+          currentRotY += (targetRotY - currentRotY) * 0.18;
+          currentRotX += (targetRotX - currentRotX) * 0.18;
+        } else {
+          // Apply velocity glide
+          targetRotY += velocityY;
+          targetRotX += velocityX;
+          velocityY *= 0.91;
+          velocityX *= 0.91;
+
+          targetRotY = Math.max(-0.55, Math.min(0.55, targetRotY));
+          targetRotX = Math.max(-0.35, Math.min(0.35, targetRotX));
+
+          // Soft harmonic 3D floating & gentle return toward alive breathing float
+          if (!reducedMotion) {
+            const idleRotY = Math.sin(elapsedTime * 0.9) * 0.12;
+            const idleRotX = Math.cos(elapsedTime * 0.7) * 0.07;
+            targetRotY += (idleRotY - targetRotY) * 0.04;
+            targetRotX += (idleRotX - targetRotX) * 0.04;
+            orbitGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.08;
+          }
+
+          currentRotY += (targetRotY - currentRotY) * 0.09;
+          currentRotX += (targetRotX - currentRotX) * 0.09;
+        }
+
+        orbitGroup.rotation.y = currentRotY;
+        orbitGroup.rotation.x = currentRotX;
+
+        renderer.render(scene, camera);
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          isVisible = !!entry?.isIntersecting;
+          if (isVisible) {
+            if (!animationFrameId) {
+              animationFrameId = requestAnimationFrame(animate);
+            }
+          } else {
+            if (animationFrameId) {
+              cancelAnimationFrame(animationFrameId);
+              animationFrameId = 0;
+            }
+          }
+        },
+        { threshold: 0.05 }
+      );
+
+      observer.observe(container);
 
       cleanupFn = () => {
         observer.disconnect();
@@ -305,10 +290,10 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       style={{
         position: 'relative',
         width: '100%',
-        maxWidth: '680px',
-        aspectRatio: '680 / 280',
-        minHeight: '170px',
-        maxHeight: '290px',
+        maxWidth: '820px',
+        aspectRatio: '820 / 340',
+        minHeight: '240px',
+        maxHeight: '360px',
         margin: '0 auto',
         display: 'flex',
         alignItems: 'center',
