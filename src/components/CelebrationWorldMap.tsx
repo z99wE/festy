@@ -1,14 +1,17 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import * as THREE from 'three';
 import {
   Calendar,
   ArrowRight,
   Search,
   MessageSquare,
   Users,
-  X,
   MapPin,
+  Compass,
+  RotateCw,
+  ZoomIn,
+  ZoomOut
 } from 'lucide-react';
-import { formatCurrency } from '../utils/currency';
 import { playPopSound } from '../utils/audio';
 import { openFestiAIChat } from './FestiChatbot';
 import type { EventPlanningContext } from '../data/globalCelebrations';
@@ -23,6 +26,9 @@ export interface WorldCelebrationPin {
   dates: string;
   month: string;
   daysUntil: number;
+  localCurrencyCode: string;
+  localCurrencySymbol: string;
+  estBudgetLocal: number;
   estBudgetUSD: number;
   guestRange: string;
   categoryKey: string;
@@ -47,6 +53,9 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     dates: 'Feb 12 – Feb 17, 2027',
     month: 'February 2027',
     daysUntil: 108,
+    localCurrencyCode: 'BRL',
+    localCurrencySymbol: 'R$ ',
+    estBudgetLocal: 120000,
     estBudgetUSD: 24000,
     guestRange: '150–500 Guests',
     categoryKey: 'festival',
@@ -69,6 +78,9 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     dates: 'Oct 31 – Nov 4, 2026',
     month: 'November 2026',
     daysUntil: 18,
+    localCurrencyCode: 'INR',
+    localCurrencySymbol: '₹',
+    estBudgetLocal: 1540000,
     estBudgetUSD: 18500,
     guestRange: '250–600 Guests',
     categoryKey: 'cultural_fest',
@@ -77,7 +89,7 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     logisticsHighlight: 'Requires certified fire marshal review for outdoor sparklers and 48-hr ghee lamp vendor permits.',
     lat: 28.6,
     lon: 77.2,
-    color: '#E04E15',
+    color: '#F59E0B',
     aiPrompt: 'Generate a royal Diwali gala blueprint with courtyard lighting layouts, 5-course artisanal vegetarian menus, and sparkler safety protocols.',
     image: '/festivals/holi-festival.webp',
   },
@@ -91,6 +103,9 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     dates: 'Mar 25 – Apr 2, 2027',
     month: 'March 2027',
     daysUntil: 148,
+    localCurrencyCode: 'JPY',
+    localCurrencySymbol: '¥',
+    estBudgetLocal: 2250000,
     estBudgetUSD: 14500,
     guestRange: '80–200 Guests',
     categoryKey: 'cultural_fest',
@@ -99,13 +114,13 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     logisticsHighlight: 'Park picnic zoning permits must be booked 90 days ahead; requires zero-waste pack-out protocol.',
     lat: 35.0,
     lon: 135.7,
-    color: '#E11D48',
+    color: '#EC4899',
     aiPrompt: 'Design a serene Hanami cherry blossom event with illuminated night Sakura trees, sake tasting flights, and zero-waste bento catering.',
     image: '/festivals/kyoto-lanterns.webp',
   },
   {
     id: 'venice_carnival',
-    name: 'Carnival & Historical Regatta',
+    name: 'Venetian Masquerade Regatta',
     location: 'Venice',
     country: 'Italy',
     flag: '🇮🇹',
@@ -113,6 +128,9 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     dates: 'Feb 20 – Mar 2, 2027',
     month: 'February 2027',
     daysUntil: 115,
+    localCurrencyCode: 'EUR',
+    localCurrencySymbol: '€',
+    estBudgetLocal: 20200,
     estBudgetUSD: 22000,
     guestRange: '100–300 Guests',
     categoryKey: 'anniversary',
@@ -135,7 +153,10 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     dates: 'Jun 18 – Jun 22, 2027',
     month: 'June 2027',
     daysUntil: 234,
-    estBudgetUSD: 16800,
+    localCurrencyCode: 'GBP',
+    localCurrencySymbol: '£',
+    estBudgetLocal: 16800,
+    estBudgetUSD: 21500,
     guestRange: '150–400 Guests',
     categoryKey: 'festival',
     categoryLabel: 'Music Festivals',
@@ -156,7 +177,10 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     dates: 'Dec 31, 2026 – Jan 3, 2027',
     month: 'December 2026',
     daysUntil: 65,
-    estBudgetUSD: 29500,
+    localCurrencyCode: 'AUD',
+    localCurrencySymbol: 'A$ ',
+    estBudgetLocal: 42500,
+    estBudgetUSD: 28000,
     guestRange: '200–800 Guests',
     categoryKey: 'anniversary',
     categoryLabel: 'Galas & Anniversaries',
@@ -164,7 +188,7 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     logisticsHighlight: 'Harbour waterfront maritime authority permits and load-in freight elevator bookings required 60 days prior.',
     lat: -33.8,
     lon: 151.2,
-    color: '#F59E0B',
+    color: '#0284C7',
     aiPrompt: 'Design an ultra-luxurious New Year rooftop ball overlooking Sydney Harbour with synchronized countdown lighting and seafood bar logistics.',
   },
   {
@@ -177,6 +201,9 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     dates: 'Oct 31 – Nov 3, 2026',
     month: 'November 2026',
     daysUntil: 18,
+    localCurrencyCode: 'MXN',
+    localCurrencySymbol: 'Mex$ ',
+    estBudgetLocal: 185000,
     estBudgetUSD: 12500,
     guestRange: '80–250 Guests',
     categoryKey: 'wine_tasting',
@@ -198,6 +225,9 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     dates: 'Feb 5 – Feb 9, 2027',
     month: 'February 2027',
     daysUntil: 100,
+    localCurrencyCode: 'USD',
+    localCurrencySymbol: '$',
+    estBudgetLocal: 15000,
     estBudgetUSD: 15000,
     guestRange: '120–350 Guests',
     categoryKey: 'festival',
@@ -219,7 +249,10 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     dates: 'Feb 11 – Feb 14, 2027',
     month: 'February 2027',
     daysUntil: 107,
-    estBudgetUSD: 26000,
+    localCurrencyCode: 'EUR',
+    localCurrencySymbol: '€',
+    estBudgetLocal: 26000,
+    estBudgetUSD: 28000,
     guestRange: '150–400 Guests',
     categoryKey: 'wedding',
     categoryLabel: 'Luxury Weddings',
@@ -240,6 +273,9 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     dates: 'Apr 13 – Apr 16, 2027',
     month: 'April 2027',
     daysUntil: 168,
+    localCurrencyCode: 'THB',
+    localCurrencySymbol: '฿',
+    estBudgetLocal: 420000,
     estBudgetUSD: 13200,
     guestRange: '100–350 Guests',
     categoryKey: 'cultural_fest',
@@ -261,6 +297,9 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     dates: 'Nov 26 – Nov 29, 2026',
     month: 'November 2026',
     daysUntil: 29,
+    localCurrencyCode: 'USD',
+    localCurrencySymbol: '$',
+    estBudgetLocal: 11000,
     estBudgetUSD: 11000,
     guestRange: '60–180 Guests',
     categoryKey: 'birthday',
@@ -282,7 +321,10 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     dates: 'Apr 20 – Apr 25, 2027',
     month: 'April 2027',
     daysUntil: 174,
-    estBudgetUSD: 19000,
+    localCurrencyCode: 'EUR',
+    localCurrencySymbol: '€',
+    estBudgetLocal: 19000,
+    estBudgetUSD: 20500,
     guestRange: '100–300 Guests',
     categoryKey: 'wedding',
     categoryLabel: 'Luxury Weddings',
@@ -290,7 +332,7 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     logisticsHighlight: 'Municipal fairground caseta access badges and private equestrian carriage permits require 90-day booking lead.',
     lat: 37.3,
     lon: -5.9,
-    color: '#EF4444',
+    color: '#F97316',
     aiPrompt: 'Architect a Spanish Feria celebration with authentic private caseta layouts, tapas catering, flamenco performers, and late-night churros.',
   },
   {
@@ -303,6 +345,9 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     dates: 'Dec 18 – Dec 22, 2026',
     month: 'December 2026',
     daysUntil: 51,
+    localCurrencyCode: 'MAD',
+    localCurrencySymbol: 'MAD ',
+    estBudgetLocal: 135000,
     estBudgetUSD: 16500,
     guestRange: '80–220 Guests',
     categoryKey: 'anniversary',
@@ -311,95 +356,505 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     logisticsHighlight: 'Agafay desert luxury transport 4x4 permits and fire lantern safety clearances required.',
     lat: 31.6,
     lon: -8.0,
-    color: '#F59E0B',
+    color: '#EAB308',
     aiPrompt: 'Design an opulent Marrakech riad anniversary gala with Berber acoustic musicians, traditional Moroccan banquets, and desert stargazing logistics.',
     image: '/festivals/holi-festival.webp',
   },
 ];
 
-// Precise Vector Continents Geometrically Projected for 960x500 Equirectangular Canvas
-const PATH_NORTH_AMERICA = "M 32,69.4 L 53.3,52.8 L 80,55.6 L 133.3,55.6 L 173.3,61.1 L 226.7,55.6 L 266.7,77.8 L 280,88.9 L 320,111.1 L 333.3,116.7 L 320,122.2 L 304,127.8 L 293.3,133.3 L 282.7,144.4 L 277.3,155.6 L 266.7,180.6 L 261.3,172.2 L 245.3,166.7 L 226.7,169.4 L 221.3,177.8 L 240,191.7 L 245.3,205.6 L 258.7,222.2 L 274.7,227.8 L 266.7,225 L 253.3,216.7 L 226.7,205.6 L 200,194.4 L 186.7,183.3 L 173.3,166.7 L 160,155.6 L 149.3,138.9 L 149.3,116.7 L 133.3,100 L 117.3,88.9 L 80,83.3 L 53.3,94.4 L 37.3,83.3 L 32,69.4 Z";
-const PATH_GREENLAND = "M 360,19.4 L 413.3,22.2 L 432,36.1 L 421.3,55.6 L 386.7,69.4 L 362.7,83.3 L 346.7,72.2 L 333.3,55.6 L 320,38.9 L 333.3,22.2 L 360,19.4 Z";
-const PATH_SOUTH_AMERICA = "M 274.7,227.8 L 288,216.7 L 314.7,219.4 L 346.7,244.4 L 362.7,258.3 L 384,266.7 L 386.7,275 L 376,291.7 L 368,311.1 L 352,322.2 L 341.3,338.9 L 325.3,347.2 L 312,361.1 L 304,377.8 L 301.3,400 L 288,400 L 282.7,388.9 L 282.7,366.7 L 288,344.4 L 290.7,322.2 L 277.3,300 L 266.7,263.9 L 264,255.6 L 272,241.7 L 274.7,227.8 Z";
-const PATH_EUROPE = "M 456,150 L 456,130.6 L 474.7,127.8 L 488,119.4 L 485.3,108.3 L 493.3,102.8 L 501.3,100 L 493.3,88.9 L 493.3,77.8 L 512,69.4 L 520,58.3 L 546.7,52.8 L 562.7,55.6 L 560,69.4 L 538.7,83.3 L 528,88.9 L 512,97.2 L 528,100 L 538.7,100 L 554.7,94.4 L 565.3,105.6 L 560,122.2 L 554.7,133.3 L 544,144.4 L 538.7,150 L 544,138.9 L 522.7,138.9 L 520,144.4 L 512,133.3 L 504,127.8 L 488,133.3 L 472,138.9 L 464,150 L 456,150 Z";
-const PATH_UK = "M 466.7,111.1 L 477.3,108.3 L 482.7,105.6 L 480,100 L 474.7,91.7 L 469.3,88.9 L 466.7,94.4 L 472,102.8 L 466.7,111.1 Z";
-const PATH_IRELAND = "M 453.3,105.6 L 464,105.6 L 464,97.2 L 453.3,100 L 453.3,105.6 Z";
-const PATH_AFRICA = "M 464,150 L 485.3,150 L 506.7,147.2 L 512,158.3 L 538.7,161.1 L 565.3,163.9 L 570.7,175 L 581.3,188.9 L 594.7,216.7 L 616,222.2 L 608,236.1 L 592,255.6 L 586.7,277.8 L 576,305.6 L 565.3,327.8 L 554.7,341.7 L 528,344.4 L 522.7,333.3 L 512,311.1 L 512,288.9 L 504,261.1 L 488,238.9 L 488,233.3 L 469.3,236.1 L 448,227.8 L 434.7,216.7 L 434.7,205.6 L 445.3,183.3 L 453.3,166.7 L 464,150 Z";
-const PATH_MADAGASCAR = "M 610.7,283.3 L 616,291.7 L 608,319.4 L 597.3,319.4 L 597.3,300 L 610.7,283.3 Z";
-const PATH_ASIA = "M 565.3,105.6 L 586.7,97.2 L 613.3,97.2 L 640,83.3 L 666.7,50 L 720,44.4 L 773.3,47.2 L 840,52.8 L 880,52.8 L 933.3,63.9 L 960,66.7 L 920,83.3 L 896,105.6 L 858.7,111.1 L 832,130.6 L 821.3,144.4 L 805.3,166.7 L 800,183.3 L 768,194.4 L 762.7,222.2 L 746.7,238.9 L 741.3,227.8 L 725.3,205.6 L 714.7,188.9 L 693.3,205.6 L 688,225 L 677.3,208.3 L 666.7,186.1 L 640,180.6 L 626.7,186.1 L 634.7,194.4 L 624,205.6 L 608,211.1 L 597.3,216.7 L 576,188.9 L 570.7,175 L 573.3,158.3 L 576,150 L 586.7,133.3 L 608,138.9 L 618.7,127.8 L 608,116.7 L 565.3,105.6 Z";
-const PATH_JAPAN = "M 853.3,125 L 866.7,127.8 L 858.7,138.9 L 853.3,150 L 842.7,155.6 L 826.7,161.1 L 832,155.6 L 848,144.4 L 853.3,125 Z";
-const PATH_SUMATRA = "M 736,236.1 L 760,263.9 L 784,272.2 L 778.7,269.4 L 762.7,263.9 L 741.3,244.4 L 736,236.1 Z";
-const PATH_BORNEO = "M 773.3,247.2 L 792,238.9 L 794.7,258.3 L 776,258.3 L 773.3,247.2 Z";
-const PATH_PHILIPPINES = "M 800,200 L 816,216.7 L 816,233.3 L 805.3,230.6 L 800,211.1 L 800,200 Z";
-const PATH_AUSTRALIA = "M 826.7,283.3 L 842.7,283.3 L 858.7,280.6 L 869.3,291.7 L 885.3,319.4 L 888,327.8 L 880,347.2 L 858.7,355.6 L 842.7,347.2 L 821.3,338.9 L 800,344.4 L 786.7,344.4 L 784,322.2 L 794.7,305.6 L 810.7,294.4 L 826.7,283.3 Z";
-const PATH_TASMANIA = "M 866.7,363.9 L 874.7,363.9 L 874.7,369.4 L 866.7,369.4 L 866.7,363.9 Z";
-const PATH_NZ = "M 941.3,347.2 L 954.7,355.6 L 946.7,363.9 L 941.3,347.2 Z M 938.7,363.9 L 944,369.4 L 933.3,377.8 L 925.3,375 L 938.7,363.9 Z";
+// Helper to format event budget specifically in its local region currency
+export function formatLocalRegionalBudget(pin: WorldCelebrationPin): {
+  localFormatted: string;
+  usdBenchmark: string;
+} {
+  let localFormatted = '';
+  if (pin.localCurrencyCode === 'INR') {
+    localFormatted = `${pin.localCurrencySymbol}${pin.estBudgetLocal.toLocaleString('en-IN')}`;
+  } else if (pin.localCurrencyCode === 'JPY') {
+    localFormatted = `${pin.localCurrencySymbol}${pin.estBudgetLocal.toLocaleString('ja-JP')}`;
+  } else {
+    localFormatted = `${pin.localCurrencySymbol}${pin.estBudgetLocal.toLocaleString('en-US')}`;
+  }
+  const usdBenchmark = `≈ $${pin.estBudgetUSD.toLocaleString()} USD`;
+  return { localFormatted, usdBenchmark };
+}
+
+// Precise Continent SVG path data used to paint the procedural Globe canvas texture
+const CONTINENT_PATHS = [
+  "M 32,69.4 L 53.3,52.8 L 80,55.6 L 133.3,55.6 L 173.3,61.1 L 226.7,55.6 L 266.7,77.8 L 280,88.9 L 320,111.1 L 333.3,116.7 L 320,122.2 L 304,127.8 L 293.3,133.3 L 282.7,144.4 L 277.3,155.6 L 266.7,180.6 L 261.3,172.2 L 245.3,166.7 L 226.7,169.4 L 221.3,177.8 L 240,191.7 L 245.3,205.6 L 258.7,222.2 L 274.7,227.8 L 266.7,225 L 253.3,216.7 L 226.7,205.6 L 200,194.4 L 186.7,183.3 L 173.3,166.7 L 160,155.6 L 149.3,138.9 L 149.3,116.7 L 133.3,100 L 117.3,88.9 L 80,83.3 L 53.3,94.4 L 37.3,83.3 L 32,69.4 Z",
+  "M 360,19.4 L 413.3,22.2 L 432,36.1 L 421.3,55.6 L 386.7,69.4 L 362.7,83.3 L 346.7,72.2 L 333.3,55.6 L 320,38.9 L 333.3,22.2 L 360,19.4 Z",
+  "M 274.7,227.8 L 288,216.7 L 314.7,219.4 L 346.7,244.4 L 362.7,258.3 L 384,266.7 L 386.7,275 L 376,291.7 L 368,311.1 L 352,322.2 L 341.3,338.9 L 325.3,347.2 L 312,361.1 L 304,377.8 L 301.3,400 L 288,400 L 282.7,388.9 L 282.7,366.7 L 288,344.4 L 290.7,322.2 L 277.3,300 L 266.7,263.9 L 264,255.6 L 272,241.7 L 274.7,227.8 Z",
+  "M 456,150 L 456,130.6 L 474.7,127.8 L 488,119.4 L 485.3,108.3 L 493.3,102.8 L 501.3,100 L 493.3,88.9 L 493.3,77.8 L 512,69.4 L 520,58.3 L 546.7,52.8 L 562.7,55.6 L 560,69.4 L 538.7,83.3 L 528,88.9 L 512,97.2 L 528,100 L 538.7,100 L 554.7,94.4 L 565.3,105.6 L 560,122.2 L 554.7,133.3 L 544,144.4 L 538.7,150 L 544,138.9 L 522.7,138.9 L 520,144.4 L 512,133.3 L 504,127.8 L 488,133.3 L 472,138.9 L 464,150 L 456,150 Z",
+  "M 466.7,111.1 L 477.3,108.3 L 482.7,105.6 L 480,100 L 474.7,91.7 L 469.3,88.9 L 466.7,94.4 L 472,102.8 L 466.7,111.1 Z",
+  "M 453.3,105.6 L 464,105.6 L 464,97.2 L 453.3,100 L 453.3,105.6 Z",
+  "M 464,150 L 485.3,150 L 506.7,147.2 L 512,158.3 L 538.7,161.1 L 565.3,163.9 L 570.7,175 L 581.3,188.9 L 594.7,216.7 L 616,222.2 L 608,236.1 L 592,255.6 L 586.7,277.8 L 576,305.6 L 565.3,327.8 L 554.7,341.7 L 528,344.4 L 522.7,333.3 L 512,311.1 L 512,288.9 L 504,261.1 L 488,238.9 L 488,233.3 L 469.3,236.1 L 448,227.8 L 434.7,216.7 L 434.7,205.6 L 445.3,183.3 L 453.3,166.7 L 464,150 Z",
+  "M 610.7,283.3 L 616,291.7 L 608,319.4 L 597.3,319.4 L 597.3,300 L 610.7,283.3 Z",
+  "M 565.3,105.6 L 586.7,97.2 L 613.3,97.2 L 640,83.3 L 666.7,50 L 720,44.4 L 773.3,47.2 L 840,52.8 L 880,52.8 L 933.3,63.9 L 960,66.7 L 920,83.3 L 896,105.6 L 858.7,111.1 L 832,130.6 L 821.3,144.4 L 805.3,166.7 L 800,183.3 L 768,194.4 L 762.7,222.2 L 746.7,238.9 L 741.3,227.8 L 725.3,205.6 L 714.7,188.9 L 693.3,205.6 L 688,225 L 677.3,208.3 L 666.7,186.1 L 640,180.6 L 626.7,186.1 L 634.7,194.4 L 624,205.6 L 608,211.1 L 597.3,216.7 L 576,188.9 L 570.7,175 L 573.3,158.3 L 576,150 L 586.7,133.3 L 608,138.9 L 618.7,127.8 L 608,116.7 L 565.3,105.6 Z",
+  "M 853.3,125 L 866.7,127.8 L 858.7,138.9 L 853.3,150 L 842.7,155.6 L 826.7,161.1 L 832,155.6 L 848,144.4 L 853.3,125 Z",
+  "M 789.3,277.8 L 821.3,277.8 L 853.3,291.7 L 885.3,300 L 874.7,322.2 L 853.3,344.4 L 826.7,344.4 L 805.3,327.8 L 794.7,305.6 L 789.3,277.8 Z",
+  "M 901.3,347.2 L 917.3,355.6 L 912,377.8 L 896,366.7 L 901.3,347.2 Z",
+];
+
+// Generate procedural equirectangular texture for Three.js Sphere
+function createProceduralGlobeTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 2048;
+  canvas.height = 1024;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return new THREE.CanvasTexture(canvas);
+
+  // 1. Deep luxury warm espresso ocean
+  const oceanGrad = ctx.createLinearGradient(0, 0, 0, 1024);
+  oceanGrad.addColorStop(0, '#120A06');
+  oceanGrad.addColorStop(0.5, '#1E1008');
+  oceanGrad.addColorStop(1, '#120A06');
+  ctx.fillStyle = oceanGrad;
+  ctx.fillRect(0, 0, 2048, 1024);
+
+  // 2. Subtle latitude & longitude graticules
+  ctx.strokeStyle = 'rgba(245, 158, 11, 0.12)';
+  ctx.lineWidth = 1;
+
+  // Latitudes
+  for (let lat = 0; lat <= 1024; lat += 64) {
+    ctx.beginPath();
+    ctx.moveTo(0, lat);
+    ctx.lineTo(2048, lat);
+    ctx.stroke();
+  }
+  // Longitudes
+  for (let lon = 0; lon <= 2048; lon += 64) {
+    ctx.beginPath();
+    ctx.moveTo(lon, 0);
+    ctx.lineTo(lon, 1024);
+    ctx.stroke();
+  }
+
+  // Equator highlight
+  ctx.strokeStyle = 'rgba(255, 158, 48, 0.28)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(0, 512);
+  ctx.lineTo(2048, 512);
+  ctx.stroke();
+
+  // 3. Draw continents with warm chocolate & amber coastline
+  ctx.save();
+  ctx.scale(2048 / 960, 1024 / 500);
+
+  CONTINENT_PATHS.forEach((svgD) => {
+    try {
+      const p = new Path2D(svgD);
+      // Outer subtle land glow
+      ctx.shadowColor = 'rgba(255, 110, 40, 0.35)';
+      ctx.shadowBlur = 8;
+      ctx.fillStyle = '#3A1F13';
+      ctx.fill(p);
+
+      // Continent coast outline
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = '#8E5A3C';
+      ctx.lineWidth = 1.8;
+      ctx.stroke(p);
+    } catch {
+      // Fallback
+    }
+  });
+
+  ctx.restore();
+
+  // 4. Subtle starburst clusters at cultural hubs
+  ctx.fillStyle = 'rgba(255, 230, 180, 0.75)';
+  for (let i = 0; i < 70; i++) {
+    const rx = Math.random() * 2048;
+    const ry = Math.random() * 1024;
+    ctx.beginPath();
+    ctx.arc(rx, ry, Math.random() * 1.5 + 0.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.ClampToEdgeWrapping;
+  return texture;
+}
+
+// Convert Lat/Lon to 3D spherical Cartesian coordinates
+function latLonToVector3(lat: number, lon: number, radius: number): THREE.Vector3 {
+  const phi = (90 - lat) * (Math.PI / 180);
+  const theta = (lon + 180) * (Math.PI / 180);
+  const x = -(radius * Math.sin(phi) * Math.cos(theta));
+  const z = radius * Math.sin(phi) * Math.sin(theta);
+  const y = radius * Math.cos(phi);
+  return new THREE.Vector3(x, y, z);
+}
 
 interface CelebrationWorldMapProps {
   reducedMotion?: boolean;
   currentCurrency?: string;
-  onSelectEventForPlanner: (
-    occasionId: string,
-    eventName: string,
-    context?: EventPlanningContext
-  ) => void;
+  onSelectEventForPlanner: (occasionId: string, eventName: string, context?: EventPlanningContext) => void;
 }
 
 export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
-  currentCurrency = 'USD',
+  reducedMotion = false,
   onSelectEventForPlanner,
 }) => {
-  const [activePinId, setActivePinId] = useState<string>(WORLD_CELEBRATION_PINS[0].id);
-  const [selectedRegion, setSelectedRegion] = useState<string>('All');
-  const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(true);
+  const [selectedRegion, setSelectedRegion] = useState<
+    'All' | 'Americas' | 'Europe' | 'Asia & Pacific' | 'Middle East & Africa'
+  >('All');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activePinId, setActivePinId] = useState<string>('rio_carnival');
+  const [autoRotate, setAutoRotate] = useState(!reducedMotion);
 
+  // 3D Canvas Ref & Label Positions state
+  const mountRef = useRef<HTMLDivElement>(null);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const globeGroupRef = useRef<THREE.Group | null>(null);
+  const animFrameRef = useRef<number | null>(null);
+
+  // Screen projected coordinates for interactive 2D labels floating on the 3D globe
+  const [labelCoords, setLabelCoords] = useState<
+    Array<{
+      id: string;
+      name: string;
+      location: string;
+      flag: string;
+      color: string;
+      x: number;
+      y: number;
+      visible: boolean;
+    }>
+  >([]);
+
+  // Filtered Pins based on region & search
   const filteredPins = useMemo(() => {
     return WORLD_CELEBRATION_PINS.filter((pin) => {
-      const matchRegion = selectedRegion === 'All' || pin.region === selectedRegion;
-      const matchSearch =
-        !searchQuery.trim() ||
+      const matchesRegion = selectedRegion === 'All' || pin.region === selectedRegion;
+      const matchesSearch =
+        searchQuery === '' ||
         pin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        pin.country.toLowerCase().includes(searchQuery.toLowerCase()) ||
         pin.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        pin.categoryLabel.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchRegion && matchSearch;
+        pin.country.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesRegion && matchesSearch;
     });
   }, [selectedRegion, searchQuery]);
 
+  // Active pin object
   const activePin = useMemo(() => {
     return (
+      filteredPins.find((p) => p.id === activePinId) ||
       WORLD_CELEBRATION_PINS.find((p) => p.id === activePinId) ||
       filteredPins[0] ||
       WORLD_CELEBRATION_PINS[0]
     );
   }, [activePinId, filteredPins]);
 
-  // Convert (lat, lon) to SVG (x, y) on 960x500 canvas
-  const projectCoords = (lat: number, lon: number) => {
-    const x = ((lon + 180) / 360) * 960;
-    const y = ((90 - lat) / 180) * 500;
-    return { x, y };
-  };
+  // Interactive Drag & Rotation State
+  const isDraggingRef = useRef(false);
+  const prevMouseRef = useRef({ x: 0, y: 0 });
+  const rotVelocityRef = useRef({ x: 0, y: 0 });
+  const targetRotationRef = useRef<{ x: number; y: number } | null>(null);
 
-  const activeCoords = projectCoords(activePin.lat, activePin.lon);
-
-  const handleSelectPin = (pin: WorldCelebrationPin) => {
+  // Smoothly rotate globe towards target pin
+  const focusOnPin = useCallback((pin: WorldCelebrationPin) => {
     playPopSound(false);
     setActivePinId(pin.id);
-    setIsPopupOpen(true);
+
+    // Compute target rotation in radians so lat/lon faces camera
+    // Target Y angle (longitude): lon + 180 degrees offset
+    const targetY = -((pin.lon - 0) * (Math.PI / 180));
+    const targetX = (pin.lat * (Math.PI / 180)) * 0.7; // slight tilt
+    targetRotationRef.current = { x: targetX, y: targetY };
+  }, []);
+
+  // Three.js 3D Globe Lifecycle
+  useEffect(() => {
+    const container = mountRef.current;
+    if (!container) return;
+
+    const width = container.clientWidth || 540;
+    const height = container.clientHeight || 420;
+
+    // 1. Scene, Camera, Renderer
+    const scene = new THREE.Scene();
+    sceneRef.current = scene;
+
+    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+    camera.position.set(0, 0, 240);
+    cameraRef.current = camera;
+
+    const renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: true,
+      powerPreference: 'high-performance',
+    });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    rendererRef.current = renderer;
+
+    // Append canvas
+    container.innerHTML = '';
+    container.appendChild(renderer.domElement);
+
+    // 2. Lighting
+    const ambientLight = new THREE.AmbientLight(0xfff7ed, 2.2);
+    scene.add(ambientLight);
+
+    const sunLight = new THREE.DirectionalLight(0xffebd2, 2.8);
+    sunLight.position.set(180, 120, 200);
+    scene.add(sunLight);
+
+    const rimLight = new THREE.DirectionalLight(0xff8c00, 1.4);
+    rimLight.position.set(-180, -60, -100);
+    scene.add(rimLight);
+
+    // 3. Globe Group
+    const globeGroup = new THREE.Group();
+    scene.add(globeGroup);
+    globeGroupRef.current = globeGroup;
+
+    // Sphere Geometry (radius 75)
+    const globeRadius = 75;
+    const sphereGeo = new THREE.SphereGeometry(globeRadius, 64, 64);
+    const globeTexture = createProceduralGlobeTexture();
+
+    const sphereMat = new THREE.MeshStandardMaterial({
+      map: globeTexture,
+      roughness: 0.65,
+      metalness: 0.12,
+    });
+    const globeMesh = new THREE.Mesh(sphereGeo, sphereMat);
+    globeGroup.add(globeMesh);
+
+    // Atmosphere Glow Outer Shell (radius 78)
+    const atmosGeo = new THREE.SphereGeometry(globeRadius + 3, 32, 32);
+    const atmosMat = new THREE.MeshBasicMaterial({
+      color: 0xffaa44,
+      transparent: true,
+      opacity: 0.14,
+      side: THREE.BackSide,
+    });
+    const atmosMesh = new THREE.Mesh(atmosGeo, atmosMat);
+    globeGroup.add(atmosMesh);
+
+    // 4. Hotspot Pins on Sphere Surface (clean warm colors, NO bright red dots!)
+    const pinGroup = new THREE.Group();
+    globeGroup.add(pinGroup);
+
+    WORLD_CELEBRATION_PINS.forEach((pin) => {
+      const pos = latLonToVector3(pin.lat, pin.lon, globeRadius + 1.2);
+
+      // Elevated beacon head (radius 2.2)
+      const beaconGeo = new THREE.SphereGeometry(2.2, 16, 16);
+      const beaconMat = new THREE.MeshBasicMaterial({
+        color: pin.color || '#FF9E30',
+      });
+      const beaconMesh = new THREE.Mesh(beaconGeo, beaconMat);
+      beaconMesh.position.copy(pos);
+      pinGroup.add(beaconMesh);
+
+      // Ground disc ring
+      const ringGeo = new THREE.RingGeometry(1.8, 3.6, 24);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: pin.color || '#FF9E30',
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.65,
+      });
+      const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+      ringMesh.position.copy(pos);
+      ringMesh.lookAt(new THREE.Vector3(0, 0, 0));
+      pinGroup.add(ringMesh);
+    });
+
+    // 5. Initial angle facing Americas / Atlantic
+    globeGroup.rotation.y = 0.6;
+    globeGroup.rotation.x = 0.2;
+
+    // 6. Animation Loop
+    let lastTime = performance.now();
+
+    const animate = (time: number) => {
+      animFrameRef.current = requestAnimationFrame(animate);
+      const delta = Math.min((time - lastTime) / 1000, 0.1);
+      lastTime = time;
+
+      // Handle smooth interpolation to target rotation
+      if (targetRotationRef.current) {
+        const tx = targetRotationRef.current.x;
+        const ty = targetRotationRef.current.y;
+        globeGroup.rotation.x += (tx - globeGroup.rotation.x) * 0.08;
+        globeGroup.rotation.y += (ty - globeGroup.rotation.y) * 0.08;
+
+        if (
+          Math.abs(tx - globeGroup.rotation.x) < 0.002 &&
+          Math.abs(ty - globeGroup.rotation.y) < 0.002
+        ) {
+          targetRotationRef.current = null;
+        }
+      } else if (!isDraggingRef.current) {
+        // Apply inertia velocity
+        globeGroup.rotation.y += rotVelocityRef.current.y;
+        globeGroup.rotation.x += rotVelocityRef.current.x;
+        rotVelocityRef.current.y *= 0.94;
+        rotVelocityRef.current.x *= 0.94;
+
+        // Auto-rotation if enabled and stationary
+        if (autoRotate && Math.abs(rotVelocityRef.current.y) < 0.001) {
+          globeGroup.rotation.y += delta * 0.15;
+        }
+      }
+
+      // Clamp X tilt
+      globeGroup.rotation.x = Math.max(-0.65, Math.min(0.65, globeGroup.rotation.x));
+
+      // Render Three.js Scene
+      renderer.render(scene, camera);
+
+      // Project 3D Hotspot Coordinates to 2D Screen for HTML Overlay Tags
+      if (camera && container) {
+        const cWidth = container.clientWidth;
+        const cHeight = container.clientHeight;
+        const camDir = new THREE.Vector3(0, 0, 1).applyQuaternion(camera.quaternion);
+
+        const newCoords = WORLD_CELEBRATION_PINS.map((pin) => {
+          const localPos = latLonToVector3(pin.lat, pin.lon, globeRadius + 2.5);
+          const worldPos = localPos.clone().applyMatrix4(globeGroup.matrixWorld);
+
+          // Check if on front side facing camera
+          const normal = worldPos.clone().normalize();
+          const dot = normal.dot(camDir);
+          const isFront = dot > 0.15;
+
+          // Project to 2D screen
+          const proj = worldPos.project(camera);
+          const screenX = ((proj.x + 1) / 2) * cWidth;
+          const screenY = ((-proj.y + 1) / 2) * cHeight;
+
+          return {
+            id: pin.id,
+            name: pin.name,
+            location: pin.location.split('&')[0].trim(),
+            flag: pin.flag,
+            color: pin.color,
+            x: screenX,
+            y: screenY,
+            visible: isFront,
+          };
+        });
+
+        setLabelCoords(newCoords);
+      }
+    };
+
+    animFrameRef.current = requestAnimationFrame(animate);
+
+    // 7. Mouse / Touch Drag Handlers
+    const onMouseDown = (e: MouseEvent) => {
+      isDraggingRef.current = true;
+      targetRotationRef.current = null;
+      prevMouseRef.current = { x: e.clientX, y: e.clientY };
+      rotVelocityRef.current = { x: 0, y: 0 };
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isDraggingRef.current) return;
+      const dx = e.clientX - prevMouseRef.current.x;
+      const dy = e.clientY - prevMouseRef.current.y;
+      prevMouseRef.current = { x: e.clientX, y: e.clientY };
+
+      globeGroup.rotation.y += dx * 0.007;
+      globeGroup.rotation.x += dy * 0.007;
+      rotVelocityRef.current = { x: dy * 0.002, y: dx * 0.002 };
+    };
+
+    const onMouseUp = () => {
+      isDraggingRef.current = false;
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        isDraggingRef.current = true;
+        targetRotationRef.current = null;
+        prevMouseRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        rotVelocityRef.current = { x: 0, y: 0 };
+      }
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!isDraggingRef.current || e.touches.length !== 1) return;
+      const dx = e.touches[0].clientX - prevMouseRef.current.x;
+      const dy = e.touches[0].clientY - prevMouseRef.current.y;
+      prevMouseRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+
+      globeGroup.rotation.y += dx * 0.009;
+      globeGroup.rotation.x += dy * 0.009;
+      rotVelocityRef.current = { x: dy * 0.002, y: dx * 0.002 };
+    };
+
+    const onTouchEnd = () => {
+      isDraggingRef.current = false;
+    };
+
+    // Resize Observer
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const w = entry.contentRect.width;
+        const h = entry.contentRect.height;
+        if (w > 0 && h > 0 && cameraRef.current && rendererRef.current) {
+          cameraRef.current.aspect = w / h;
+          cameraRef.current.updateProjectionMatrix();
+          rendererRef.current.setSize(w, h);
+        }
+      }
+    });
+    ro.observe(container);
+
+    const domEl = renderer.domElement;
+    domEl.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    domEl.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', onTouchEnd);
+
+    // Cleanup
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      ro.disconnect();
+      domEl.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      domEl.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
+
+      sphereGeo.dispose();
+      sphereMat.dispose();
+      globeTexture.dispose();
+      atmosGeo.dispose();
+      atmosMat.dispose();
+      renderer.dispose();
+      if (container.contains(domEl)) {
+        container.removeChild(domEl);
+      }
+    };
+  }, [autoRotate]);
+
+  // Zoom Controls
+  const handleZoom = (direction: 'in' | 'out') => {
+    if (!cameraRef.current) return;
+    const curZ = cameraRef.current.position.z;
+    const delta = direction === 'in' ? -25 : 25;
+    cameraRef.current.position.z = Math.max(170, Math.min(320, curZ + delta));
   };
 
-  const handleContinentClick = (region: 'Americas' | 'Europe' | 'Asia & Pacific' | 'Middle East & Africa') => {
-    playPopSound(false);
-    setSelectedRegion(region);
-    // Find the first celebration located in this clicked continent/region
-    const firstInRegion = WORLD_CELEBRATION_PINS.find((p) => p.region === region);
-    if (firstInRegion) {
-      setActivePinId(firstInRegion.id);
-      setIsPopupOpen(true);
-    }
+  const handleResetRotation = () => {
+    targetRotationRef.current = { x: 0.2, y: 0.6 };
+    if (cameraRef.current) cameraRef.current.position.z = 240;
   };
 
   const handlePlanThisEvent = () => {
@@ -417,22 +872,65 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
     });
   };
 
+  const budgetDisplay = formatLocalRegionalBudget(activePin);
+
   return (
-    <section className="celebration-world-section" aria-labelledby="world-map-title">
+    <section className="celebration-world-section" aria-labelledby="world-globe-title">
       <div className="celebration-world-card">
-        {/* SECTION HEADER (Clean typography, zero icons) */}
+        {/* SECTION HEADER */}
         <div className="celebration-world-header">
           <div>
-            <h2 id="world-map-title" className="celebration-world-title">
+            <div className="celebration-badge-pill">
+              <Compass size={13} aria-hidden="true" />
+              <span>Interactive 3D Celebration Globe</span>
+            </div>
+            <h2 id="world-globe-title" className="celebration-world-title">
               Global Celebrations &amp; Cultural Long Weekends
             </h2>
             <p className="celebration-world-subtitle">
-              Explore iconic celebrations mapped across the world. Tap any continent or city pin to inspect what is happening at that part of the globe.
+              Spin the 3D globe to explore iconic festivals with native local currency valuations calibrated to regional vendor economics.
             </p>
+          </div>
+
+          {/* Quick Globe Controls */}
+          <div className="globe-controls-pill-group">
+            <button
+              type="button"
+              className={`mode-toggle-btn ${autoRotate ? 'active' : ''}`}
+              onClick={() => setAutoRotate(!autoRotate)}
+              title={autoRotate ? 'Pause Auto-Spin' : 'Resume Auto-Spin'}
+            >
+              <RotateCw size={13} className={autoRotate ? 'spin-icon' : ''} />
+              <span>{autoRotate ? 'Spinning' : 'Paused'}</span>
+            </button>
+            <button
+              type="button"
+              className="mode-toggle-btn"
+              onClick={() => handleZoom('in')}
+              title="Zoom In"
+            >
+              <ZoomIn size={13} />
+            </button>
+            <button
+              type="button"
+              className="mode-toggle-btn"
+              onClick={() => handleZoom('out')}
+              title="Zoom Out"
+            >
+              <ZoomOut size={13} />
+            </button>
+            <button
+              type="button"
+              className="mode-toggle-btn"
+              onClick={handleResetRotation}
+              title="Reset View"
+            >
+              <span>Reset</span>
+            </button>
           </div>
         </div>
 
-        {/* REGION FILTER BAR */}
+        {/* REGION FILTER BAR & SEARCH */}
         <div className="celebration-filter-bar">
           <div className="region-pills" role="tablist" aria-label="Filter by region">
             {(['All', 'Americas', 'Europe', 'Asia & Pacific', 'Middle East & Africa'] as const).map((r) => (
@@ -445,336 +943,77 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
                   if (r !== 'All') {
                     const firstMatch = WORLD_CELEBRATION_PINS.find((p) => p.region === r);
                     if (firstMatch) {
-                      setActivePinId(firstMatch.id);
-                      setIsPopupOpen(true);
+                      focusOnPin(firstMatch);
                     }
                   }
                 }}
-                role="tab"
-                aria-selected={selectedRegion === r}
               >
-                <span>{r === 'All' ? `All Regions (${WORLD_CELEBRATION_PINS.length})` : r}</span>
+                {r}
               </button>
             ))}
           </div>
 
           <div className="celebration-search-wrap">
-            <Search size={15} className="search-icon" aria-hidden="true" />
+            <Search size={14} className="search-icon" aria-hidden="true" />
             <input
               type="text"
               className="celebration-search-input"
-              placeholder="Search city, country, or celebration..."
+              placeholder="Search festival, city, or country..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              aria-label="Search celebration destination"
+              aria-label="Search celebration destinations"
             />
           </div>
         </div>
 
-        {/* MAIN VISUAL CANVAS & DOSSIER GRID */}
+        {/* 3D GLOBE CANVAS & DOSSIER GRID */}
         <div className="celebration-grid-body">
-          {/* LEFT: CELEBRATORY INTERACTIVE VECTOR MAP */}
-          <div className="celebration-visual-canvas">
-            <div className="svg-map-wrapper">
-              <svg
-                viewBox="0 0 960 500"
-                className="celebration-svg-map"
-                role="img"
-                aria-label="Interactive Celebration World Map with clickable continents and event pins"
-              >
-                <defs>
-                  <linearGradient id="oceanGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#FAF7F2" />
-                    <stop offset="100%" stopColor="#F2ECE2" />
-                  </linearGradient>
+          {/* LEFT: 3D GLOBE CONTAINER */}
+          <div className="celebration-visual-canvas globe-canvas-wrapper">
+            {/* The WebGL 3D Globe renders here */}
+            <div
+              ref={mountRef}
+              className="three-globe-container"
+              style={{ width: '100%', height: '440px', cursor: 'grab' }}
+            />
 
-                  <filter id="beaconGlow" x="-30%" y="-30%" width="160%" height="160%">
-                    <feGaussianBlur stdDeviation="3" result="glow" />
-                    <feComposite in="SourceGraphic" in2="glow" operator="over" />
-                  </filter>
-
-                  <filter id="continentShadow" x="-5%" y="-5%" width="110%" height="110%">
-                    <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#3D1E06" floodOpacity="0.08" />
-                  </filter>
-                </defs>
-
-                {/* Ocean Background Canvas */}
-                <rect width="960" height="500" rx="16" fill="url(#oceanGrad)" />
-
-                {/* Subtle Latitude & Longitude Geodetic Grid Lines */}
-                <g stroke="#E8DFCF" strokeWidth="0.75" strokeDasharray="3 4">
-                  {/* Tropic of Cancer (23.5° N) */}
-                  <line x1="0" y1="184.7" x2="960" y2="184.7" stroke="#DECFA9" strokeWidth="0.8" />
-                  {/* Equator (0°) */}
-                  <line x1="0" y1="250" x2="960" y2="250" stroke="#DECFA9" strokeWidth="1.2" strokeDasharray="none" />
-                  {/* Tropic of Capricorn (23.5° S) */}
-                  <line x1="0" y1="315.3" x2="960" y2="315.3" stroke="#DECFA9" strokeWidth="0.8" />
-                  {/* 45° N / S */}
-                  <line x1="0" y1="125" x2="960" y2="125" />
-                  <line x1="0" y1="375" x2="960" y2="375" />
-                  {/* Longitude Meridians */}
-                  <line x1="240" y1="0" x2="240" y2="500" />
-                  <line x1="480" y1="0" x2="480" y2="500" stroke="#DECFA9" strokeWidth="1" strokeDasharray="none" />
-                  <line x1="720" y1="0" x2="720" y2="500" />
-                </g>
-
-                {/* ========================================================
-                    CLICKABLE CONTINENT GEOMETRIES (Rich Geodetic Vectors)
-                    ======================================================== */}
-
-                {/* 1. AMERICAS REGION (North & South America + Greenland) */}
-                <g
-                  className={`world-continent-group ${selectedRegion === 'Americas' ? 'active-region' : ''} ${hoveredRegion === 'Americas' ? 'hovered-region' : ''}`}
-                  onClick={() => handleContinentClick('Americas')}
-                  onMouseEnter={() => setHoveredRegion('Americas')}
-                  onMouseLeave={() => setHoveredRegion(null)}
-                  role="button"
-                  tabIndex={0}
-                  aria-label="Click to explore celebrations in the Americas"
-                  filter="url(#continentShadow)"
-                  style={{ cursor: 'pointer' }}
-                >
-                  <path d={PATH_NORTH_AMERICA} className="continent-land" />
-                  <path d={PATH_GREENLAND} className="continent-land" />
-                  <path d={PATH_SOUTH_AMERICA} className="continent-land" />
-                  {/* Continent Label */}
-                  <text x="210" y="140" className="continent-name-label">Americas</text>
-                </g>
-
-                {/* 2. EUROPE REGION (Continental Europe + British Isles + Scandinavia) */}
-                <g
-                  className={`world-continent-group ${selectedRegion === 'Europe' ? 'active-region' : ''} ${hoveredRegion === 'Europe' ? 'hovered-region' : ''}`}
-                  onClick={() => handleContinentClick('Europe')}
-                  onMouseEnter={() => setHoveredRegion('Europe')}
-                  onMouseLeave={() => setHoveredRegion(null)}
-                  role="button"
-                  tabIndex={0}
-                  aria-label="Click to explore celebrations in Europe"
-                  filter="url(#continentShadow)"
-                  style={{ cursor: 'pointer' }}
-                >
-                  <path d={PATH_EUROPE} className="continent-land" />
-                  <path d={PATH_UK} className="continent-land" />
-                  <path d={PATH_IRELAND} className="continent-land" />
-                  {/* Continent Label */}
-                  <text x="500" y="90" className="continent-name-label">Europe</text>
-                </g>
-
-                {/* 3. MIDDLE EAST & AFRICA REGION */}
-                <g
-                  className={`world-continent-group ${selectedRegion === 'Middle East & Africa' ? 'active-region' : ''} ${hoveredRegion === 'Middle East & Africa' ? 'hovered-region' : ''}`}
-                  onClick={() => handleContinentClick('Middle East & Africa')}
-                  onMouseEnter={() => setHoveredRegion('Middle East & Africa')}
-                  onMouseLeave={() => setHoveredRegion(null)}
-                  role="button"
-                  tabIndex={0}
-                  aria-label="Click to explore celebrations in Middle East & Africa"
-                  filter="url(#continentShadow)"
-                  style={{ cursor: 'pointer' }}
-                >
-                  <path d={PATH_AFRICA} className="continent-land" />
-                  <path d={PATH_MADAGASCAR} className="continent-land" />
-                  {/* Continent Label */}
-                  <text x="520" y="240" className="continent-name-label">Africa</text>
-                </g>
-
-                {/* 4. ASIA & PACIFIC REGION (Asia, Japan, SE Asia, Australia, NZ) */}
-                <g
-                  className={`world-continent-group ${selectedRegion === 'Asia & Pacific' ? 'active-region' : ''} ${hoveredRegion === 'Asia & Pacific' ? 'hovered-region' : ''}`}
-                  onClick={() => handleContinentClick('Asia & Pacific')}
-                  onMouseEnter={() => setHoveredRegion('Asia & Pacific')}
-                  onMouseLeave={() => setHoveredRegion(null)}
-                  role="button"
-                  tabIndex={0}
-                  aria-label="Click to explore celebrations in Asia & Pacific"
-                  filter="url(#continentShadow)"
-                  style={{ cursor: 'pointer' }}
-                >
-                  <path d={PATH_ASIA} className="continent-land" />
-                  <path d={PATH_JAPAN} className="continent-land" />
-                  <path d={PATH_SUMATRA} className="continent-land" />
-                  <path d={PATH_BORNEO} className="continent-land" />
-                  <path d={PATH_PHILIPPINES} className="continent-land" />
-                  <path d={PATH_AUSTRALIA} className="continent-land" />
-                  <path d={PATH_TASMANIA} className="continent-land" />
-                  <path d={PATH_NZ} className="continent-land" />
-                  {/* Continent Labels */}
-                  <text x="730" y="110" className="continent-name-label">Asia</text>
-                  <text x="840" y="325" className="continent-name-label">Australia</text>
-                </g>
-
-                {/* ========================================================
-                    INTERACTIVE CELEBRATION PINS (City Hotspots)
-                    ======================================================== */}
-                {filteredPins.map((pin) => {
-                  const { x, y } = projectCoords(pin.lat, pin.lon);
-                  const isSelected = activePin.id === pin.id;
-                  return (
-                    <g
-                      key={pin.id}
-                      className="map-pin-group"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSelectPin(pin);
-                      }}
-                      style={{ cursor: 'pointer' }}
-                      tabIndex={0}
-                      role="button"
-                      aria-label={`${pin.name} in ${pin.location}`}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          handleSelectPin(pin);
-                        }
-                      }}
-                    >
-                      {/* Generous Hit-Target for Mobile and Cursor Tapping */}
-                      <circle cx={x} cy={y} r={24} fill="transparent" />
-
-                      {/* Gentle Radiant Halo Beacon */}
-                      <circle
-                        cx={x}
-                        cy={y}
-                        r={isSelected ? 18 : 10}
-                        fill={pin.color}
-                        opacity={isSelected ? 0.35 : 0.18}
-                        className={isSelected ? 'pin-active-pulse' : ''}
-                      />
-
-                      {/* Outer Ring */}
-                      <circle
-                        cx={x}
-                        cy={y}
-                        r={isSelected ? 8.5 : 5.5}
-                        fill="#FFFFFF"
-                        stroke={pin.color}
-                        strokeWidth={isSelected ? 3 : 2}
-                        filter="url(#beaconGlow)"
-                      />
-
-                      {/* Center Dot */}
-                      <circle
-                        cx={x}
-                        cy={y}
-                        r={isSelected ? 4 : 2.5}
-                        fill={pin.color}
-                      />
-
-                      {/* Compact City Label Tag */}
-                      <g transform={`translate(${x}, ${y + (isSelected ? 14 : 12)})`}>
-                        <rect
-                          x="-46"
-                          y="0"
-                          width="92"
-                          height="16"
-                          rx="8"
-                          fill={isSelected ? '#3D1E06' : '#FFFFFF'}
-                          stroke={isSelected ? '#3D1E06' : '#E5DECF'}
-                          strokeWidth="1"
-                          opacity={isSelected ? 0.95 : 0.88}
-                        />
-                        <text
-                          x="0"
-                          y="11"
-                          fill={isSelected ? '#FFFFFF' : '#3D1E06'}
-                          fontSize="9.5"
-                          fontWeight={isSelected ? '800' : '700'}
-                          textAnchor="middle"
-                          letterSpacing="-0.01em"
-                        >
-                          {pin.flag} {pin.location.split('&')[0].trim()}
-                        </text>
-                      </g>
-                    </g>
-                  );
-                })}
-              </svg>
-            </div>
-
-            {/* FLOATING CONTINENT EXPLORATION HINT */}
-            <div className="map-region-hint">
-              <span>
-                {hoveredRegion
-                  ? `Exploring ${hoveredRegion} • Click continent to view celebrations`
-                  : `Tap any continent or city pin to view celebrations`}
-              </span>
-            </div>
-
-            {/* IN-MAP INTERACTIVE CELEBRATION POPUP CARD ("What's Up") */}
-            {isPopupOpen && (
-              <div
-                className={`celebration-pin-popup ${activeCoords.y < 180 ? 'pos-below' : 'pos-above'}`}
-                style={{
-                  left: `${Math.max(18, Math.min(82, (activeCoords.x / 960) * 100))}%`,
-                  top: `${(activeCoords.y / 500) * 100}%`,
-                }}
-                role="dialog"
-                aria-label={`Celebration details for ${activePin.name}`}
-              >
-                <div className="popup-header-row">
-                  <div className="popup-flag-location">
-                    <span className="popup-flag">{activePin.flag}</span>
-                    <span className="popup-location">{activePin.location}, {activePin.country}</span>
-                  </div>
+            {/* Interactive Projected HTML Labels Floating on Front Hemisphere */}
+            <div className="globe-labels-overlay" aria-hidden="true">
+              {labelCoords.map((label) => {
+                if (!label.visible) return null;
+                const isSelected = label.id === activePin.id;
+                const pinData = WORLD_CELEBRATION_PINS.find((p) => p.id === label.id);
+                return (
                   <button
+                    key={label.id}
                     type="button"
-                    className="popup-close-btn"
+                    className={`globe-floating-pin-badge ${isSelected ? 'active-pin' : ''}`}
+                    style={{
+                      left: `${label.x}px`,
+                      top: `${label.y}px`,
+                      transform: 'translate(-50%, -100%)',
+                      borderColor: isSelected ? '#5B42F3' : 'rgba(255, 158, 48, 0.45)',
+                    }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setIsPopupOpen(false);
+                      if (pinData) focusOnPin(pinData);
                     }}
-                    aria-label="Close celebration popup"
                   >
-                    <X size={13} />
+                    <span className="globe-pin-beacon" style={{ background: label.color }} />
+                    <span className="globe-pin-flag">{label.flag}</span>
+                    <span className="globe-pin-city">{label.location}</span>
                   </button>
-                </div>
+                );
+              })}
+            </div>
 
-                <h4 className="popup-title">{activePin.name}</h4>
-
-                <div className="popup-meta-row">
-                  <span className="popup-category-badge">{activePin.categoryLabel}</span>
-                  <span className="popup-countdown-badge">
-                    <Calendar size={11} aria-hidden="true" />
-                    <span>In {activePin.daysUntil} days</span>
-                  </span>
-                </div>
-
-                <div className="popup-highlight-box">
-                  <span className="popup-highlight-label">What is Happening:</span>
-                  <p className="popup-highlight-text">{activePin.tagline}</p>
-                </div>
-
-                <div className="popup-footer-row">
-                  <div className="popup-budget-block">
-                    <span className="popup-budget-label">Budget Benchmark</span>
-                    <span className="popup-budget-val">
-                      {formatCurrency(activePin.estBudgetUSD, currentCurrency)}
-                    </span>
-                  </div>
-                  <div className="popup-actions-group">
-                    <button
-                      type="button"
-                      className="popup-plan-btn"
-                      onClick={handlePlanThisEvent}
-                    >
-                      <span>Plan</span>
-                      <ArrowRight size={13} aria-hidden="true" />
-                    </button>
-                    <button
-                      type="button"
-                      className="popup-ask-btn"
-                      onClick={() => openFestiAIChat(activePin.aiPrompt)}
-                      title="Ask Festi AI about this event"
-                      aria-label="Ask Festi AI"
-                    >
-                      <MessageSquare size={13} aria-hidden="true" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
+            {/* Hint overlay */}
+            <div className="map-region-hint">
+              <span>Drag to spin 3D globe • Click city beacon to inspect celebration</span>
+            </div>
           </div>
 
-          {/* RIGHT: CELEBRATION DOSSIER CARD */}
+          {/* RIGHT: REGIONAL CELEBRATION DOSSIER CARD */}
           <div className="celebration-dossier-card">
             {activePin.image && (
               <div className="dossier-image-hero">
@@ -791,9 +1030,7 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
             )}
 
             <div className="dossier-header-row">
-              <span className="dossier-category-pill">
-                {activePin.categoryLabel}
-              </span>
+              <span className="dossier-category-pill">{activePin.categoryLabel}</span>
               <span className="dossier-countdown-pill">
                 <Calendar size={13} aria-hidden="true" />
                 <span>In {activePin.daysUntil} days</span>
@@ -803,7 +1040,9 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
             <div className="dossier-title-block">
               <div className="dossier-flag-location">
                 <span className="dossier-flag">{activePin.flag}</span>
-                <span className="dossier-location">{activePin.location}, {activePin.country}</span>
+                <span className="dossier-location">
+                  {activePin.location}, {activePin.country}
+                </span>
               </div>
               <h3 className="dossier-title">{activePin.name}</h3>
               <p className="dossier-tagline">{activePin.tagline}</p>
@@ -818,11 +1057,16 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
                 </span>
               </div>
 
-              <div className="dossier-spec-item">
-                <span className="spec-label">3-Tier Benchmark</span>
-                <span className="spec-val highlight-gold">
-                  {formatCurrency(activePin.estBudgetUSD, currentCurrency)}
-                </span>
+              {/* Specific Regional Native Valuation (NO forced Rupees!) */}
+              <div className="dossier-spec-item regional-valuation-highlight">
+                <span className="spec-label">Local Market Valuation</span>
+                <div className="regional-currency-block">
+                  <span className="spec-val highlight-gold">
+                    {budgetDisplay.localFormatted}
+                  </span>
+                  <span className="currency-code-pill">{activePin.localCurrencyCode}</span>
+                </div>
+                <span className="spec-usd-benchmark">{budgetDisplay.usdBenchmark}</span>
               </div>
 
               <div className="dossier-spec-item">
@@ -834,7 +1078,7 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
               </div>
 
               <div className="dossier-spec-item">
-                <span className="spec-label">Regional Hub</span>
+                <span className="spec-label">Regional Destination</span>
                 <span className="spec-val">{activePin.region}</span>
               </div>
             </div>
@@ -853,39 +1097,45 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
                 className="btn btn-primary dossier-btn-primary"
                 onClick={handlePlanThisEvent}
               >
-                <span>Build plan for this celebration</span>
+                <span>Plan this celebration</span>
                 <ArrowRight size={16} aria-hidden="true" />
               </button>
 
               <button
                 type="button"
-                className="btn btn-secondary dossier-btn-secondary"
+                className="btn btn-secondary dossier-btn-ai"
                 onClick={() => openFestiAIChat(activePin.aiPrompt)}
-                title="Consult Festi AI about this event"
+                title="Ask Festi AI about this event"
               >
-                <MessageSquare size={16} aria-hidden="true" />
+                <MessageSquare size={15} aria-hidden="true" />
                 <span>Ask Festi AI</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* BOTTOM: CELEBRATION CITY QUICK SELECTOR STRIP */}
-        <div className="celebration-cities-strip" role="group" aria-label="Quick celebration city selector">
-          <span className="cities-strip-label">Global Celebration Hubs:</span>
-          <div className="cities-strip-scroll">
-            {WORLD_CELEBRATION_PINS.map((pin) => {
-              const isActive = activePin.id === pin.id;
+        {/* BOTTOM QUICK-SWITCH DESTINATION CAROUSEL STRIP */}
+        <div className="globe-destinations-strip">
+          <div className="destinations-strip-header">
+            <span className="strip-title">Featured World Destinations</span>
+            <span className="strip-count">{filteredPins.length} Celebrations</span>
+          </div>
+          <div className="destinations-scroll-track">
+            {filteredPins.map((pin) => {
+              const isSelected = pin.id === activePin.id;
+              const { localFormatted } = formatLocalRegionalBudget(pin);
               return (
                 <button
                   key={pin.id}
                   type="button"
-                  className={`city-chip-btn ${isActive ? 'active' : ''}`}
-                  onClick={() => handleSelectPin(pin)}
-                  aria-pressed={isActive}
+                  className={`destination-chip ${isSelected ? 'active' : ''}`}
+                  onClick={() => focusOnPin(pin)}
                 >
-                  <span className="city-chip-flag">{pin.flag}</span>
-                  <span className="city-chip-name">{pin.location.split('&')[0].trim()}</span>
+                  <span className="chip-flag">{pin.flag}</span>
+                  <div className="chip-info">
+                    <span className="chip-name">{pin.name}</span>
+                    <span className="chip-cost">{localFormatted} ({pin.localCurrencyCode})</span>
+                  </div>
                 </button>
               );
             })}
