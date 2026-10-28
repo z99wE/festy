@@ -624,20 +624,6 @@ export function App() {
                 </li>
               </ul>
             </div>
-
-            <div className="footer-col">
-              <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>Privacy, Rights & Trust</h3>
-              <ul className="footer-links">
-                <li>• 100% GDPR & privacy law compliant</li>
-                <li>• Zero data selling or broker sharing</li>
-                <li>• Full right to access & instant erasure</li>
-                <li>• Transparent pricing & zero hidden fees</li>
-                <li>• Zero advertising tracking or cookies</li>
-                <li>• Plain-language contracts & honest terms</li>
-                <li>• Complete data export anytime</li>
-                <li>• Private, client-controlled workspace</li>
-              </ul>
-            </div>
           </div>
 
           {/* STANDARD LEGAL & PRIVACY NOTICE DISCLAIMER */}

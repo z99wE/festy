@@ -3195,7 +3195,7 @@ img {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr repeat(3, 1fr);
+  grid-template-columns: 2fr repeat(2, 1fr);
   gap: var(--space-500);
   margin-bottom: var(--space-500);
 }

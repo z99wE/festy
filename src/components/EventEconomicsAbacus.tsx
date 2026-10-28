@@ -4,7 +4,6 @@ import {
   MapPin, 
   Users, 
   Sparkles, 
-  TrendingUp, 
   Camera, 
   Utensils, 
   Building, 
@@ -15,7 +14,7 @@ import {
   Info,
   CheckCircle2
 } from 'lucide-react';
-import { SUPPORTED_CURRENCIES } from '../utils/currency';
+import { SUPPORTED_CURRENCIES, getExchangeRate } from '../utils/currency';
 
 export interface RegionalMarketProfile {
   id: string;
@@ -265,14 +264,6 @@ export const EventEconomicsAbacus: React.FC<{
     }
   }, [selectedTier]);
 
-  // Exchange rates from currency utils
-  const getExchangeRate = (fromCode: string, toCode: string): number => {
-    const fromCfg = SUPPORTED_CURRENCIES.find((c) => c.code === fromCode) || { exchangeRateFromUSD: 1.0 };
-    const toCfg = SUPPORTED_CURRENCIES.find((c) => c.code === toCode) || { exchangeRateFromUSD: 1.0 };
-    // Conversion formula: (amount / fromCfg.exchangeRateFromUSD) * toCfg.exchangeRateFromUSD
-    return toCfg.exchangeRateFromUSD / fromCfg.exchangeRateFromUSD;
-  };
-
   const displayCurrencyConfig = useMemo(() => {
     return SUPPORTED_CURRENCIES.find((c) => c.code === displayCurrencyCode) || SUPPORTED_CURRENCIES[0];
   }, [displayCurrencyCode]);
@@ -367,10 +358,6 @@ export const EventEconomicsAbacus: React.FC<{
     <section className="abacus-container" id="event-economics-abacus" aria-labelledby="abacus-title">
       {/* Header Banner */}
       <div className="abacus-header-band">
-        <div className="abacus-badge">
-          <TrendingUp size={14} className="abacus-badge-icon" />
-          <span>Regional Market Dynamics & Economic Abacus</span>
-        </div>
         <h2 id="abacus-title" className="abacus-title">
           Event Economics Abacus
         </h2>
@@ -416,7 +403,7 @@ export const EventEconomicsAbacus: React.FC<{
               id="guest-slider"
               type="range"
               min={15}
-              max={350}
+              max={1000}
               step={5}
               value={guestCount}
               onChange={(e) => setGuestCount(parseInt(e.target.value, 10))}
@@ -424,8 +411,9 @@ export const EventEconomicsAbacus: React.FC<{
             />
             <div className="abacus-range-ticks">
               <span>Intimate (20)</span>
-              <span>Mid-Size (80)</span>
-              <span>Grand (200+)</span>
+              <span>Mid-Size (150)</span>
+              <span>Grand (500)</span>
+              <span>Mega Festival (1,000)</span>
             </div>
           </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useId, useEffect } from 'react';
+import React, { useState, useId, useEffect, useMemo } from 'react';
 import {
   Copy,
   Check,
@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 
 import { playPopSound, playCelebrationSound } from '../utils/audio';
+import { getCurrencyBudgetScale, convertCurrency } from '../utils/currency';
 import { type EventPlanningContext } from '../data/globalCelebrations';
 import { aiOrchestrator } from '../services/aiOrchestrator';
 import { openFestiAIChat } from './FestiChatbot';
@@ -68,6 +69,18 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
   const guestSliderId = useId();
   const budgetSliderId = useId();
   const currencySelectId = useId();
+
+  const budgetScale = useMemo(() => getCurrencyBudgetScale(currency), [currency]);
+
+  const handleCurrencyChange = (newCurrency: string) => {
+    if (newCurrency === currency) return;
+    const converted = convertCurrency(budgetAmount, currency, newCurrency);
+    const targetScale = getCurrencyBudgetScale(newCurrency);
+    const stepped = Math.round(converted / targetScale.step) * targetScale.step;
+    const clamped = Math.min(targetScale.max, Math.max(targetScale.min, stepped));
+    setBudgetAmount(clamped);
+    setCurrency(newCurrency);
+  };
 
   // If planningContext arrives from the Worldwide Long Weekend or Festival calendar
   useEffect(() => {
@@ -558,19 +571,20 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                 aria-label="Guest count"
                 type="range"
                 min="10"
-                max="500"
+                max="1000"
                 step="5"
                 value={guestCount}
                 onChange={(e) => setGuestCount(Number(e.target.value))}
                 className="slider-input"
                 aria-valuemin={10}
-                aria-valuemax={500}
+                aria-valuemax={1000}
                 aria-valuenow={guestCount}
               />
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: 'var(--text-faint)', marginTop: '4px' }}>
                 <span>10 (Intimate)</span>
-                <span>250 (Large)</span>
-                <span>500+ (Festival)</span>
+                <span>250 (Mid-Size)</span>
+                <span>500 (Festival)</span>
+                <span>1,000 (Mega Gathering)</span>
               </div>
             </div>
 
@@ -587,7 +601,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                   <select
                     id={currencySelectId}
                     value={currency}
-                    onChange={(e) => setCurrency(e.target.value)}
+                    onChange={(e) => handleCurrencyChange(e.target.value)}
                     className="currency-select"
                     aria-label="Currency"
                   >
@@ -597,6 +611,9 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                     <option value="₹">INR (₹)</option>
                     <option value="A$">AUD (A$)</option>
                     <option value="C$">CAD (C$)</option>
+                    <option value="¥">JPY (¥)</option>
+                    <option value="AED ">AED (AED)</option>
+                    <option value="CHF ">CHF (CHF)</option>
                   </select>
                 </div>
               </div>
@@ -609,20 +626,20 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                 id={budgetSliderId}
                 aria-label="Target budget"
                 type="range"
-                min="1000"
-                max="50000"
-                step="500"
+                min={budgetScale.min}
+                max={budgetScale.max}
+                step={budgetScale.step}
                 value={budgetAmount}
                 onChange={(e) => setBudgetAmount(Number(e.target.value))}
                 className="slider-input"
-                aria-valuemin={1000}
-                aria-valuemax={50000}
+                aria-valuemin={budgetScale.min}
+                aria-valuemax={budgetScale.max}
                 aria-valuenow={budgetAmount}
               />
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: 'var(--text-faint)', marginTop: '4px' }}>
-                <span>{currency}1,000</span>
-                <span>{currency}25,000</span>
-                <span>{currency}50,000+</span>
+                <span>{budgetScale.ticks[0]}</span>
+                <span>{budgetScale.ticks[1]}</span>
+                <span>{budgetScale.ticks[2]}</span>
               </div>
             </div>
 
