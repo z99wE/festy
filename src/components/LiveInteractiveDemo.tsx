@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Sparkles, TrendingDown } from 'lucide-react';
 
 interface Scenario {
   id: string;
@@ -238,19 +239,23 @@ export const LiveInteractiveDemo: React.FC = () => {
               <div className="demo-tasks-list">
                 {scenario.tasks.map((task, i) => (
                   <div key={i} className="demo-task-item">
-                    <span style={{ color: '#059669', fontWeight: 800, marginRight: '6px' }}>•</span>
+                    <span className="demo-task-bullet">•</span>
                     <span>{task}</span>
                   </div>
                 ))}
               </div>
 
-              {/* Vendor Leverage Script Box */}
+              {/* Vendor Leverage Script Box - Brand Styled Warm Glow */}
               <div className="demo-vendor-leverage-box">
                 <div className="leverage-badge">
+                  <Sparkles size={12} className="leverage-icon" />
                   <span>Negotiation Leverage Script</span>
                 </div>
                 <p className="leverage-question">{scenario.vendorTip.question}</p>
-                <span className="leverage-savings">{scenario.vendorTip.savings}</span>
+                <div className="leverage-savings">
+                  <TrendingDown size={13} className="leverage-savings-icon" />
+                  <span>{scenario.vendorTip.savings}</span>
+                </div>
               </div>
             </div>
           </div>

@@ -74,7 +74,8 @@ const Tile: React.FC<{ tile: TileData }> = ({ tile }) => (
     {tile.kind === 'image' && (
       <img
         src={tile.src}
-        alt={tile.alt || 'Celebration festival scene'}
+        alt={tile.alt || 'Festiya Global Celebration Festival - Atmospheric cultural event gathering'}
+        title={tile.alt || 'Global Celebration Showcase'}
         draggable={false}
         decoding="async"
         loading="lazy"

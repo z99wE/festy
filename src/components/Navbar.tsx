@@ -93,7 +93,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="island-brand-icon" style={{ overflow: 'visible', background: 'transparent', width: 'auto', height: 'auto' }}>
               <img
                 src="/festiya-logo-nav.webp"
-                alt="Festiya 3D Brand Logo"
+                alt="Festiya - Autonomous Celebration Architect & Event Planning Platform Logo"
+                title="Festiya - Autonomous Celebration Architect"
                 width={96}
                 height={36}
                 style={{

@@ -2,18 +2,54 @@ import React from 'react';
 import { GridMotion } from './GridMotion';
 
 const FESTIVAL_PHOTOS = [
-  '/festivals/rio-carnival.webp',
-  '/festivals/kyoto-lanterns.webp',
-  '/festivals/venice-masquerade.webp',
-  '/festivals/holi-festival.webp',
-  '/festivals/kyoto-lanterns.webp',
-  '/festivals/rio-carnival.webp',
-  '/festivals/holi-festival.webp',
-  '/festivals/venice-masquerade.webp',
-  '/festivals/rio-carnival.webp',
-  '/festivals/holi-festival.webp',
-  '/festivals/kyoto-lanterns.webp',
-  '/festivals/venice-masquerade.webp',
+  {
+    src: '/festivals/rio-carnival.webp',
+    alt: 'Rio de Janeiro Carnival Celebration - Grand Sambadrome parade with vibrant floats, feathered dancers, and lively music',
+  },
+  {
+    src: '/festivals/kyoto-lanterns.webp',
+    alt: 'Kyoto Gion Matsuri Lantern Celebration - Evening historical festival with illuminated traditional paper lanterns in Kyoto streets',
+  },
+  {
+    src: '/festivals/venice-masquerade.webp',
+    alt: 'Venice Carnival Grand Masquerade Gala - Elegant baroque costumes and handcrafted gold filigree carnival masks in Venice',
+  },
+  {
+    src: '/festivals/holi-festival.webp',
+    alt: 'Holi Festival of Colors Celebration - Joyful spring gathering with organic vibrant powdered gulal colors flying in sunlight',
+  },
+  {
+    src: '/festivals/kyoto-lanterns.webp',
+    alt: 'Kyoto Gion Matsuri Evening Festival - Traditional Japanese lantern festival illuminating celebratory night crowds',
+  },
+  {
+    src: '/festivals/rio-carnival.webp',
+    alt: 'Rio Carnival Parade Showcase - World-famous Brazilian carnival with spectacular musical performance and radiant costumes',
+  },
+  {
+    src: '/festivals/holi-festival.webp',
+    alt: 'Indian Holi Color Festival - Celebratory community festival honoring spring renewal with color bursts and music',
+  },
+  {
+    src: '/festivals/venice-masquerade.webp',
+    alt: 'Venice Masquerade Ball - Historic Italian celebration with period Renaissance attire and Venetian carnival artistry',
+  },
+  {
+    src: '/festivals/rio-carnival.webp',
+    alt: 'Rio de Janeiro Street Carnival - Energetic bloco celebration with dancing performers and brass band rhythms',
+  },
+  {
+    src: '/festivals/holi-festival.webp',
+    alt: 'Holi Festival of Joy - Joyous festival participants celebrating friendship and love with pink and saffron color powders',
+  },
+  {
+    src: '/festivals/kyoto-lanterns.webp',
+    alt: 'Kyoto Lantern Festival Walk - Atmospheric lantern-lit heritage path during annual Kyoto cultural festival celebration',
+  },
+  {
+    src: '/festivals/venice-masquerade.webp',
+    alt: 'Venetian Carnival Evening - Grand canal palace celebration with masquerade masqueraders in historical costumes',
+  },
 ];
 
 interface GlobalFestivalFooterShowcaseProps {

@@ -122,7 +122,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {/* Brand Header */}
         <div className="auth-modal-header">
           <div className="auth-logo-badge">
-            <img src="/festiya-logo-nav.webp" alt="Festiya" width={96} height={36} style={{ height: '36px', width: 'auto' }} />
+            <img
+              src="/festiya-logo-nav.webp"
+              alt="Festiya - Autonomous Celebration Architect Brand Emblem"
+              title="Festiya Account Workspace"
+              width={96}
+              height={36}
+              style={{ height: '36px', width: 'auto' }}
+            />
           </div>
           <h2 id="auth-modal-title" className="auth-title">
             {mode === 'signup' ? 'Create Your Festiya Account' : 'Sign In to Workspace'}

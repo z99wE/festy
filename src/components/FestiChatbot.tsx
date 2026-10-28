@@ -8,11 +8,11 @@ import { FestiSecurityGuard, type HardDrillResult } from '../services/festiSecur
 
 // The 5 Mascot frames requested by the user (Ultra-fast WebP format)
 const FESTI_FRAMES = [
-  { id: 1, src: '/mascots/pink-dancing.webp', alt: 'Fluffy PINK Dancing Mascot' },
-  { id: 2, src: '/mascots/yellow-dance.webp', alt: 'Cheerful Fluffy Yellow Dance Mascot' },
-  { id: 3, src: '/mascots/blue-jumping.webp', alt: 'Cheerful Blue Fuzzy Mascot Jumping' },
-  { id: 4, src: '/mascots/bubble-mint.webp', alt: 'Bubble Mint Plush Mascot' },
-  { id: 5, src: '/mascots/dancing-sticker.webp', alt: 'Fluffy Dancing Mascot Sticker' },
+  { id: 1, src: '/mascots/pink-dancing.webp', alt: 'Festiya AI Event Architect - Fluffy Pink Plush Mascot Dancing for Wedding and Party Planning' },
+  { id: 2, src: '/mascots/yellow-dance.webp', alt: 'Festiya AI Event Architect - Cheerful Fluffy Yellow Dance Mascot Celebrating Birthday Milestones' },
+  { id: 3, src: '/mascots/blue-jumping.webp', alt: 'Festiya AI Event Architect - Cheerful Blue Fuzzy Mascot Jumping for Music Festival Logistics' },
+  { id: 4, src: '/mascots/bubble-mint.webp', alt: 'Festiya AI Event Architect - Bubble Mint Plush Mascot Assisting with Corporate Gala Budgets' },
+  { id: 5, src: '/mascots/dancing-sticker.webp', alt: 'Festiya AI Event Architect - 3D Holographic Dancing Mascot Sticker for Celebration Planning' },
 ];
 
 export interface ChatMessage {
@@ -232,8 +232,11 @@ export const FestiChatbot: React.FC = () => {
               <div className="festi-header-mascot-wrap">
                 <img
                   src={currentFrame.src}
-                  alt="Festi AI Mascot"
+                  alt="Festiya Autonomous Event Architect Mascot - Interactive AI Concierge"
+                  title="Festiya AI Concierge"
                   className="festi-header-mascot-img"
+                  width={38}
+                  height={38}
                 />
               </div>
               <div>
@@ -368,7 +371,13 @@ export const FestiChatbot: React.FC = () => {
                   >
                     {m.sender === 'festi' && (
                       <div className="festi-mini-avatar">
-                        <img src="/festiya-logo-nav.webp" alt="Festi" width={28} height={28} />
+                        <img
+                          src="/festiya-logo-nav.webp"
+                          alt="Festiya AI Assistant Avatar"
+                          title="Festiya AI Assistant"
+                          width={28}
+                          height={28}
+                        />
                       </div>
                     )}
 
@@ -408,7 +417,13 @@ export const FestiChatbot: React.FC = () => {
                 {isTyping && (
                   <div className="festi-chat-bubble-row festi-row">
                     <div className="festi-mini-avatar">
-                      <img src="/festiya-logo-nav.webp" alt="Festi" width={28} height={28} />
+                      <img
+                        src="/festiya-logo-nav.webp"
+                        alt="Festiya AI Assistant Avatar"
+                        title="Festiya AI Assistant"
+                        width={28}
+                        height={28}
+                      />
                     </div>
                     <div className="festi-chat-bubble festi-bubble festi-typing-bubble">
                       <RefreshCw size={14} className="festi-spin-icon" />

@@ -11,19 +11,19 @@ interface MascotConfig {
 
 const MASCOTS: Record<MascotColor, MascotConfig> = {
   mint: {
-    name: 'Bubble Mint Plush Mascot',
+    name: 'Festiya Celebration Mascot - Mint Plush Character cheering on event planning',
     src: '/mascots/bubble-mint.webp',
   },
   blue: {
-    name: 'Cheerful Blue Fuzzy Mascot',
+    name: 'Festiya Celebration Mascot - Cheerful Blue Fuzzy Character jumping for festival milestones',
     src: '/mascots/blue-jumping.webp',
   },
   yellow: {
-    name: 'Fluffy Yellow Dance Mascot',
+    name: 'Festiya Celebration Mascot - Fluffy Yellow Dance Character celebrating birthdays and galas',
     src: '/mascots/yellow-dance.webp',
   },
   pink: {
-    name: 'Fluffy Pink Dancing Mascot',
+    name: 'Festiya Celebration Mascot - Fluffy Pink Dancing Character dancing for wedding receptions',
     src: '/mascots/pink-dancing.webp',
   },
 };
@@ -150,7 +150,7 @@ export const PeekingMascot: React.FC = () => {
   }
 
   return (
-    <div className="peeking-mascot-portal" aria-hidden="true">
+    <div className="peeking-mascot-portal" role="region" aria-label="Festiya Celebratory Mascot Peek">
       <div
         className={`peeking-mascot-container ${
           activePeek.isRetreating ? 'retreating' : 'peeking'
@@ -162,6 +162,7 @@ export const PeekingMascot: React.FC = () => {
           <img
             src={currentMascot.src}
             alt={currentMascot.name}
+            title={currentMascot.name}
             className="peeking-mascot-img"
             draggable={false}
             width={220}

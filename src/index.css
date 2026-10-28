@@ -4739,38 +4739,76 @@ img {
   margin-top: 1px;
 }
 
+.demo-task-bullet {
+  color: var(--accent-primary, #FF5E1E);
+  font-weight: 800;
+  margin-right: 8px;
+  font-size: 15px;
+  line-height: 1;
+}
+
 .demo-vendor-leverage-box {
-  background: #ECFDF5;
-  border: 1.5px solid #059669;
-  border-radius: 12px;
-  padding: 12px;
+  background: linear-gradient(135deg, rgba(255, 248, 240, 0.98), rgba(254, 241, 230, 0.94));
+  border: 1.5px solid rgba(255, 94, 30, 0.22);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 4px 16px rgba(255, 94, 30, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-quick, 0.2s ease), box-shadow var(--transition-quick, 0.2s ease);
+}
+
+.demo-vendor-leverage-box:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 94, 30, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
 .leverage-badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  color: #065F46;
+  color: #C2410C;
+  background: rgba(255, 94, 30, 0.1);
+  border: 1px solid rgba(255, 94, 30, 0.24);
+  border-radius: 999px;
+  padding: 3px 10px;
   letter-spacing: 0.05em;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+}
+
+.leverage-badge .leverage-icon {
+  color: #EA580C;
+  flex-shrink: 0;
 }
 
 .leverage-question {
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 13px;
+  line-height: 1.45;
   font-weight: 600;
-  color: #064E3B;
-  margin-bottom: 6px;
+  color: #2C1810;
+  margin: 0 0 8px 0;
 }
 
 .leverage-savings {
-  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
   font-weight: 700;
-  color: #047857;
-  display: block;
+  color: #9A3412;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(249, 115, 22, 0.28);
+  padding: 4px 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(154, 52, 18, 0.05);
+}
+
+.leverage-savings-icon {
+  color: #EA580C;
+  flex-shrink: 0;
 }
 
 .demo-card-footer {

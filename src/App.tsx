@@ -153,7 +153,8 @@ export function App() {
                         >
                           <img
                             src="/festiya-logo.webp"
-                            alt="Festiya 3D Plush Mascot Logo"
+                            alt="Festiya 3D Plush Mascot Logo - Autonomous Celebration Architect & Event Planning Platform"
+                            title="Festiya 3D Plush Mascot Logo"
                             width={639}
                             height={240}
                             fetchPriority="high"
@@ -472,7 +473,14 @@ export function App() {
           <div className="footer-grid">
             <div className="footer-brand-col">
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <img src="/festiya-logo-nav.webp" alt="Festiya Logo" width={64} height={24} style={{ height: '24px', width: 'auto' }} />
+                <img
+                  src="/festiya-logo-nav.webp"
+                  alt="Festiya - Autonomous Celebration Architect & Global Event Workspace Brand Logo"
+                  title="Festiya - Turn every moment into a festival"
+                  width={64}
+                  height={24}
+                  style={{ height: '24px', width: 'auto' }}
+                />
                 <span className="island-brand-text" style={{ fontSize: '16px' }}>Festiya</span>
               </div>
               <p style={{ color: 'var(--text-secondary)' }}>
