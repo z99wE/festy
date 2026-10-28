@@ -458,7 +458,7 @@ export function App() {
             VIEW 2: DEDICATED 12 EVENT BLUEPRINTS
             ========================================================== */}
         {activeTab === 'blueprints' && (
-          <div style={{ paddingTop: '80px', minHeight: '80vh' }}>
+          <div style={{ paddingTop: '12px', minHeight: '80vh' }}>
             <Suspense fallback={null}>
               <CategoryShowcase
                 onSelectCategory={(occ) => {
@@ -479,7 +479,7 @@ export function App() {
             VIEW 3: DEDICATED PLANNER WORKSPACE
             ========================================================== */}
         {activeTab === 'planner' && (
-          <div style={{ paddingTop: '80px', minHeight: '80vh' }}>
+          <div style={{ paddingTop: '12px', minHeight: '80vh' }}>
             <Suspense fallback={null}>
               <PlanBuilder
                 activeOccasion={activeOccasion}
@@ -499,7 +499,7 @@ export function App() {
             VIEW 4: DEDICATED FAQ & SUPPORT HUB
             ========================================================== */}
         {activeTab === 'faq' && (
-          <div style={{ paddingTop: '80px', minHeight: '80vh' }}>
+          <div style={{ paddingTop: '12px', minHeight: '80vh' }}>
             <Suspense fallback={null}>
               <EventInsights
                 onStartPlanning={handleStartPlanning}

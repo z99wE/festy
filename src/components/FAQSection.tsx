@@ -56,7 +56,16 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ soundEnabled }) => {
   return (
     <section className="faq-section" id="faq" aria-labelledby="faq-heading">
       <div className="content-wrapper">
-        <div className="section-header">
+        <div className="section-header" style={{ margin: '0 auto 28px' }}>
+          <div className="tab-hero-logo" style={{ marginBottom: '14px' }}>
+            <img
+              src="/festiya-logo.webp"
+              alt="Festiya Logo"
+              width={130}
+              height={48}
+              style={{ height: '42px', width: 'auto', display: 'inline-block', filter: 'drop-shadow(0 4px 12px rgba(255, 94, 30, 0.16))' }}
+            />
+          </div>
           <h2 id="faq-heading" className="section-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
             Everything You Need to Know Before Planning
           </h2>

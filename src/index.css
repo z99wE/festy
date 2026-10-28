@@ -2073,7 +2073,7 @@ img {
    INTERACTIVE PLAN BUILDER SECTION
    -------------------------------------------------------------------------- */
 .plan-builder-section {
-  padding: var(--space-800) 0;
+  padding: var(--space-200, 12px) 0 var(--space-800);
   position: relative;
   z-index: 2;
 }
@@ -2453,7 +2453,7 @@ img {
    CATEGORIES SECTION
    -------------------------------------------------------------------------- */
 .categories-section {
-  padding: var(--space-800) 0;
+  padding: var(--space-200, 12px) 0 var(--space-800);
   position: relative;
   z-index: 2;
 }
@@ -2738,7 +2738,7 @@ img {
    FAQ & RISK REVERSAL (Rule A2 & A4)
    -------------------------------------------------------------------------- */
 .faq-section {
-  padding: var(--space-800) 0;
+  padding: var(--space-200, 12px) 0 var(--space-800);
   position: relative;
   z-index: 2;
 }

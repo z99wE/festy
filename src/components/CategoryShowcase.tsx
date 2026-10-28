@@ -143,7 +143,16 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
   return (
     <section className="categories-section" id="categories" aria-labelledby="categories-heading">
       <div className="content-wrapper">
-        <div className="section-header" style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 36px' }}>
+        <div className="section-header" style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 28px' }}>
+          <div className="tab-hero-logo" style={{ marginBottom: '14px' }}>
+            <img
+              src="/festiya-logo.webp"
+              alt="Festiya Logo"
+              width={130}
+              height={48}
+              style={{ height: '42px', width: 'auto', display: 'inline-block', filter: 'drop-shadow(0 4px 12px rgba(255, 94, 30, 0.16))' }}
+            />
+          </div>
           <h2 id="categories-heading" className="section-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
             Battle-Tested Event Blueprints Engineered for Operational Calm
           </h2>
