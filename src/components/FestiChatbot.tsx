@@ -441,7 +441,42 @@ export const FestiChatbot: React.FC = () => {
                         </div>
                       )}
 
-                      <p className="festi-msg-text">{m.text}</p>
+                      {/* Message Text with Zero Raw Asterisks and Clean Typography */}
+                      <div className="festi-msg-text">
+                        {(() => {
+                          const sanitized = m.text
+                            .replace(/\*\*(.*?)\*\*/g, '$1')
+                            .replace(/\*(.*?)\*/g, '$1')
+                            .replace(/#{1,6}\s+/g, '')
+                            .replace(/\*/g, '')
+                            .trim();
+
+                          const paragraphs = sanitized.split(/\n\s*\n/).filter(Boolean);
+                          if (paragraphs.length <= 1) {
+                            const lines = sanitized.split('\n').filter(Boolean);
+                            if (lines.length > 1) {
+                              return lines.map((line, idx) => (
+                                <p key={idx} style={{ margin: '0 0 6px 0', lineHeight: 1.5 }}>
+                                  {line.startsWith('•') || line.startsWith('-') ? (
+                                    <span style={{ display: 'flex', gap: '6px', alignItems: 'flex-start' }}>
+                                      <span style={{ color: 'var(--coral-pop, #ff6b4a)', flexShrink: 0 }}>•</span>
+                                      <span>{line.replace(/^[•\-]\s*/, '')}</span>
+                                    </span>
+                                  ) : (
+                                    line
+                                  )}
+                                </p>
+                              ));
+                            }
+                          }
+
+                          return paragraphs.map((para, idx) => (
+                            <p key={idx} style={{ margin: '0 0 8px 0', lineHeight: 1.5 }}>
+                              {para}
+                            </p>
+                          ));
+                        })()}
+                      </div>
 
                       {/* 3-Tier Budget Allocation Matrix Artifact */}
                       {m.budgetArtifact && (

@@ -18,6 +18,7 @@ const EventInsights = lazy(() => import('./components/EventInsights').then((m) =
 const GlobalFestivalFooterShowcase = lazy(() => import('./components/GlobalFestivalFooterShowcase').then((m) => ({ default: m.GlobalFestivalFooterShowcase })));
 const PeekingMascot = lazy(() => import('./components/PeekingMascot').then((m) => ({ default: m.PeekingMascot })));
 const FestiChatbot = lazy(() => import('./components/FestiChatbot').then((m) => ({ default: m.FestiChatbot })));
+const EventEconomicsAbacus = lazy(() => import('./components/EventEconomicsAbacus').then((m) => ({ default: m.EventEconomicsAbacus })));
 
 const OCCASION_SWAP_ITEMS = [
   { id: 'wedding', name: 'Luxury Weddings' },
@@ -38,7 +39,7 @@ export function App() {
   const [reducedMotion, setReducedMotion] = useState(false);
 
   // Regional currency state
-  const [currentCurrency, setCurrentCurrency] = useState<string>(() => {
+  const [currentCurrency] = useState<string>(() => {
     return detectUserRegion().currencyCode || 'USD';
   });
 
@@ -149,8 +150,6 @@ export function App() {
         soundEnabled={soundEnabled}
         currentUser={currentUser}
         activeTab={activeTab}
-        currentCurrency={currentCurrency}
-        onCurrencyChange={setCurrentCurrency}
         onSelectTab={(tab) => {
           setActiveTab(tab);
           window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
@@ -366,6 +365,26 @@ export function App() {
                     <div
                       className="home-gateway-card"
                       onClick={() => {
+                        const el = document.getElementById('event-economics-abacus');
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      <div>
+                        <h3 className="gateway-card-title">Economics Abacus</h3>
+                        <p className="gateway-card-desc">
+                          Regional vendor valuation engine with interactive abacus allocation rails and local market dynamics.
+                        </p>
+                      </div>
+                      <div className="gateway-card-link">
+                        <span>Calculate Valuation</span>
+                      </div>
+                    </div>
+
+                    <div
+                      className="home-gateway-card"
+                      onClick={() => {
                         setActiveTab('faq');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
@@ -386,6 +405,25 @@ export function App() {
                 </div>
               </div>
             </section>
+
+            {/* EVENT ECONOMICS ABACUS & REGIONAL MARKET VALUATION ENGINE */}
+            <LazyMount placeholderHeight="520px" rootMargin="300px">
+              <Suspense fallback={null}>
+                <EventEconomicsAbacus
+                  onApplyToWorkspace={(summary) => {
+                    setSelectedPlanningContext({
+                      id: 'abacus-valuation',
+                      name: `${summary.regionName} Celebration`,
+                      category: activeOccasion,
+                      location: summary.regionName,
+                      dates: 'Upcoming Season',
+                    });
+                    setActiveTab('planner');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                />
+              </Suspense>
+            </LazyMount>
 
             {/* LIVE AUTOMATED INTERACTIVE DEMO */}
             <LazyMount placeholderHeight="320px" rootMargin="300px">
@@ -572,6 +610,47 @@ export function App() {
                 <li>• Complete data export anytime</li>
                 <li>• Private, client-controlled workspace</li>
               </ul>
+            </div>
+          </div>
+
+          {/* STANDARD LEGAL & PRIVACY NOTICE DISCLAIMER */}
+          <div className="footer-legal-notice-band">
+            <div className="footer-legal-grid">
+              <div className="footer-legal-block">
+                <h4 className="footer-legal-heading">Data Privacy & Client Confidentiality</h4>
+                <p className="footer-legal-text">
+                  Festiya operates in full compliance with international data privacy frameworks including the General Data Protection Regulation (GDPR), California Consumer Privacy Act (CCPA/CPRA), and modern digital security standards. All celebration plans, vendor budgets, event timelines, and client guest records created within this workspace are stored securely in isolated tenant environments. Festiya does not sell, monetize, broker, or transmit personal consumer information to third-party commercial brokers or unauthorized marketing networks.
+                </p>
+              </div>
+
+              <div className="footer-legal-block">
+                <h4 className="footer-legal-heading">Planning & Valuation Disclaimer</h4>
+                <p className="footer-legal-text">
+                  All budget projections, vendor rate evaluations, game-theoretic negotiation benchmarks, regional abacus valuations, and multi-agent AI recommendations are provided solely for budgeting reference and event planning guidance. Actual contractor pricing, availability, seasonal surges, minimum spends, municipal permitting requirements, security deposits, and local sales taxes are subject to formal agreements executed directly between event organizers and licensed local vendors. Organizers are advised to verify regional municipal permits, fire codes, liquor licensing, and vendor liability coverage prior to executing binding commitments.
+                </p>
+              </div>
+            </div>
+
+            <div className="footer-legal-compliance-bar">
+              <div className="footer-compliance-badges">
+                <span className="footer-compliance-pill">GDPR Ready</span>
+                <span>•</span>
+                <span className="footer-compliance-pill">CCPA Compliant</span>
+                <span>•</span>
+                <span className="footer-compliance-pill">Decimal-Accurate Accounting</span>
+                <span>•</span>
+                <span className="footer-compliance-pill">Zero Third-Party Trackers</span>
+              </div>
+
+              <div className="footer-legal-links">
+                <span className="footer-legal-link-btn">Terms of Service</span>
+                <span>•</span>
+                <span className="footer-legal-link-btn">Privacy Policy</span>
+                <span>•</span>
+                <span className="footer-legal-link-btn">Data Processing Addendum</span>
+                <span>•</span>
+                <span className="footer-legal-link-btn">Cookie Directives</span>
+              </div>
             </div>
           </div>
 

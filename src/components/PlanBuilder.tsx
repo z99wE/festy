@@ -87,14 +87,14 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
 
   // Dynamic Event Archetypes
   const occasions = [
-    { id: 'birthday', label: '🎂 Milestone Birthday', subtitle: 'Fun, energetic, personal memories' },
-    { id: 'wedding', label: '💍 Joyful Wedding', subtitle: 'Heartfelt, elegant, multi-generational' },
-    { id: 'family_reunion', label: '🏡 Family Reunion', subtitle: 'Multi-day, garden feasts & keepsakes' },
+    { id: 'birthday', label: 'Milestone Birthday', subtitle: 'Fun, energetic, personal memories' },
+    { id: 'wedding', label: 'Joyful Wedding', subtitle: 'Heartfelt, elegant, multi-generational' },
+    { id: 'family_reunion', label: 'Family Reunion', subtitle: 'Multi-day, garden feasts & keepsakes' },
     { id: 'cultural_fest', label: 'Cultural Festival', subtitle: 'Heritage, banquets & lantern spectacles' },
-    { id: 'community', label: '🎪 Community Carnival', subtitle: 'Street festival, vibrant, open-air' },
-    { id: 'retreat', label: '🏔️ Offsite & Retreat', subtitle: 'Luxury lodges, strategy & nature breaks' },
-    { id: 'festival', label: '🎶 Music & Street Fest', subtitle: 'Live stages, street food & high vibe' },
-    { id: 'work', label: '🚀 Gala & Showcase', subtitle: 'Impactful, polished, team celebration' },
+    { id: 'community', label: 'Community Carnival', subtitle: 'Street festival, vibrant, open-air' },
+    { id: 'retreat', label: 'Offsite & Retreat', subtitle: 'Luxury lodges, strategy & nature breaks' },
+    { id: 'festival', label: 'Music & Street Fest', subtitle: 'Live stages, street food & high vibe' },
+    { id: 'work', label: 'Gala & Showcase', subtitle: 'Impactful, polished, team celebration' },
   ];
 
   // Calculated Budget Categories based on budget amount

@@ -34,7 +34,7 @@ export default {
           const incomingMessages = body.messages || [];
           const systemPrompt =
             body.systemPrompt ||
-            'You are Festi AI, the world-class event architect and celebration intelligence assistant. You help users plan extraordinary weddings, milestone birthdays, corporate retreats, street festivals, dinner parties, and seasonal celebrations. Provide inspiring, actionable, step-by-step advice with timelines, sensory decor touches, and budget-saving recommendations. Strictly stay focused on celebrations, parties, hospitality, and event production.';
+            'You are Festi AI, the world-class event architect and celebration intelligence assistant. You help users plan extraordinary weddings, milestone birthdays, corporate retreats, street festivals, dinner parties, and seasonal celebrations. Provide inspiring, actionable, step-by-step advice with timelines, sensory decor touches, and budget-saving recommendations. Strictly stay focused on celebrations, parties, hospitality, and event production. Writing format rules: Never use markdown bold or italic asterisks such as ** or *. Do not put asterisks anywhere in your answer. Use clean plain text with clear paragraph spacing and standard bullet points like • if needed.';
 
           const messages: Array<{ role: string; content: string }> = [
             { role: 'system', content: systemPrompt },
@@ -67,6 +67,16 @@ export default {
             );
           }
 
+          const cleanAiOutput = (text?: string): string => {
+            if (!text) return '';
+            return text
+              .replace(/\*\*(.*?)\*\*/g, '$1')
+              .replace(/\*(.*?)\*/g, '$1')
+              .replace(/^\s*\*\s+/gm, '• ')
+              .replace(/\*/g, '')
+              .trim();
+          };
+
           // Try primary model: Llama 3.3 70B Instruct Fast
           try {
             const aiResult = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
@@ -77,7 +87,7 @@ export default {
 
             return new Response(
               JSON.stringify({
-                response: aiResult.response,
+                response: cleanAiOutput(aiResult.response),
                 provider: 'Edge AI (Llama 3.3 70B)',
                 model: '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
               }),
@@ -95,7 +105,7 @@ export default {
 
             return new Response(
               JSON.stringify({
-                response: fallbackAiResult.response,
+                response: cleanAiOutput(fallbackAiResult.response),
                 provider: 'Edge AI (Fast Fallback)',
                 model: '@cf/meta/llama-3.1-8b-instruct-fp8',
               }),

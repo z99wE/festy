@@ -6895,3 +6895,588 @@ img {
 .spin-icon {
   animation: spin 1s linear infinite;
 }
+
+/* ==========================================================================
+   EVENT ECONOMICS ABACUS & REGIONAL VALUATION ENGINE
+   ========================================================================== */
+.abacus-container {
+  max-width: 1240px;
+  margin: 48px auto;
+  padding: 36px 32px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-medium);
+  border-radius: var(--radius-2xl, 24px);
+  box-shadow: 0 16px 40px rgba(45, 24, 16, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.abacus-header-band {
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.abacus-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(91, 66, 243, 0.08);
+  border: 1px solid rgba(91, 66, 243, 0.2);
+  border-radius: var(--radius-full, 9999px);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bubblegum-purple-blue, #5b42f3);
+  margin-bottom: 12px;
+}
+
+.abacus-badge-icon {
+  color: var(--bubblegum-purple-blue, #5b42f3);
+}
+
+.abacus-title {
+  font-size: clamp(26px, 3.2vw, 36px);
+  font-weight: 850;
+  color: var(--text-primary);
+  margin: 0 0 10px 0;
+  letter-spacing: -0.02em;
+}
+
+.abacus-subtitle {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 780px;
+  margin: 0;
+}
+
+.abacus-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) 1.5fr;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .abacus-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Control Panel */
+.abacus-control-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: var(--bg-surface-elevated, rgba(255, 255, 255, 0.7));
+  padding: 24px;
+  border-radius: var(--radius-xl, 18px);
+  border: 1px solid var(--border-subtle);
+}
+
+.abacus-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.abacus-control-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 750;
+  color: var(--text-primary);
+}
+
+.abacus-icon {
+  color: var(--coral-pop, #ff6b4a);
+}
+
+.abacus-select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-medium);
+  background: #FFFFFF;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.abacus-select:focus {
+  outline: none;
+  border-color: var(--bubblegum-purple-blue, #5b42f3);
+  box-shadow: 0 0 0 3px rgba(91, 66, 243, 0.15);
+}
+
+.abacus-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.abacus-count-pill {
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 10px;
+  background: rgba(255, 107, 74, 0.12);
+  color: var(--coral-pop, #ff6b4a);
+  border-radius: var(--radius-full, 9999px);
+}
+
+.abacus-rate-indicator {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.abacus-range {
+  width: 100%;
+  accent-color: var(--coral-pop, #ff6b4a);
+  cursor: pointer;
+}
+
+.abacus-range-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.abacus-tier-toggle-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.abacus-tier-btn {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border-subtle);
+  background: #FFFFFF;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.abacus-tier-btn:hover {
+  border-color: var(--bubblegum-purple-blue, #5b42f3);
+  color: var(--text-primary);
+}
+
+.abacus-tier-btn.active {
+  background: var(--bubblegum-purple-blue, #5b42f3);
+  border-color: var(--bubblegum-purple-blue, #5b42f3);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(91, 66, 243, 0.25);
+}
+
+/* Regional Intel Card */
+.abacus-regional-intel {
+  margin-top: 8px;
+  padding: 16px;
+  background: rgba(255, 247, 237, 0.85);
+  border: 1px solid rgba(255, 107, 74, 0.25);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.abacus-intel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.abacus-intel-title {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--coral-pop, #ff6b4a);
+}
+
+.abacus-intel-text {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin: 0;
+  font-weight: 600;
+}
+
+.abacus-intel-photo-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #065f46;
+  background: rgba(5, 150, 105, 0.08);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border-left: 3px solid #059669;
+}
+
+.abacus-intel-footer-note {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Rails Panel (Abacus Visual Rails) */
+.abacus-rails-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: var(--bg-surface-elevated, #FFFFFF);
+  padding: 24px;
+  border-radius: var(--radius-xl, 18px);
+  border: 1px solid var(--border-medium);
+}
+
+.abacus-rails-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.abacus-rails-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.abacus-rails-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.abacus-total-snapshot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background: linear-gradient(135deg, rgba(91, 66, 243, 0.08), rgba(255, 107, 74, 0.08));
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(91, 66, 243, 0.15);
+}
+
+.abacus-snapshot-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.abacus-snapshot-number {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.abacus-snapshot-per-head {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--coral-pop, #ff6b4a);
+}
+
+/* Abacus Bead Matrix */
+.abacus-bead-matrix {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.abacus-rail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  background: var(--bg-card, #faf8f5);
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  transition: all 0.2s ease;
+}
+
+.abacus-rail-item:hover {
+  border-color: var(--border-medium);
+  box-shadow: 0 4px 14px rgba(45, 24, 16, 0.04);
+}
+
+.abacus-rail-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.abacus-rail-name-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.abacus-pillar-icon {
+  flex-shrink: 0;
+}
+.abacus-pillar-icon.photo { color: #0284c7; }
+.abacus-pillar-icon.catering { color: #ea580c; }
+.abacus-pillar-icon.venue { color: #5b42f3; }
+.abacus-pillar-icon.entertainment { color: #d946ef; }
+.abacus-pillar-icon.decor { color: #16a34a; }
+.abacus-pillar-icon.logistics { color: #64748b; }
+
+.abacus-pillar-title {
+  font-size: 13.5px;
+  font-weight: 750;
+  color: var(--text-primary);
+}
+
+.abacus-rail-valuation {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.abacus-rail-figure {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.abacus-rail-pct {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* Wire track with Abacus Beads */
+.abacus-rail-track {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  position: relative;
+  padding: 6px 0;
+}
+
+.abacus-rail-track::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  right: 10px;
+  height: 3px;
+  background: var(--border-medium);
+  border-radius: 2px;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.abacus-bead {
+  position: relative;
+  z-index: 2;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.abacus-bead-core {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #E2E8F0;
+  border: 2px solid #CBD5E1;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.abacus-bead.filled .abacus-bead-core {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  border-color: #c2410c;
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.35);
+}
+
+.abacus-bead.active-bead .abacus-bead-core {
+  transform: scale(1.18);
+  border-color: #7c2d12;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.25), 0 3px 8px rgba(234, 88, 12, 0.4);
+}
+
+.abacus-rail-legend {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: 0 4px;
+}
+
+/* Actions */
+.abacus-actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.abacus-local-reference {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.abacus-local-ref-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.abacus-local-ref-value {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.abacus-apply-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.abacus-toast-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(5, 150, 105, 0.1);
+  border: 1px solid rgba(5, 150, 105, 0.3);
+  border-radius: 10px;
+  font-size: 13px;
+  color: #065f46;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ==========================================================================
+   FOOTER STANDARD LEGAL & PRIVACY DISCLAIMER BAND
+   ========================================================================== */
+.footer-legal-notice-band {
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-legal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .footer-legal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.footer-legal-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-legal-heading {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.footer-legal-text {
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.footer-legal-compliance-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.footer-compliance-badges {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.footer-compliance-pill {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.footer-legal-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-legal-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.footer-legal-link-btn:hover {
+  color: var(--text-primary);
+}
+

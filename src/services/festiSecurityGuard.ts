@@ -339,6 +339,19 @@ export class FestiSecurityGuard {
     // Redact accidental system prompt echos
     clean = clean.replace(/You are Festi, the cheerful, energetic, and deeply knowledgeable Festi AI event architect.*/gi, '');
 
+    // Strip raw markdown asterisks, bold/italic markers, and formatting clutter
+    clean = clean
+      // Replace **bold** with clean text
+      .replace(/\*\*(.*?)\*\*/g, '$1')
+      // Replace *italic* with clean text
+      .replace(/\*(.*?)\*/g, '$1')
+      // Replace markdown bullet asterisks (* item) with clean bullet symbol (• item)
+      .replace(/^\s*[\*\-]\s+/gm, '• ')
+      // Strip any dangling isolated asterisks
+      .replace(/\*+/g, '')
+      // Strip markdown header hashes (### Heading -> Heading)
+      .replace(/^#+\s+/gm, '');
+
     return clean.trim();
   }
 
