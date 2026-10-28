@@ -1,0 +1,24 @@
+stages:
+  - test
+  - lint
+  - build
+
+image: node:22
+
+before_script:
+  - npm ci
+
+unit_tests:
+  stage: test
+  script:
+    - npm test
+
+linting:
+  stage: lint
+  script:
+    - npm run lint
+
+typecheck_build:
+  stage: build
+  script:
+    - npm run build

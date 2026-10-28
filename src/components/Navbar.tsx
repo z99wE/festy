@@ -105,6 +105,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="island-links">
             <button
               type="button"
+              aria-label="Navigate to Home"
               className={`island-nav-link ${activeTab === 'home' ? 'active-tab' : ''}`}
               onClick={() => handleTabClick('home')}
             >
@@ -112,6 +113,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
             <button
               type="button"
+              aria-label="Navigate to Blueprints"
               className={`island-nav-link ${activeTab === 'blueprints' ? 'active-tab' : ''}`}
               onClick={() => handleTabClick('blueprints')}
             >
@@ -119,6 +121,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
             <button
               type="button"
+              aria-label="Navigate to Planner"
               className={`island-nav-link ${activeTab === 'planner' ? 'active-tab' : ''}`}
               onClick={() => handleTabClick('planner')}
             >
@@ -126,6 +129,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
             <button
               type="button"
+              aria-label="Navigate to FAQ"
               className={`island-nav-link ${activeTab === 'faq' ? 'active-tab' : ''}`}
               onClick={() => handleTabClick('faq')}
             >
@@ -144,10 +148,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {onSignOut && (
                   <button
                     type="button"
-                    className="navbar-logout-btn"
-                    onClick={onSignOut}
                     aria-label="Sign out"
                     title="Sign Out"
+                    className="navbar-logout-btn"
+                    onClick={onSignOut}
                   >
                     <span>Sign Out</span>
                   </button>
@@ -157,17 +161,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <button
                   type="button"
+                  aria-label="Sign in to your account"
                   className="navbar-auth-btn"
                   onClick={() => onOpenAuth?.('login')}
-                  aria-label="Sign in to your account"
                 >
                   <span>Sign In</span>
                 </button>
                 <button
                   type="button"
+                  aria-label="Create your account"
                   className="navbar-auth-btn signup"
                   onClick={() => onOpenAuth?.('signup')}
-                  aria-label="Create your account"
                 >
                   <span>Sign Up</span>
                 </button>
@@ -176,12 +180,12 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               type="button"
+              aria-label="Build your event plan"
               className="btn btn-primary island-cta-btn"
               onClick={() => {
                 handleTabClick('planner');
                 onStartPlanning();
               }}
-              aria-label="Build your event plan"
             >
               <span>Build plan</span>
             </button>
@@ -189,10 +193,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Mobile Hamburger Morph Button */}
             <button
               type="button"
-              className={`hamburger-morph-btn ${mobileMenuOpen ? 'open' : ''}`}
-              onClick={toggleMobileMenu}
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={mobileMenuOpen}
+              className={`hamburger-morph-btn ${mobileMenuOpen ? 'open' : ''}`}
+              onClick={toggleMobileMenu}
             >
               <span className="burger-line line-1" />
               <span className="burger-line line-2" />
@@ -208,6 +212,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="mobile-links-list">
               <button
                 type="button"
+                aria-label="Navigate to Home 3D Experience"
                 className={`mobile-nav-item item-delay-1 ${activeTab === 'home' ? 'active-tab' : ''}`}
                 onClick={() => handleTabClick('home')}
               >
@@ -215,6 +220,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
               <button
                 type="button"
+                aria-label="Navigate to Blueprints"
                 className={`mobile-nav-item item-delay-2 ${activeTab === 'blueprints' ? 'active-tab' : ''}`}
                 onClick={() => handleTabClick('blueprints')}
               >
@@ -222,6 +228,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
               <button
                 type="button"
+                aria-label="Navigate to Planner"
                 className={`mobile-nav-item item-delay-3 ${activeTab === 'planner' ? 'active-tab' : ''}`}
                 onClick={() => handleTabClick('planner')}
               >
@@ -229,6 +236,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
               <button
                 type="button"
+                aria-label="Navigate to FAQ & Support"
                 className={`mobile-nav-item item-delay-4 ${activeTab === 'faq' ? 'active-tab' : ''}`}
                 onClick={() => handleTabClick('faq')}
               >
@@ -249,12 +257,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {onSignOut && (
                     <button
                       type="button"
+                      aria-label="Sign Out"
+                      title="Sign Out"
                       className="navbar-logout-btn"
                       onClick={() => {
                         setMobileMenuOpen(false);
                         onSignOut();
                       }}
-                      title="Sign Out"
                     >
                       <span>Sign Out</span>
                     </button>
@@ -264,6 +273,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                   <button
                     type="button"
+                    aria-label="Sign In"
                     className="navbar-auth-btn"
                     onClick={() => {
                       setMobileMenuOpen(false);
@@ -275,6 +285,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </button>
                   <button
                     type="button"
+                    aria-label="Sign Up"
                     className="navbar-auth-btn signup"
                     onClick={() => {
                       setMobileMenuOpen(false);

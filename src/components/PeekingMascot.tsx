@@ -158,20 +158,30 @@ export const PeekingMascot: React.FC = () => {
   }, [triggerPeek, clearAllTimers]);
 
   // Handle playful click on mascot
-  const handleMascotClick = (e: React.MouseEvent) => {
+  const handleMascotClick = (e?: React.MouseEvent | React.KeyboardEvent) => {
     playPopSound(true);
 
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (rect.left + rect.width / 2) / window.innerWidth;
-    const y = (rect.top + rect.height / 2) / window.innerHeight;
+    if (e && 'currentTarget' in e && e.currentTarget) {
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+      const x = (rect.left + rect.width / 2) / window.innerWidth;
+      const y = (rect.top + rect.height / 2) / window.innerHeight;
 
-    confetti({
-      particleCount: 22,
-      spread: 55,
-      origin: { x, y },
-      colors: ['#FF5E1E', '#FFB800', '#2DD4BF', '#A78BFA', '#FFFFFF'],
-      disableForReducedMotion: true,
-    });
+      confetti({
+        particleCount: 22,
+        spread: 55,
+        origin: { x, y },
+        colors: ['#FF5E1E', '#FFB800', '#2DD4BF', '#A78BFA', '#FFFFFF'],
+        disableForReducedMotion: true,
+      });
+    } else {
+      confetti({
+        particleCount: 22,
+        spread: 55,
+        origin: { x: 0.5, y: 0.5 },
+        colors: ['#FF5E1E', '#FFB800', '#2DD4BF', '#A78BFA', '#FFFFFF'],
+        disableForReducedMotion: true,
+      });
+    }
 
     // Gently retreat immediately on click
     setActivePeek((prev) => (prev ? { ...prev, isRetreating: true } : null));
@@ -200,7 +210,11 @@ export const PeekingMascot: React.FC = () => {
           activePeek.isRetreating ? 'retreating' : 'peeking'
         }`}
         style={styleObj}
+        role="button"
+        tabIndex={0}
+        aria-label="Festiya Mascot interact"
         onClick={handleMascotClick}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleMascotClick(); }}
       >
         <div className="peeking-mascot-wrap">
           <img

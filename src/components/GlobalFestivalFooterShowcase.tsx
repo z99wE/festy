@@ -103,6 +103,7 @@ export const GlobalFestivalFooterShowcase: React.FC<GlobalFestivalFooterShowcase
             <button
               type="button"
               className="btn btn-primary"
+              aria-label="Build your event plan in under 90 seconds"
               style={{ padding: '12px 32px', fontSize: '16px' }}
               onClick={onStartPlanning}
             >

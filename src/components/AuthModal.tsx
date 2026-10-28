@@ -112,9 +112,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {/* Close Button */}
         <button
           type="button"
+          aria-label="Close authentication modal"
           className="auth-modal-close-btn"
           onClick={onClose}
-          aria-label="Close authentication modal"
         >
           <X size={18} />
         </button>
@@ -146,6 +146,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           <button
             type="button"
             role="tab"
+            aria-label="Create Account tab"
             aria-selected={mode === 'signup'}
             className={`auth-tab-btn ${mode === 'signup' ? 'active' : ''}`}
             onClick={() => {
@@ -158,6 +159,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           <button
             type="button"
             role="tab"
+            aria-label="Sign In tab"
             aria-selected={mode === 'login'}
             className={`auth-tab-btn ${mode === 'login' ? 'active' : ''}`}
             onClick={() => {
@@ -270,6 +272,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {/* Submit Button */}
           <button
             type="submit"
+            aria-label={mode === 'signup' ? 'Create Workspace' : 'Sign In to Festiya'}
             className="btn btn-primary auth-submit-btn"
             disabled={loading}
           >
@@ -296,6 +299,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         <button
           type="button"
+          aria-label="Instant 1-Click Demo Login as Alex Rivera"
           className="auth-demo-btn"
           onClick={handleDemoLogin}
           disabled={loading}

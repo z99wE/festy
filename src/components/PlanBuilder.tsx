@@ -335,6 +335,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
               <button
                 type="button"
+                aria-label="Re-generate with Festi AI"
                 className="btn btn-primary"
                 style={{ padding: '8px 14px', fontSize: '13px' }}
                 onClick={() =>
@@ -350,6 +351,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
 
               <button
                 type="button"
+                aria-label="Chat with Festi AI"
                 className="btn btn-secondary"
                 style={{ padding: '8px 14px', fontSize: '13px' }}
                 onClick={() =>
@@ -364,10 +366,11 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
               {onClearPlanningContext && (
                 <button
                   type="button"
+                  aria-label="Switch to default template"
+                  title="Switch to default template"
                   className="search-clear-btn"
                   style={{ width: '28px', height: '28px', fontSize: '16px' }}
                   onClick={onClearPlanningContext}
-                  title="Switch to default template"
                 >
                   ×
                 </button>
@@ -393,6 +396,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
           <div className="ai-studio-quick-prompts">
             <button
               type="button"
+              aria-label="Auto-Optimize Budget"
               className="ai-quick-chip"
               onClick={() =>
                 handleTriggerAIGenerator(
@@ -404,6 +408,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
             </button>
             <button
               type="button"
+              aria-label="Day-of Run of Show"
               className="ai-quick-chip"
               onClick={() =>
                 handleTriggerAIGenerator(
@@ -415,6 +420,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
             </button>
             <button
               type="button"
+              aria-label="Vendor Negotiation Script"
               className="ai-quick-chip"
               onClick={() =>
                 handleTriggerAIGenerator(
@@ -426,6 +432,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
             </button>
             <button
               type="button"
+              aria-label="Unique Experience Ideas"
               className="ai-quick-chip"
               onClick={() =>
                 handleTriggerAIGenerator(
@@ -447,14 +454,16 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
           >
             <input
               type="text"
+              id="ai-studio-custom-prompt-input"
+              aria-label="Custom Festi AI planning instruction"
               className="ai-studio-input"
               placeholder={`Ask Festi AI anything: e.g. "We need vegan food stations", "How to manage sound curfews", "Plan a 4-day weekend schedule"...`}
               value={customAIPrompt}
               onChange={(e) => setCustomAIPrompt(e.target.value)}
-              aria-label="Custom Festi AI planning instruction"
             />
             <button
               type="submit"
+              aria-label="Ask Festi AI"
               className="btn btn-primary ai-studio-submit-btn"
               disabled={isAILoading || !customAIPrompt.trim()}
             >
@@ -478,9 +487,10 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
               <div className="ai-result-header" style={{ justifyContent: 'flex-end' }}>
                 <button
                   type="button"
+                  aria-label="Copy Festi AI Blueprint"
+                  title="Copy Festi AI Blueprint"
                   className="ai-copy-btn"
                   onClick={handleCopyAIResponse}
-                  title="Copy Festi AI Blueprint"
                 >
                   {aiCopied ? (
                     <>
@@ -522,6 +532,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                     <button
                       key={occ.id}
                       type="button"
+                      aria-label={`Select occasion: ${occ.label}`}
                       className={`category-choice-btn ${isSelected ? 'selected' : ''}`}
                       onClick={() => {
                         onOccasionChange(occ.id);
@@ -544,6 +555,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
               </label>
               <input
                 id={guestSliderId}
+                aria-label="Guest count"
                 type="range"
                 min="10"
                 max="500"
@@ -595,6 +607,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
 
               <input
                 id={budgetSliderId}
+                aria-label="Target budget"
                 type="range"
                 min="1000"
                 max="50000"
@@ -658,9 +671,9 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
 
               <button
                 type="button"
+                aria-label="Copy plan summary to clipboard"
                 className="btn btn-secondary"
                 onClick={handleCopyPlan}
-                aria-label="Copy plan summary to clipboard"
               >
                 {copied ? 'Copied to Clipboard!' : 'Copy Plan'}
               </button>
@@ -680,6 +693,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
             <nav className="plan-tabs-row" aria-label="Plan Sections">
               <button
                 type="button"
+                aria-label="Budget Blueprint tab"
                 className={`plan-tab-btn ${activeTab === 'budget' ? 'active' : ''}`}
                 onClick={() => {
                   setActiveTab('budget');
@@ -690,6 +704,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
               </button>
               <button
                 type="button"
+                aria-label="Tasks and Milestones tab"
                 className={`plan-tab-btn ${activeTab === 'tasks' ? 'active' : ''}`}
                 onClick={() => {
                   setActiveTab('tasks');
@@ -700,6 +715,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
               </button>
               <button
                 type="button"
+                aria-label="Vendor Questions tab"
                 className={`plan-tab-btn ${activeTab === 'vendors' ? 'active' : ''}`}
                 onClick={() => {
                   setActiveTab('vendors');
@@ -710,6 +726,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
               </button>
               <button
                 type="button"
+                aria-label="Creative Ideas tab"
                 className={`plan-tab-btn ${activeTab === 'ideas' ? 'active' : ''}`}
                 onClick={() => {
                   setActiveTab('ideas');
@@ -720,6 +737,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
               </button>
               <button
                 type="button"
+                aria-label="Risks and Safeguards tab"
                 className={`plan-tab-btn ${activeTab === 'risks' ? 'active' : ''}`}
                 onClick={() => {
                   setActiveTab('risks');
@@ -777,23 +795,24 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                     <li
                       key={task.id}
                       className={`task-row ${task.completed ? 'completed' : ''}`}
-                      onClick={() => toggleTask(task.id)}
                       role="button"
                       tabIndex={0}
+                      aria-pressed={task.completed}
+                      onClick={() => toggleTask(task.id)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
                           toggleTask(task.id);
                         }
                       }}
-                      aria-pressed={task.completed}
                     >
                       <input
                         type="checkbox"
+                        id={`task-checkbox-${task.id}`}
+                        aria-label={`Mark task "${task.title}" as complete`}
                         checked={task.completed}
                         onChange={() => {}} // handled by parent onClick
                         className="task-checkbox"
-                        aria-label={`Mark task "${task.title}" as complete`}
                       />
                       <div className="task-content">
                         <span className="task-title">{task.title}</span>

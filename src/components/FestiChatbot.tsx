@@ -234,10 +234,11 @@ export const FestiChatbot: React.FC = () => {
         {!isOpen && (
           <div 
             className="festi-speech-bubble" 
-            onClick={() => setIsOpen(true)}
             role="button"
             tabIndex={0}
             aria-label="Open Festi AI chat"
+            onClick={() => setIsOpen(true)}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setIsOpen(true); }}
           >
             <span>Chat with Festi AI</span>
           </div>
@@ -333,6 +334,7 @@ export const FestiChatbot: React.FC = () => {
                 </div>
                 <button
                   type="button"
+                  aria-label="Run Live Drills"
                   className="btn btn-secondary"
                   style={{ padding: '6px 12px', fontSize: '12px', gap: '6px' }}
                   onClick={handleRunLiveDrills}
@@ -375,6 +377,7 @@ export const FestiChatbot: React.FC = () => {
                     </div>
                     <button
                       type="button"
+                      aria-label="Test this vector in chat"
                       className="drill-try-btn"
                       onClick={() => {
                         setShowDrillsModal(false);
@@ -395,6 +398,7 @@ export const FestiChatbot: React.FC = () => {
                   <button
                     key={sIdx}
                     type="button"
+                    aria-label={`Ask Festi: ${starter}`}
                     className="festi-starter-chip"
                     onClick={() => handleSendMessage(starter)}
                   >
@@ -630,6 +634,7 @@ export const FestiChatbot: React.FC = () => {
                       {(m.budgetArtifact || m.timelineArtifact) && (
                         <button
                           type="button"
+                          aria-label="Apply this plan to active workspace"
                           className="festi-apply-workspace-btn"
                           onClick={() => handleApplyPlanToWorkspace(m)}
                         >
@@ -644,6 +649,7 @@ export const FestiChatbot: React.FC = () => {
                             <button
                               key={idx}
                               type="button"
+                              aria-label={`Select suggestion: ${sug}`}
                               className="festi-suggestion-pill"
                               onClick={() => handleSendMessage(sug)}
                             >
@@ -688,17 +694,18 @@ export const FestiChatbot: React.FC = () => {
               >
                 <input
                   type="text"
+                  id="festi-event-query-input"
+                  aria-label="Event query input"
                   className="festi-input-field"
                   placeholder="Ask Festi: budgets, timelines, themes, vendors..."
                   value={inputVal}
                   onChange={(e) => setInputVal(e.target.value)}
-                  aria-label="Event query input"
                 />
                 <button
                   type="submit"
+                  aria-label="Send message to Festi"
                   className="festi-send-btn"
                   disabled={!inputVal.trim() || isTyping}
-                  aria-label="Send message to Festi"
                 >
                   <Send size={16} />
                 </button>

@@ -178,6 +178,7 @@ export const EventInsights: React.FC<EventInsightsProps> = ({ onStartPlanning, o
             <button
               type="button"
               className="btn btn-primary"
+              aria-label="Launch celebration planner"
               onClick={onStartPlanning}
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
             >
@@ -188,6 +189,7 @@ export const EventInsights: React.FC<EventInsightsProps> = ({ onStartPlanning, o
               <button
                 type="button"
                 className="btn btn-secondary"
+                aria-label="Watch auto simulation"
                 onClick={onExploreDemo}
               >
                 Watch Auto Simulation

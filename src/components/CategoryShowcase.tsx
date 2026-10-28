@@ -196,6 +196,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
             <button
               type="button"
               className="btn btn-primary active-category-cta"
+              aria-label={`Build ${currentItem.title} Blueprint`}
               onClick={() => handleLaunchPlan(currentItem.id)}
             >
               <span>Build {currentItem.title} Blueprint</span>
@@ -209,12 +210,13 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
             <div
               key={idx}
               className={`category-card ${idx === activeIndex ? 'active-highlight' : ''}`}
+              role="button"
+              tabIndex={0}
+              aria-label={`Select ${cat.title} and launch blueprint`}
               onClick={() => {
                 setActiveIndex(idx);
                 handleLaunchPlan(cat.id);
               }}
-              role="button"
-              tabIndex={0}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
@@ -222,7 +224,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
                   handleLaunchPlan(cat.id);
                 }
               }}
-              aria-label={`Select ${cat.title} and launch blueprint`}
             >
               <h4>{cat.title}</h4>
               <p>{cat.categoryDescription}</p>

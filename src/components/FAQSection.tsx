@@ -81,10 +81,10 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ soundEnabled }) => {
               <div
                 key={index}
                 className={`faq-card ${isOpen ? 'open' : ''}`}
-                onClick={() => handleToggle(index)}
                 role="button"
                 tabIndex={0}
                 aria-expanded={isOpen}
+                onClick={() => handleToggle(index)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();

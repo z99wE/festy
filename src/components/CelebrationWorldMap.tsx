@@ -914,34 +914,38 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
           <div className="globe-controls-pill-group">
             <button
               type="button"
+              aria-label={autoRotate ? 'Pause Auto-Spin' : 'Resume Auto-Spin'}
+              title={autoRotate ? 'Pause Auto-Spin' : 'Resume Auto-Spin'}
               className={`mode-toggle-btn ${autoRotate ? 'active' : ''}`}
               onClick={() => setAutoRotate(!autoRotate)}
-              title={autoRotate ? 'Pause Auto-Spin' : 'Resume Auto-Spin'}
             >
               <RotateCw size={13} className={autoRotate ? 'spin-icon' : ''} />
               <span>{autoRotate ? 'Spinning' : 'Paused'}</span>
             </button>
             <button
               type="button"
+              aria-label="Zoom In"
+              title="Zoom In"
               className="mode-toggle-btn"
               onClick={() => handleZoom('in')}
-              title="Zoom In"
             >
               <ZoomIn size={13} />
             </button>
             <button
               type="button"
+              aria-label="Zoom Out"
+              title="Zoom Out"
               className="mode-toggle-btn"
               onClick={() => handleZoom('out')}
-              title="Zoom Out"
             >
               <ZoomOut size={13} />
             </button>
             <button
               type="button"
+              aria-label="Reset View"
+              title="Reset View"
               className="mode-toggle-btn"
               onClick={handleResetRotation}
-              title="Reset View"
             >
               <span>Reset</span>
             </button>
@@ -955,6 +959,7 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
               <button
                 key={r}
                 type="button"
+                aria-label={`Filter by region: ${r}`}
                 className={`region-pill-btn ${selectedRegion === r ? 'active' : ''}`}
                 onClick={() => {
                   setSelectedRegion(r);
@@ -975,11 +980,12 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
             <Search size={14} className="search-icon" aria-hidden="true" />
             <input
               type="text"
+              id="celebration-search-input"
+              aria-label="Search celebration destinations"
               className="celebration-search-input"
               placeholder="Search festival, city, or country..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              aria-label="Search celebration destinations"
             />
           </div>
         </div>
@@ -1005,6 +1011,7 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
                   <button
                     key={label.id}
                     type="button"
+                    aria-label={`Select destination ${pinData?.name || label.id}`}
                     className={`globe-floating-pin-badge ${isSelected ? 'active-pin' : ''}`}
                     style={{
                       left: `${label.x}px`,
@@ -1099,6 +1106,7 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
             <div className="dossier-actions-row">
               <button
                 type="button"
+                aria-label="Plan this celebration"
                 className="btn btn-primary dossier-btn-primary"
                 onClick={handlePlanThisEvent}
               >
@@ -1108,9 +1116,10 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
 
               <button
                 type="button"
+                aria-label="Ask Festi AI about this event"
+                title="Ask Festi AI about this event"
                 className="btn btn-secondary dossier-btn-ai"
                 onClick={() => openFestiAIChat(activePin.aiPrompt)}
-                title="Ask Festi AI about this event"
               >
                 <MessageSquare size={15} aria-hidden="true" />
                 <span>Ask Festi AI</span>
@@ -1133,6 +1142,7 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
                 <button
                   key={pin.id}
                   type="button"
+                  aria-label={`Select destination ${pin.name}`}
                   className={`destination-chip ${isSelected ? 'active' : ''}`}
                   onClick={() => focusOnPin(pin)}
                 >

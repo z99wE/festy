@@ -154,6 +154,7 @@ export const LiveInteractiveDemo: React.FC = () => {
             {SCENARIOS.map((s, idx) => (
               <button
                 key={s.id}
+                aria-label={`Select scenario ${s.tag}`}
                 type="button"
                 role="tab"
                 aria-selected={activeScenarioIdx === idx}
@@ -254,6 +255,7 @@ export const LiveInteractiveDemo: React.FC = () => {
             <button
               type="button"
               className="btn btn-primary demo-jump-btn"
+              aria-label="Build your plan with custom numbers"
               onClick={handleJumpToPlanner}
             >
               <span>Build your plan with custom numbers</span>

@@ -230,6 +230,7 @@ export function App() {
                         <button
                           key={item.id}
                           type="button"
+                          aria-label={`Select ${item.name} celebration`}
                           className={`occasion-grid-btn ${isActive ? 'active' : ''}`}
                           onClick={() => handleQuickOccasionSelect(item.id)}
                           aria-pressed={isActive}
@@ -244,6 +245,7 @@ export function App() {
                   <div className="hero-actions">
                     <button
                       type="button"
+                      aria-label="Build your event plan"
                       className="btn btn-primary hero-btn-primary"
                       onClick={handleStartPlanning}
                     >
@@ -256,6 +258,7 @@ export function App() {
 
                     <button
                       type="button"
+                      aria-label="Explore Blueprints"
                       className="btn btn-secondary hero-btn-secondary"
                       onClick={() => {
                         setActiveTab('blueprints');
@@ -324,12 +327,19 @@ export function App() {
                   <div className="home-gateways-grid">
                     <div
                       className="home-gateway-card"
+                      role="button"
+                      tabIndex={0}
+                      aria-label="Browse Blueprints"
                       onClick={() => {
                         setActiveTab('blueprints');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      role="button"
-                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          setActiveTab('blueprints');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                      }}
                     >
                       <div>
                         <h3 className="gateway-card-title">Blueprints</h3>
@@ -344,12 +354,19 @@ export function App() {
 
                     <div
                       className="home-gateway-card"
+                      role="button"
+                      tabIndex={0}
+                      aria-label="Launch Planner"
                       onClick={() => {
                         setActiveTab('planner');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      role="button"
-                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          setActiveTab('planner');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                      }}
                     >
                       <div>
                         <h3 className="gateway-card-title">Planner</h3>
@@ -364,12 +381,19 @@ export function App() {
 
                     <div
                       className="home-gateway-card"
+                      role="button"
+                      tabIndex={0}
+                      aria-label="Calculate Valuation with Economics Abacus"
                       onClick={() => {
                         const el = document.getElementById('event-economics-abacus');
                         if (el) el.scrollIntoView({ behavior: 'smooth' });
                       }}
-                      role="button"
-                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          const el = document.getElementById('event-economics-abacus');
+                          if (el) el.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
                     >
                       <div>
                         <h3 className="gateway-card-title">Economics Abacus</h3>
@@ -384,12 +408,19 @@ export function App() {
 
                     <div
                       className="home-gateway-card"
+                      role="button"
+                      tabIndex={0}
+                      aria-label="View FAQ Hub"
                       onClick={() => {
                         setActiveTab('faq');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      role="button"
-                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          setActiveTab('faq');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                      }}
                     >
                       <div>
                         <h3 className="gateway-card-title">FAQ & Support</h3>
@@ -546,22 +577,22 @@ export function App() {
               <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>App Sections</h3>
               <ul className="footer-links">
                 <li>
-                  <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+                  <button type="button" aria-label="Navigate to Home" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
                     Home
                   </button>
                 </li>
                 <li>
-                  <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('blueprints'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+                  <button type="button" aria-label="Navigate to Blueprints" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('blueprints'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
                     Blueprints
                   </button>
                 </li>
                 <li>
-                  <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+                  <button type="button" aria-label="Navigate to Planner" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
                     Planner
                   </button>
                 </li>
                 <li>
-                  <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('faq'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+                  <button type="button" aria-label="Navigate to FAQ & Support" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('faq'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
                     FAQ & Support
                   </button>
                 </li>
@@ -572,22 +603,22 @@ export function App() {
               <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>Event types</h3>
               <ul className="footer-links">
                 <li>
-                  <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveOccasion('wedding'); setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+                  <button type="button" aria-label="Plan Weddings and Receptions" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveOccasion('wedding'); setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
                     Weddings and Receptions
                   </button>
                 </li>
                 <li>
-                  <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveOccasion('birthday'); setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+                  <button type="button" aria-label="Plan Milestone Birthdays" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveOccasion('birthday'); setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
                     Milestone Birthdays
                   </button>
                 </li>
                 <li>
-                  <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveOccasion('festival'); setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+                  <button type="button" aria-label="Plan Music Festivals & Carnivals" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveOccasion('festival'); setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
                     Music Festivals & Carnivals
                   </button>
                 </li>
                 <li>
-                  <button type="button" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveOccasion('product_launch'); setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+                  <button type="button" aria-label="Plan Tech Product Launches" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveOccasion('product_launch'); setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
                     Tech Product Launches
                   </button>
                 </li>
