@@ -39,7 +39,6 @@ export interface WorldCelebrationPin {
   lon: number;
   color: string;
   aiPrompt: string;
-  image?: string;
 }
 
 export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
@@ -66,7 +65,6 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     lon: -43.1,
     color: '#FF5E1E',
     aiPrompt: 'Plan a vibrant Rio Carnival celebration with Brazilian churrasco catering, samba band timelines, and costume staging lounges.',
-    image: '/festivals/rio-carnival.webp',
   },
   {
     id: 'diwali_delhi',
@@ -91,7 +89,6 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     lon: 77.2,
     color: '#F59E0B',
     aiPrompt: 'Generate a royal Diwali gala blueprint with courtyard lighting layouts, 5-course artisanal vegetarian menus, and sparkler safety protocols.',
-    image: '/festivals/holi-festival.webp',
   },
   {
     id: 'hanami_kyoto',
@@ -116,7 +113,6 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     lon: 135.7,
     color: '#EC4899',
     aiPrompt: 'Design a serene Hanami cherry blossom event with illuminated night Sakura trees, sake tasting flights, and zero-waste bento catering.',
-    image: '/festivals/kyoto-lanterns.webp',
   },
   {
     id: 'venice_carnival',
@@ -141,7 +137,6 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     lon: 12.3,
     color: '#5B42F3',
     aiPrompt: 'Architect an authentic Venetian masquerade ball inside a historic palazzo with chamber music, wine pairings, and gondola arrival schedules.',
-    image: '/festivals/venice-masquerade.webp',
   },
   {
     id: 'midsummer_uk',
@@ -358,7 +353,6 @@ export const WORLD_CELEBRATION_PINS: WorldCelebrationPin[] = [
     lon: -8.0,
     color: '#EAB308',
     aiPrompt: 'Design an opulent Marrakech riad anniversary gala with Berber acoustic musicians, traditional Moroccan banquets, and desert stargazing logistics.',
-    image: '/festivals/holi-festival.webp',
   },
 ];
 
@@ -395,7 +389,7 @@ const CONTINENT_PATHS = [
   "M 901.3,347.2 L 917.3,355.6 L 912,377.8 L 896,366.7 L 901.3,347.2 Z",
 ];
 
-// Generate procedural equirectangular texture for Three.js Sphere
+// Generate procedural equirectangular texture with brand mascot colors (zero black!)
 function createProceduralGlobeTexture(): THREE.CanvasTexture {
   const canvas = document.createElement('canvas');
   canvas.width = 2048;
@@ -403,17 +397,19 @@ function createProceduralGlobeTexture(): THREE.CanvasTexture {
   const ctx = canvas.getContext('2d');
   if (!ctx) return new THREE.CanvasTexture(canvas);
 
-  // 1. Deep luxury warm espresso ocean
+  // 1. Warm plush apricot & peach cream base (Zero black, branded warmth)
   const oceanGrad = ctx.createLinearGradient(0, 0, 0, 1024);
-  oceanGrad.addColorStop(0, '#120A06');
-  oceanGrad.addColorStop(0.5, '#1E1008');
-  oceanGrad.addColorStop(1, '#120A06');
+  oceanGrad.addColorStop(0, '#FFEBDD');
+  oceanGrad.addColorStop(0.3, '#FFF5ED');
+  oceanGrad.addColorStop(0.5, '#FFFDFB');
+  oceanGrad.addColorStop(0.7, '#FFF5ED');
+  oceanGrad.addColorStop(1, '#FFEBDD');
   ctx.fillStyle = oceanGrad;
   ctx.fillRect(0, 0, 2048, 1024);
 
-  // 2. Subtle latitude & longitude graticules
-  ctx.strokeStyle = 'rgba(245, 158, 11, 0.12)';
-  ctx.lineWidth = 1;
+  // 2. Graticules / latitude & longitude grid lines in delicate soft coral
+  ctx.strokeStyle = 'rgba(255, 94, 30, 0.12)';
+  ctx.lineWidth = 1.2;
 
   // Latitudes
   for (let lat = 0; lat <= 1024; lat += 64) {
@@ -430,31 +426,31 @@ function createProceduralGlobeTexture(): THREE.CanvasTexture {
     ctx.stroke();
   }
 
-  // Equator highlight
-  ctx.strokeStyle = 'rgba(255, 158, 48, 0.28)';
-  ctx.lineWidth = 1.5;
+  // Equator highlight in vibrant festive brand orange
+  ctx.strokeStyle = 'rgba(255, 94, 30, 0.32)';
+  ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(0, 512);
   ctx.lineTo(2048, 512);
   ctx.stroke();
 
-  // 3. Draw continents with warm chocolate & amber coastline
+  // 3. Draw continents in plush mascot terracotta orange & sunset coral
   ctx.save();
   ctx.scale(2048 / 960, 1024 / 500);
 
   CONTINENT_PATHS.forEach((svgD) => {
     try {
       const p = new Path2D(svgD);
-      // Outer subtle land glow
-      ctx.shadowColor = 'rgba(255, 110, 40, 0.35)';
-      ctx.shadowBlur = 8;
-      ctx.fillStyle = '#3A1F13';
+      // Soft plush shadow
+      ctx.shadowColor = 'rgba(255, 94, 30, 0.25)';
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = '#FF6B4A';
       ctx.fill(p);
 
-      // Continent coast outline
+      // Continent coast outline in bright peach gold
       ctx.shadowBlur = 0;
-      ctx.strokeStyle = '#8E5A3C';
-      ctx.lineWidth = 1.8;
+      ctx.strokeStyle = '#FFA756';
+      ctx.lineWidth = 2.2;
       ctx.stroke(p);
     } catch {
       // Fallback
@@ -463,13 +459,13 @@ function createProceduralGlobeTexture(): THREE.CanvasTexture {
 
   ctx.restore();
 
-  // 4. Subtle starburst clusters at cultural hubs
-  ctx.fillStyle = 'rgba(255, 230, 180, 0.75)';
-  for (let i = 0; i < 70; i++) {
+  // 4. Sparkling festival starburst points across celebration capitals
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+  for (let i = 0; i < 90; i++) {
     const rx = Math.random() * 2048;
     const ry = Math.random() * 1024;
     ctx.beginPath();
-    ctx.arc(rx, ry, Math.random() * 1.5 + 0.5, 0, Math.PI * 2);
+    ctx.arc(rx, ry, Math.random() * 1.8 + 0.8, 0, Math.PI * 2);
     ctx.fill();
   }
 
@@ -600,15 +596,15 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
     container.appendChild(renderer.domElement);
 
     // 2. Lighting
-    const ambientLight = new THREE.AmbientLight(0xfff7ed, 2.2);
+    const ambientLight = new THREE.AmbientLight(0xfff8f0, 2.6);
     scene.add(ambientLight);
 
-    const sunLight = new THREE.DirectionalLight(0xffebd2, 2.8);
-    sunLight.position.set(180, 120, 200);
+    const sunLight = new THREE.DirectionalLight(0xffecd5, 2.6);
+    sunLight.position.set(160, 120, 180);
     scene.add(sunLight);
 
-    const rimLight = new THREE.DirectionalLight(0xff8c00, 1.4);
-    rimLight.position.set(-180, -60, -100);
+    const rimLight = new THREE.DirectionalLight(0xff7a45, 1.5);
+    rimLight.position.set(-160, -60, -100);
     scene.add(rimLight);
 
     // 3. Globe Group
@@ -621,20 +617,25 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
     const sphereGeo = new THREE.SphereGeometry(globeRadius, 64, 64);
     const globeTexture = createProceduralGlobeTexture();
 
-    const sphereMat = new THREE.MeshStandardMaterial({
+    const sphereMat = new THREE.MeshPhysicalMaterial({
       map: globeTexture,
-      roughness: 0.65,
-      metalness: 0.12,
+      roughness: 0.32,
+      metalness: 0.04,
+      clearcoat: 0.75,
+      clearcoatRoughness: 0.18,
+      transmission: 0.14,
+      transparent: true,
+      opacity: 0.96,
     });
     const globeMesh = new THREE.Mesh(sphereGeo, sphereMat);
     globeGroup.add(globeMesh);
 
-    // Atmosphere Glow Outer Shell (radius 78)
+    // Atmosphere Glow Outer Shell (radius 78) in warm brand sunset peach
     const atmosGeo = new THREE.SphereGeometry(globeRadius + 3, 32, 32);
     const atmosMat = new THREE.MeshBasicMaterial({
-      color: 0xffaa44,
+      color: 0xff7a45,
       transparent: true,
-      opacity: 0.14,
+      opacity: 0.18,
       side: THREE.BackSide,
     });
     const atmosMesh = new THREE.Mesh(atmosGeo, atmosMat);
@@ -1015,19 +1016,6 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
 
           {/* RIGHT: REGIONAL CELEBRATION DOSSIER CARD */}
           <div className="celebration-dossier-card">
-            {activePin.image && (
-              <div className="dossier-image-hero">
-                <img
-                  src={activePin.image}
-                  alt={`${activePin.name} in ${activePin.location}`}
-                  className="dossier-cover-photo"
-                  loading="lazy"
-                />
-                <div className="dossier-image-overlay">
-                  <span className="dossier-badge-floating">{activePin.categoryLabel}</span>
-                </div>
-              </div>
-            )}
 
             <div className="dossier-header-row">
               <span className="dossier-category-pill">{activePin.categoryLabel}</span>
