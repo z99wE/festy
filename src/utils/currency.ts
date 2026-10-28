@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 /**
  * Currency & Region Internationalization Engine for Festiya
  * Real-time, decimal-accurate currency conversion, live market rate fetching,
@@ -18,7 +20,7 @@ export const SUPPORTED_CURRENCIES: CurrencyConfig[] = [
   { code: 'USD', symbol: '$', name: 'US Dollar', flag: '🇺🇸', exchangeRateFromUSD: 1.0, region: 'North America' },
   { code: 'EUR', symbol: '€', name: 'Euro', flag: '🇪🇺', exchangeRateFromUSD: 0.8975, region: 'Europe' },
   { code: 'GBP', symbol: '£', name: 'British Pound', flag: '🇬🇧', exchangeRateFromUSD: 0.7511, region: 'United Kingdom' },
-  { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳', exchangeRateFromUSD: 95.199, region: 'South Asia' },
+  { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳', exchangeRateFromUSD: 95.1993, region: 'South Asia' },
   { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', flag: '🇨🇦', exchangeRateFromUSD: 1.4041, region: 'Canada' },
   { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', flag: '🇦🇺', exchangeRateFromUSD: 1.4226, region: 'Australia' },
   { code: 'JPY', symbol: '¥', name: 'Japanese Yen', flag: '🇯🇵', exchangeRateFromUSD: 157.893, region: 'Japan' },
@@ -27,12 +29,12 @@ export const SUPPORTED_CURRENCIES: CurrencyConfig[] = [
   { code: 'CHF', symbol: 'CHF ', name: 'Swiss Franc', flag: '🇨🇭', exchangeRateFromUSD: 0.8288, region: 'Switzerland' },
 ];
 
-// In-memory rate cache initialized with baseline rates
+// In-memory rate cache initialized with verified baseline rates
 const liveRatesCache: Record<string, number> = {
   USD: 1.0,
   EUR: 0.8975,
   GBP: 0.7511,
-  INR: 95.199,
+  INR: 95.1993,
   CAD: 1.4041,
   AUD: 1.4226,
   JPY: 157.893,
@@ -41,8 +43,8 @@ const liveRatesCache: Record<string, number> = {
   CHF: 0.8288,
 };
 
-const CACHE_KEY = 'festiya_live_rates_v1';
-const CACHE_TTL_MS = 12 * 60 * 60 * 1000; // 12 hours
+const CACHE_KEY = 'festiya_forex_rates_2026_v4';
+const CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
 
 /**
  * Fetch and cache live foreign exchange rates from open endpoint
@@ -51,10 +53,20 @@ export async function refreshLiveRates(): Promise<Record<string, number>> {
   if (typeof window === 'undefined') return liveRatesCache;
 
   try {
+    // Purge any stale legacy caches that had obsolete rates
+    localStorage.removeItem('festiya_live_rates_v1');
+    localStorage.removeItem('festiya_live_rates_v2');
+
     const cached = localStorage.getItem(CACHE_KEY);
     if (cached) {
       const parsed = JSON.parse(cached);
-      if (Date.now() - parsed.timestamp < CACHE_TTL_MS && parsed.rates) {
+      // Validate cached INR rate is realistic (>= 90) before using
+      if (
+        Date.now() - parsed.timestamp < CACHE_TTL_MS &&
+        parsed.rates &&
+        typeof parsed.rates.INR === 'number' &&
+        parsed.rates.INR >= 90
+      ) {
         Object.assign(liveRatesCache, parsed.rates);
         return liveRatesCache;
       }
@@ -73,6 +85,7 @@ export async function refreshLiveRates(): Promise<Record<string, number>> {
         CACHE_KEY,
         JSON.stringify({ timestamp: Date.now(), rates: liveRatesCache })
       );
+      window.dispatchEvent(new CustomEvent('festiya-rates-updated', { detail: liveRatesCache }));
     }
   } catch (err) {
     console.warn('[Festiya Currency] Fallback to verified 2026 baseline rates:', err);
@@ -80,11 +93,31 @@ export async function refreshLiveRates(): Promise<Record<string, number>> {
   return liveRatesCache;
 }
 
+// React Hook for live reactive currency rates across components
+export function useLiveRates(): Record<string, number> {
+  const [rates, setRates] = useState<Record<string, number>>(() => ({ ...liveRatesCache }));
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setRates({ ...liveRatesCache });
+    };
+
+    window.addEventListener('festiya-rates-updated', handleUpdate);
+    refreshLiveRates().then(handleUpdate);
+
+    return () => {
+      window.removeEventListener('festiya-rates-updated', handleUpdate);
+    };
+  }, []);
+
+  return rates;
+}
+
 // Auto-trigger background rate refresh in browser environments
 if (typeof window !== 'undefined') {
   setTimeout(() => {
     refreshLiveRates().catch(() => {});
-  }, 100);
+  }, 50);
 }
 
 /**

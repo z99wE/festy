@@ -14,7 +14,7 @@ import {
   Info,
   CheckCircle2
 } from 'lucide-react';
-import { SUPPORTED_CURRENCIES, getExchangeRate } from '../utils/currency';
+import { SUPPORTED_CURRENCIES, getExchangeRate, useLiveRates } from '../utils/currency';
 
 export interface RegionalMarketProfile {
   id: string;
@@ -241,6 +241,8 @@ export const EventEconomicsAbacus: React.FC<{
   const [displayCurrencyCode, setDisplayCurrencyCode] = useState<string>('USD');
   const [showAppliedToast, setShowAppliedToast] = useState(false);
 
+  const liveRates = useLiveRates();
+
   // Pillar Abacus Bead sliders (1 = Lean/Pragmatic, 2 = Standard, 3 = Elevated, 4 = Premium, 5 = Extravagant)
   const [pillarWeights, setPillarWeights] = useState<Record<string, number>>({
     venue: 3,
@@ -307,7 +309,7 @@ export const EventEconomicsAbacus: React.FC<{
   // Convert to DISPLAY currency
   const conversionRate = useMemo(() => {
     return getExchangeRate(currentMarket.baseCurrencyCode, displayCurrencyCode);
-  }, [currentMarket.baseCurrencyCode, displayCurrencyCode]);
+  }, [currentMarket.baseCurrencyCode, displayCurrencyCode, liveRates]);
 
   const displayCalculations = useMemo(() => {
     const rate = conversionRate;
@@ -461,7 +463,9 @@ export const EventEconomicsAbacus: React.FC<{
               <span className="abacus-rate-indicator">
                 {currentMarket.baseCurrencyCode !== displayCurrencyCode ? (
                   <span>
-                    1 {currentMarket.baseCurrencyCode} ≈ {(conversionRate).toFixed(3)} {displayCurrencyCode}
+                    {conversionRate >= 1
+                      ? `1 ${currentMarket.baseCurrencyCode} ≈ ${displayCurrencyConfig.symbol}${conversionRate.toFixed(2)} ${displayCurrencyCode}`
+                      : `1 ${displayCurrencyCode} ≈ ${currentMarket.baseCurrencySymbol}${(1 / conversionRate).toFixed(2)} ${currentMarket.baseCurrencyCode}`}
                   </span>
                 ) : (
                   <span>Local Base Match</span>

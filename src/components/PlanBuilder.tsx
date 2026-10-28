@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 
 import { playPopSound, playCelebrationSound } from '../utils/audio';
-import { getCurrencyBudgetScale, convertCurrency } from '../utils/currency';
+import { getCurrencyBudgetScale, convertCurrency, useLiveRates } from '../utils/currency';
 import { type EventPlanningContext } from '../data/globalCelebrations';
 import { aiOrchestrator } from '../services/aiOrchestrator';
 import { openFestiAIChat } from './FestiChatbot';
@@ -70,7 +70,11 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
   const budgetSliderId = useId();
   const currencySelectId = useId();
 
-  const budgetScale = useMemo(() => getCurrencyBudgetScale(currency), [currency]);
+  const liveRates = useLiveRates();
+  const budgetScale = useMemo(() => {
+    void liveRates;
+    return getCurrencyBudgetScale(currency);
+  }, [currency, liveRates]);
 
   const handleCurrencyChange = (newCurrency: string) => {
     if (newCurrency === currency) return;

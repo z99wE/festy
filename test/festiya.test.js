@@ -12,14 +12,14 @@ describe('Festiya Core Operations & Architecture', () => {
   test('Currency conversion formula and rounding', () => {
     const rates = {
       USD: 1,
-      EUR: 0.92,
-      GBP: 0.79,
-      INR: 83.12,
-      JPY: 155.4
+      EUR: 0.8975,
+      GBP: 0.7511,
+      INR: 95.20,
+      JPY: 157.89
     };
     const convert = (amount, fromRate, toRate) => Math.round((amount / fromRate) * toRate);
     const converted = convert(1000, rates.USD, rates.INR);
-    assert.strictEqual(converted, 83120);
+    assert.strictEqual(converted, 95200);
     assert.ok(converted > 0);
   });
 
