@@ -7,7 +7,6 @@ import {
   MessageSquare,
   Users,
   MapPin,
-  Compass,
   RotateCw,
   ZoomIn,
   ZoomOut
@@ -903,10 +902,6 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
         {/* SECTION HEADER */}
         <div className="celebration-world-header">
           <div>
-            <div className="celebration-badge-pill">
-              <Compass size={13} aria-hidden="true" />
-              <span>Interactive 3D Celebration Globe</span>
-            </div>
             <h2 id="world-globe-title" className="celebration-world-title">
               Global Celebrations &amp; Cultural Long Weekends
             </h2>
