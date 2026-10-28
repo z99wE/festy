@@ -433,31 +433,13 @@ export function App() {
           </div>
         )}
 
-        {/* Final CTA Section (on all views for conversion continuity) */}
-        <section className="final-cta-section" aria-label="Ready to plan your celebration">
-          <div className="content-wrapper">
-            <div className="final-cta-card">
-              <h2 className="final-cta-title">Launch Your Commercial-Grade Celebration Plan in Under 90 Seconds</h2>
-              <p className="final-cta-subtitle">
-                Join couples, hosts, and event producers who replaced chaotic spreadsheets with operational calm. Generate your complete 3-tier budget and milestone checklist in under 90 seconds.
-              </p>
-              <button
-                type="button"
-                className="btn btn-primary"
-                style={{ padding: '10px 28px', fontSize: '16px' }}
-                onClick={handleStartPlanning}
-              >
-                <span>Build your event plan</span>
-              </button>
-            </div>
-          </div>
-        </section>
       </main>
 
-      {/* Global Celebrations 3D Parallax & Perspective Footer Showcase */}
-      <LazyMount placeholderHeight="420px" rootMargin="300px">
+      {/* Global Celebrations 3D Parallax & Perspective Footer Showcase with Floating CTA Box */}
+      <LazyMount placeholderHeight="580px" rootMargin="300px">
         <Suspense fallback={null}>
           <GlobalFestivalFooterShowcase
+            onStartPlanning={handleStartPlanning}
             onSelectFestival={(occ) => {
               setActiveOccasion(occ);
               setActiveTab('planner');

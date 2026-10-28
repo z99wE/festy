@@ -53,32 +53,25 @@ const FESTIVAL_PHOTOS = [
 ];
 
 interface GlobalFestivalFooterShowcaseProps {
+  onStartPlanning?: () => void;
   onSelectFestival?: (category: string, name: string) => void;
 }
 
-export const GlobalFestivalFooterShowcase: React.FC<GlobalFestivalFooterShowcaseProps> = () => {
+export const GlobalFestivalFooterShowcase: React.FC<GlobalFestivalFooterShowcaseProps> = ({
+  onStartPlanning,
+}) => {
   return (
     <section
       className="footer-grid-motion-section"
-      aria-label="Global celebrations photo gallery"
+      aria-label="Ready to plan your celebration"
       style={{
         position: 'relative',
         width: '100%',
         overflow: 'hidden',
         background: 'var(--bg-canvas, #fbf8f3)',
-        paddingTop: '32px',
-        paddingBottom: '32px',
       }}
     >
-      <div
-        className="footer-grid-motion-container"
-        style={{
-          position: 'relative',
-          width: '100%',
-          height: '520px',
-          overflow: 'hidden',
-        }}
-      >
+      <div className="footer-grid-motion-container">
         <GridMotion
           items={FESTIVAL_PHOTOS}
           rows={4}
@@ -91,12 +84,36 @@ export const GlobalFestivalFooterShowcase: React.FC<GlobalFestivalFooterShowcase
           direction="alternate"
           parallax={0.5}
           spotlight={0.65}
-          dim={0.25}
-          fade={0.5}
+          dim={0.28}
+          fade={0.55}
           grayscale={false}
           theme="light"
           tileColor="var(--bg-card, #ffffff)"
         />
+
+        {/* Floating CTA Box Over The Carousel */}
+        <div className="footer-floating-cta-overlay">
+          <div className="final-cta-card footer-floating-cta-card">
+            <h2 className="final-cta-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)', fontWeight: 850 }}>
+              Launch Your Commercial-Grade Celebration Plan in Under 90 Seconds
+            </h2>
+            <p className="final-cta-subtitle">
+              Join couples, hosts, and event producers who replaced chaotic spreadsheets with operational calm. Generate your complete 3-tier budget and milestone checklist in under 90 seconds.
+            </p>
+            <button
+              type="button"
+              className="btn btn-primary"
+              style={{ padding: '12px 32px', fontSize: '16px' }}
+              onClick={onStartPlanning}
+            >
+              <span>Build your event plan</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );
