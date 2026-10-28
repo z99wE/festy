@@ -268,24 +268,6 @@ export function App() {
                       <span>Explore Blueprints</span>
                     </button>
                   </div>
-
-                  {/* 7. TRUST PROOF LINE */}
-                  <div className="hero-proof-line">
-                    <div className="proof-pill">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                      <span>Multi-Agent Architecture</span>
-                    </div>
-                    <span className="proof-dot" aria-hidden="true">•</span>
-                    <div className="proof-pill">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5B42F3" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-                      <span>Decimal-Accurate Budgeting</span>
-                    </div>
-                    <span className="proof-dot" aria-hidden="true">•</span>
-                    <div className="proof-pill">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                      <span>Client-Side Private</span>
-                    </div>
-                  </div>
                 </div>
 
                 {/* CELEBRATION WORLD MAP & 3D GLOBE HUB (Joyful celebratory world, zero confetti) */}
