@@ -9,7 +9,8 @@ import {
   MultiAgentEngine, 
   type AgentBudgetArtifact, 
   type AgentTimelineArtifact, 
-  type AgentContractArtifact 
+  type AgentContractArtifact,
+  type AgentGameTheoryArtifact
 } from '../services/multiAgentEngine';
 
 // The 5 Mascot frames requested by the user (Ultra-fast WebP format)
@@ -35,6 +36,7 @@ export interface ChatMessage {
   budgetArtifact?: AgentBudgetArtifact;
   timelineArtifact?: AgentTimelineArtifact;
   contractArtifact?: AgentContractArtifact;
+  gameTheoryArtifact?: AgentGameTheoryArtifact;
   occasionId?: string;
   occasionTitle?: string;
 }
@@ -179,6 +181,7 @@ export const FestiChatbot: React.FC = () => {
         budgetArtifact: plan.budgetArtifact,
         timelineArtifact: plan.timelineArtifact,
         contractArtifact: plan.contractArtifact,
+        gameTheoryArtifact: plan.gameTheoryArtifact,
         occasionId: plan.occasionId,
         occasionTitle: plan.occasionTitle,
         suggestions: res.threatNeutralized
@@ -190,7 +193,7 @@ export const FestiChatbot: React.FC = () => {
           : [
               "3-Tier budget breakdown for 80 guests",
               "Minute-by-minute day-of schedule",
-              "Hidden vendor fee questions",
+              "Game-theoretic vendor bargaining strategy",
             ],
       };
       setMessages((prev) => [...prev, festiMsg]);
@@ -206,6 +209,7 @@ export const FestiChatbot: React.FC = () => {
         budgetArtifact: plan.budgetArtifact,
         timelineArtifact: plan.timelineArtifact,
         contractArtifact: plan.contractArtifact,
+        gameTheoryArtifact: plan.gameTheoryArtifact,
         occasionId: plan.occasionId,
         occasionTitle: plan.occasionTitle,
       };
@@ -521,6 +525,69 @@ export const FestiChatbot: React.FC = () => {
                               </div>
                             ))}
                           </div>
+                        </div>
+                      )}
+
+                      {/* Game-Theoretic Bargaining & Risk Model Artifact */}
+                      {m.gameTheoryArtifact && (
+                        <div className="festi-artifact-card">
+                          <div className="festi-artifact-header">
+                            <span className="festi-artifact-label">Game-Theoretic Bargaining Protocol</span>
+                            <span className="festi-artifact-meta">Nash Equilibrium & Savage Minimax</span>
+                          </div>
+
+                          <div className="festi-gt-batna-card">
+                            <div className="festi-gt-anchor-row">
+                              <span className="festi-gt-kicker">BATNA Walk-Away Anchor:</span>
+                              <p className="festi-gt-text">{m.gameTheoryArtifact.batnaAnchor}</p>
+                            </div>
+                            <div className="festi-gt-anchor-row">
+                              <span className="festi-gt-kicker">Reservation Ceiling:</span>
+                              <p className="festi-gt-text">{m.gameTheoryArtifact.reservationCeiling}</p>
+                            </div>
+                          </div>
+
+                          {m.gameTheoryArtifact.paretoTradeoffs.length > 0 && (
+                            <div className="festi-gt-section">
+                              <span className="festi-gt-section-title">Pareto-Optimal Value Exchange</span>
+                              <div className="festi-gt-trades-list">
+                                {m.gameTheoryArtifact.paretoTradeoffs.map((trade, tIdx) => (
+                                  <div key={tIdx} className="festi-gt-trade-node">
+                                    <div className="festi-gt-trade-cols">
+                                      <div className="festi-gt-col">
+                                        <span className="festi-gt-col-label">Concession Given (Low Host Cost):</span>
+                                        <span className="festi-gt-col-value">{trade.concessionGiven}</span>
+                                      </div>
+                                      <div className="festi-gt-col highlight">
+                                        <span className="festi-gt-col-label">Extracted Gain (High Host Value):</span>
+                                        <span className="festi-gt-col-value">{trade.concessionExtracted}</span>
+                                      </div>
+                                    </div>
+                                    <div className="festi-gt-payoff">
+                                      <span>Payoff Logic: {trade.payoffRationale}</span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {m.gameTheoryArtifact.minimaxScenarios.length > 0 && (
+                            <div className="festi-gt-section">
+                              <span className="festi-gt-section-title">Minimax Regret Risk Mitigation</span>
+                              <div className="festi-gt-scenarios-list">
+                                {m.gameTheoryArtifact.minimaxScenarios.map((sc, scIdx) => (
+                                  <div key={scIdx} className="festi-gt-scenario-node">
+                                    <div className="festi-gt-scenario-header">
+                                      <span className="festi-gt-scenario-name">{sc.riskScenario}</span>
+                                      <span className="festi-gt-scenario-saving">Protected Margin: {sc.estimatedProtectedMargin}</span>
+                                    </div>
+                                    <p className="festi-gt-scenario-strategy">{sc.minimaxOptimalStrategy}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       )}
 

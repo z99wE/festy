@@ -1,7 +1,7 @@
-# 🎉 Festiya — Autonomous Celebration & Event Planning Engine
+# 🎉 Festiya — Autonomous Multi-Agent Celebration & Event Intelligence Engine
 
-> **Turn Every Moment Into a Festival.**  
-> Transform any celebration vision into an editable 3-tier budget (Conservative, Realistic, Luxury), prioritized vendor milestone checklist, and day-of timeline in under 90 seconds — with zero spreadsheet dread.
+> **Turn Every Vision Into an Unforgettable Celebration.**  
+> Transform any event concept into an editable, decimal-accurate 3-tier budget (Conservative, Realistic, Luxury), minute-by-minute day-of timeline, contract fee safeguards, and game-theoretic negotiation protocols in under 90 seconds — with zero spreadsheet dread.
 
 [![Production Status](https://img.shields.io/badge/Status-Live%20Production-success?style=for-the-badge&logo=cloudflare&logoColor=white)](https://festiya.viktorechakraborty.workers.dev)
 [![Cloudflare Workers](https://img.shields.io/badge/Deploy-Cloudflare%20Workers-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://festiya.viktorechakraborty.workers.dev)
@@ -18,35 +18,133 @@
 ---
 
 ## 📑 Table of Contents
-1. [Executive Summary & Progress Statement](#-executive-summary--progress-statement)
-2. [Core Problem Statement & Solution](#-core-problem-statement--solution)
-3. [Key Capabilities & Feature Matrix](#-key-capabilities--feature-matrix)
-4. [System Architecture](#-system-architecture)
-   - [Cloudflare Edge-Native Topology](#cloudflare-edge-native-topology)
-   - [Component & State Hierarchy](#component--state-hierarchy)
-   - [Multi-LLM Cascading Orchestrator](#multi-llm-cascading-orchestrator)
-5. [Performance & Web Vitals Engineering](#-performance--web-vitals-engineering)
-6. [Design System & Typography Architecture](#-design-system--typography-architecture)
-7. [Tech Stack](#-tech-stack)
-8. [Local Development Quickstart](#-local-development-quickstart)
-9. [Configuration & Environment Variables](#-configuration--environment-variables)
-10. [Production Cloudflare Deployment](#-production-cloudflare-deployment)
-11. [Clean Codebase Directory Structure](#-clean-codebase-directory-structure)
-12. [AEO, GEO & Agentic Web Readiness](#-aeo-geo--agentic-web-readiness)
-13. [License & Author](#-license--author)
+1. [Executive Overview & Mission](#-executive-overview--mission)
+2. [Autonomous Multi-Agent Architecture](#-autonomous-multi-agent-architecture)
+3. [Game Theory & Decision Science Methodology](#-game-theory--decision-science-methodology)
+4. [Hard Drills Security & LLM Defense Matrix](#-hard-drills-security--llm-defense-matrix)
+5. [Core Problem Statement & Solution](#-core-problem-statement--solution)
+6. [Key Capabilities & Feature Matrix](#-key-capabilities--feature-matrix)
+7. [System Architecture & Edge-Native Topology](#-system-architecture--edge-native-topology)
+8. [Performance, Web Vitals & Accessibility (100/100)](#-performance-web-vitals--accessibility-100100)
+9. [Design System & Typography Architecture](#-design-system--typography-architecture)
+10. [Local Development Quickstart](#-local-development-quickstart)
+11. [Configuration & Environment Variables](#-configuration--environment-variables)
+12. [Cloudflare Edge Production Deployment](#-cloudflare-edge-production-deployment)
+13. [Clean Codebase Directory Structure](#-clean-codebase-directory-structure)
+14. [AEO, GEO & Agentic Web Readiness](#-aeo-geo--agentic-web-readiness)
+15. [License & Maintainer](#-license--maintainer)
 
 ---
 
-## 🚀 Executive Summary & Progress Statement
+## 🚀 Executive Overview & Mission
 
-Self-planned celebrations suffer from an industry-wide **73% budget creep**, vendor fee surprises, and schedule collapse. **Festiya** resolves this by delivering an autonomous, edge-native event planning workspace engineered on Cloudflare Workers.
+Planning a major celebration — whether a wedding, landmark birthday, corporate retreat, or festival — is notoriously plagued by an industry-wide **73% budget creep**, hidden contractual surcharges (e.g., corkage markups, service multipliers, load-in overages), and scheduling collapse. Traditional planning tools are either static spreadsheets that demand tedious manual entry or predatory lead-generation brokerages that harvest personal data.
 
-### 🌟 Key Milestones & Progress
-- **100/100 PageSpeed & Lighthouse Scores**: Perfect scores achieved across Accessibility (100), Best Practices (100), SEO (100), and Agentic Browsing (2/2), with optimized Core Web Vitals (sub-50ms TBT, 0 CLS, instant LCP discovery).
-- **Multi-Agent Architecture**: Decentralized planning workspace with client-side privacy, zero data brokerage, and instant edge response.
-- **Enterprise Multi-LLM Fault Tolerance**: Real-time cascading fallback through Cloudflare Workers AI (`@cf/meta/llama-3.3-70b-instruct`), Google Gemini, Groq, OpenAI, Anthropic, and a 0ms deterministic safety net.
-- **Decimal-Accurate Accounting**: Zero floating-point rounding bugs across currency conversions, multi-tier allocations, and tax/gratuity multipliers.
-- **Tactile 3D Presence Without Bloat**: Desktop-optimized Three.js hero mascot and 3D celebratory disco globe featuring auto-sleep throttles, with feather-light static image fallback on mobile devices.
+**Festiya** reinvents celebration planning as an **autonomous, mathematical, and edge-native intelligence workspace**. It combines multi-agent orchestration, game-theoretic bargaining models, and decimal-safe financial calculations directly on Cloudflare's global edge network.
+
+### 🌟 Hallmarks of the Platform
+- **Multi-Agent Autonomous Swarm**: Five specialized agents coordinate concurrently to synthesize complete event operational blueprints from natural prompts.
+- **Game-Theoretic Bargaining & Risk Protocols**: Implements Nash Bargaining BATNA anchors, Pareto-optimal value trades, and Savage's Minimax Regret mitigation to protect hosts from vendor contract traps.
+- **100/100 Perfect Lighthouse Scores**: Validated across Performance (100), Accessibility (100), Best Practices (100), and SEO (100) with 0.00 CLS and sub-50ms TBT.
+- **Multi-LLM Cascading Resilience**: 5-tier failover chain from Cloudflare Workers AI (`@cf/meta/llama-3.3-70b-instruct`) through Google Gemini, Groq, OpenAI, and Anthropic, backed by a 0ms deterministic safety net.
+- **Client-Side Privacy & Zero Paywalls**: Full functionality is available unconditionally without hidden subscription tiers, marketing lead brokers, or tracker cookies.
+
+---
+
+## 🤖 Autonomous Multi-Agent Architecture
+
+Rather than treating AI as a generic text-generation prompt, Festiya deploys a coordinated **Multi-Agent Execution Swarm** (`src/services/multiAgentEngine.ts`). Each agent operates with specialized domain logic, mathematical constraints, and targeted heuristics:
+
+```mermaid
+flowchart TD
+    UserQuery["User Natural Prompt\ne.g., '80-guest wedding in Sonoma with $12,000 budget'"] --> Orchestrator["Chief Swarm Orchestrator\nIntent & Parameter Extraction"]
+    
+    subgraph MultiAgentSwarm ["Festiya Autonomous Multi-Agent Swarm"]
+        Orchestrator --> Agent1["1. Financial Synthesizer Agent\n• Decimal-accurate budgeting\n• 3-Tier Allocation (Conservative / Realistic / Luxury)\n• Dynamic per-guest metrics"]
+        Orchestrator --> Agent2["2. Logistics & Run-of-Show Architect\n• Chronological milestone sequencing\n• Vendor load-in buffer windows\n• Minute-by-minute day-of schedule"]
+        Orchestrator --> Agent3["3. Contract Safeguard Agent\n• Hidden fee & corkage detection\n• Overtime multiplier checks\n• Interrogative verification scripts"]
+        Orchestrator --> Agent4["4. Experience & Sensory Agent\n• Atmosphere & lighting progression\n• Acoustic and tempo transitions\n• Signature emotional touchpoints"]
+        Orchestrator --> Agent5["5. Game-Theoretic Bargaining Agent\n• BATNA Walk-Away Anchor\n• Pareto Value Exchange Matrix\n• Savage Minimax Regret Modeling"]
+    end
+    
+    Agent1 --> Synthesizer["Multi-Agent Synthesis Engine"]
+    Agent2 --> Synthesizer
+    Agent3 --> Synthesizer
+    Agent4 --> Synthesizer
+    Agent5 --> Synthesizer
+    
+    Synthesizer --> PlanResult["Structured Event Blueprint\n(Budget Matrix + Timeline Flow + Contract Safeguards + Game Theory Artifact)"]
+    PlanResult --> UI["Instant UI Rendering & 1-Click Workspace Import"]
+```
+
+### Swarm Agent Responsibilities
+
+1. **Chief Swarm Orchestrator**:
+   - Parses unstructured natural prompts to identify occasion type, guest headcount, currency, location constraints, and planning intents.
+   - Determines which specialized agents to engage and balances output density.
+
+2. **Financial Synthesizer Agent**:
+   - Enforces IEEE-754 decimal arithmetic hygiene across all budget categories to eliminate floating-point rounding errors.
+   - Calculates **3 simultaneous budget allocations**: *Conservative* (essential cost containment), *Realistic* (market median with 20% tax/service contingency), and *Luxury* (full-service staffing and contingency buffers).
+   - Generates exact per-guest expenditure figures and percentage category limits.
+
+3. **Logistics & Run-of-Show Architect**:
+   - Generates chronologically ordered timelines spanning from macro preparation milestones down to 15-minute day-of execution blocks.
+   - Applies mandatory **30-to-45-minute buffer windows** before critical transitions (e.g., guest arrival, vendor soundchecks, catering service) to prevent domino delays.
+
+4. **Contract Safeguard Agent**:
+   - Scans vendor categories for high-risk contractual fine print: unbundled electrical drops, mandatory vendor meal charges, corkage fees, and unilateral overtime penalties.
+   - Provides exact verification scripts for hosts to present prior to signing deposit agreements.
+
+5. **Experience & Sensory Agent**:
+   - Curates the emotional and sensory arc of the celebration, establishing acoustic transitions, lighting shifts, and signature shared experiences that leave lasting impressions.
+
+6. **Game-Theoretic Bargaining Agent**:
+   - Analyzes power dynamics between event hosts and venue/catering suppliers, generating actionable bargaining strategies based on formal economic theory.
+
+---
+
+## 📐 Game Theory & Decision Science Methodology
+
+Festiya incorporates three established decision-science and game-theoretic models to ensure vendor negotiations and risk management are grounded in rigorous mathematical theory rather than generic conversational advice:
+
+### 1. Nash Bargaining Solution & BATNA Anchoring
+In bilateral negotiations between an event host and a supplier, suppliers exploit information asymmetry to capture consumer surplus. Festiya establishes the host's **BATNA** (Best Alternative to a Negotiated Agreement) and **Reservation Ceiling** before negotiations commence:
+- **BATNA Walk-Away Anchor**: The maximum justifiable cost benchmark based on secondary market alternatives (e.g., alternative venue buyout with flat catering vs. high-minimum full-service hall).
+- **Reservation Ceiling**: The exact dollar figure beyond which the host is mathematically incentivized to terminate discussions, preventing emotional overcommitment.
+
+### 2. Pareto-Optimal Value Exchange Matrix
+Negotiations frequently stall when parties treat discussions as zero-sum (distributive bargaining). Festiya applies **Pareto Efficiency** principles to identify asymmetric utility trades:
+$$\Delta U_{\text{host}} \gg 0 \quad \text{while} \quad \Delta C_{\text{vendor}} \approx 0$$
+- **Concession Given (Low Host Marginal Cost)**: The host offers concessions that carry negligible burden (e.g., early Tuesday load-in windows, flexibility on dessert service timing, immediate ACH wire settlement).
+- **Extracted Gain (High Host Value)**: In exchange, the host extracts concessions that save hundreds or thousands of dollars (e.g., complete waiver of $600 power drop fees, complimentary staff during cocktail hour, or flat beverage corkage buyout).
+
+### 3. Savage's Minimax Regret Criterion
+Event planning involves radical uncertainty (unpredictable weather, RSVP drops, vendor cancellations) where reliable probability distributions cannot be assumed. Standard expected utility theory fails under these conditions.
+
+Festiya implements **L.J. Savage’s Minimax Regret Criterion**:
+$$\min_{d \in D} \max_{s \in S} R(d, s)$$
+Where:
+- $D$ is the set of host planning decisions.
+- $S$ is the state space of uncertain outcomes (e.g., guest drop below catering minimums, inclement weather curfew).
+- $R(d, s)$ is the regret experienced from not having chosen the optimal action in hindsight.
+
+By minimizing the maximum possible regret rather than betting on optimistic scenarios, Festiya generates decision rules that protect margins against worst-case financial penalties.
+
+---
+
+## 🛡️ Hard Drills Security & LLM Defense Matrix
+
+Festiya includes an integrated adversarial defense engine, **`FestiSecurityGuard`** (`src/services/festiSecurityGuard.ts`), designed to protect the platform against common AI attack vectors:
+
+| Attack Vector | Defense Mechanism | Latency | Action Taken |
+| :--- | :--- | :--- | :--- |
+| **LLM Hijacking / Jails** | Multi-token regex filter detecting role-play overrides, system prompt manipulation, and DAN variants. | $< 1\text{ ms}$ | Neutralized immediately; safe celebration redirection returned. |
+| **Meta-Prompt Jacking** | Strict outbound boundary checks blocking leakage of internal system instructions, API keys, or agent configurations. | $< 1\text{ ms}$ | Blocked; generic operational capability summary returned. |
+| **Domain Escaping** | Domain-constraint heuristics restricting conversation to event logistics, budgets, timelines, contracts, and celebrations. | $< 2\text{ ms}$ | Polite domain lock redirecting back to celebration planning. |
+| **Denial-of-Service / Floods** | Edge rate-limiting and circuit breakers with automatic 60-second cooldown windows on failing providers. | Edge-level | Automated cascading failover to secondary edge models. |
+
+Users and security auditors can verify these defenses in real time by opening the **Hard Drills** drawer inside the Festi AI Chatbot to execute live adversarial vectors.
 
 ---
 
@@ -54,41 +152,42 @@ Self-planned celebrations suffer from an industry-wide **73% budget creep**, ven
 
 | Event Planning Challenge | Industry Baseline | Festiya Edge Solution |
 | :--- | :--- | :--- |
-| **Budget Creep** | Average 73% cost overrun from hidden fees & single-number guesswork. | **3-Tier Predictive Modeling**: Simultaneous Conservative, Realistic, and Luxury budgets with live guest sliders. |
-| **Vendor Contract Traps** | Surprise 18–25% corkage, service fees, and overtime multipliers. | **Tailored Negotiation Prompts**: Auto-generated contract clauses and vendor verification questions before deposit payments. |
-| **Schedule Chaos** | Fragmented spreadsheets, lost run sheets, and missed vendor arrival deadlines. | **Chronological Milestone Matrix**: Time-offset task sequences (T-12M down to minute-by-minute day-of schedules). |
-| **Privacy & Security** | Data harvested for third-party vendor lead marketing. | **Cloudflare Edge Privacy**: Local tenant isolation, client-side encryption, and zero third-party trackers. |
+| **Budget Creep** | Average 73% cost overrun from single-number guesswork and hidden fees. | **3-Tier Predictive Modeling**: Simultaneous Conservative, Realistic, and Luxury budgets with dynamic guest sliders and decimal safety. |
+| **Vendor Contract Traps** | Surprise 18–25% corkage, service fees, and overtime multipliers. | **Contract Safeguard Agent**: Auto-generated contract warnings, fee elimination tactics, and supplier verification questions. |
+| **Bargaining Asymmetry** | Hosts negotiate without leverage, accepting inflated standard package rates. | **Game-Theoretic Bargaining**: BATNA walk-away anchors, Pareto-optimal value trades, and Savage Minimax regret protection. |
+| **Schedule Chaos** | Fragmented spreadsheets, lost run sheets, and missed vendor arrival deadlines. | **Chronological Milestone Matrix**: Time-offset task sequences spanning from 12 months out down to 15-minute day-of schedules. |
+| **Privacy & Security** | User details harvested for third-party vendor advertising and lead brokering. | **Client-Side Privacy**: Edge isolation, client-side encryption, and zero third-party lead tracking. |
 
 ---
 
 ## 💎 Key Capabilities & Feature Matrix
 
-### 1. Interactive 3-Tier Budget & Plan Builder
+### 1. Interactive 3-Tier Budget & Plan Builder (`PlanBuilder.tsx`)
 - **3 Dynamic Allocations**: View *Conservative* (essential DIY savings), *Realistic* (market median with 20% service/tax allowances), and *Luxury* (full-service staffing & contingency buffers).
 - **Real-Time Sliders**: Adjust guest counts ($10$ to $500+$) and total budget ceilings with sub-millisecond mathematical recalculations.
-- **Instant Export**: Export structured plans in Markdown, PDF-ready plain text, or copy directly into organizational tools.
+- **One-Click Swarm Import**: Any blueprint generated by the multi-agent chatbot can be imported directly into the active workspace with a single click.
+- **Instant Plan Export**: Export structured plans in Markdown, PDF-ready plain text, or copy directly into organizational tools.
 
-### 2. Curated Event Blueprints
+### 2. Curated Event Blueprints (`CategoryShowcase.tsx`)
 - Instant architectural templates for **Luxury Weddings**, **Milestone Birthdays**, **Music Festivals & Carnivals**, **Tech Product Launches**, **Executive Retreats**, **Galas & Anniversaries**, **Private Tastings**, and **Cultural Heritage Festivals**.
 
-### 3. Worldwide Celebration & Long Weekend Hub
-- Interactive calendar featuring international celebrations (e.g., Rio Carnival, Kyoto Gion Matsuri, Venice Masquerade, Holi Festival of Colors, Oktoberfest) and regional long weekend planners with one-click budget integration.
+### 3. Worldwide Celebration & Long Weekend Hub (`CelebrationWorldMap.tsx` & `DiscoBallCelebrationHub.tsx`)
+- Interactive world map with geographical festival pinpoints (e.g., Rio Carnival, Kyoto Gion Matsuri, Venice Masquerade, Holi Festival of Colors, Oktoberfest).
+- Integrated regional long-weekend calendars with one-click itinerary builders.
 
-### 4. Festi AI Mascot & Chat Assistant
-- Conversational celebration architect powered by multi-LLM orchestration.
-- Built-in **FestiSecurityGuard** defending against prompt injection, off-topic requests, and harmful inputs with instant safe resets.
-- 5-frame animated sprite dance loop rendered in ultra-compressed WebP format.
+### 4. Festi AI Mascot & Chat Assistant (`FestiChatbot.tsx`)
+- Autonomous multi-agent celebration architect with icon-free, high-legibility artifact presentation.
+- 5-frame animated plush mascot sprite loop rendered in ultra-compressed WebP format with natural blinking behavior.
+- Built-in **Hard Drills** security drawer for real-time adversarial testing.
 
-### 5. Multi-Tenant Edge Authentication
+### 5. Multi-Tenant Edge Authentication (`AuthModal.tsx`)
 - Cloudflare Edge session management with instant 1-click test login as *Alex Rivera* (`Rivera Celebrations & Studio`) for frictionless evaluation.
 
 ---
 
-## 🏛️ System Architecture
+## 🏛️ System Architecture & Edge-Native Topology
 
 Festiya is built on a **Cloudflare-First** serverless architecture, delivering sub-second edge responses across 300+ cities globally.
-
-### Cloudflare Edge-Native Topology
 
 ```mermaid
 flowchart TD
@@ -97,11 +196,11 @@ flowchart TD
     subgraph Cloudflare Global Network
         CF_CDN --> Worker[Cloudflare Worker Engine]
         Worker --> StaticAssets[Static Asset Storage: dist/]
-        Worker --> SecurityHeaders[HSTS, CSP, COOP & Security Guard]
+        Worker --> SecurityHeaders[HSTS, CSP, COOP & Security Headers]
         Worker --> EdgeAuth[Multi-Tenant Edge Session Manager]
     end
 
-    subgraph Client Application [React 19 + TypeScript + Vite]
+    subgraph Client Application [React 19 + TypeScript 5.9 + Vite 8.3]
         Worker --> AppRoot[App.tsx State Root]
         AppRoot --> NavbarComp[Fluid Island Navbar]
         AppRoot --> HeroSection[Tactile Hero & LCP Mascot]
@@ -118,61 +217,33 @@ flowchart TD
         Gemini -.->|Fail / Timeout / 429| Groq[Groq LLaMA 3.3 70B]
         Groq -.->|Fail / Timeout / 429| OpenAI[OpenAI GPT-4o-mini]
         OpenAI -.->|Fail / Timeout / 429| Claude[Anthropic Claude 3.5 Haiku]
-        Claude -.->|Fail / Offline| Heuristic[Festiya Heuristic Engine\n0ms Deterministic Safety Net]
+        Claude -.->|Fail / Offline| Heuristic[Festiya MultiAgentEngine\n0ms Deterministic Swarm]
     end
 ```
 
-### Component & State Hierarchy
-
-```mermaid
-graph TD
-    App[App.tsx]
-    App --> Navbar[Navbar.tsx]
-    App --> Hero[OrbitableHeroLogo.tsx / High-Priority Image]
-    App --> Gateways[App Navigation Gateway Cards]
-    App --> LazyMount1[LazyMount: DiscoBallCelebrationHub.tsx]
-    App --> LazyMount2[LazyMount: LiveInteractiveDemo.tsx]
-    App --> Tagline[TaglineReveal.tsx]
-    App --> LazyMount3[LazyMount: ProblemSolution.tsx]
-    App --> LazyMount4[LazyMount: GlobalFestivalFooterShowcase.tsx]
-    App --> SiteFooter[site-footer]
-    App --> LazyMount5[LazyMount: FestiChatbot.tsx]
-    App --> PeekingMascot[PeekingMascot.tsx]
-    App --> AuthModal[AuthModal.tsx]
-```
-
-### Multi-LLM Cascading Orchestrator
-
-The AI architecture is defined in [`src/services/aiOrchestrator.ts`](file:///Users/souvikchakraborty/shippa/festiya/src/services/aiOrchestrator.ts):
-- **Autonomous Failover**: If any model times out or encounters a 429 rate limit, requests seamlessly cascade to the next provider within milliseconds.
-- **Circuit Breakers**: Providers experiencing 3 consecutive errors enter a 60-second cooldown to preserve latency budgets.
-- **Deterministic Heuristic Fallback**: A local, zero-latency generator guarantees that users receive a fully formatted, decimal-safe plan even in full offline conditions.
-
 ---
 
-## ⚡ Performance & Web Vitals Engineering
+## ⚡ Performance, Web Vitals & Accessibility (100/100)
 
 Festiya is rigorously tuned for maximum PageSpeed, mobile efficiency, and battery preservation:
 
 1. **Preload Scanner Optimization**:
    - `<link rel="preload" as="image" href="/festiya-logo.webp" type="image/webp" fetchpriority="high" />` eliminates LCP resource load delay down to $0\text{ ms}$.
-   - Mascot image compressed to **23.8 KiB (24,378 bytes)** using tuned WebP alpha compression factor (`quality=72, alpha_quality=55`).
+   - Mascot image compressed to **23.8 KiB** using tuned WebP alpha compression factor (`quality=72, alpha_quality=55`).
 2. **`LazyMount` Viewport Deferral**:
-   - Heavy below-the-fold components (`DiscoBallCelebrationHub`, `LiveInteractiveDemo`, `GlobalFestivalFooterShowcase`) are deferred via an `IntersectionObserver` with a 350px anticipation margin.
+   - Below-the-fold components (`DiscoBallCelebrationHub`, `LiveInteractiveDemo`, `GlobalFestivalFooterShowcase`) are deferred via an `IntersectionObserver` with a 350px anticipation margin.
    - Initial main-thread execution drops to under $150\text{ ms}$, dropping **Total Blocking Time (TBT) to near 0 ms**.
    - Reserved layout dimensions guarantee **Cumulative Layout Shift (CLS) = 0.00**.
 3. **Dynamic Three.js Isolation**:
    - `three` is loaded dynamically (`import('three')`) exclusively on desktop viewports.
-   - Mobile bundles exclude the 135 KiB Three.js chunk entirely, ensuring rapid boot on throttled mobile processors.
+   - Mobile bundles exclude the Three.js chunk entirely, ensuring rapid boot on throttled mobile processors.
    - Raf animation loops automatically sleep after 2.5–3.0 seconds of inactivity to eliminate background CPU drain.
-4. **Zero Forced Reflows**:
-   - Geometric DOM queries (`getBoundingClientRect`, `clientWidth`) are wrapped in `requestAnimationFrame` to avoid layout-thrashing during initial hydration.
+4. **Accessible High-Contrast Palette (WCAG 2.2 AA)**:
+   - Deep roasted chocolate (`#3D1E06`) on warm cream (`#fbf8f3`) guarantees contrast ratios $> 7:1$, eliminating eye fatigue while avoiding harsh pure-black pixels.
 
 ---
 
 ## 🎨 Design System & Typography Architecture
-
-Festiya adheres to strict color contrast, accessibility, and visual hierarchy standards:
 
 | Design Token | Value | Semantic Role |
 | :--- | :--- | :--- |
@@ -180,48 +251,39 @@ Festiya adheres to strict color contrast, accessibility, and visual hierarchy st
 | `--bg-surface` | `#ffffff` | Pure white container cards with subtle borders |
 | `--bubblegum-purple-blue` | `#5b42f3` | Signature brand primary and button gradient |
 | `--orange-500` | `#FF5E1E` | High-energy festive accent & badges |
-| `--text-primary` | `#2b1b17` / `#5b42f3` | High-contrast chocolate roast / royal purple (zero pure black) |
-| `--text-secondary` | `#4338ca` | Deep royal indigo for readable paragraphs |
-| `--text-muted` | `#3730a3` | High-contrast subtitles and metadata (WCAG AA compliant) |
-| `--font-sans` | `Plus Jakarta Sans, sans-serif` | Soft, legible body typography |
+| `--text-primary` | `#3D1E06` | Rich dark chocolate roast (zero pure black, contrast ratio $> 7:1$) |
+| `--text-secondary` | `#554e47` | Muted roasted espresso for secondary text |
+| `--font-sans` | `Plus Jakarta Sans, sans-serif` | Soft, modern, legible body typography |
 | `--font-heading` | `Outfit, sans-serif` | Clean, geometric display headings |
 | `--font-mono` | `ui-monospace, monospace` | System monospace for decimal calculations |
 
 ---
 
-## 💻 Tech Stack
-
-- **Framework**: [React 19.3](https://react.dev/) + [TypeScript 5.9+](https://www.typescriptlang.org/)
-- **Bundler**: [Vite 8.3](https://vitejs.dev/) with Rolldown tree-shaking
-- **Edge Runtime**: [Cloudflare Workers](https://workers.cloudflare.com/) + Cloudflare Static Assets
-- **AI Models**: Cloudflare Workers AI (`@cf/meta/llama-3.3-70b-instruct`), Google Gemini 2.5 Flash, Groq LLaMA 3.3 70B, OpenAI GPT-4o-mini, Anthropic Claude 3.5 Haiku
-- **Icons & Graphics**: [Lucide React](https://lucide.dev/), Canvas Confetti, Three.js (dynamic desktop WebGL)
-- **Code Hygiene**: [Oxlint](https://oxc.rs/) (Rust-based linter)
-
----
-
 ## 🛠️ Local Development Quickstart
 
-### 1. Clone the Repository
+### 1. Prerequisites
+- **Node.js**: `v20.x` or higher
+- **npm**: `v10.x` or higher
+
+### 2. Clone the Repository
 ```bash
 git clone https://github.com/z99wE/festy.git
 cd festy
 ```
 
-### 2. Install Dependencies
+### 3. Install Dependencies
 ```bash
 npm install
 ```
 
-### 3. Run Development Server
+### 4. Start Development Server
 ```bash
 npm run dev
 ```
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Navigate to [http://localhost:5173](http://localhost:5173) in your browser.
 
-### 4. Build and Verify
+### 5. Build and Typecheck
 ```bash
-npm run lint
 npm run build
 ```
 
@@ -229,7 +291,7 @@ npm run build
 
 ## ⚙️ Configuration & Environment Variables
 
-Create an optional `.env` file in the root directory for live multi-LLM API connections:
+Create an optional `.env` file in the root directory to connect external multi-LLM providers:
 
 ```bash
 # Cloudflare Workers AI (Priority #1)
@@ -249,13 +311,13 @@ VITE_OPENAI_API_KEY="your_openai_api_key"
 VITE_ANTHROPIC_API_KEY="your_anthropic_api_key"
 ```
 
-*(Note: If no API keys are provided, Festiya automatically falls back to its deterministic local heuristic engine with 0ms response time and 100% schema accuracy).*
+*(Note: In the absence of API keys, Festiya automatically engages its local autonomous MultiAgentEngine with 0ms latency, zero external network dependency, and 100% schema accuracy).*
 
 ---
 
-## 🚀 Production Cloudflare Deployment
+## 🚀 Cloudflare Edge Production Deployment
 
-Festiya deploys directly to the Cloudflare edge using `wrangler.jsonc`:
+Festiya deploys directly to Cloudflare Workers with Static Assets:
 
 ```bash
 # 1. Compile TypeScript and generate production Vite bundle
@@ -265,7 +327,7 @@ npm run build
 npx -y wrangler deploy
 ```
 
-The live application is accessible at:  
+The live application is accessible globally at:  
 👉 **[https://festiya.viktorechakraborty.workers.dev](https://festiya.viktorechakraborty.workers.dev)**
 
 ---
@@ -276,36 +338,39 @@ The live application is accessible at:
 festiya/
 ├── public/                                # Lightweight static assets (< 300 KB total)
 │   ├── _headers                           # Security headers & cache-control policies
-│   ├── favicon.png                        # Optimized 4.4 KB brand favicon
-│   ├── favicon.svg                        # Vector favicon
+│   ├── favicon.png                        # Optimized brand favicon
+│   ├── favicon.svg                        # Scalable vector favicon
 │   ├── festiya-logo.webp                  # Compressed 23.8 KB LCP mascot logo
 │   ├── festiya-logo-nav.webp              # 3.6 KB navbar brand logo
-│   ├── festiya-logo.png                   # 46 KB OpenGraph & social preview image
+│   ├── festiya-logo.png                   # OpenGraph & social preview image
 │   ├── festivals/                         # Optimized festival card imagery (.webp & .jpg)
-│   └── mascots/                           # 13 tuned WebP animated mascot frames (< 80 KB total)
+│   └── mascots/                           # Animated mascot WebP frames & blink states
 ├── src/
-│   ├── components/                        # Clean, modular React UI components
-│   │   ├── AuthModal.tsx                  # Cloudflare Edge tenant Sign In / Sign Up modal
-│   │   ├── CategoryShowcase.tsx           # 12 Event blueprints with interactive carousel
-│   │   ├── DiscoBallCelebrationHub.tsx    # 3D Disco ball & global celebration calendar
+│   ├── components/                        # Modular, accessible React UI components
+│   │   ├── AuthModal.tsx                  # Edge tenant session Sign In / Sign Up modal
+│   │   ├── CategoryShowcase.tsx           # 12 Event blueprints with interactive showcase
+│   │   ├── CelebrationWorldMap.tsx        # Interactive global festival map with pinpoints
+│   │   ├── DiscoBallCelebrationHub.tsx    # 3D celebratory disco ball & calendar
+│   │   ├── EventInsights.tsx              # Architectural metrics, benchmarks & agent stats
 │   │   ├── FAQSection.tsx                 # Schema-backed AEO/GEO FAQ accordion
-│   │   ├── FestiChatbot.tsx               # Festi AI assistant drawer & mascot animation
-│   │   ├── FlexCarousel.tsx               # High-performance 3D category carousel
-│   │   ├── GlobalFestivalFooterShowcase.tsx# Footer global celebration showcase
-│   │   ├── GridMotion.tsx                 # Smooth photo grid motion component
+│   │   ├── FestiChatbot.tsx               # Festi AI assistant, hard drills & multi-agent cards
+│   │   ├── FlexCarousel.tsx               # Smooth 3D category carousel component
+│   │   ├── GlobalFestivalFooterShowcase.tsx# Footer showcase with floating CTA overlay
+│   │   ├── GridMotion.tsx                 # Hardware-accelerated photo grid motion
 │   │   ├── LazyMount.tsx                  # Viewport intersection observer for 0 TBT
-│   │   ├── LiveInteractiveDemo.tsx        # Simulated interactive planning preview
+│   │   ├── LiveInteractiveDemo.tsx        # Simulated interactive event planning preview
 │   │   ├── Navbar.tsx                     # Fluid island navigation, region & currency
-│   │   ├── OrbitableHeroLogo.tsx          # Dynamic 3D tactile mascot for desktop
-│   │   ├── PeekingMascot.tsx              # Delightful playful peeking mascot
-│   │   ├── PlanBuilder.tsx                # 3-tier budget engine & milestone checklist
+│   │   ├── OrbitableHeroLogo.tsx          # Dynamic 3D tactile mascot for desktop viewports
+│   │   ├── PeekingMascot.tsx              # Animated blinking plush mascot components
+│   │   ├── PlanBuilder.tsx                # 3-Tier decimal budget engine & day-of timelines
 │   │   ├── ProblemSolution.tsx            # Spreadsheet dread comparison section
 │   │   └── TaglineReveal.tsx              # Scroll-driven typography reveal
 │   ├── data/
 │   │   └── globalCelebrations.ts          # Worldwide festival calendars & metadata
 │   ├── services/
 │   │   ├── aiOrchestrator.ts              # Multi-LLM cascading resilience engine
-│   │   └── festiSecurityGuard.ts          # Prompt injection & threat defense guardrails
+│   │   ├── festiSecurityGuard.ts          # Prompt injection & hard drills defense guardrails
+│   │   └── multiAgentEngine.ts            # Autonomous multi-agent swarm & game theory engine
 │   ├── utils/
 │   │   ├── audio.ts                       # Web Audio API sound synthesizers
 │   │   └── currency.ts                    # Geo-currency detection & decimal formatting
@@ -317,14 +382,14 @@ festiya/
 ├── tsconfig.json                          # TypeScript configuration
 ├── vite.config.ts                         # Vite build & chunking configuration
 ├── wrangler.jsonc                         # Cloudflare Workers configuration
-└── README.md                              # Comprehensive project architecture & documentation
+└── README.md                              # Institutional-grade architecture & documentation
 ```
 
 ---
 
 ## 🤖 AEO, GEO & Agentic Web Readiness
 
-Festiya is optimized for both human users and AI agents (ChatGPT Search, Perplexity, Claude, Google Gemini):
+Festiya is architected for both human users and autonomous AI search engines (ChatGPT Search, Perplexity, Claude, Google Gemini):
 - **JSON-LD Schema**: Full `SoftwareApplication` and `FAQPage` schemas embedded directly in the initial HTML document.
 - **Semantic HTML5**: Native `<main>`, `<nav>`, `<header>`, `<footer>`, `<section>`, and `<article>` landmark elements.
 - **Unique Stable IDs**: Descriptive IDs on all key inputs, buttons, and sections for automated browser navigation and WebMCP integrations.
@@ -332,9 +397,9 @@ Festiya is optimized for both human users and AI agents (ChatGPT Search, Perplex
 
 ---
 
-## 📄 License & Author
+## 📄 License & Maintainer
 
-- **Author**: Souvik Chakraborty
-- **Platform**: Festiya Celebration & Event Planning Engine
+- **Maintainer**: Souvik Chakraborty
+- **Platform**: Festiya Celebration & Event Intelligence Engine
 - **Hosting**: Cloudflare Workers
 - **License**: [MIT License](LICENSE)

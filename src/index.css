@@ -4156,6 +4156,156 @@ img {
   border: 1px dashed #cbd5e1;
 }
 
+/* ==========================================================
+   GAME-THEORETIC BARGAINING & RISK PROTOCOL ARTIFACTS
+   ========================================================== */
+.festi-gt-batna-card {
+  background: #fbf9f5;
+  border: 1px solid #ebd9c8;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.festi-gt-anchor-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.festi-gt-kicker {
+  font-size: 9.5px;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #3D1E06;
+}
+
+.festi-gt-text {
+  font-size: 11px;
+  color: #4b443c;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.festi-gt-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.festi-gt-section-title {
+  font-size: 10px;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #5b42f3;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #f0ede6;
+}
+
+.festi-gt-trades-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.festi-gt-trade-node {
+  background: #ffffff;
+  border: 1px solid #ebd9c8;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.festi-gt-trade-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.festi-gt-col {
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.festi-gt-col.highlight {
+  background: #fdf6ec;
+  border: 1px solid #fde68a;
+}
+
+.festi-gt-col-label {
+  display: block;
+  font-size: 9px;
+  font-weight: 750;
+  text-transform: uppercase;
+  color: #786f66;
+}
+
+.festi-gt-col-value {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #3D1E06;
+  margin-top: 2px;
+}
+
+.festi-gt-payoff {
+  margin-top: 5px;
+  padding-top: 4px;
+  border-top: 1px dashed #ebd9c8;
+  font-size: 10.5px;
+  color: #554e47;
+  font-style: italic;
+  line-height: 1.3;
+}
+
+.festi-gt-scenarios-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.festi-gt-scenario-node {
+  background: #fdfaf6;
+  border: 1px solid #e2dcd2;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.festi-gt-scenario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.festi-gt-scenario-name {
+  font-size: 11px;
+  font-weight: 800;
+  color: #3D1E06;
+}
+
+.festi-gt-scenario-saving {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #047857;
+  background: #ecfdf5;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.festi-gt-scenario-strategy {
+  font-size: 10.5px;
+  color: #4b5563;
+  margin: 3px 0 0;
+  line-height: 1.35;
+}
+
 .festi-apply-workspace-btn {
   display: block;
   width: 100%;

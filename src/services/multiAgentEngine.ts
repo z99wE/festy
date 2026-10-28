@@ -50,6 +50,26 @@ export interface AgentContractArtifact {
   safeguards: AgentContractItem[];
 }
 
+export interface ParetoTradeoff {
+  concessionGiven: string;
+  concessionExtracted: string;
+  payoffRationale: string;
+}
+
+export interface MinimaxScenario {
+  riskScenario: string;
+  naiveReaction: string;
+  minimaxOptimalStrategy: string;
+  estimatedProtectedMargin: string;
+}
+
+export interface AgentGameTheoryArtifact {
+  batnaAnchor: string;
+  reservationCeiling: string;
+  paretoTradeoffs: ParetoTradeoff[];
+  minimaxScenarios: MinimaxScenario[];
+}
+
 export interface MultiAgentPlanResult {
   summary: string;
   agentsEngaged: string[];
@@ -58,6 +78,7 @@ export interface MultiAgentPlanResult {
   budgetArtifact?: AgentBudgetArtifact;
   timelineArtifact?: AgentTimelineArtifact;
   contractArtifact?: AgentContractArtifact;
+  gameTheoryArtifact?: AgentGameTheoryArtifact;
   rawText: string;
 }
 
@@ -314,6 +335,56 @@ export class MultiAgentEngine {
   }
 
   /**
+   * Game-Theoretic Bargaining & Minimax Decision Agent
+   * Applies Nash bargaining principles, Pareto trade-offs, and Savage's Minimax Regret
+   */
+  static synthesizeGameTheory(params: ExtractedEventParams): AgentGameTheoryArtifact {
+    const total = params.budgetAmount;
+    const currency = params.currency;
+    const reservationCeiling = Math.round(total * 0.82);
+
+    const paretoTradeoffs: ParetoTradeoff[] = [
+      {
+        concessionGiven: 'Offer afternoon load-in flexibility (T-5h instead of morning lock)',
+        concessionExtracted: `Waive standard $450-$700 equipment drop fee and secure complimentary vendor green room`,
+        payoffRationale: 'The venue incurs zero marginal cost for daylight hall access, while eliminating an arbitrary high-markup line item from your ledger.',
+      },
+      {
+        concessionGiven: 'Commit to upfront wire/ACH milestone schedule (eliminating merchant interchange fees)',
+        concessionExtracted: `Secure flat beverage corkage buyout (${currency}15/bottle or waived) instead of standard 22% venue beverage markups`,
+        payoffRationale: 'Guaranteed settlement eliminates 3.2% credit merchant drag for the caterer, delivering high surplus margin to your drink budget.',
+      },
+      {
+        concessionGiven: 'Permit dual-menu tasting on a weekday off-peak window',
+        concessionExtracted: 'Lock in a 10% headcount variance buffer without forfeiting minimum spend thresholds',
+        payoffRationale: 'Vendor kitchen runs low-stress prep while protecting you from paying full price on late guest cancellations.',
+      },
+    ];
+
+    const minimaxScenarios: MinimaxScenario[] = [
+      {
+        riskScenario: 'Late guest drop-out (12-18% no-show rate after RSVP lock)',
+        naiveReaction: 'Pay for empty contracted covers at full price.',
+        minimaxOptimalStrategy: 'Contract an addendum converting unserved covers into late-night savory stations or top-shelf spirit upgrades.',
+        estimatedProtectedMargin: `Recovers ~${currency}${Math.round(total * 0.08).toLocaleString()} in otherwise sunk F&B spend.`,
+      },
+      {
+        riskScenario: 'Sudden overtime trigger (event runs 25 minutes past midnight curfew)',
+        naiveReaction: 'Incur 1.75x emergency hourly rate multiplier plus security surcharges.',
+        minimaxOptimalStrategy: 'Pre-negotiate a 30-minute grace window in the master rider for music cutoff vs. physical guest exit.',
+        estimatedProtectedMargin: `Eliminates ~${currency}850-${currency}1,400 in punitive overtime penalty clauses.`,
+      },
+    ];
+
+    return {
+      batnaAnchor: 'Maintain active holds on two comparable alternative spaces before depositing to establish credible walk-away optionality.',
+      reservationCeiling: `Cap base contractual commitment at ${currency}${reservationCeiling.toLocaleString()} (82% of target) to preserve an 18% tactical contingency reserve.`,
+      paretoTradeoffs,
+      minimaxScenarios,
+    };
+  }
+
+  /**
    * Dispatches the multi-agent swarm, synthesizes artifacts, and compiles response
    */
   static executeSwarm(prompt: string, llmResponseText?: string): MultiAgentPlanResult {
@@ -323,6 +394,7 @@ export class MultiAgentEngine {
     let budgetArtifact: AgentBudgetArtifact | undefined;
     let timelineArtifact: AgentTimelineArtifact | undefined;
     let contractArtifact: AgentContractArtifact | undefined;
+    let gameTheoryArtifact: AgentGameTheoryArtifact | undefined;
 
     // Trigger Financial Agent
     if (params.isBudgetQuery || prompt.includes('$') || prompt.includes('cost') || prompt.includes('spend')) {
@@ -336,17 +408,19 @@ export class MultiAgentEngine {
       timelineArtifact = this.synthesizeTimeline(params);
     }
 
-    // Trigger Contract Safeguard Agent
-    if (params.isContractQuery || prompt.includes('vendor') || prompt.includes('contract') || prompt.includes('caterer') || prompt.includes('deposit')) {
-      agentsEngaged.push('Contract Safeguard Agent');
+    // Trigger Contract Safeguard Agent & Game-Theoretic Bargaining Agent
+    if (params.isContractQuery || prompt.includes('vendor') || prompt.includes('contract') || prompt.includes('caterer') || prompt.includes('deposit') || prompt.includes('negotiat') || prompt.includes('game')) {
+      agentsEngaged.push('Contract Safeguard Agent', 'Game-Theoretic Bargaining Agent');
       contractArtifact = this.synthesizeContractSafeguards(params);
+      gameTheoryArtifact = this.synthesizeGameTheory(params);
     }
 
-    // If generic question with no specific artifacts triggered, generate a complete baseline plan
+    // If generic question with no specific artifacts triggered, generate a complete baseline plan including Game Theory
     if (!budgetArtifact && !timelineArtifact && !contractArtifact) {
-      agentsEngaged.push('Financial Synthesizer Agent', 'Logistics & Run-of-Show Agent');
+      agentsEngaged.push('Financial Synthesizer Agent', 'Logistics & Run-of-Show Agent', 'Game-Theoretic Bargaining Agent');
       budgetArtifact = this.synthesizeBudget(params);
       timelineArtifact = this.synthesizeTimeline(params);
+      gameTheoryArtifact = this.synthesizeGameTheory(params);
     }
 
     // Build concise executive summary
@@ -362,6 +436,7 @@ export class MultiAgentEngine {
       budgetArtifact,
       timelineArtifact,
       contractArtifact,
+      gameTheoryArtifact,
       rawText: summary,
     };
   }
