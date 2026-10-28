@@ -84,6 +84,18 @@ export const TaglineReveal: React.FC<TaglineRevealProps> = ({ reducedMotion }) =
             })}
           </p>
 
+          {/* Centered, Unsquished Festiya Logo */}
+          <div className="tagline-logo-wrap" aria-hidden="true">
+            <img
+              src="/festiya-logo.webp"
+              alt="Festiya Logo"
+              className="tagline-brand-logo"
+              width="213"
+              height="80"
+              loading="lazy"
+            />
+          </div>
+
           <p className="tagline-sub-text">
             {supportingWords.map((word, index) => {
               const globalIndex = words.length + index;

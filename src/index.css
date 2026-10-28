@@ -1837,7 +1837,7 @@ img {
    MANDATORY TAGLINE REVEAL SECTION (Rule B11)
    -------------------------------------------------------------------------- */
 .tagline-reveal-section {
-  padding: var(--space-900) 0;
+  padding: var(--space-600) 0 var(--space-200) 0;
   position: relative;
   z-index: 2;
 }
@@ -1883,6 +1883,29 @@ img {
   opacity: 1;
 }
 
+.tagline-logo-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto 24px;
+}
+
+.tagline-brand-logo {
+  max-width: 220px;
+  width: auto;
+  height: auto;
+  aspect-ratio: 639 / 240;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 24px rgba(91, 66, 243, 0.15));
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.4s ease;
+  display: block;
+}
+
+.tagline-brand-logo:hover {
+  transform: scale(1.05) perspective(600px) rotateX(4deg);
+  filter: drop-shadow(0 12px 28px rgba(91, 66, 243, 0.25));
+}
+
 .tagline-sub-text {
   font-size: 18px;
   line-height: 28px;
@@ -1904,7 +1927,7 @@ img {
    PROBLEM TO SOLUTION SECTION (Rule A2)
    -------------------------------------------------------------------------- */
 .problem-solution-section {
-  padding: var(--space-800) 0;
+  padding: var(--space-200) 0 var(--space-800) 0;
   position: relative;
   z-index: 2;
 }
@@ -5527,19 +5550,21 @@ img {
 }
 
 .benchmark-card {
-  background: var(--bg-surface);
-  border: 1.5px solid var(--border-subtle);
+  background: linear-gradient(145deg, #ffffff 0%, #fdfbf7 100%);
+  border: 1.5px solid rgba(255, 94, 30, 0.14);
   border-radius: var(--radius-2xl);
   padding: 28px 24px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px -2px rgba(91, 66, 243, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
   display: flex;
   flex-direction: column;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.2s ease;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.25s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .benchmark-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-5px) perspective(800px) rotateX(2deg);
+  box-shadow: 0 16px 30px -6px rgba(91, 66, 243, 0.14), 0 6px 12px -2px rgba(255, 94, 30, 0.1), inset 0 1px 0 rgba(255, 255, 255, 1);
   border-color: var(--orange-400);
 }
 
@@ -5658,30 +5683,65 @@ img {
 }
 
 .aeo-qa-card {
-  background: var(--bg-surface);
-  border: 1.5px solid var(--border-subtle);
-  border-radius: var(--radius-xl);
-  padding: 24px;
-  box-shadow: var(--shadow-xs);
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  background: linear-gradient(145deg, #ffffff 0%, #fdfbf7 100%);
+  border: 1.5px solid rgba(91, 66, 243, 0.14);
+  border-radius: var(--radius-2xl);
+  padding: 28px 26px;
+  box-shadow: 0 6px 18px -3px rgba(91, 66, 243, 0.07), 0 2px 6px -1px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.aeo-qa-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3.5px;
+  background: linear-gradient(90deg, #5b42f3 0%, #ff5e1e 60%, #ffb703 100%);
+  opacity: 0.85;
+  transition: opacity 0.3s ease;
 }
 
 .aeo-qa-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--orange-300);
+  transform: translateY(-6px) perspective(1000px) rotateX(2deg) rotateY(-1deg);
+  border-color: rgba(255, 94, 30, 0.35);
+  box-shadow: 0 20px 36px -8px rgba(91, 66, 243, 0.16), 0 8px 16px -4px rgba(255, 94, 30, 0.12), inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.aeo-qa-card:hover::before {
+  opacity: 1;
+}
+
+.aeo-qa-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5b42f3;
+  background: linear-gradient(135deg, rgba(91, 66, 243, 0.09) 0%, rgba(255, 94, 30, 0.09) 100%);
+  border: 1px solid rgba(91, 66, 243, 0.2);
+  box-shadow: 0 2px 4px rgba(91, 66, 243, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 14px;
 }
 
 .aeo-qa-question {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--text-primary);
-  line-height: 24px;
-  margin-bottom: 10px;
+  line-height: 25px;
+  letter-spacing: -0.015em;
+  margin-bottom: 12px;
 }
 
 .aeo-qa-answer {
-  font-size: 14px;
-  line-height: 22px;
+  font-size: 14.5px;
+  line-height: 23px;
   color: var(--text-secondary);
   margin: 0;
 }
