@@ -391,7 +391,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                 )
               }
             >
-              💰 Auto-Optimize Budget
+              Auto-Optimize Budget
             </button>
             <button
               type="button"
@@ -402,7 +402,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                 )
               }
             >
-              📋 Day-of Run of Show
+              Day-of Run of Show
             </button>
             <button
               type="button"
@@ -413,7 +413,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                 )
               }
             >
-              ❓ Vendor Negotiation Script
+              Vendor Negotiation Script
             </button>
             <button
               type="button"
@@ -424,7 +424,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
                 )
               }
             >
-              💡 Unique Experience Ideas
+              Unique Experience Ideas
             </button>
           </div>
 
