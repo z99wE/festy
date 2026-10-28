@@ -137,60 +137,9 @@ export function App() {
             {/* HERO SECTION */}
             <section id="hero" className="hero-section" aria-labelledby="hero-title">
               <div className="content-wrapper">
-                <div className="hero-grid">
-                  <div className="hero-content">
-                    {/* HIGH-ROI H1 TITLE */}
-                    <h1 id="hero-title" className="hero-title">
-                      <span className="hero-headline-lead">The Autonomous Event Architect That</span>
-                      <br />
-                      <span className="highlight-orange">Cuts Planning Time by 90% & Saves Thousands on Vendors.</span>
-                    </h1>
-
-                    {/* HIGH-CONVERTING VALUE SUBTITLE */}
-                    <p className="hero-description">
-                      <strong>Festiya</strong> eliminates spreadsheet anxiety by generating an audit-ready 3-tier budget (low, likely, high), prioritized milestone schedule, and insider vendor negotiation scripts in under 90 seconds.
-                    </p>
-
-                    {/* Fast-Selector Occasion Chips */}
-                    <div className="hero-occasion-chips" role="group" aria-label="Select celebration category">
-                      {OCCASION_SWAP_ITEMS.map((item) => (
-                        <button
-                          key={item.id}
-                          type="button"
-                          className={`occasion-chip-btn ${activeOccasion === item.id ? 'active' : ''}`}
-                          onClick={() => handleQuickOccasionSelect(item.id)}
-                        >
-                          <span>{item.name}</span>
-                        </button>
-                      ))}
-                    </div>
-
-                    <div className="hero-actions">
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        style={{ padding: '10px 28px', fontSize: '16px' }}
-                        onClick={handleStartPlanning}
-                      >
-                        <span>Build your event plan</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        className="btn btn-secondary"
-                        style={{ padding: '10px 22px', fontSize: '16px' }}
-                        onClick={() => {
-                          setActiveTab('blueprints');
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }}
-                      >
-                        <span>Explore Blueprints</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* 3D Orbitable Hero Logo (Pristine, 360 degree drag rotation on desktop, instant lightweight plush image on mobile) */}
-                  <div className="hero-tactile-centerpiece">
+                <div className="hero-masthead-flow">
+                  {/* 1. TOP MASTHEAD: 3D Orbitable Hero Logo (Pristine tactile 360 rotation on desktop, instant preloaded WebP on mobile) */}
+                  <div className="hero-masthead-centerpiece" aria-label="Festiya Interactive 3D Mascot Logo">
                     {isDesktop ? (
                       <Suspense
                         fallback={
@@ -199,29 +148,21 @@ export function App() {
                             style={{
                               position: 'relative',
                               width: '100%',
-                              maxWidth: '850px',
-                              height: '520px',
-                              aspectRatio: '850 / 520',
+                              maxWidth: '640px',
+                              aspectRatio: '639 / 240',
                               margin: '0 auto',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              contain: 'layout size',
                             }}
                           >
                             <img
                               src="/festiya-logo.webp"
                               alt="Festiya 3D Plush Mascot Logo"
-                              width={850}
-                              height={520}
+                              width={639}
+                              height={240}
                               fetchPriority="high"
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                                maxHeight: '520px',
-                                objectFit: 'contain',
-                                display: 'block',
-                              }}
+                              className="festiya-masthead-img"
                             />
                           </div>
                         }
@@ -234,9 +175,8 @@ export function App() {
                         style={{
                           position: 'relative',
                           width: '100%',
-                          maxWidth: '850px',
-                          height: 'auto',
-                          aspectRatio: '850 / 520',
+                          maxWidth: '640px',
+                          aspectRatio: '639 / 240',
                           margin: '0 auto',
                           display: 'flex',
                           alignItems: 'center',
@@ -249,16 +189,95 @@ export function App() {
                           width={639}
                           height={240}
                           fetchPriority="high"
-                          style={{
-                            width: '100%',
-                            height: 'auto',
-                            maxHeight: '420px',
-                            objectFit: 'contain',
-                            display: 'block',
-                          }}
+                          className="festiya-masthead-img"
                         />
                       </div>
                     )}
+                  </div>
+
+                  {/* 2. CLASSY EYEBROW PILL BADGE */}
+                  <div className="hero-eyebrow-container">
+                    <span className="hero-eyebrow-pill">
+                      <span className="eyebrow-sparkle" aria-hidden="true">✨</span>
+                      <span>The Autonomous Celebration Architect</span>
+                      <span className="eyebrow-separator" aria-hidden="true">•</span>
+                      <span className="eyebrow-highlight">Decimal-Safe Precision</span>
+                    </span>
+                  </div>
+
+                  {/* 3. FLOWING EDITORIAL H1 */}
+                  <h1 id="hero-title" className="hero-title">
+                    <span className="hero-headline-lead">Plan Extraordinary Celebrations</span>
+                    <br />
+                    <span className="highlight-orange">Without the Stress, Spreadsheets, or Overcharging.</span>
+                  </h1>
+
+                  {/* 4. CLASSY H2 SUBTITLE */}
+                  <h2 className="hero-subtitle">
+                    Audit-ready 3-tier budgets, milestone itineraries, and insider vendor negotiation scripts — generated in under 90 seconds.
+                  </h2>
+
+                  {/* 5. FLOWING EDITORIAL BODY COPY */}
+                  <p className="hero-description">
+                    From intimate terrace dinners to 500-guest heritage weddings and corporate galas, <strong>Festiya</strong> replaces planning anxiety with real-time financial certainty, bespoke cost curves, and contract safeguards tailored to your city.
+                  </p>
+
+                  {/* 6. OCCASION FAST-SELECTOR CHIPS */}
+                  <div className="hero-occasion-chips" role="group" aria-label="Select celebration category">
+                    {OCCASION_SWAP_ITEMS.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        className={`occasion-chip-btn ${activeOccasion === item.id ? 'active' : ''}`}
+                        onClick={() => handleQuickOccasionSelect(item.id)}
+                      >
+                        <span>{item.name}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* 7. CLASSY HERO ACTIONS */}
+                  <div className="hero-actions">
+                    <button
+                      type="button"
+                      className="btn btn-primary hero-btn-primary"
+                      onClick={handleStartPlanning}
+                    >
+                      <span>Build your event plan</span>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn btn-secondary hero-btn-secondary"
+                      onClick={() => {
+                        setActiveTab('blueprints');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                    >
+                      <span>Explore Blueprints</span>
+                    </button>
+                  </div>
+
+                  {/* 8. TRUST PROOF LINE */}
+                  <div className="hero-proof-line">
+                    <div className="proof-pill">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                      <span>100% Free &amp; Open-Access</span>
+                    </div>
+                    <span className="proof-dot" aria-hidden="true">•</span>
+                    <div className="proof-pill">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5B42F3" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                      <span>Decimal-Accurate Budgeting</span>
+                    </div>
+                    <span className="proof-dot" aria-hidden="true">•</span>
+                    <div className="proof-pill">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                      <span>Client-Side Private</span>
+                    </div>
                   </div>
                 </div>
 

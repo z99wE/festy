@@ -22,10 +22,11 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     import('three').then((THREE) => {
       if (isDisposed) return;
 
-      // Viewport sizing: expansive dimensions for a bold, hero-scale 3D presence
+      // Viewport sizing: responsive aspect ratio matching 639:240 (~2.66:1) logo geometry
       const getViewportSize = () => {
-        const w = container.clientWidth || 740;
-        const h = Math.min(560, Math.max(420, Math.round(w * 0.72)));
+        const w = Math.min(container.clientWidth || 640, 640);
+        const naturalH = Math.round(w * (240 / 639));
+        const h = Math.min(260, Math.max(160, naturalH));
         return { width: w, height: h };
       };
 
@@ -35,15 +36,15 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(34, width / height, 0.1, 100);
 
-    // Hero-scale framing: mascot occupies ~92% of the frame (prominent, bold, commanding)
+    // Hero masthead framing: mascot fits comfortably with subtle breathing room
     const updateCameraDistance = (w: number, h: number) => {
       const aspect = w / h;
       const fovRad = (34 * Math.PI) / 180;
-      const targetW = 5.6; // Large target width
-      const targetH = 2.15;
+      const targetW = 5.2; // Matches plane geometry
+      const targetH = (5.2 * 240) / 639;
       const distW = targetW / (2 * aspect * Math.tan(fovRad / 2));
       const distH = targetH / (2 * Math.tan(fovRad / 2));
-      camera.position.set(0, 0, Math.max(distW, distH));
+      camera.position.set(0, 0, Math.max(distW, distH) * 1.05);
     };
     updateCameraDistance(width, height);
 
@@ -291,22 +292,22 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       style={{
         position: 'relative',
         width: '100%',
-        maxWidth: '850px',
-        height: '520px',
-        aspectRatio: '850 / 520',
+        maxWidth: '640px',
+        aspectRatio: '639 / 240',
+        minHeight: '160px',
+        maxHeight: '260px',
         margin: '0 auto',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'visible',
-        contain: 'layout size',
       }}
     >
       <div
         ref={mountRef}
         style={{
           width: '100%',
-          height: '520px',
+          height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
