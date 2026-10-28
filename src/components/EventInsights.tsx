@@ -120,7 +120,7 @@ export const EventInsights: React.FC<EventInsightsProps> = ({ onStartPlanning, o
                   <th scope="col" style={{ width: '25%' }}>Capability / Feature</th>
                   <th scope="col" style={{ width: '25%' }}>Spreadsheets & Notes</th>
                   <th scope="col" style={{ width: '25%' }}>Legacy Event Platforms</th>
-                  <th scope="col" className="highlight-col" style={{ width: '25%' }}>Festiya Edge Engine</th>
+                  <th scope="col" className="highlight-col" style={{ width: '25%' }}>FESTIYA</th>
                 </tr>
               </thead>
               <tbody>
