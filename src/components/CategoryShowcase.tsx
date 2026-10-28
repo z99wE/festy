@@ -122,6 +122,40 @@ export const CAROUSEL_ITEMS: (FlexCarouselItem & {
   },
 ];
 
+interface CategoryGridCardProps {
+  cat: typeof CAROUSEL_ITEMS[number];
+  idx: number;
+  isActive: boolean;
+  onSelect: (index: number, id: string) => void;
+}
+
+const CategoryGridCard: React.FC<CategoryGridCardProps> = ({ cat, idx, isActive, onSelect }) => {
+  const handleClick = () => onSelect(idx, cat.id);
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    onSelect(idx, cat.id);
+  };
+
+  return (
+    <div
+      className={`category-card ${isActive ? 'active-highlight' : ''}`}
+      role="button"
+      tabIndex={0}
+      aria-label={`Select ${cat.title} and launch blueprint`}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+    >
+      <h4>{cat.title}</h4>
+      <p>{cat.categoryDescription}</p>
+
+      <div className="category-card-cta">
+        <span>Explore Plan Blueprint</span>
+      </div>
+    </div>
+  );
+};
+
 export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
   onSelectCategory,
   onNavigateToPlanner,
@@ -193,10 +227,9 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
               <p className="active-category-desc">{currentItem.categoryDescription}</p>
             </div>
 
-            <button
+            <button aria-label={'Build ' + currentItem.title + ' Blueprint'}
               type="button"
               className="btn btn-primary active-category-cta"
-              aria-label={`Build ${currentItem.title} Blueprint`}
               onClick={() => handleLaunchPlan(currentItem.id)}
             >
               <span>Build {currentItem.title} Blueprint</span>
@@ -207,31 +240,16 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
         {/* Complete Blueprint Content Card Grid (All 12 Events Clickable) */}
         <div className="category-grid" style={{ marginTop: '40px' }}>
           {CAROUSEL_ITEMS.map((cat, idx) => (
-            <div
+            <CategoryGridCard
               key={idx}
-              className={`category-card ${idx === activeIndex ? 'active-highlight' : ''}`}
-              role="button"
-              tabIndex={0}
-              aria-label={`Select ${cat.title} and launch blueprint`}
-              onClick={() => {
-                setActiveIndex(idx);
-                handleLaunchPlan(cat.id);
+              cat={cat}
+              idx={idx}
+              isActive={idx === activeIndex}
+              onSelect={(index, id) => {
+                setActiveIndex(index);
+                handleLaunchPlan(id);
               }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  setActiveIndex(idx);
-                  handleLaunchPlan(cat.id);
-                }
-              }}
-            >
-              <h4>{cat.title}</h4>
-              <p>{cat.categoryDescription}</p>
-
-              <div className="category-card-cta">
-                <span>Explore Plan Blueprint</span>
-              </div>
-            </div>
+            />
           ))}
         </div>
       </div>

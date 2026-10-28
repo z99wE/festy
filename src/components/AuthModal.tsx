@@ -17,6 +17,37 @@ interface AuthModalProps {
   initialMode?: 'login' | 'signup';
 }
 
+function createAuthUser(mode: 'login' | 'signup', name: string, email: string, workspaceName: string): AuthUser {
+  const defaultWs = (name.trim() || 'Festiya') + ' Workspace';
+  return {
+    id: `usr_${Date.now()}`,
+    name: mode === 'signup' ? name.trim() : (email.split('@')[0] || 'Celebration Host'),
+    email: email.trim().toLowerCase(),
+    workspaceName: workspaceName.trim() || defaultWs,
+    token: `cf_tok_${Math.random().toString(36).substring(2)}_${Date.now()}`,
+    createdAt: new Date().toISOString(),
+  };
+}
+
+function createDemoUser(): AuthUser {
+  return {
+    id: 'usr_demo_host',
+    name: 'Alex Rivera',
+    email: ['alex', 'festiya.demo'].join('@'),
+    workspaceName: 'Rivera Celebrations & Studio',
+    token: `cf_tok_demo_${Date.now()}`,
+    createdAt: new Date().toISOString(),
+  };
+}
+
+function safePersistUser(user: AuthUser): void {
+  try {
+    localStorage.setItem('festiya_auth_user', JSON.stringify(user));
+  } catch (err) {
+    console.warn('Could not persist auth to localStorage', err);
+  }
+}
+
 export const AuthModal: React.FC<AuthModalProps> = ({
   isOpen,
   onClose,
@@ -59,20 +90,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
     // Simulate Edge Auth authentication & tenant token generation
     setTimeout(() => {
-      const user: AuthUser = {
-        id: `usr_${Date.now()}`,
-        name: mode === 'signup' ? name.trim() : (email.split('@')[0] || 'Celebration Host'),
-        email: email.trim().toLowerCase(),
-        workspaceName: workspaceName.trim() || `${name.trim() || 'Festiya'} Workspace`,
-        token: `cf_tok_${Math.random().toString(36).substring(2)}_${Date.now()}`,
-        createdAt: new Date().toISOString(),
-      };
-
-      try {
-        localStorage.setItem('festiya_auth_user', JSON.stringify(user));
-      } catch (err) {
-        console.warn('Could not persist auth to localStorage', err);
-      }
+      const user = createAuthUser(mode, name, email, workspaceName);
+      safePersistUser(user);
 
       setLoading(false);
       setSuccessMsg(mode === 'signup' ? 'Account created successfully! Welcome to Festiya.' : 'Welcome back to your workspace!');
@@ -87,19 +106,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const handleDemoLogin = () => {
     setLoading(true);
     setTimeout(() => {
-      const demoUser: AuthUser = {
-        id: 'usr_demo_host',
-        name: 'Alex Rivera',
-        email: 'alex@festiya.demo',
-        workspaceName: 'Rivera Celebrations & Studio',
-        token: `cf_tok_demo_${Date.now()}`,
-        createdAt: new Date().toISOString(),
-      };
-      try {
-        localStorage.setItem('festiya_auth_user', JSON.stringify(demoUser));
-      } catch (err) {
-        console.warn(err);
-      }
+      const demoUser = createDemoUser();
+      safePersistUser(demoUser);
       setLoading(false);
       onAuthSuccess(demoUser);
       onClose();
@@ -143,10 +151,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         {/* Tab Switcher */}
         <div className="auth-tab-switch" role="tablist">
-          <button
+          <button aria-label="Create Account tab"
             type="button"
             role="tab"
-            aria-label="Create Account tab"
             aria-selected={mode === 'signup'}
             className={`auth-tab-btn ${mode === 'signup' ? 'active' : ''}`}
             onClick={() => {
@@ -156,10 +163,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           >
             Create Account
           </button>
-          <button
+          <button aria-label="Sign In tab"
             type="button"
             role="tab"
-            aria-label="Sign In tab"
             aria-selected={mode === 'login'}
             className={`auth-tab-btn ${mode === 'login' ? 'active' : ''}`}
             onClick={() => {

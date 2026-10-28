@@ -100,10 +100,9 @@ export const GlobalFestivalFooterShowcase: React.FC<GlobalFestivalFooterShowcase
             <p className="final-cta-subtitle">
               Join couples, hosts, and event producers who replaced chaotic spreadsheets with operational calm. Generate your complete 3-tier budget and milestone checklist in under 90 seconds.
             </p>
-            <button
+            <button aria-label="Build your event plan in under 90 seconds"
               type="button"
               className="btn btn-primary"
-              aria-label="Build your event plan in under 90 seconds"
               style={{ padding: '12px 32px', fontSize: '16px' }}
               onClick={onStartPlanning}
             >

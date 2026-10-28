@@ -4,6 +4,32 @@ interface TaglineRevealProps {
   reducedMotion: boolean;
 }
 
+interface WordItemProps {
+  word: string;
+  index: number;
+  activeCount: number;
+  reducedMotion: boolean;
+}
+
+const PrimaryWord: React.FC<WordItemProps> = ({ word, index, activeCount, reducedMotion }) => {
+  const isLit = index < activeCount;
+  const delay = reducedMotion ? '0ms' : `${(index % 4) * 25}ms`;
+  return (
+    <span
+      className={`reveal-word ${isLit ? 'lit' : 'dim'}`}
+      style={{ transitionDelay: delay }}
+    >
+      {word}{' '}
+    </span>
+  );
+};
+
+const SubWord: React.FC<{ word: string; isLit: boolean }> = ({ word, isLit }) => (
+  <span className={`reveal-word-sub ${isLit ? 'lit' : 'dim'}`}>
+    {word}{' '}
+  </span>
+);
+
 export const TaglineReveal: React.FC<TaglineRevealProps> = ({ reducedMotion }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeWordIndex, setActiveWordIndex] = useState<number>(0);
@@ -31,7 +57,6 @@ export const TaglineReveal: React.FC<TaglineRevealProps> = ({ reducedMotion }) =
       const rect = container.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       
-      // Calculate how far through the reveal section the user has scrolled
       const start = windowHeight * 0.85;
       const end = windowHeight * 0.15;
       const total = start - end;
@@ -44,21 +69,20 @@ export const TaglineReveal: React.FC<TaglineRevealProps> = ({ reducedMotion }) =
     };
 
     let ticking = false;
+    const onTick = () => {
+      handleScroll();
+      ticking = false;
+    };
     const onScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(onTick);
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    const rafId = requestAnimationFrame(() => handleScroll());
+    requestAnimationFrame(() => handleScroll());
 
     return () => {
-      cancelAnimationFrame(rafId);
       window.removeEventListener('scroll', onScroll);
     };
   }, [reducedMotion, words.length, supportingWords.length]);
@@ -68,23 +92,17 @@ export const TaglineReveal: React.FC<TaglineRevealProps> = ({ reducedMotion }) =
       <div className="content-wrapper">
         <div className="tagline-reveal-container">
           <p className="tagline-display-text" aria-live="polite">
-            {words.map((word, index) => {
-              const isLit = index < activeWordIndex;
-              return (
-                <span
-                  key={`w1-${index}`}
-                  className={`reveal-word ${isLit ? 'lit' : 'dim'}`}
-                  style={{
-                    transitionDelay: reducedMotion ? '0ms' : `${(index % 4) * 25}ms`,
-                  }}
-                >
-                  {word}{' '}
-                </span>
-              );
-            })}
+            {words.map((word, index) => (
+              <PrimaryWord
+                key={`w1-${index}`}
+                word={word}
+                index={index}
+                activeCount={activeWordIndex}
+                reducedMotion={reducedMotion}
+              />
+            ))}
           </p>
 
-          {/* Centered, Unsquished Festiya Logo */}
           <div className="tagline-logo-wrap" aria-hidden="true">
             <img
               src="/festiya-logo.webp"
@@ -97,18 +115,13 @@ export const TaglineReveal: React.FC<TaglineRevealProps> = ({ reducedMotion }) =
           </div>
 
           <p className="tagline-sub-text">
-            {supportingWords.map((word, index) => {
-              const globalIndex = words.length + index;
-              const isLit = globalIndex < activeWordIndex;
-              return (
-                <span
-                  key={`w2-${index}`}
-                  className={`reveal-word-sub ${isLit ? 'lit' : 'dim'}`}
-                >
-                  {word}{' '}
-                </span>
-              );
-            })}
+            {supportingWords.map((word, index) => (
+              <SubWord
+                key={`w2-${index}`}
+                word={word}
+                isLit={words.length + index < activeWordIndex}
+              />
+            ))}
           </p>
         </div>
       </div>

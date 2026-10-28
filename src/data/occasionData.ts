@@ -1,0 +1,15 @@
+export interface OccasionItem {
+  id: string;
+  name: string;
+}
+
+export const OCCASION_SWAP_ITEMS: OccasionItem[] = [
+  { id: 'wedding', name: 'Luxury Weddings' },
+  { id: 'birthday', name: 'Milestone Birthdays' },
+  { id: 'festival', name: 'Music Festivals' },
+  { id: 'product_launch', name: 'Product Launches' },
+  { id: 'retreat', name: 'Executive Retreats' },
+  { id: 'anniversary', name: 'Galas & Anniversaries' },
+  { id: 'wine_tasting', name: 'Private Tastings' },
+  { id: 'cultural_fest', name: 'Heritage Festivals' },
+];

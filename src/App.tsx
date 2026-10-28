@@ -1,35 +1,20 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { Navbar, type AuthUser, type ActiveAppTab } from './components/Navbar';
-import { TaglineReveal } from './components/TaglineReveal';
 import { detectUserRegion } from './utils/currency';
 import { playCelebrationSound } from './utils/audio';
 import { type EventPlanningContext } from './data/globalCelebrations';
 import { LazyMount } from './components/LazyMount';
+import { FooterSection } from './components/FooterSection';
+import { HomeTabView } from './components/HomeTabView';
 
 const OrbitableHeroLogo = lazy(() => import('./components/OrbitableHeroLogo').then((m) => ({ default: m.OrbitableHeroLogo })));
-const ProblemSolution = lazy(() => import('./components/ProblemSolution').then((m) => ({ default: m.ProblemSolution })));
 const AuthModal = lazy(() => import('./components/AuthModal').then((m) => ({ default: m.AuthModal })));
-const LiveInteractiveDemo = lazy(() => import('./components/LiveInteractiveDemo').then((m) => ({ default: m.LiveInteractiveDemo })));
-const CelebrationWorldMap = lazy(() => import('./components/CelebrationWorldMap').then((m) => ({ default: m.CelebrationWorldMap })));
 const CategoryShowcase = lazy(() => import('./components/CategoryShowcase').then((m) => ({ default: m.CategoryShowcase })));
 const PlanBuilder = lazy(() => import('./components/PlanBuilder').then((m) => ({ default: m.PlanBuilder })));
 const FAQSection = lazy(() => import('./components/FAQSection').then((m) => ({ default: m.FAQSection })));
-const EventInsights = lazy(() => import('./components/EventInsights').then((m) => ({ default: m.EventInsights })));
 const GlobalFestivalFooterShowcase = lazy(() => import('./components/GlobalFestivalFooterShowcase').then((m) => ({ default: m.GlobalFestivalFooterShowcase })));
 const PeekingMascot = lazy(() => import('./components/PeekingMascot').then((m) => ({ default: m.PeekingMascot })));
 const FestiChatbot = lazy(() => import('./components/FestiChatbot').then((m) => ({ default: m.FestiChatbot })));
-const EventEconomicsAbacus = lazy(() => import('./components/EventEconomicsAbacus').then((m) => ({ default: m.EventEconomicsAbacus })));
-
-const OCCASION_SWAP_ITEMS = [
-  { id: 'wedding', name: 'Luxury Weddings' },
-  { id: 'birthday', name: 'Milestone Birthdays' },
-  { id: 'festival', name: 'Music Festivals' },
-  { id: 'product_launch', name: 'Product Launches' },
-  { id: 'retreat', name: 'Executive Retreats' },
-  { id: 'anniversary', name: 'Galas & Anniversaries' },
-  { id: 'wine_tasting', name: 'Private Tastings' },
-  { id: 'cultural_fest', name: 'Heritage Festivals' },
-];
 
 export function App() {
   const [activeOccasion, setActiveOccasion] = useState('birthday');
@@ -133,6 +118,32 @@ export function App() {
     playCelebrationSound(soundEnabled);
   };
 
+  const handleBlueprintSelectCategory = (occ: string) => {
+    setActiveOccasion(occ);
+    setActiveTab('planner');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNavigateToPlanner = () => {
+    setActiveTab('planner');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleOccasionChange = (occ: string) => {
+    setActiveOccasion(occ);
+    setSelectedPlanningContext(null);
+  };
+
+  const handleClearPlanningContext = () => {
+    setSelectedPlanningContext(null);
+  };
+
+  const handleFestivalSelect = (occ: string) => {
+    setActiveOccasion(occ);
+    setActiveTab('planner');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleSignOut = () => {
     setCurrentUser(null);
     try {
@@ -163,354 +174,50 @@ export function App() {
 
       {/* Main Content Landmark */}
       <main id="main-content">
-        {/* ==========================================================
-            VIEW 1: HOME EXPERIENCE (HERO + INTERACTIVE 3D VENUE STAGE)
-            ========================================================== */}
+        {/* VIEW 1: HOME EXPERIENCE */}
         {activeTab === 'home' && (
-          <>
-            {/* HERO SECTION */}
-            <section id="hero" className="hero-section" aria-labelledby="hero-title">
-              <div className="content-wrapper">
-                <div className="hero-masthead-flow">
-                  {/* 1. TOP MASTHEAD: 3D Orbitable Hero Logo (Pristine tactile 360 rotation & plush 3D lighting) */}
-                  <div className="hero-masthead-centerpiece" aria-label="Festiya Interactive 3D Mascot Logo">
-                    <Suspense
-                      fallback={
-                        <div
-                          className="orbitable-hero-wrapper"
-                          style={{
-                            position: 'relative',
-                            width: '100%',
-                            maxWidth: '940px',
-                            aspectRatio: '940 / 400',
-                            margin: '0 auto',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <img
-                            src="/festiya-logo.webp"
-                            alt="Festiya 3D Plush Mascot Logo - Autonomous Celebration Architect & Event Planning Platform"
-                            title="Festiya 3D Plush Mascot Logo"
-                            width={639}
-                            height={240}
-                            fetchPriority="high"
-                            className="festiya-masthead-img"
-                          />
-                        </div>
-                      }
-                    >
-                      <OrbitableHeroLogo reducedMotion={reducedMotion} soundEnabled={soundEnabled} />
-                    </Suspense>
-                  </div>
-
-                  {/* 2. FLOWING EDITORIAL H1 */}
-                  <h1 id="hero-title" className="hero-title">
-                    <span className="hero-headline-lead">Plan Extraordinary Celebrations</span>
-                    <br />
-                    <span className="highlight-orange">Without the Stress, Spreadsheets, or Overcharging.</span>
-                  </h1>
-
-                  {/* 3. CLASSY H2 SUBTITLE */}
-                  <h2 className="hero-subtitle">
-                    Audit-ready 3-tier budgets, milestone itineraries, and vendor contract run sheets — generated in under 90 seconds.
-                  </h2>
-
-                  {/* 4. FLOWING EDITORIAL BODY COPY */}
-                  <p className="hero-description">
-                    From intimate terrace dinners to 500-guest heritage weddings and corporate galas, <strong>Festiya</strong> replaces planning anxiety with real-time financial certainty, bespoke cost curves, and contract safeguards tailored to your city.
-                  </p>
-
-                  {/* 5. SYMMETRICAL OCCASION SELECTOR GRID (4x2 on Desktop, 2x4 on Mobile) */}
-                  <div className="hero-occasion-grid" role="group" aria-label="Select celebration category">
-                    {OCCASION_SWAP_ITEMS.map((item) => {
-                      const isActive = activeOccasion === item.id;
-                      return (
-                        <button
-                          key={item.id}
-                          type="button"
-                          aria-label={`Select ${item.name} celebration`}
-                          className={`occasion-grid-btn ${isActive ? 'active' : ''}`}
-                          onClick={() => handleQuickOccasionSelect(item.id)}
-                          aria-pressed={isActive}
-                        >
-                          <span className="occasion-grid-label">{item.name}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* 6. CLASSY HERO ACTIONS */}
-                  <div className="hero-actions">
-                    <button
-                      type="button"
-                      aria-label="Build your event plan"
-                      className="btn btn-primary hero-btn-primary"
-                      onClick={handleStartPlanning}
-                    >
-                      <span>Build your event plan</span>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
-                      </svg>
-                    </button>
-
-                    <button
-                      type="button"
-                      aria-label="Explore Blueprints"
-                      className="btn btn-secondary hero-btn-secondary"
-                      onClick={() => {
-                        setActiveTab('blueprints');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                    >
-                      <span>Explore Blueprints</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* CELEBRATION WORLD MAP & 3D GLOBE HUB (Joyful celebratory world, zero confetti) */}
-                <div style={{ marginTop: '36px', marginBottom: '40px' }}>
-                  <LazyMount placeholderHeight="420px" rootMargin="350px">
-                    <Suspense fallback={<div style={{ minHeight: '380px' }} />}>
-                      <CelebrationWorldMap
-                        reducedMotion={reducedMotion}
-                        currentCurrency={currentCurrency}
-                        onSelectEventForPlanner={(occasionId, eventName, context) => {
-                          setActiveOccasion(occasionId);
-                          if (context) {
-                            setSelectedPlanningContext(context);
-                          } else {
-                            setSelectedPlanningContext({
-                              id: occasionId,
-                              name: eventName,
-                              category: occasionId,
-                              location: 'Worldwide',
-                              dates: 'Upcoming 6 Months',
-                            });
-                          }
-                          setActiveTab('planner');
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }}
-                      />
-                    </Suspense>
-                  </LazyMount>
-                </div>
-
-                {/* APP NAVIGATION GATEWAY CARDS (Dividing the app into distinct parts) */}
-                <div style={{ marginTop: '10px' }}>
-                  <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-                    <h2 style={{ fontSize: '26px', fontWeight: 850, color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
-                      Explore Different Parts of Festiya
-                    </h2>
-                  </div>
-
-                  <div className="home-gateways-grid">
-                    <div
-                      className="home-gateway-card"
-                      role="button"
-                      tabIndex={0}
-                      aria-label="Browse Blueprints"
-                      onClick={() => {
-                        setActiveTab('blueprints');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          setActiveTab('blueprints');
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }
-                      }}
-                    >
-                      <div>
-                        <h3 className="gateway-card-title">Blueprints</h3>
-                        <p className="gateway-card-desc">
-                          Curated celebration models covering weddings, milestone birthdays, music festivals, tech launches, and cultural galas.
-                        </p>
-                      </div>
-                      <div className="gateway-card-link">
-                        <span>Browse Blueprints</span>
-                      </div>
-                    </div>
-
-                    <div
-                      className="home-gateway-card"
-                      role="button"
-                      tabIndex={0}
-                      aria-label="Launch Planner"
-                      onClick={() => {
-                        setActiveTab('planner');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          setActiveTab('planner');
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }
-                      }}
-                    >
-                      <div>
-                        <h3 className="gateway-card-title">Planner</h3>
-                        <p className="gateway-card-desc">
-                          Dedicated 3-tier budget synthesizer (low, likely, high) and day-of chronological checklist engine.
-                        </p>
-                      </div>
-                      <div className="gateway-card-link">
-                        <span>Launch Planner</span>
-                      </div>
-                    </div>
-
-                    <div
-                      className="home-gateway-card"
-                      role="button"
-                      tabIndex={0}
-                      aria-label="Calculate Valuation with Economics Abacus"
-                      onClick={() => {
-                        const el = document.getElementById('event-economics-abacus');
-                        if (el) el.scrollIntoView({ behavior: 'smooth' });
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          const el = document.getElementById('event-economics-abacus');
-                          if (el) el.scrollIntoView({ behavior: 'smooth' });
-                        }
-                      }}
-                    >
-                      <div>
-                        <h3 className="gateway-card-title">Economics Abacus</h3>
-                        <p className="gateway-card-desc">
-                          Regional vendor valuation engine with interactive abacus allocation rails and local market dynamics.
-                        </p>
-                      </div>
-                      <div className="gateway-card-link">
-                        <span>Calculate Valuation</span>
-                      </div>
-                    </div>
-
-                    <div
-                      className="home-gateway-card"
-                      role="button"
-                      tabIndex={0}
-                      aria-label="View FAQ Hub"
-                      onClick={() => {
-                        setActiveTab('faq');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          setActiveTab('faq');
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }
-                      }}
-                    >
-                      <div>
-                        <h3 className="gateway-card-title">FAQ & Support</h3>
-                        <p className="gateway-card-desc">
-                          Answers to licensing, vendor pricing guarantees, data security and privacy, and export formats.
-                        </p>
-                      </div>
-                      <div className="gateway-card-link">
-                        <span>View FAQ Hub</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* EVENT ECONOMICS ABACUS & REGIONAL MARKET VALUATION ENGINE */}
-            <LazyMount placeholderHeight="520px" rootMargin="300px">
-              <Suspense fallback={null}>
-                <EventEconomicsAbacus
-                  onApplyToWorkspace={(summary) => {
-                    setSelectedPlanningContext({
-                      id: 'abacus-valuation',
-                      name: `${summary.regionName} Celebration`,
-                      category: activeOccasion,
-                      location: summary.regionName,
-                      dates: 'Upcoming Season',
-                    });
-                    setActiveTab('planner');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                />
-              </Suspense>
-            </LazyMount>
-
-            {/* LIVE AUTOMATED INTERACTIVE DEMO */}
-            <LazyMount placeholderHeight="320px" rootMargin="300px">
-              <Suspense fallback={null}>
-                <LiveInteractiveDemo />
-              </Suspense>
-            </LazyMount>
-
-            {/* Tagline Reveal Section */}
-            <TaglineReveal reducedMotion={reducedMotion} />
-
-            {/* Problem vs Solution Section */}
-            <LazyMount placeholderHeight="360px" rootMargin="300px">
-              <Suspense fallback={null}>
-                <ProblemSolution />
-              </Suspense>
-            </LazyMount>
-
-            {/* AEO & SEO KNOWLEDGE HUB (EMPIRICAL BENCHMARKS & HIGH-CITATION DATA) */}
-            <LazyMount placeholderHeight="580px" rootMargin="350px">
-              <Suspense fallback={null}>
-                <EventInsights
-                  onStartPlanning={handleStartPlanning}
-                  onExploreDemo={handleExploreDemo}
-                />
-              </Suspense>
-            </LazyMount>
-          </>
+          <HomeTabView
+            activeOccasion={activeOccasion}
+            reducedMotion={reducedMotion}
+            soundEnabled={soundEnabled}
+            currentCurrency={currentCurrency}
+            onSelectOccasion={handleQuickOccasionSelect}
+            onStartPlanning={handleStartPlanning}
+            onExploreDemo={handleExploreDemo}
+            onNavigateTab={(tab) => setActiveTab(tab)}
+            onSelectPlanningContext={(ctx) => setSelectedPlanningContext(ctx)}
+            OrbitableHeroLogoComponent={OrbitableHeroLogo}
+          />
         )}
 
-        {/* ==========================================================
-            VIEW 2: DEDICATED 12 EVENT BLUEPRINTS
-            ========================================================== */}
+        {/* VIEW 2: DEDICATED 12 EVENT BLUEPRINTS */}
         {activeTab === 'blueprints' && (
           <div style={{ paddingTop: '12px', minHeight: '80vh' }}>
             <Suspense fallback={null}>
               <CategoryShowcase
-                onSelectCategory={(occ) => {
-                  setActiveOccasion(occ);
-                  setActiveTab('planner');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                onNavigateToPlanner={() => {
-                  setActiveTab('planner');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
+                onSelectCategory={handleBlueprintSelectCategory}
+                onNavigateToPlanner={handleNavigateToPlanner}
               />
             </Suspense>
           </div>
         )}
 
-        {/* ==========================================================
-            VIEW 3: DEDICATED PLANNER WORKSPACE
-            ========================================================== */}
+        {/* VIEW 3: DEDICATED PLANNER WORKSPACE */}
         {activeTab === 'planner' && (
           <div style={{ paddingTop: '12px', minHeight: '80vh' }}>
             <Suspense fallback={null}>
               <PlanBuilder
                 activeOccasion={activeOccasion}
-                onOccasionChange={(occ) => {
-                  setActiveOccasion(occ);
-                  setSelectedPlanningContext(null);
-                }}
+                onOccasionChange={handleOccasionChange}
                 soundEnabled={soundEnabled}
                 planningContext={selectedPlanningContext}
-                onClearPlanningContext={() => setSelectedPlanningContext(null)}
+                onClearPlanningContext={handleClearPlanningContext}
               />
             </Suspense>
           </div>
         )}
 
-        {/* ==========================================================
-            VIEW 4: DEDICATED FAQ & SUPPORT HUB
-            ========================================================== */}
+        {/* VIEW 4: DEDICATED FAQ & SUPPORT HUB */}
         {activeTab === 'faq' && (
           <div style={{ paddingTop: '12px', minHeight: '80vh' }}>
             <Suspense fallback={null}>
@@ -526,135 +233,16 @@ export function App() {
         <Suspense fallback={null}>
           <GlobalFestivalFooterShowcase
             onStartPlanning={handleStartPlanning}
-            onSelectFestival={(occ) => {
-              setActiveOccasion(occ);
-              setActiveTab('planner');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
+            onSelectFestival={handleFestivalSelect}
           />
         </Suspense>
       </LazyMount>
 
       {/* FOOTER */}
-      <footer className="site-footer" role="contentinfo">
-        <div className="content-wrapper">
-          <div className="footer-grid">
-            <div className="footer-brand-col">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                <img
-                  src="/festiya-logo-nav.webp"
-                  alt="Celebration Architect & Global Event Workspace Brand Logo"
-                  title="Turn every moment into a festival"
-                  width={64}
-                  height={24}
-                  style={{ height: '24px', width: 'auto' }}
-                />
-              </div>
-              <p style={{ color: 'var(--text-secondary)' }}>
-                Turn every moment into a festival. Global event planning workspace.
-              </p>
-            </div>
-
-            <div className="footer-col">
-              <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>App Sections</h3>
-              <ul className="footer-links">
-                <li>
-                  <button type="button" aria-label="Navigate to Home" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                    Home
-                  </button>
-                </li>
-                <li>
-                  <button type="button" aria-label="Navigate to Blueprints" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('blueprints'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                    Blueprints
-                  </button>
-                </li>
-                <li>
-                  <button type="button" aria-label="Navigate to Planner" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                    Planner
-                  </button>
-                </li>
-                <li>
-                  <button type="button" aria-label="Navigate to FAQ & Support" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveTab('faq'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                    FAQ & Support
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            <div className="footer-col">
-              <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>Event types</h3>
-              <ul className="footer-links">
-                <li>
-                  <button type="button" aria-label="Plan Weddings and Receptions" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveOccasion('wedding'); setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                    Weddings and Receptions
-                  </button>
-                </li>
-                <li>
-                  <button type="button" aria-label="Plan Milestone Birthdays" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveOccasion('birthday'); setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                    Milestone Birthdays
-                  </button>
-                </li>
-                <li>
-                  <button type="button" aria-label="Plan Music Festivals & Carnivals" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveOccasion('festival'); setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                    Music Festivals & Carnivals
-                  </button>
-                </li>
-                <li>
-                  <button type="button" aria-label="Plan Tech Product Launches" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }} onClick={() => { setActiveOccasion('product_launch'); setActiveTab('planner'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                    Tech Product Launches
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* STANDARD LEGAL & PRIVACY NOTICE DISCLAIMER */}
-          <div className="footer-legal-notice-band">
-            <div className="footer-legal-grid">
-              <div className="footer-legal-block">
-                <h4 className="footer-legal-heading">Data Privacy & Client Confidentiality</h4>
-                <p className="footer-legal-text">
-                  Festiya operates in full compliance with international data privacy frameworks including the General Data Protection Regulation (GDPR), California Consumer Privacy Act (CCPA/CPRA), and modern digital security standards. All celebration plans, vendor budgets, event timelines, and client guest records created within this workspace are stored securely in isolated tenant environments. Festiya does not sell, monetize, broker, or transmit personal consumer information to third-party commercial brokers or unauthorized marketing networks.
-                </p>
-              </div>
-
-              <div className="footer-legal-block">
-                <h4 className="footer-legal-heading">Planning & Valuation Disclaimer</h4>
-                <p className="footer-legal-text">
-                  All budget projections, vendor rate evaluations, game-theoretic negotiation benchmarks, regional abacus valuations, and multi-agent AI recommendations are provided solely for budgeting reference and event planning guidance. Actual contractor pricing, availability, seasonal surges, minimum spends, municipal permitting requirements, security deposits, and local sales taxes are subject to formal agreements executed directly between event organizers and licensed local vendors. Organizers are advised to verify regional municipal permits, fire codes, liquor licensing, and vendor liability coverage prior to executing binding commitments.
-                </p>
-              </div>
-            </div>
-
-            <div className="footer-legal-compliance-bar">
-              <div className="footer-compliance-badges">
-                <span className="footer-compliance-pill">GDPR Ready</span>
-                <span>•</span>
-                <span className="footer-compliance-pill">CCPA Compliant</span>
-                <span>•</span>
-                <span className="footer-compliance-pill">Decimal-Accurate Accounting</span>
-                <span>•</span>
-                <span className="footer-compliance-pill">Zero Third-Party Trackers</span>
-              </div>
-
-              <div className="footer-legal-links">
-                <span className="footer-legal-link-btn">Terms of Service</span>
-                <span>•</span>
-                <span className="footer-legal-link-btn">Privacy Policy</span>
-                <span>•</span>
-                <span className="footer-legal-link-btn">Data Processing Addendum</span>
-                <span>•</span>
-                <span className="footer-legal-link-btn">Cookie Directives</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="footer-bottom" style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>
-            <span>© 2026 Festiya. All rights reserved.</span>
-            <span>Turn every moment into a festival.</span>
-          </div>
-        </div>
-      </footer>
+      <FooterSection
+        onNavigateTab={(tab) => setActiveTab(tab)}
+        onSelectOccasion={(occ) => setActiveOccasion(occ)}
+      />
 
       {/* Playful 3D Alive Peeking Mascot (randomized, max 3 per session, side & upside-down peek) */}
       <Suspense fallback={null}>

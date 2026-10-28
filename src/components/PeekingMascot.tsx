@@ -35,6 +35,16 @@ const MASCOTS: Record<MascotColor, MascotConfig> = {
 
 const COLOR_KEYS: MascotColor[] = ['mint', 'blue', 'yellow', 'pink'];
 
+function triggerMascotConfetti(x = 0.5, y = 0.5): void {
+  confetti({
+    particleCount: 22,
+    spread: 55,
+    origin: { x, y },
+    colors: ['#FF5E1E', '#FFB800', '#2DD4BF', '#A78BFA', '#FFFFFF'],
+    disableForReducedMotion: true,
+  });
+}
+
 interface ActivePeek {
   color: MascotColor;
   horizontalOffset: string;
@@ -66,14 +76,15 @@ export const PeekingMascot: React.FC = () => {
     let blinkTimer: ReturnType<typeof setTimeout>;
     let openTimer: ReturnType<typeof setTimeout>;
 
+    const onOpen = () => {
+      setIsBlinking(false);
+      scheduleNextBlink(1600 + Math.random() * 1200);
+    };
+
     const scheduleNextBlink = (delay: number) => {
       blinkTimer = setTimeout(() => {
         setIsBlinking(true);
-        openTimer = setTimeout(() => {
-          setIsBlinking(false);
-          // Next blink between 1.6s and 2.8s
-          scheduleNextBlink(1600 + Math.random() * 1200);
-        }, 150);
+        openTimer = setTimeout(onOpen, 150);
       }, delay);
     };
 
@@ -165,22 +176,9 @@ export const PeekingMascot: React.FC = () => {
       const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
       const x = (rect.left + rect.width / 2) / window.innerWidth;
       const y = (rect.top + rect.height / 2) / window.innerHeight;
-
-      confetti({
-        particleCount: 22,
-        spread: 55,
-        origin: { x, y },
-        colors: ['#FF5E1E', '#FFB800', '#2DD4BF', '#A78BFA', '#FFFFFF'],
-        disableForReducedMotion: true,
-      });
+      triggerMascotConfetti(x, y);
     } else {
-      confetti({
-        particleCount: 22,
-        spread: 55,
-        origin: { x: 0.5, y: 0.5 },
-        colors: ['#FF5E1E', '#FFB800', '#2DD4BF', '#A78BFA', '#FFFFFF'],
-        disableForReducedMotion: true,
-      });
+      triggerMascotConfetti(0.5, 0.5);
     }
 
     // Gently retreat immediately on click

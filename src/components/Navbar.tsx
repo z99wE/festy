@@ -21,6 +21,83 @@ interface NavbarProps {
   onSelectTab?: (tab: ActiveAppTab) => void;
 }
 
+interface MobileAuthSectionProps {
+  currentUser?: AuthUser | null;
+  onSignOut?: () => void;
+  onOpenAuth?: (mode: 'login' | 'signup') => void;
+  onCloseMenu: () => void;
+}
+
+const MobileAuthSection: React.FC<MobileAuthSectionProps> = ({
+  currentUser,
+  onSignOut,
+  onOpenAuth,
+  onCloseMenu,
+}) => {
+  const handleSignOut = () => {
+    onCloseMenu();
+    if (onSignOut) onSignOut();
+  };
+
+  const handleLogin = () => {
+    onCloseMenu();
+    if (onOpenAuth) onOpenAuth('login');
+  };
+
+  const handleSignup = () => {
+    onCloseMenu();
+    if (onOpenAuth) onOpenAuth('signup');
+  };
+
+  if (currentUser) {
+    return (
+      <div style={{ background: 'var(--bg-surface)', padding: '12px 16px', borderRadius: '12px', border: '1.5px solid var(--border-medium)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div className="navbar-user-avatar">{currentUser.name.charAt(0).toUpperCase()}</div>
+          <div style={{ textAlign: 'left' }}>
+            <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--text-primary)' }}>{currentUser.name}</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{currentUser.workspaceName}</div>
+          </div>
+        </div>
+        {onSignOut && (
+          <button
+            type="button"
+            aria-label="Sign Out"
+            title="Sign Out"
+            className="navbar-logout-btn"
+            onClick={handleSignOut}
+          >
+            <span>Sign Out</span>
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+      <button
+        type="button"
+        aria-label="Sign In"
+        className="navbar-auth-btn"
+        onClick={handleLogin}
+        style={{ justifyContent: 'center' }}
+      >
+        <span>Sign In</span>
+      </button>
+      <button
+        type="button"
+        aria-label="Sign Up"
+        className="navbar-auth-btn signup"
+        onClick={handleSignup}
+        style={{ justifyContent: 'center' }}
+      >
+        <span>Sign Up</span>
+      </button>
+    </div>
+  );
+};
+
 export const Navbar: React.FC<NavbarProps> = ({
   onStartPlanning,
   soundEnabled,
@@ -245,58 +322,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             <div style={{ marginTop: '24px', width: '100%', maxWidth: '320px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {currentUser ? (
-                <div style={{ background: 'var(--bg-surface)', padding: '12px 16px', borderRadius: '12px', border: '1.5px solid var(--border-medium)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div className="navbar-user-avatar">{currentUser.name.charAt(0).toUpperCase()}</div>
-                    <div style={{ textAlign: 'left' }}>
-                      <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--text-primary)' }}>{currentUser.name}</div>
-                      <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{currentUser.workspaceName}</div>
-                    </div>
-                  </div>
-                  {onSignOut && (
-                    <button
-                      type="button"
-                      aria-label="Sign Out"
-                      title="Sign Out"
-                      className="navbar-logout-btn"
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        onSignOut();
-                      }}
-                    >
-                      <span>Sign Out</span>
-                    </button>
-                  )}
-                </div>
-              ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                  <button
-                    type="button"
-                    aria-label="Sign In"
-                    className="navbar-auth-btn"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      onOpenAuth?.('login');
-                    }}
-                    style={{ justifyContent: 'center' }}
-                  >
-                    <span>Sign In</span>
-                  </button>
-                  <button
-                    type="button"
-                    aria-label="Sign Up"
-                    className="navbar-auth-btn signup"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      onOpenAuth?.('signup');
-                    }}
-                    style={{ justifyContent: 'center' }}
-                  >
-                    <span>Sign Up</span>
-                  </button>
-                </div>
-              )}
+              <MobileAuthSection
+                currentUser={currentUser}
+                onSignOut={onSignOut}
+                onOpenAuth={onOpenAuth}
+                onCloseMenu={() => setMobileMenuOpen(false)}
+              />
             </div>
           </div>
         </div>

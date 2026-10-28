@@ -87,6 +87,32 @@ const SCENARIOS: Scenario[] = [
   },
 ];
 
+interface BudgetItem {
+  category: string;
+  amount: number;
+  percentage: number;
+}
+
+const BudgetRow: React.FC<{ item: BudgetItem; showResults: boolean }> = ({ item, showResults }) => {
+  const scale = showResults ? Math.min(1, (item.percentage * 2.5) / 100) : 0;
+  return (
+    <div className="demo-budget-row">
+      <div className="budget-row-meta">
+        <span className="budget-cat-name">{item.category}</span>
+        <span className="budget-cat-amount">
+          ${item.amount.toLocaleString()} ({item.percentage}%)
+        </span>
+      </div>
+      <div className="demo-bar-track">
+        <div
+          className="demo-bar-fill"
+          style={{ transform: `scaleX(${scale})` }}
+        />
+      </div>
+    </div>
+  );
+};
+
 export const LiveInteractiveDemo: React.FC = () => {
   const [activeScenarioIdx, setActiveScenarioIdx] = useState(0);
   const [typedText, setTypedText] = useState('');
@@ -106,19 +132,25 @@ export const LiveInteractiveDemo: React.FC = () => {
     setIsProcessing(false);
     setShowResults(false);
 
+    const onFinish = () => {
+      setIsProcessing(false);
+      setShowResults(true);
+    };
+
+    const onDoneTyping = () => {
+      setIsTyping(false);
+      setIsProcessing(true);
+      timeout = setTimeout(onFinish, 500);
+    };
+
     const typeChar = () => {
       if (charIndex < targetText.length) {
         setTypedText(targetText.slice(0, charIndex + 1));
         charIndex++;
         timeout = setTimeout(typeChar, 24 + Math.random() * 18);
-      } else {
-        setIsTyping(false);
-        setIsProcessing(true);
-        timeout = setTimeout(() => {
-          setIsProcessing(false);
-          setShowResults(true);
-        }, 500);
+        return;
       }
+      onDoneTyping();
     };
 
     timeout = setTimeout(typeChar, 200);
@@ -207,22 +239,11 @@ export const LiveInteractiveDemo: React.FC = () => {
 
               <div className="demo-budget-breakdown">
                 {scenario.items.map((item) => (
-                  <div key={item.category} className="demo-budget-row">
-                    <div className="budget-row-meta">
-                      <span className="budget-cat-name">{item.category}</span>
-                      <span className="budget-cat-amount">
-                        ${item.amount.toLocaleString()} ({item.percentage}%)
-                      </span>
-                    </div>
-                    <div className="demo-bar-track">
-                      <div
-                        className="demo-bar-fill"
-                        style={{
-                          transform: showResults ? `scaleX(${Math.min(1, (item.percentage * 2.5) / 100)})` : 'scaleX(0)',
-                        }}
-                      />
-                    </div>
-                  </div>
+                  <BudgetRow
+                    key={item.category}
+                    item={item}
+                    showResults={showResults}
+                  />
                 ))}
               </div>
             </div>
@@ -252,10 +273,9 @@ export const LiveInteractiveDemo: React.FC = () => {
             <span className="demo-footer-text">
               Generated in <strong>1.2 seconds</strong> with zero spreadsheet dread.
             </span>
-            <button
+            <button aria-label="Build your plan with custom numbers"
               type="button"
               className="btn btn-primary demo-jump-btn"
-              aria-label="Build your plan with custom numbers"
               onClick={handleJumpToPlanner}
             >
               <span>Build your plan with custom numbers</span>

@@ -112,10 +112,9 @@ export const EventInsights: React.FC<EventInsightsProps> = ({ onStartPlanning, o
             </p>
           </div>
           <div className="insights-cta-buttons">
-            <button
+            <button aria-label="Launch celebration planner"
               type="button"
               className="btn btn-primary"
-              aria-label="Launch celebration planner"
               onClick={onStartPlanning}
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
             >
@@ -123,10 +122,9 @@ export const EventInsights: React.FC<EventInsightsProps> = ({ onStartPlanning, o
               <ArrowRight size={18} />
             </button>
             {onExploreDemo && (
-              <button
+              <button aria-label="Watch auto simulation"
                 type="button"
                 className="btn btn-secondary"
-                aria-label="Watch auto simulation"
                 onClick={onExploreDemo}
               >
                 Watch Auto Simulation

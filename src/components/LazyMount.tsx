@@ -17,43 +17,32 @@ export const LazyMount: React.FC<LazyMountProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (shouldMount) return;
-    const el = containerRef.current;
-    if (!el) return;
-
-    if (typeof IntersectionObserver !== 'undefined') {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry?.isIntersecting) {
-            setShouldMount(true);
-            observer.disconnect();
-          }
-        },
-        { rootMargin }
-      );
-      observer.observe(el);
-
-      const timeoutId = setTimeout(() => {
-        setShouldMount(true);
-      }, idleDelayMs);
-
-      return () => {
-        observer.disconnect();
-        clearTimeout(timeoutId);
-      };
-    } else {
+    if (shouldMount || !containerRef.current) return;
+    if (typeof IntersectionObserver === 'undefined') {
       setShouldMount(true);
+      return;
     }
+    const onIntersect: IntersectionObserverCallback = ([entry]) => {
+      if (!entry?.isIntersecting) return;
+      setShouldMount(true);
+      observer.disconnect();
+    };
+    const observer = new IntersectionObserver(onIntersect, { rootMargin });
+    observer.observe(containerRef.current);
+    const timeoutId = setTimeout(() => setShouldMount(true), idleDelayMs);
+    return () => {
+      observer.disconnect();
+      clearTimeout(timeoutId);
+    };
   }, [rootMargin, idleDelayMs, shouldMount]);
 
+  const wrapperStyle = {
+    minHeight: shouldMount ? undefined : placeholderHeight,
+    width: '100%',
+  };
+
   return (
-    <div
-      ref={containerRef}
-      style={{
-        minHeight: shouldMount ? undefined : placeholderHeight,
-        width: '100%',
-      }}
-    >
+    <div ref={containerRef} style={wrapperStyle}>
       {shouldMount ? children : null}
     </div>
   );

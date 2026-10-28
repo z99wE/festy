@@ -95,79 +95,78 @@ export interface ExtractedEventParams {
   isCreativeQuery: boolean;
 }
 
+const OCCASION_MATCHERS = [
+  { id: 'wedding', title: 'Wedding & Reception', regex: /wed|reception|bridal|groom/ },
+  { id: 'birthday', title: 'Milestone Birthday', regex: /birth|sweet 16|turning|30th|40th|50th/ },
+  { id: 'festival', title: 'Festival & Concert', regex: /festival|carnival|concert|stage|music/ },
+  { id: 'product_launch', title: 'Product Launch', regex: /launch|product|demo|tech|keynote/ },
+  { id: 'retreat', title: 'Executive Retreat', regex: /retreat|offsite|executive|corporate|team/ },
+  { id: 'anniversary', title: 'Gala & Anniversary', regex: /anniversary|gala|charity|fundraiser/ },
+  { id: 'wine_tasting', title: 'Private Culinary Tasting', regex: /tasting|wine|dinner|culinary/ },
+];
+
+const CURRENCY_SYMBOLS = ['A$', '€', '£', '₹'];
+
+const DEFAULT_BUDGET_WEIGHTS = [
+  { cat: 'Venue & Facilities', pct: 0.30, note: 'Primary space hire, basic lighting & setup' },
+  { cat: 'Food & Refreshments', pct: 0.36, note: 'Plated/stations, cocktail bar & staffing' },
+  { cat: 'Decor & Ambiance', pct: 0.14, note: 'Tablescapes, focal floral arches & accent lighting' },
+  { cat: 'Entertainment & Audio', pct: 0.12, note: 'Sound equipment, curated DJ/performers' },
+  { cat: 'Contingency Safety Buffer', pct: 0.08, note: 'Protected margin against overtime & tax drift' },
+];
+
+const BUDGET_WEIGHT_MAP: Record<string, Array<{ cat: string; pct: number; note: string }>> = {
+  festival: [
+    { cat: 'Stages & Staging AV', pct: 0.35, note: 'Open-air rigging, power generators & sound' },
+    { cat: 'Permits & Municipal Security', pct: 0.20, note: 'Crowd safety, medical triage & city permits' },
+    { cat: 'Talent & Performers', pct: 0.25, note: 'Live acts, host/DJ riders & hospitality' },
+    { cat: 'Guest Facilities & Waste', pct: 0.12, note: 'Sanitation stations, wristbands & water points' },
+    { cat: 'Contingency Safety Buffer', pct: 0.08, note: 'Weather reserve & overtime allowance' },
+  ],
+  product_launch: [
+    { cat: 'AV, Keynote & Streaming', pct: 0.38, note: 'Low-latency broadcast, LED wall & audio' },
+    { cat: 'Venue & Demo Pods', pct: 0.28, note: 'Auditorium staging & interactive hands-on bays' },
+    { cat: 'Executive Hospitality', pct: 0.18, note: 'VIP catering, espresso bar & press hospitality' },
+    { cat: 'Brand Design & Signage', pct: 0.10, note: 'High-contrast stage backdrops & credentials' },
+    { cat: 'Contingency Safety Buffer', pct: 0.06, note: 'Backup streaming link & technical reserve' },
+  ],
+};
+
+function parseGuestCount(prompt: string): number {
+  const match = prompt.match(/(\d+)\s*(guests?|people|attendees|pax|friends|members)/i) || prompt.match(/(for|with)\s*(\d+)/i);
+  if (!match) return 60;
+  const num = parseInt(match[1] || match[2], 10);
+  return (num > 0 && num <= 5000) ? num : 60;
+}
+
+function parseBudgetAmount(prompt: string, guestCount: number, occasionId: string): number {
+  const match = prompt.match(/([$€£₹])\s*([\d,]+)/) || prompt.match(/([\d,]+)\s*(dollars|usd|eur|gbp|inr|budget)/i);
+  if (match) {
+    const raw = (match[2] || match[1]).replace(/,/g, '');
+    const num = parseInt(raw, 10);
+    if (num >= 200) return num;
+  }
+  const multipliers: Record<string, number> = { wedding: 120, retreat: 95 };
+  const mult = multipliers[occasionId] || 65;
+  return Math.max(2500, guestCount * mult);
+}
+
+function parseLocation(prompt: string): string {
+  const locMatch = prompt.match(/in\s+([A-Z][a-zA-Z\s]+?)(?:\s+(?:for|with|on|under|budget)|[,\.]|$)/);
+  return locMatch && locMatch[1] ? locMatch[1].trim() : 'Local Venue';
+}
+
 export class MultiAgentEngine {
-  /**
-   * Intelligently extracts event parameters and intent from natural user prompts
-   */
   static extractParams(prompt: string): ExtractedEventParams {
     const text = prompt.toLowerCase();
+    const matched = OCCASION_MATCHERS.find((m) => m.regex.test(text));
+    const occasionId = matched ? matched.id : 'birthday';
+    const occasionTitle = matched ? matched.title : 'Milestone Celebration';
+    const guestCount = parseGuestCount(prompt);
+    const budgetAmount = parseBudgetAmount(prompt, guestCount, occasionId);
+    const currency = CURRENCY_SYMBOLS.find((s) => prompt.includes(s)) || '$';
+    const location = parseLocation(prompt);
 
-    // Occasion Detection
-    let occasionId = 'birthday';
-    let occasionTitle = 'Milestone Celebration';
-
-    if (text.includes('wed') || text.includes('reception') || text.includes('bridal') || text.includes('groom')) {
-      occasionId = 'wedding';
-      occasionTitle = 'Wedding & Reception';
-    } else if (text.includes('birth') || text.includes('sweet 16') || text.includes('turning') || text.includes('30th') || text.includes('40th') || text.includes('50th')) {
-      occasionId = 'birthday';
-      occasionTitle = 'Milestone Birthday';
-    } else if (text.includes('festival') || text.includes('carnival') || text.includes('concert') || text.includes('stage') || text.includes('music')) {
-      occasionId = 'festival';
-      occasionTitle = 'Festival & Concert';
-    } else if (text.includes('launch') || text.includes('product') || text.includes('demo') || text.includes('tech') || text.includes('keynote')) {
-      occasionId = 'product_launch';
-      occasionTitle = 'Product Launch';
-    } else if (text.includes('retreat') || text.includes('offsite') || text.includes('executive') || text.includes('corporate') || text.includes('team')) {
-      occasionId = 'retreat';
-      occasionTitle = 'Executive Retreat';
-    } else if (text.includes('anniversary') || text.includes('gala') || text.includes('charity') || text.includes('fundraiser')) {
-      occasionId = 'anniversary';
-      occasionTitle = 'Gala & Anniversary';
-    } else if (text.includes('tasting') || text.includes('wine') || text.includes('dinner') || text.includes('culinary')) {
-      occasionId = 'wine_tasting';
-      occasionTitle = 'Private Culinary Tasting';
-    }
-
-    // Guest Count Extraction (e.g. "50 guests", "for 120 people", "30 attendees")
-    let guestCount = 60;
-    const guestMatch = prompt.match(/(\d+)\s*(guests?|people|attendees|pax|friends|members)/i) || prompt.match(/(for|with)\s*(\d+)/i);
-    if (guestMatch) {
-      const parsed = parseInt(guestMatch[1] || guestMatch[2], 10);
-      if (!isNaN(parsed) && parsed > 0 && parsed <= 5000) {
-        guestCount = parsed;
-      }
-    }
-
-    // Budget Amount Extraction (e.g. "$5,000", "5000 budget", "€4,000", "£3500", "₹500000")
-    let budgetAmount = 5000;
-    let currency = '$';
-
-    if (prompt.includes('€')) currency = '€';
-    else if (prompt.includes('£')) currency = '£';
-    else if (prompt.includes('₹')) currency = '₹';
-    else if (prompt.includes('A$')) currency = 'A$';
-
-    const budgetMatch = prompt.match(/([$€£₹])\s*([\d,]+)/) || prompt.match(/([\d,]+)\s*(dollars|usd|eur|gbp|inr|budget)/i);
-    if (budgetMatch) {
-      const rawNum = (budgetMatch[2] || budgetMatch[1]).replace(/,/g, '');
-      const parsed = parseInt(rawNum, 10);
-      if (!isNaN(parsed) && parsed >= 200) {
-        budgetAmount = parsed;
-      }
-    } else {
-      // Default estimation heuristic based on guest count and occasion
-      budgetAmount = Math.max(2500, guestCount * (occasionId === 'wedding' ? 120 : occasionId === 'retreat' ? 95 : 65));
-    }
-
-    // Location Extraction
-    let location = 'Local Venue';
-    const locMatch = prompt.match(/in\s+([A-Z][a-zA-Z\s]+?)(?:\s+(?:for|with|with|on|under|budget)|[,\.]|$)/);
-    if (locMatch && locMatch[1]) {
-      location = locMatch[1].trim();
-    }
-
-    // Intent Flags
     const isBudgetQuery = /budget|cost|price|allocate|spend|estimate|dollars|split|breakdown/i.test(prompt);
     const isTimelineQuery = /timeline|schedule|run\s*of\s*show|agenda|itinerary|hours?|milestone|when/i.test(prompt);
     const isContractQuery = /vendor|contract|caterer|deposit|hidden\s*fee|negotiat|clause|venue\s*fee/i.test(prompt);
@@ -187,46 +186,14 @@ export class MultiAgentEngine {
     };
   }
 
-  /**
-   * Financial Synthesizer Agent
-   * Calculates decimal-safe 3-tier allocations and structured category distributions
-   */
   static synthesizeBudget(params: ExtractedEventParams): AgentBudgetArtifact {
     const total = params.budgetAmount;
     const guests = Math.max(1, params.guestCount);
     const costPerGuest = Math.round(total / guests);
-
-    // 3-Tier scenario bounds
     const conservative = Math.round(total * 0.78);
-    const realistic = total;
     const luxury = Math.round(total * 1.38);
 
-    // Occasion-specific percentage weighting
-    let weights = [
-      { cat: 'Venue & Facilities', pct: 0.30, note: 'Primary space hire, basic lighting & setup' },
-      { cat: 'Food & Refreshments', pct: 0.36, note: 'Plated/stations, cocktail bar & staffing' },
-      { cat: 'Decor & Ambiance', pct: 0.14, note: 'Tablescapes, focal floral arches & accent lighting' },
-      { cat: 'Entertainment & Audio', pct: 0.12, note: 'Sound equipment, curated DJ/performers' },
-      { cat: 'Contingency Safety Buffer', pct: 0.08, note: 'Protected margin against overtime & tax drift' },
-    ];
-
-    if (params.occasionId === 'festival') {
-      weights = [
-        { cat: 'Stages & Staging AV', pct: 0.35, note: 'Open-air rigging, power generators & sound' },
-        { cat: 'Permits & Municipal Security', pct: 0.20, note: 'Crowd safety, medical triage & city permits' },
-        { cat: 'Talent & Performers', pct: 0.25, note: 'Live acts, host/DJ riders & hospitality' },
-        { cat: 'Guest Facilities & Waste', pct: 0.12, note: 'Sanitation stations, wristbands & water points' },
-        { cat: 'Contingency Safety Buffer', pct: 0.08, note: 'Weather reserve & overtime allowance' },
-      ];
-    } else if (params.occasionId === 'product_launch') {
-      weights = [
-        { cat: 'AV, Keynote & Streaming', pct: 0.38, note: 'Low-latency broadcast, LED wall & audio' },
-        { cat: 'Venue & Demo Pods', pct: 0.28, note: 'Auditorium staging & interactive hands-on bays' },
-        { cat: 'Executive Hospitality', pct: 0.18, note: 'VIP catering, espresso bar & press hospitality' },
-        { cat: 'Brand Design & Signage', pct: 0.10, note: 'High-contrast stage backdrops & credentials' },
-        { cat: 'Contingency Safety Buffer', pct: 0.06, note: 'Backup streaming link & technical reserve' },
-      ];
-    }
+    const weights = BUDGET_WEIGHT_MAP[params.occasionId] || DEFAULT_BUDGET_WEIGHTS;
 
     const categories: AgentBudgetCategory[] = weights.map((w) => ({
       category: w.cat,
@@ -240,56 +207,20 @@ export class MultiAgentEngine {
       totalBudget: total,
       guestCount: guests,
       costPerGuest,
-      tiers: {
-        conservative,
-        realistic,
-        luxury,
-      },
+      tiers: { conservative, realistic: total, luxury },
       categories,
     };
   }
 
-  /**
-   * Logistics & Run-of-Show Agent
-   * Produces a minute-accurate milestone execution timeline
-   */
   static synthesizeTimeline(params: ExtractedEventParams): AgentTimelineArtifact {
     const items: AgentTimelineItem[] = [
-      {
-        time: 'T - 4 Hours',
-        title: 'Vendor Load-In & Power Drops',
-        detail: 'Catering vehicles arrive, main power distribution lines tested, venue manager sign-off.',
-      },
-      {
-        time: 'T - 90 Minutes',
-        title: 'AV Soundcheck & Lighting State Lock',
-        detail: 'Microphone levels balanced, ambient lighting set to arrival state, background playlist cued.',
-      },
-      {
-        time: '00:00 (Start)',
-        title: 'Guest Arrivals & Welcome Beverage Service',
-        detail: 'Signature drink trays circulated, coat check staffed, guest book and greeting station active.',
-      },
-      {
-        time: '+ 45 Minutes',
-        title: 'Opening Welcome & Host Welcome Remarks',
-        detail: 'Short 3-minute toast, transition music dip, first course or food stations opened.',
-      },
-      {
-        time: '+ 2 Hours',
-        title: 'Main Feature & Celebratory Milestone Moment',
-        detail: 'Cake cutting, key presentation, or headline performance under focused spotlight.',
-      },
-      {
-        time: '+ 3.5 Hours',
-        title: 'Last Call & Departure Hospitality',
-        detail: 'Bar service closes, guest keepsake distribution, coordinated rideshare & transport queue.',
-      },
-      {
-        time: '+ 4.5 Hours',
-        title: 'Load-Out & Damage Deposit Sign-Off',
-        detail: 'Strike rentals, venue walkthrough with facility supervisor to release damage escrow.',
-      },
+      { time: 'T - 4 Hours', title: 'Vendor Load-In & Power Drops', detail: 'Catering vehicles arrive, main power distribution lines tested, venue manager sign-off.' },
+      { time: 'T - 90 Minutes', title: 'AV Soundcheck & Lighting State Lock', detail: 'Microphone levels balanced, ambient lighting set to arrival state, background playlist cued.' },
+      { time: '00:00 (Start)', title: 'Guest Arrivals & Welcome Beverage Service', detail: 'Signature drink trays circulated, coat check staffed, guest book and greeting station active.' },
+      { time: '+ 45 Minutes', title: 'Opening Welcome & Host Welcome Remarks', detail: 'Short 3-minute toast, transition music dip, first course or food stations opened.' },
+      { time: '+ 2 Hours', title: 'Main Feature & Celebratory Milestone Moment', detail: 'Cake cutting, key presentation, or headline performance under focused spotlight.' },
+      { time: '+ 3.5 Hours', title: 'Last Call & Departure Hospitality', detail: 'Bar service closes, guest keepsake distribution, coordinated rideshare & transport queue.' },
+      { time: '+ 4.5 Hours', title: 'Load-Out & Damage Deposit Sign-Off', detail: 'Strike rentals, venue walkthrough with facility supervisor to release damage escrow.' },
     ];
 
     return {
@@ -298,26 +229,22 @@ export class MultiAgentEngine {
     };
   }
 
-  /**
-   * Contract Safeguard Agent
-   * Identifies hidden surcharges and formulates sharp verification questions
-   */
   static synthesizeContractSafeguards(params: ExtractedEventParams): AgentContractArtifact {
     const safeguards: AgentContractItem[] = [
       {
         riskArea: 'Overtime & Teardown Multipliers',
-        clauseWarning: 'Venues frequently charge 1.5x to 2x hourly rates if load-out exceeds midnight by even 15 minutes.',
-        verificationQuestion: 'What is the grace period for teardown before overtime rates trigger, and is staff load-out billed separately from guest curfew?',
+        clauseWarning: 'Venues frequently charge 1.5x to 2x hourly rates when load-out exceeds midnight by even 15 minutes.',
+        verificationQuestion: 'What is the grace period for teardown before overtime rates trigger, and is staff load-out billed separately from guest curfew.',
       },
       {
         riskArea: 'Service Surcharges vs. Gratuities',
         clauseWarning: 'Many venues levy a mandatory 22% "Administrative Service Fee" that does NOT go to service staff as tips.',
-        verificationQuestion: 'Does the administrative service fee include staff gratuities, or will an additional tip multiplier be expected on the final invoice?',
+        verificationQuestion: 'Does the administrative service fee include staff gratuities, or will an additional tip multiplier be expected on the final invoice.',
       },
       {
         riskArea: 'External Vendor Surcharges',
-        clauseWarning: 'Venues often add $500–$1,200 penalties if you bring your own photographer, DJ, or baker outside their preferred list.',
-        verificationQuestion: 'Are there landmark or buyout surcharges if we contract our own certified, insured vendors rather than the preferred directory?',
+        clauseWarning: 'Venues often add $500–$1,200 penalties when bringing your own photographer, DJ, or baker outside their preferred list.',
+        verificationQuestion: 'Are there landmark or buyout surcharges when contracting our own certified, insured vendors rather than the preferred directory.',
       },
     ];
 
@@ -325,19 +252,13 @@ export class MultiAgentEngine {
       safeguards.push({
         riskArea: 'Corkage & Cake Cutting Surcharges',
         clauseWarning: 'Standard venue rates apply $4–$9 per guest just to slice celebratory cakes or $25–$45 per uncorked wine bottle.',
-        verificationQuestion: 'Can we negotiate a flat-rate beverage corkage fee or waive the cake-cutting fee if dessert is served buffet-style?',
+        verificationQuestion: 'Can we negotiate a flat-rate beverage corkage fee or waive the cake-cutting fee when dessert is served buffet-style.',
       });
     }
 
-    return {
-      safeguards,
-    };
+    return { safeguards };
   }
 
-  /**
-   * Game-Theoretic Bargaining & Minimax Decision Agent
-   * Applies Nash bargaining principles, Pareto trade-offs, and Savage's Minimax Regret
-   */
   static synthesizeGameTheory(params: ExtractedEventParams): AgentGameTheoryArtifact {
     const total = params.budgetAmount;
     const currency = params.currency;
@@ -346,7 +267,7 @@ export class MultiAgentEngine {
     const paretoTradeoffs: ParetoTradeoff[] = [
       {
         concessionGiven: 'Offer afternoon load-in flexibility (T-5h instead of morning lock)',
-        concessionExtracted: `Waive standard $450-$700 equipment drop fee and secure complimentary vendor green room`,
+        concessionExtracted: 'Waive standard $450-$700 equipment drop fee and secure complimentary vendor green room',
         payoffRationale: 'The venue incurs zero marginal cost for daylight hall access, while eliminating an arbitrary high-markup line item from your ledger.',
       },
       {
@@ -384,9 +305,6 @@ export class MultiAgentEngine {
     };
   }
 
-  /**
-   * Dispatches the multi-agent swarm, synthesizes artifacts, and compiles response
-   */
   static executeSwarm(prompt: string, llmResponseText?: string): MultiAgentPlanResult {
     const params = this.extractParams(prompt);
     const agentsEngaged: string[] = ['Chief Orchestrator Agent'];
@@ -396,26 +314,22 @@ export class MultiAgentEngine {
     let contractArtifact: AgentContractArtifact | undefined;
     let gameTheoryArtifact: AgentGameTheoryArtifact | undefined;
 
-    // Trigger Financial Agent
-    if (params.isBudgetQuery || prompt.includes('$') || prompt.includes('cost') || prompt.includes('spend')) {
+    if (params.isBudgetQuery || /[$]|cost|spend/i.test(prompt)) {
       agentsEngaged.push('Financial Synthesizer Agent');
       budgetArtifact = this.synthesizeBudget(params);
     }
 
-    // Trigger Logistics Agent
-    if (params.isTimelineQuery || prompt.includes('schedule') || prompt.includes('timeline') || prompt.includes('hours')) {
+    if (params.isTimelineQuery || /schedule|timeline|hours/i.test(prompt)) {
       agentsEngaged.push('Logistics & Run-of-Show Agent');
       timelineArtifact = this.synthesizeTimeline(params);
     }
 
-    // Trigger Contract Safeguard Agent & Game-Theoretic Bargaining Agent
-    if (params.isContractQuery || prompt.includes('vendor') || prompt.includes('contract') || prompt.includes('caterer') || prompt.includes('deposit') || prompt.includes('negotiat') || prompt.includes('game')) {
+    if (params.isContractQuery || /vendor|contract|caterer|deposit|negotiat|game/i.test(prompt)) {
       agentsEngaged.push('Contract Safeguard Agent', 'Game-Theoretic Bargaining Agent');
       contractArtifact = this.synthesizeContractSafeguards(params);
       gameTheoryArtifact = this.synthesizeGameTheory(params);
     }
 
-    // If generic question with no specific artifacts triggered, generate a complete baseline plan including Game Theory
     if (!budgetArtifact && !timelineArtifact && !contractArtifact) {
       agentsEngaged.push('Financial Synthesizer Agent', 'Logistics & Run-of-Show Agent', 'Game-Theoretic Bargaining Agent');
       budgetArtifact = this.synthesizeBudget(params);
@@ -423,7 +337,6 @@ export class MultiAgentEngine {
       gameTheoryArtifact = this.synthesizeGameTheory(params);
     }
 
-    // Build concise executive summary
     const summary = llmResponseText && llmResponseText.length > 20
       ? llmResponseText
       : `I have orchestrated a complete ${params.occasionTitle} blueprint tailored for ${params.guestCount} guests with a target budget of ${params.currency}${params.budgetAmount.toLocaleString()}. Review the synthesized allocations, chronological milestones, and contract safeguards below, then apply directly to your active event workspace.`;
