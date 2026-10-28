@@ -1,13 +1,12 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
-  Globe,
   Calendar,
-  Sparkles,
   ArrowRight,
   Search,
   MessageSquare,
   Users,
-  Compass,
+  X,
+  MapPin,
 } from 'lucide-react';
 import { formatCurrency } from '../utils/currency';
 import { playPopSound } from '../utils/audio';
@@ -307,15 +306,13 @@ interface CelebrationWorldMapProps {
 }
 
 export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
-  reducedMotion = false,
   currentCurrency = 'USD',
   onSelectEventForPlanner,
 }) => {
   const [activePinId, setActivePinId] = useState<string>(WORLD_CELEBRATION_PINS[0].id);
   const [selectedRegion, setSelectedRegion] = useState<string>('All');
-  const [displayMode, setDisplayMode] = useState<'map' | 'globe'>('map');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const globeContainerRef = useRef<HTMLDivElement>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(true);
 
   const filteredPins = useMemo(() => {
     return WORLD_CELEBRATION_PINS.filter((pin) => {
@@ -345,250 +342,12 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
     return { x, y };
   };
 
-  // 3D Three.js Rotating Celebration Globe with Beacons (Zero confetti, warm celebratory earth)
-  useEffect(() => {
-    if (displayMode !== 'globe') return;
-    const container = globeContainerRef.current;
-    if (!container) return;
-
-    let isDisposed = false;
-    let animationFrameId = 0;
-    let cleanupFn: (() => void) | undefined;
-
-    import('three').then((THREE) => {
-      if (isDisposed) return;
-      const width = container.clientWidth || 460;
-      const height = 380;
-
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 100);
-      camera.position.set(0, 0, 5.2);
-
-      const renderer = new THREE.WebGLRenderer({
-        alpha: true,
-        antialias: true,
-        powerPreference: 'high-performance',
-      });
-      renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-      container.innerHTML = '';
-      container.appendChild(renderer.domElement);
-
-      // Warm celebratory lighting
-      const ambientLight = new THREE.AmbientLight(0xfff5ea, 2.2);
-      scene.add(ambientLight);
-
-      const sunLight = new THREE.DirectionalLight(0xffedd5, 2.5);
-      sunLight.position.set(4, 3, 5);
-      scene.add(sunLight);
-
-      const rimLight = new THREE.DirectionalLight(0xffc278, 1.5);
-      rimLight.position.set(-4, -2, -3);
-      scene.add(rimLight);
-
-      const globeGroup = new THREE.Group();
-      scene.add(globeGroup);
-
-      // Earth Sphere with elegant celebratory parchment/landmass canvas
-      const sphereRadius = 1.7;
-      const sphereGeom = new THREE.SphereGeometry(sphereRadius, 32, 32);
-
-      // Procedural warm celebratory globe texture
-      const canvas = document.createElement('canvas');
-      canvas.width = 1024;
-      canvas.height = 512;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        // Soft creamy ocean
-        ctx.fillStyle = '#f8f4ec';
-        ctx.fillRect(0, 0, 1024, 512);
-
-        // Latitude & Longitude delicate guide arcs
-        ctx.strokeStyle = '#e7dece';
-        ctx.lineWidth = 1;
-        for (let x = 0; x <= 1024; x += 1024 / 12) {
-          ctx.beginPath();
-          ctx.moveTo(x, 0);
-          ctx.lineTo(x, 512);
-          ctx.stroke();
-        }
-        for (let y = 0; y <= 512; y += 512 / 6) {
-          ctx.beginPath();
-          ctx.moveTo(0, y);
-          ctx.lineTo(1024, y);
-          ctx.stroke();
-        }
-
-        // Equator accent line
-        ctx.strokeStyle = '#dfd2bc';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(0, 256);
-        ctx.lineTo(1024, 256);
-        ctx.stroke();
-
-        // Stylized continent clusters (warm champagne fill)
-        ctx.fillStyle = '#ebdcc7';
-        // Americas
-        ctx.beginPath();
-        ctx.ellipse(280, 190, 85, 110, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.ellipse(340, 360, 60, 95, 0.2, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Europe & Africa
-        ctx.beginPath();
-        ctx.ellipse(540, 170, 60, 50, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.ellipse(550, 290, 75, 90, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Asia & Australia
-        ctx.beginPath();
-        ctx.ellipse(750, 180, 120, 80, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.ellipse(840, 360, 50, 45, 0, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      const globeTex = new THREE.CanvasTexture(canvas);
-      globeTex.colorSpace = THREE.SRGBColorSpace;
-
-      const globeMat = new THREE.MeshStandardMaterial({
-        map: globeTex,
-        roughness: 0.65,
-        metalness: 0.05,
-      });
-
-      const earthMesh = new THREE.Mesh(sphereGeom, globeMat);
-      globeGroup.add(earthMesh);
-
-      // Outer atmospheric warm glow
-      const atmosphereGeom = new THREE.SphereGeometry(sphereRadius * 1.025, 32, 32);
-      const atmosphereMat = new THREE.MeshBasicMaterial({
-        color: 0xffa45b,
-        transparent: true,
-        opacity: 0.09,
-        side: THREE.BackSide,
-      });
-      const atmosphereMesh = new THREE.Mesh(atmosphereGeom, atmosphereMat);
-      globeGroup.add(atmosphereMesh);
-
-      // Add 3D Beacon Pins for celebrations
-      const pinMeshes: { mesh: any; pin: WorldCelebrationPin }[] = [];
-      const pinGeom = new THREE.SphereGeometry(0.065, 16, 16);
-
-      WORLD_CELEBRATION_PINS.forEach((pin) => {
-        const phi = (90 - pin.lat) * (Math.PI / 180);
-        const theta = (pin.lon + 180) * (Math.PI / 180);
-
-        const x = -sphereRadius * Math.sin(phi) * Math.cos(theta);
-        const y = sphereRadius * Math.cos(phi);
-        const z = sphereRadius * Math.sin(phi) * Math.sin(theta);
-
-        const pinMat = new THREE.MeshBasicMaterial({
-          color: new THREE.Color(pin.color),
-        });
-        const pinMesh = new THREE.Mesh(pinGeom, pinMat);
-        pinMesh.position.set(x, y, z);
-        globeGroup.add(pinMesh);
-        pinMeshes.push({ mesh: pinMesh, pin });
-      });
-
-      // Mouse drag rotation
-      let isDragging = false;
-      let prevX = 0;
-      let prevY = 0;
-      let rotX = 0.25;
-      let rotY = -0.6;
-      let targetRotX = rotX;
-      let targetRotY = rotY;
-
-      const dom = renderer.domElement;
-      dom.style.cursor = 'grab';
-
-      const onPointerDown = (e: MouseEvent | TouchEvent) => {
-        isDragging = true;
-        const cx = 'touches' in e ? e.touches[0].clientX : e.clientX;
-        const cy = 'touches' in e ? e.touches[0].clientY : e.clientY;
-        prevX = cx;
-        prevY = cy;
-        dom.style.cursor = 'grabbing';
-      };
-
-      const onPointerMove = (e: MouseEvent | TouchEvent) => {
-        if (!isDragging) return;
-        const cx = 'touches' in e ? e.touches[0].clientX : e.clientX;
-        const cy = 'touches' in e ? e.touches[0].clientY : e.clientY;
-        const deltaX = cx - prevX;
-        const deltaY = cy - prevY;
-        prevX = cx;
-        prevY = cy;
-        targetRotY += deltaX * 0.007;
-        targetRotX += deltaY * 0.007;
-        targetRotX = Math.max(-1.1, Math.min(1.1, targetRotX));
-      };
-
-      const onPointerUp = () => {
-        isDragging = false;
-        dom.style.cursor = 'grab';
-      };
-
-      dom.addEventListener('mousedown', onPointerDown);
-      window.addEventListener('mousemove', onPointerMove);
-      window.addEventListener('mouseup', onPointerUp);
-      dom.addEventListener('touchstart', onPointerDown, { passive: true });
-      window.addEventListener('touchmove', onPointerMove, { passive: true });
-      window.addEventListener('touchend', onPointerUp);
-
-      let lastTime = 0;
-      const animate = (timestamp: number) => {
-        animationFrameId = requestAnimationFrame(animate);
-        if (timestamp - lastTime < 28) return;
-        lastTime = timestamp;
-
-        if (!isDragging && !reducedMotion) {
-          targetRotY += 0.0018; // Gentle slow rotation
-        }
-
-        rotY += (targetRotY - rotY) * 0.08;
-        rotX += (targetRotX - rotX) * 0.08;
-
-        globeGroup.rotation.y = rotY;
-        globeGroup.rotation.x = rotX;
-
-        renderer.render(scene, camera);
-      };
-
-      animationFrameId = requestAnimationFrame(animate);
-
-      cleanupFn = () => {
-        if (animationFrameId) cancelAnimationFrame(animationFrameId);
-        dom.removeEventListener('mousedown', onPointerDown);
-        window.removeEventListener('mousemove', onPointerMove);
-        window.removeEventListener('mouseup', onPointerUp);
-        dom.removeEventListener('touchstart', onPointerDown);
-        window.removeEventListener('touchmove', onPointerMove);
-        window.removeEventListener('touchend', onPointerUp);
-        if (renderer.domElement && container.contains(renderer.domElement)) {
-          container.removeChild(renderer.domElement);
-        }
-        renderer.dispose();
-      };
-    });
-
-    return () => {
-      isDisposed = true;
-      cleanupFn?.();
-    };
-  }, [displayMode, reducedMotion]);
+  const activeCoords = projectCoords(activePin.lat, activePin.lon);
 
   const handleSelectPin = (pin: WorldCelebrationPin) => {
     playPopSound(false);
     setActivePinId(pin.id);
+    setIsPopupOpen(true);
   };
 
   const handlePlanThisEvent = () => {
@@ -609,45 +368,15 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
   return (
     <section className="celebration-world-section" aria-labelledby="world-map-title">
       <div className="celebration-world-card">
-        {/* SECTION HEADER */}
+        {/* SECTION HEADER (Clean & icon/eyebrow-free) */}
         <div className="celebration-world-header">
           <div>
-            <div className="celebration-badge-pill">
-              <Sparkles size={14} className="badge-sparkle-icon" aria-hidden="true" />
-              <span>Worldwide Celebrations &amp; Getaways</span>
-            </div>
             <h2 id="world-map-title" className="celebration-world-title">
               Global Celebrations &amp; Long Weekend Escapes
             </h2>
             <p className="celebration-world-subtitle">
-              Explore iconic cultural festivals, solstice gatherings, and milestone long weekends mapped across the world.
+              Explore iconic cultural festivals, solstice gatherings, and milestone long weekends mapped across the world. Tap any pin to see what's happening.
             </p>
-          </div>
-
-          {/* VIEW SWITCHER & REGION FILTER */}
-          <div className="celebration-header-actions">
-            <div className="mode-toggle-cluster" role="radiogroup" aria-label="Map Display Mode">
-              <button
-                type="button"
-                className={`mode-toggle-btn ${displayMode === 'map' ? 'active' : ''}`}
-                onClick={() => setDisplayMode('map')}
-                role="radio"
-                aria-checked={displayMode === 'map'}
-              >
-                <Compass size={15} aria-hidden="true" />
-                <span>World Map</span>
-              </button>
-              <button
-                type="button"
-                className={`mode-toggle-btn ${displayMode === 'globe' ? 'active' : ''}`}
-                onClick={() => setDisplayMode('globe')}
-                role="radio"
-                aria-checked={displayMode === 'globe'}
-              >
-                <Globe size={15} aria-hidden="true" />
-                <span>Celebration Globe</span>
-              </button>
-            </div>
           </div>
         </div>
 
@@ -683,150 +412,218 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
 
         {/* MAIN VISUAL CANVAS & DOSSIER GRID */}
         <div className="celebration-grid-body">
-          {/* LEFT: MAP OR 3D GLOBE CANVAS */}
+          {/* LEFT: CELEBRATORY INTERACTIVE SVG MAP */}
           <div className="celebration-visual-canvas">
-            {displayMode === 'map' ? (
-              <div className="svg-map-wrapper">
-                <svg
-                  viewBox="0 0 920 460"
-                  className="celebration-svg-map"
-                  role="img"
-                  aria-label="Interactive Celebration World Map"
-                >
-                  <defs>
-                    <linearGradient id="oceanGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#FAF6EF" />
-                      <stop offset="100%" stopColor="#F5EFE3" />
-                    </linearGradient>
-                    <filter id="beaconGlow" x="-30%" y="-30%" width="160%" height="160%">
-                      <feGaussianBlur stdDeviation="3" result="glow" />
-                      <feComposite in="SourceGraphic" in2="glow" operator="over" />
-                    </filter>
-                  </defs>
+            <div className="svg-map-wrapper">
+              <svg
+                viewBox="0 0 920 460"
+                className="celebration-svg-map"
+                role="img"
+                aria-label="Interactive Celebration World Map"
+              >
+                <defs>
+                  <linearGradient id="oceanGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#FAF6EF" />
+                    <stop offset="100%" stopColor="#F5EFE3" />
+                  </linearGradient>
+                  <filter id="beaconGlow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="3" result="glow" />
+                    <feComposite in="SourceGraphic" in2="glow" operator="over" />
+                  </filter>
+                </defs>
 
-                  {/* Ocean Canvas */}
-                  <rect width="920" height="460" rx="16" fill="url(#oceanGrad)" />
+                {/* Ocean Canvas */}
+                <rect width="920" height="460" rx="16" fill="url(#oceanGrad)" />
 
-                  {/* Latitude / Longitude Delicate Grid Arcs */}
-                  <g stroke="#E7DDCD" strokeWidth="0.75" strokeDasharray="3 3">
-                    <line x1="0" y1="115" x2="920" y2="115" />
-                    <line x1="0" y1="230" x2="920" y2="230" stroke="#DECFA9" strokeWidth="1" strokeDasharray="none" />
-                    <line x1="0" y1="345" x2="920" y2="345" />
-                    <line x1="230" y1="0" x2="230" y2="460" />
-                    <line x1="460" y1="0" x2="460" y2="460" stroke="#DECFA9" strokeWidth="1" strokeDasharray="none" />
-                    <line x1="690" y1="0" x2="690" y2="460" />
-                  </g>
+                {/* Latitude / Longitude Delicate Grid Arcs */}
+                <g stroke="#E7DDCD" strokeWidth="0.75" strokeDasharray="3 3">
+                  <line x1="0" y1="115" x2="920" y2="115" />
+                  <line x1="0" y1="230" x2="920" y2="230" stroke="#DECFA9" strokeWidth="1" strokeDasharray="none" />
+                  <line x1="0" y1="345" x2="920" y2="345" />
+                  <line x1="230" y1="0" x2="230" y2="460" />
+                  <line x1="460" y1="0" x2="460" y2="460" stroke="#DECFA9" strokeWidth="1" strokeDasharray="none" />
+                  <line x1="690" y1="0" x2="690" y2="460" />
+                </g>
 
-                  {/* Stylized Warm Continent Silhouettes */}
-                  <g fill="#EADBC6" stroke="#DFCDAF" strokeWidth="1" opacity="0.95">
-                    {/* North America */}
-                    <path d="M 110,60 Q 200,50 270,70 Q 320,110 290,180 Q 230,220 180,240 Q 140,200 120,140 Z" />
-                    {/* Central America & Caribbean */}
-                    <path d="M 180,240 Q 220,260 250,285 Q 220,300 190,270 Z" />
-                    {/* South America */}
-                    <path d="M 240,290 Q 340,310 350,380 Q 310,430 270,440 Q 230,370 240,290 Z" />
-                    {/* Europe & Scandinavia */}
-                    <path d="M 450,70 Q 520,60 550,110 Q 510,160 460,165 Q 430,130 450,70 Z" />
-                    {/* British Isles */}
-                    <circle cx="445" cy="115" r="14" />
-                    {/* Africa */}
-                    <path d="M 455,175 Q 570,180 570,270 Q 540,380 490,390 Q 440,300 455,175 Z" />
-                    {/* Asia */}
-                    <path d="M 540,70 Q 750,55 830,110 Q 820,230 730,250 Q 640,220 540,150 Z" />
-                    {/* Indian Subcontinent */}
-                    <path d="M 660,200 Q 720,220 700,280 Q 670,280 660,200 Z" />
-                    {/* Japan & East Asian Isles */}
-                    <ellipse cx="800" cy="160" rx="14" ry="24" transform="rotate(25 800 160)" />
-                    {/* Southeast Asia */}
-                    <path d="M 720,250 Q 760,270 750,310 Q 720,310 720,250 Z" />
-                    {/* Australia & New Zealand */}
-                    <path d="M 740,330 Q 840,320 860,380 Q 810,420 740,390 Z" />
-                    <ellipse cx="885" cy="410" rx="8" ry="18" transform="rotate(-20 885 410)" />
-                  </g>
+                {/* Stylized Warm Continent Silhouettes */}
+                <g fill="#EADBC6" stroke="#DFCDAF" strokeWidth="1" opacity="0.95">
+                  {/* North America */}
+                  <path d="M 110,60 Q 200,50 270,70 Q 320,110 290,180 Q 230,220 180,240 Q 140,200 120,140 Z" />
+                  {/* Central America & Caribbean */}
+                  <path d="M 180,240 Q 220,260 250,285 Q 220,300 190,270 Z" />
+                  {/* South America */}
+                  <path d="M 240,290 Q 340,310 350,380 Q 310,430 270,440 Q 230,370 240,290 Z" />
+                  {/* Europe & Scandinavia */}
+                  <path d="M 450,70 Q 520,60 550,110 Q 510,160 460,165 Q 430,130 450,70 Z" />
+                  {/* British Isles */}
+                  <circle cx="445" cy="115" r="14" />
+                  {/* Africa */}
+                  <path d="M 455,175 Q 570,180 570,270 Q 540,380 490,390 Q 440,300 455,175 Z" />
+                  {/* Asia */}
+                  <path d="M 540,70 Q 750,55 830,110 Q 820,230 730,250 Q 640,220 540,150 Z" />
+                  {/* Indian Subcontinent */}
+                  <path d="M 660,200 Q 720,220 700,280 Q 670,280 660,200 Z" />
+                  {/* Japan & East Asian Isles */}
+                  <ellipse cx="800" cy="160" rx="14" ry="24" transform="rotate(25 800 160)" />
+                  {/* Southeast Asia */}
+                  <path d="M 720,250 Q 760,270 750,310 Q 720,310 720,250 Z" />
+                  {/* Australia & New Zealand */}
+                  <path d="M 740,330 Q 840,320 860,380 Q 810,420 740,390 Z" />
+                  <ellipse cx="885" cy="410" rx="8" ry="18" transform="rotate(-20 885 410)" />
+                </g>
 
-                  {/* Celebration Interactive Destination Pins */}
-                  {filteredPins.map((pin) => {
-                    const { x, y } = projectCoords(pin.lat, pin.lon);
-                    const isSelected = activePin.id === pin.id;
-                    return (
-                      <g
-                        key={pin.id}
-                        className="map-pin-group"
-                        onClick={() => handleSelectPin(pin)}
-                        style={{ cursor: 'pointer' }}
-                        tabIndex={0}
-                        role="button"
-                        aria-label={`${pin.name} in ${pin.location}`}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            handleSelectPin(pin);
-                          }
-                        }}
-                      >
-                        {/* Gentle Pulsing Ring (Zero confetti, warm celebratory glow) */}
-                        <circle
-                          cx={x}
-                          cy={y}
-                          r={isSelected ? 18 : 10}
-                          fill={pin.color}
-                          opacity={isSelected ? 0.35 : 0.18}
-                          className={isSelected ? 'pin-active-pulse' : ''}
-                        />
+                {/* Celebration Interactive Destination Pins */}
+                {filteredPins.map((pin) => {
+                  const { x, y } = projectCoords(pin.lat, pin.lon);
+                  const isSelected = activePin.id === pin.id;
+                  return (
+                    <g
+                      key={pin.id}
+                      className="map-pin-group"
+                      onClick={() => handleSelectPin(pin)}
+                      style={{ cursor: 'pointer' }}
+                      tabIndex={0}
+                      role="button"
+                      aria-label={`${pin.name} in ${pin.location}`}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          handleSelectPin(pin);
+                        }
+                      }}
+                    >
+                      {/* Generous Invisible Touch Target for Easy Mobile Tapping */}
+                      <circle cx={x} cy={y} r={24} fill="transparent" />
 
-                        {/* Outer Ring */}
-                        <circle
-                          cx={x}
-                          cy={y}
-                          r={isSelected ? 8 : 5.5}
-                          fill="#FFFFFF"
-                          stroke={pin.color}
-                          strokeWidth={isSelected ? 3 : 2}
-                          filter="url(#beaconGlow)"
-                        />
+                      {/* Gentle Pulsing Ring (Zero confetti, warm celebratory glow) */}
+                      <circle
+                        cx={x}
+                        cy={y}
+                        r={isSelected ? 20 : 11}
+                        fill={pin.color}
+                        opacity={isSelected ? 0.38 : 0.2}
+                        className={isSelected ? 'pin-active-pulse' : ''}
+                      />
 
-                        {/* Center Dot */}
-                        <circle
-                          cx={x}
-                          cy={y}
-                          r={isSelected ? 4 : 2.5}
-                          fill={pin.color}
-                        />
+                      {/* Outer Ring */}
+                      <circle
+                        cx={x}
+                        cy={y}
+                        r={isSelected ? 9 : 6}
+                        fill="#FFFFFF"
+                        stroke={pin.color}
+                        strokeWidth={isSelected ? 3.5 : 2}
+                        filter="url(#beaconGlow)"
+                      />
 
-                        {/* Pill Label for Selected Pin */}
-                        {isSelected && (
-                          <g transform={`translate(${x}, ${y - 14})`}>
-                            <rect
-                              x="-55"
-                              y="-24"
-                              width="110"
-                              height="22"
-                              rx="11"
-                              fill="#2B1B17"
-                              opacity="0.94"
-                            />
-                            <text
-                              x="0"
-                              y="-9"
-                              fill="#FFFFFF"
-                              fontSize="11"
-                              fontWeight="700"
-                              textAnchor="middle"
-                              letterSpacing="-0.01em"
-                            >
-                              {pin.flag} {pin.location.split('&')[0].trim()}
-                            </text>
-                          </g>
-                        )}
-                      </g>
-                    );
-                  })}
-                </svg>
-              </div>
-            ) : (
-              <div className="three-globe-wrapper">
-                <div ref={globeContainerRef} className="three-globe-canvas-host" />
-                <div className="globe-drag-hint">
-                  <span>Drag globe in 360° to explore global celebration hubs</span>
+                      {/* Center Dot */}
+                      <circle
+                        cx={x}
+                        cy={y}
+                        r={isSelected ? 4.5 : 3}
+                        fill={pin.color}
+                      />
+
+                      {/* Compact city tag below pin if active */}
+                      {isSelected && (
+                        <g transform={`translate(${x}, ${y + 16})`}>
+                          <rect
+                            x="-50"
+                            y="0"
+                            width="100"
+                            height="18"
+                            rx="9"
+                            fill="#2B1B17"
+                            opacity="0.92"
+                          />
+                          <text
+                            x="0"
+                            y="12"
+                            fill="#FFFFFF"
+                            fontSize="10"
+                            fontWeight="700"
+                            textAnchor="middle"
+                            letterSpacing="-0.01em"
+                          >
+                            {pin.flag} {pin.location.split('&')[0].trim()}
+                          </text>
+                        </g>
+                      )}
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
+
+            {/* IN-MAP INTERACTIVE CELEBRATION POPUP CARD ("What's Up") */}
+            {isPopupOpen && (
+              <div
+                className={`celebration-pin-popup ${activeCoords.y < 160 ? 'pos-below' : 'pos-above'}`}
+                style={{
+                  left: `${Math.max(22, Math.min(78, (activeCoords.x / 920) * 100))}%`,
+                  top: `${(activeCoords.y / 460) * 100}%`,
+                }}
+                role="dialog"
+                aria-label={`Celebration details for ${activePin.name}`}
+              >
+                <div className="popup-header-row">
+                  <div className="popup-flag-location">
+                    <span className="popup-flag">{activePin.flag}</span>
+                    <span className="popup-location">{activePin.location}, {activePin.country}</span>
+                  </div>
+                  <button
+                    type="button"
+                    className="popup-close-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsPopupOpen(false);
+                    }}
+                    aria-label="Close celebration popup"
+                  >
+                    <X size={13} />
+                  </button>
+                </div>
+
+                <h4 className="popup-title">{activePin.name}</h4>
+
+                <div className="popup-meta-row">
+                  <span className="popup-category-badge">{activePin.categoryLabel}</span>
+                  <span className="popup-countdown-badge">
+                    <Calendar size={11} aria-hidden="true" />
+                    <span>In {activePin.daysUntil} days</span>
+                  </span>
+                </div>
+
+                <div className="popup-highlight-box">
+                  <span className="popup-highlight-label">What's Happening:</span>
+                  <p className="popup-highlight-text">{activePin.tagline}</p>
+                </div>
+
+                <div className="popup-footer-row">
+                  <div className="popup-budget-block">
+                    <span className="popup-budget-label">3-Tier Benchmark</span>
+                    <span className="popup-budget-val">
+                      {formatCurrency(activePin.estBudgetUSD, currentCurrency)}
+                    </span>
+                  </div>
+                  <div className="popup-actions-group">
+                    <button
+                      type="button"
+                      className="popup-plan-btn"
+                      onClick={handlePlanThisEvent}
+                    >
+                      <span>Plan</span>
+                      <ArrowRight size={13} aria-hidden="true" />
+                    </button>
+                    <button
+                      type="button"
+                      className="popup-ask-btn"
+                      onClick={() => openFestiAIChat(activePin.aiPrompt)}
+                      title="Ask Festi AI about this event"
+                      aria-label="Ask Festi AI"
+                    >
+                      <MessageSquare size={13} aria-hidden="true" />
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -885,7 +682,7 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
 
             <div className="dossier-logistics-box">
               <div className="logistics-title-row">
-                <Sparkles size={14} className="logistics-icon" aria-hidden="true" />
+                <MapPin size={14} className="logistics-icon" aria-hidden="true" />
                 <span>Key Logistics Safeguard</span>
               </div>
               <p className="logistics-text">{activePin.logisticsHighlight}</p>
@@ -905,12 +702,34 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
                 type="button"
                 className="btn btn-secondary dossier-btn-secondary"
                 onClick={() => openFestiAIChat(activePin.aiPrompt)}
-                title="Consult FestiBot AI about this event"
+                title="Consult Festi AI about this event"
               >
                 <MessageSquare size={16} aria-hidden="true" />
-                <span>Ask FestiBot</span>
+                <span>Ask Festi AI</span>
               </button>
             </div>
+          </div>
+        </div>
+
+        {/* BOTTOM: CELEBRATION CITY QUICK SELECTOR STRIP */}
+        <div className="celebration-cities-strip" role="group" aria-label="Quick celebration city selector">
+          <span className="cities-strip-label">Celebration Hubs:</span>
+          <div className="cities-strip-scroll">
+            {WORLD_CELEBRATION_PINS.map((pin) => {
+              const isActive = activePin.id === pin.id;
+              return (
+                <button
+                  key={pin.id}
+                  type="button"
+                  className={`city-chip-btn ${isActive ? 'active' : ''}`}
+                  onClick={() => handleSelectPin(pin)}
+                  aria-pressed={isActive}
+                >
+                  <span className="city-chip-flag">{pin.flag}</span>
+                  <span className="city-chip-name">{pin.location.split('&')[0].trim()}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

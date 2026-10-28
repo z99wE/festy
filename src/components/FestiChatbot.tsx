@@ -59,17 +59,17 @@ export const FestiChatbot: React.FC = () => {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Mascot frame animation - only runs when chat is open, saving continuous main-thread re-renders
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Mascot frame animation - continuously cycles through the 5 plush frames like a gif
+  // When user hovers near it, it pauses jumping and pauses frame cycling!
   useEffect(() => {
-    if (!isOpen) {
-      setCurrentFrameIndex(0);
-      return;
-    }
+    if (isHovered) return;
     const timer = setInterval(() => {
       setCurrentFrameIndex((prev) => (prev + 1) % FESTI_FRAMES.length);
-    }, 350);
+    }, 280);
     return () => clearInterval(timer);
-  }, [isOpen]);
+  }, [isHovered]);
 
   // Auto-scroll chat to bottom
   useEffect(() => {
@@ -184,9 +184,19 @@ export const FestiChatbot: React.FC = () => {
       {/* ==========================================================
           FLOATING DANCING FESTI MASCOT TRIGGER (Festi AI Companion)
           ========================================================== */}
-      <div className="festi-companion-container">
+      <div 
+        className={`festi-companion-container ${isHovered ? 'paused' : ''}`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         {!isOpen && (
-          <div className="festi-speech-bubble" onClick={() => setIsOpen(true)}>
+          <div 
+            className="festi-speech-bubble" 
+            onClick={() => setIsOpen(true)}
+            role="button"
+            tabIndex={0}
+            aria-label="Open Festi AI chat"
+          >
             <span>Chat with Festi AI</span>
           </div>
         )}
@@ -195,13 +205,16 @@ export const FestiChatbot: React.FC = () => {
           type="button"
           className="festi-mascot-btn"
           aria-label="Open Festi AI"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsOpen(true)}
         >
           <div className="festi-avatar-frame">
             <img
               src={currentFrame.src}
               alt={currentFrame.alt}
               className="festi-dancing-img"
+              width={105}
+              height={105}
+              loading="eager"
             />
           </div>
           <div className="festi-avatar-shadow" aria-hidden="true" />

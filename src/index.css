@@ -1065,31 +1065,294 @@ img {
   100% { transform: scale(0.95); opacity: 0.45; }
 }
 
-.three-globe-wrapper {
-  width: 100%;
-  height: 380px;
-  position: relative;
+/* In-Map Celebration Popup Card ("What's Up") */
+.celebration-pin-popup {
+  position: absolute;
+  z-index: 30;
+  width: 290px;
+  max-width: calc(100% - 28px);
+  background: #FFFFFF;
+  border: 2px solid #3D1E06;
+  border-radius: 14px;
+  box-shadow: 4px 4px 0px #3D1E06;
+  padding: 12px 14px;
+  pointer-events: auto;
+  animation: popupPopIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+}
+
+.celebration-pin-popup.pos-above {
+  transform: translate(-50%, -100%);
+  margin-top: -14px;
+}
+
+.celebration-pin-popup.pos-above::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid #3D1E06;
+}
+
+.celebration-pin-popup.pos-below {
+  transform: translate(-50%, 0);
+  margin-top: 18px;
+}
+
+.celebration-pin-popup.pos-below::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid #3D1E06;
+}
+
+@keyframes popupPopIn {
+  0% { opacity: 0; transform: translate(-50%, -90%) scale(0.92); }
+  100% { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+}
+
+.popup-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.popup-flag-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.popup-flag {
+  font-size: 14px;
+}
+
+.popup-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 4px;
+  transition: color 0.15s ease;
 }
 
-.three-globe-canvas-host {
-  width: 100%;
-  height: 100%;
+.popup-close-btn:hover {
+  color: var(--text-primary);
 }
 
-.globe-drag-hint {
-  position: absolute;
-  bottom: 12px;
-  background: rgba(43, 27, 23, 0.75);
+.popup-title {
+  font-size: 14px;
+  font-weight: 850;
+  color: var(--bubblegum-purple-blue, #5B42F3);
+  margin: 0 0 6px 0;
+  line-height: 1.25;
+}
+
+.popup-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.popup-category-badge {
+  background: rgba(255, 94, 30, 0.08);
+  color: var(--orange-600, #EA580C);
+  border: 1px solid rgba(255, 94, 30, 0.2);
+  border-radius: 10px;
+  padding: 2px 7px;
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+.popup-countdown-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #F3F4F6;
+  color: var(--text-secondary);
+  border-radius: 10px;
+  padding: 2px 7px;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.popup-highlight-box {
+  background: #FFF7ED;
+  border-left: 3px solid var(--orange-500, #FF5E1E);
+  border-radius: 4px;
+  padding: 6px 8px;
+  margin-bottom: 10px;
+}
+
+.popup-highlight-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--orange-600, #EA580C);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+
+.popup-highlight-text {
+  font-size: 11px;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.35;
+}
+
+.popup-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 6px;
+  border-top: 1px solid #F3EDE4;
+}
+
+.popup-budget-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-budget-label {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.popup-budget-val {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #B45309;
+}
+
+.popup-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.popup-plan-btn {
+  background: var(--orange-500, #FF5E1E);
   color: #FFFFFF;
-  padding: 4px 14px;
+  border: 1.5px solid #3D1E06;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 750;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px #3D1E06;
+  transition: transform 0.12s ease;
+}
+
+.popup-plan-btn:hover {
+  transform: translateY(-1px);
+}
+
+.popup-ask-btn {
+  background: #FFFFFF;
+  color: var(--bubblegum-purple-blue, #5B42F3);
+  border: 1.5px solid #3D1E06;
+  border-radius: 8px;
+  padding: 4px 7px;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px #3D1E06;
+  transition: transform 0.12s ease;
+}
+
+.popup-ask-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Quick Celebration City Selector Strip */
+.celebration-cities-strip {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.cities-strip-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.cities-strip-scroll {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.cities-strip-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.city-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-medium, #E5DECF);
   border-radius: var(--radius-full);
   font-size: 11.5px;
-  font-weight: 600;
-  pointer-events: none;
-  backdrop-filter: blur(4px);
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.city-chip-btn:hover {
+  border-color: var(--orange-400, #FB923C);
+  background: #FFF7ED;
+  transform: translateY(-1px);
+}
+
+.city-chip-btn.active {
+  background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+  border-color: var(--orange-500, #FF5E1E);
+  color: var(--orange-600, #EA580C);
+  box-shadow: 0 2px 6px rgba(255, 94, 30, 0.18);
 }
 
 .celebration-dossier-card {
@@ -3288,14 +3551,19 @@ img {
   height: 100%;
   object-fit: contain;
   filter: drop-shadow(0px 8px 14px rgba(0, 0, 0, 0.25));
-  animation: festiSquashBounce 0.35s cubic-bezier(0.28, 0.84, 0.42, 1) infinite alternate;
+  animation: festiSquashBounce 0.38s cubic-bezier(0.28, 0.84, 0.42, 1) infinite alternate;
   user-select: none;
+  transform: translateZ(0);
+}
+
+.festi-companion-container:hover .festi-dancing-img,
+.festi-companion-container.paused .festi-dancing-img {
+  animation-play-state: paused !important;
 }
 
 @keyframes festiSquashBounce {
-  0% { transform: translateY(0) scale(1.02, 0.98); }
-  50% { transform: translateY(-14px) scale(0.97, 1.05); }
-  100% { transform: translateY(0) scale(1.02, 0.98); }
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-12px); }
 }
 
 .festi-avatar-shadow {
@@ -3304,13 +3572,17 @@ img {
   background: rgba(0, 0, 0, 0.25);
   border-radius: 50%;
   margin-top: -6px;
-  animation: festiShadowPulse 0.35s cubic-bezier(0.28, 0.84, 0.42, 1) infinite alternate;
+  animation: festiShadowPulse 0.38s cubic-bezier(0.28, 0.84, 0.42, 1) infinite alternate;
+}
+
+.festi-companion-container:hover .festi-avatar-shadow,
+.festi-companion-container.paused .festi-avatar-shadow {
+  animation-play-state: paused !important;
 }
 
 @keyframes festiShadowPulse {
   0% { transform: scale(1); opacity: 0.28; }
-  50% { transform: scale(0.65); opacity: 0.14; }
-  100% { transform: scale(1); opacity: 0.28; }
+  100% { transform: scale(0.72); opacity: 0.15; }
 }
 
 /* Chat Modal Drawer */
@@ -5651,12 +5923,12 @@ img {
 }
 
 .peeking-mascot-container.pos-top-upside-down.retreating {
-  transform: translateY(-105%) perspective(800px) rotate(180deg);
+  transform: translateY(-100%);
   opacity: 0;
 }
 
 .peeking-mascot-container.pos-top-upside-down.peeking {
-  transform: translateY(-26%) perspective(800px) rotate(180deg);
+  transform: translateY(0);
   opacity: 1;
 }
 
@@ -5666,33 +5938,34 @@ img {
 }
 
 .peeking-mascot-container.pos-bottom-upright.retreating {
-  transform: translateY(105%) perspective(800px);
+  transform: translateY(100%);
   opacity: 0;
 }
 
 .peeking-mascot-container.pos-bottom-upright.peeking {
-  transform: translateY(30%) perspective(800px);
+  transform: translateY(0);
   opacity: 1;
 }
 
-/* 3D Wrapper & Alive Breathing Animation */
+/* Wrapper & Alive Breathing Animation (Pure 2D Crisp Rendering) */
 .peeking-mascot-3d-wrap {
-  transform-style: preserve-3d;
-  filter: drop-shadow(0 16px 32px rgba(61, 30, 6, 0.22)) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 16px 28px rgba(61, 30, 6, 0.22)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
 }
 
 .peeking-mascot-container:hover .peeking-mascot-3d-wrap {
-  transform: scale(1.06) rotate(2deg);
-  filter: drop-shadow(0 20px 40px rgba(255, 94, 30, 0.32)) drop-shadow(0 6px 14px rgba(61, 30, 6, 0.2));
+  transform: translateY(-6px);
+  filter: drop-shadow(0 20px 36px rgba(255, 94, 30, 0.3)) drop-shadow(0 6px 12px rgba(61, 30, 6, 0.18));
 }
 
 .peeking-mascot-img {
-  width: 260px;
+  width: 240px;
   height: auto;
   display: block;
-  image-rendering: -webkit-optimize-contrast;
-  animation: mascot-alive-breath 2.6s ease-in-out infinite alternate;
+  image-rendering: auto;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  animation: mascot-alive-breath 2.4s ease-in-out infinite alternate;
 }
 
 .peeking-mascot-head {
@@ -5709,7 +5982,7 @@ img {
   z-index: 2;
   opacity: 0;
   pointer-events: none;
-  animation: mascot-alive-breath 2.6s ease-in-out infinite alternate, mascot-css-blink 6.2s steps(1) infinite;
+  animation: mascot-alive-breath 2.4s ease-in-out infinite alternate, mascot-css-blink 6.2s steps(1) infinite;
 }
 
 @keyframes mascot-css-blink {
@@ -5726,13 +5999,10 @@ img {
 
 @keyframes mascot-alive-breath {
   0% {
-    transform: translateY(0) rotate(0deg) scale(1);
-  }
-  50% {
-    transform: translateY(-3px) rotate(0.8deg) scale(1.015);
+    transform: translateY(0);
   }
   100% {
-    transform: translateY(2px) rotate(-0.8deg) scale(0.995);
+    transform: translateY(-4px);
   }
 }
 

@@ -1,5 +1,4 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { Sparkles, Cake, Music, Compass, Building, Crown, Wine, Globe } from 'lucide-react';
 import { Navbar, type AuthUser, type ActiveAppTab } from './components/Navbar';
 import { TaglineReveal } from './components/TaglineReveal';
 import { detectUserRegion } from './utils/currency';
@@ -20,14 +19,14 @@ const PeekingMascot = lazy(() => import('./components/PeekingMascot').then((m) =
 const FestiChatbot = lazy(() => import('./components/FestiChatbot').then((m) => ({ default: m.FestiChatbot })));
 
 const OCCASION_SWAP_ITEMS = [
-  { id: 'wedding', name: 'Luxury Weddings', icon: Sparkles },
-  { id: 'birthday', name: 'Milestone Birthdays', icon: Cake },
-  { id: 'festival', name: 'Music Festivals', icon: Music },
-  { id: 'product_launch', name: 'Product Launches', icon: Compass },
-  { id: 'retreat', name: 'Executive Retreats', icon: Building },
-  { id: 'anniversary', name: 'Galas & Anniversaries', icon: Crown },
-  { id: 'wine_tasting', name: 'Private Tastings', icon: Wine },
-  { id: 'cultural_fest', name: 'Heritage Festivals', icon: Globe },
+  { id: 'wedding', name: 'Luxury Weddings' },
+  { id: 'birthday', name: 'Milestone Birthdays' },
+  { id: 'festival', name: 'Music Festivals' },
+  { id: 'product_launch', name: 'Product Launches' },
+  { id: 'retreat', name: 'Executive Retreats' },
+  { id: 'anniversary', name: 'Galas & Anniversaries' },
+  { id: 'wine_tasting', name: 'Private Tastings' },
+  { id: 'cultural_fest', name: 'Heritage Festivals' },
 ];
 
 export function App() {
@@ -216,7 +215,6 @@ export function App() {
                   {/* 5. SYMMETRICAL OCCASION SELECTOR GRID (4x2 on Desktop, 2x4 on Mobile) */}
                   <div className="hero-occasion-grid" role="group" aria-label="Select celebration category">
                     {OCCASION_SWAP_ITEMS.map((item) => {
-                      const IconComp = item.icon;
                       const isActive = activeOccasion === item.id;
                       return (
                         <button
@@ -226,7 +224,6 @@ export function App() {
                           onClick={() => handleQuickOccasionSelect(item.id)}
                           aria-pressed={isActive}
                         >
-                          <IconComp size={16} className="occasion-grid-icon" aria-hidden="true" />
                           <span className="occasion-grid-label">{item.name}</span>
                         </button>
                       );

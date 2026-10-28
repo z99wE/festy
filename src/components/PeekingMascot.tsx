@@ -74,11 +74,11 @@ export const PeekingMascot: React.FC = () => {
       chosenPos = 'bottom-upright';
       hOffset = 'right: 18%';
     } else if (currentCount === 2) {
-      chosenPos = 'top-upside-down';
-      hOffset = 'right: 22%';
+      chosenPos = 'bottom-upright';
+      hOffset = 'left: 18%';
     } else {
-      chosenPos = Math.random() > 0.5 ? 'bottom-upright' : 'top-upside-down';
-      hOffset = chosenPos === 'bottom-upright' ? 'left: 20%' : 'left: 26%';
+      chosenPos = 'bottom-upright';
+      hOffset = 'right: 30%';
     }
 
     // Set mascot active (peek in)
@@ -177,16 +177,16 @@ export const PeekingMascot: React.FC = () => {
             alt={currentMascot.name}
             className="peeking-mascot-img peeking-mascot-head"
             draggable={false}
-            width={260}
-            height={170}
+            width={240}
+            height={156}
           />
           <img
             src={currentMascot.blinkSrc}
             alt=""
             className="peeking-mascot-img peeking-mascot-blink"
             draggable={false}
-            width={260}
-            height={170}
+            width={240}
+            height={156}
           />
         </div>
       </div>
