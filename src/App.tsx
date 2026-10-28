@@ -42,7 +42,7 @@ export function App() {
     return detectUserRegion().currencyCode || 'USD';
   });
 
-  // User authentication state (Cloudflare Edge tenant session)
+  // User authentication state (Edge tenant session)
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
@@ -335,7 +335,7 @@ export function App() {
                       <div>
                         <h3 className="gateway-card-title">FAQ & Support</h3>
                         <p className="gateway-card-desc">
-                          Answers to licensing, vendor pricing guarantees, data security on Cloudflare, and export formats.
+                          Answers to licensing, vendor pricing guarantees, data security and privacy, and export formats.
                         </p>
                       </div>
                       <div className="gateway-card-link">
@@ -476,11 +476,8 @@ export function App() {
                 <span className="island-brand-text" style={{ fontSize: '16px' }}>Festiya</span>
               </div>
               <p style={{ color: 'var(--text-secondary)' }}>
-                Turn every moment into a festival. Global event planning workspace built on Cloudflare.
+                Turn every moment into a festival. Global event planning workspace.
               </p>
-              <div style={{ color: 'var(--text-secondary)', fontSize: '13px', fontWeight: 500 }}>
-                Cloudflare-first architecture • WCAG 2.2 compliant • Zero pure black • Rich chocolate roast contrast
-              </div>
             </div>
 
             <div className="footer-col">
@@ -540,7 +537,7 @@ export function App() {
               <ul className="footer-links">
                 <li>• Decimal-safe accounting</li>
                 <li>• Zero dark patterns</li>
-                <li>• Cloudflare Edge Tenant</li>
+                <li>• Edge Tenant Isolation</li>
                 <li>• Export to CSV & PDF</li>
               </ul>
             </div>
@@ -565,7 +562,7 @@ export function App() {
         </Suspense>
       </LazyMount>
 
-      {/* Cloudflare Edge Tenant Sign In / Sign Up Modal */}
+      {/* Edge Tenant Sign In / Sign Up Modal */}
       <Suspense fallback={null}>
         <AuthModal
           isOpen={authModalOpen}

@@ -57,7 +57,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       return;
     }
 
-    // Simulate Cloudflare Edge Auth authentication & tenant token generation
+    // Simulate Edge Auth authentication & tenant token generation
     setTimeout(() => {
       const user: AuthUser = {
         id: `usr_${Date.now()}`,
@@ -254,10 +254,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
           </div>
 
-          {/* Cloudflare Edge Security Badge */}
+          {/* Edge Security Badge */}
           <div className="auth-security-badge">
             <ShieldCheck size={15} color="#059669" />
-            <span>Cloudflare Edge Tenant Isolation • Zero Data Leakage</span>
+            <span>Edge Tenant Isolation • Zero Data Leakage</span>
           </div>
 
           {/* Submit Button */}

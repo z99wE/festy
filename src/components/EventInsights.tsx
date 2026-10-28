@@ -35,7 +35,7 @@ export const EventInsights: React.FC<EventInsightsProps> = ({ onStartPlanning, o
     {
       metric: "0ms",
       label: "Cold-Start Edge Latency",
-      detail: "Executed globally across Cloudflare Workers edge nodes with instant offline state recovery and zero paywalls.",
+      detail: "Executed globally across high-performance distributed edge nodes with instant offline state recovery and zero paywalls.",
       icon: Zap,
       color: "var(--orange-600)",
       bgColor: "rgba(234, 88, 12, 0.1)"
@@ -86,7 +86,7 @@ export const EventInsights: React.FC<EventInsightsProps> = ({ onStartPlanning, o
     },
     {
       question: "Why is Festiya completely free with no payment page or paywall?",
-      answer: "Festiya is engineered as a lean, edge-native open utility powered by Cloudflare Workers and efficient multi-LLM orchestration. We believe hosts, couples, and community leaders deserve transparent, unbiased event intelligence without aggressive paywalls, hidden subscription traps, or sponsored vendor kickbacks."
+      answer: "Festiya is engineered as a lean, edge-native utility powered by distributed high-performance edge compute and efficient multi-LLM orchestration. We believe hosts, couples, and community leaders deserve transparent, unbiased event intelligence without aggressive paywalls, hidden subscription traps, or sponsored vendor kickbacks."
     },
     {
       question: "What are the essential vendor negotiation questions to ask before paying a deposit?",

@@ -27,8 +27,8 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ soundEnabled }) => {
     },
     {
       question: "Is my personal celebration and client data kept private?",
-      answer: "Yes. Festiya is deployed on a Cloudflare-first architecture with strict server-side tenant isolation. Your brief, guest notes, and financial figures are never sold or used to train public language models.",
-      tag: "Privacy & Cloudflare",
+      answer: "Yes. Festiya is engineered with strict server-side tenant isolation. Your brief, guest notes, and financial figures are never sold or used to train public language models.",
+      tag: "Privacy & Security",
     },
     {
       question: "Can I export my plan if I want to share it with someone offline?",

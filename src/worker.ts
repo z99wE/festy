@@ -78,7 +78,7 @@ export default {
             return new Response(
               JSON.stringify({
                 response: aiResult.response,
-                provider: 'Cloudflare Workers AI',
+                provider: 'Edge AI (Llama 3.3 70B)',
                 model: '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
               }),
               {
@@ -96,7 +96,7 @@ export default {
             return new Response(
               JSON.stringify({
                 response: fallbackAiResult.response,
-                provider: 'Cloudflare Workers AI (Fast Fallback)',
+                provider: 'Edge AI (Fast Fallback)',
                 model: '@cf/meta/llama-3.1-8b-instruct-fp8',
               }),
               {

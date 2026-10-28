@@ -150,10 +150,10 @@ export class MultiLLMOrchestrator {
         if (text) {
           this.getCircuitBreaker('worker-ai-edge').recordSuccess();
           const duration = Date.now() - start;
-          attempts.push({ provider: 'Cloudflare Workers AI (@cf/meta/llama-3.3-70b-instruct)', success: true, latencyMs: duration });
+          attempts.push({ provider: 'Edge AI (Llama 3.3 70B)', success: true, latencyMs: duration });
           return {
             content: FestiSecurityGuard.sanitizeOutput(text),
-            providerUsed: 'Cloudflare Workers AI (@cf/meta/llama-3.3-70b-instruct)',
+            providerUsed: 'Edge AI (Llama 3.3 70B)',
             modelUsed: '@cf/meta/llama-3.3-70b-instruct',
             latencyMs: duration,
             attempts,
@@ -164,7 +164,7 @@ export class MultiLLMOrchestrator {
         const duration = Date.now() - start;
         const msg = err instanceof Error ? err.message : String(err);
         this.getCircuitBreaker('worker-ai-edge').recordFailure();
-        attempts.push({ provider: 'Cloudflare Workers AI (Edge)', success: false, error: msg, latencyMs: duration });
+        attempts.push({ provider: 'Edge AI (Edge)', success: false, error: msg, latencyMs: duration });
       }
     }
 
@@ -175,10 +175,10 @@ export class MultiLLMOrchestrator {
         const text = await this.callCloudflareWorkersAI(fullMessages);
         this.getCircuitBreaker('cloudflare').recordSuccess();
         const duration = Date.now() - start;
-        attempts.push({ provider: 'Cloudflare Workers AI', success: true, latencyMs: duration });
+        attempts.push({ provider: 'Edge AI Engine', success: true, latencyMs: duration });
         return {
           content: FestiSecurityGuard.sanitizeOutput(text),
-          providerUsed: 'Cloudflare Workers AI',
+          providerUsed: 'Edge AI Engine',
           modelUsed: '@cf/meta/llama-3.3-70b-instruct',
           latencyMs: duration,
           attempts,
