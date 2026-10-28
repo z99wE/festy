@@ -501,10 +501,6 @@ export function App() {
         {activeTab === 'faq' && (
           <div style={{ paddingTop: '12px', minHeight: '80vh' }}>
             <Suspense fallback={null}>
-              <EventInsights
-                onStartPlanning={handleStartPlanning}
-                onExploreDemo={handleExploreDemo}
-              />
               <FAQSection soundEnabled={soundEnabled} />
             </Suspense>
           </div>

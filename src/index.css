@@ -5516,9 +5516,7 @@ img {
    -------------------------------------------------------------------------- */
 .aeo-insights-section {
   padding: var(--space-800) 0;
-  background: var(--bg-canvas-subtle);
-  border-top: 1.5px solid var(--border-subtle);
-  border-bottom: 1.5px solid var(--border-subtle);
+  background: var(--bg-canvas);
   position: relative;
 }
 
