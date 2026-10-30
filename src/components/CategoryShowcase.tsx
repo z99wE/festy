@@ -138,74 +138,82 @@ const CategoryGridCard: React.FC<CategoryGridCardProps> = ({ cat, idx, isActive,
   };
 
   const ticketNumber = String(idx + 1).padStart(2, '0');
+  const pillarChips = (cat.subtitle || '').split('•').map((s) => s.trim()).filter(Boolean);
 
   return (
     <div
-      className={`category-card ticket-card ${isActive ? 'active-highlight' : ''}`}
+      className={`category-ticket-pass ${isActive ? 'active-highlight' : ''}`}
       role="button"
       tabIndex={0}
-      aria-label={`Select ${cat.title} and explore blueprint pass`}
+      aria-label={`Select ${cat.title} blueprint credential`}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      style={{ '--ticket-color': cat.color } as React.CSSProperties}
+      style={{ '--pass-color': cat.color } as React.CSSProperties}
     >
-      {/* Ticket Top Header: Access Tier Badge + Serial + Animated Barcode */}
-      <div className="ticket-header">
-        <div
-          className="ticket-badge-pill"
-          style={{
-            color: cat.color,
-            borderColor: `${cat.color}44`,
-            backgroundColor: `${cat.color}14`,
-          }}
-        >
-          <span className="ticket-badge-dot" style={{ backgroundColor: cat.color }} aria-hidden="true"></span>
-          <span>ADMIT ONE • PASS</span>
-        </div>
-        <div className="ticket-serial-barcode">
-          <span className="ticket-serial">№ BLPR-{ticketNumber}</span>
-          <div className="ticket-mini-barcode" aria-hidden="true">
-            <span style={{ height: '14px', width: '2px' }}></span>
-            <span style={{ height: '14px', width: '4px' }}></span>
-            <span style={{ height: '14px', width: '1px' }}></span>
-            <span style={{ height: '14px', width: '3px' }}></span>
-            <span style={{ height: '14px', width: '2px' }}></span>
-            <span style={{ height: '14px', width: '4px' }}></span>
-            <span style={{ height: '14px', width: '1px' }}></span>
+      {/* Visual Stack Layers underneath for futuristic ticket deck depth */}
+      <div className="pass-stack-layer pass-stack-layer-2" aria-hidden="true" />
+      <div className="pass-stack-layer pass-stack-layer-1" aria-hidden="true" />
+
+      {/* Main Horizontal Credential Pass Container */}
+      <div className="pass-card-container">
+        {/* Color Edge Identifier */}
+        <div className="pass-accent-bar" style={{ backgroundColor: cat.color }} aria-hidden="true" />
+
+        {/* Left & Middle Info: Telemetry Row, Title, Subtitle Chips, Description */}
+        <div className="pass-main-content">
+          <div className="pass-telemetry-row">
+            <div className="pass-sys-badge">
+              <span className="pass-live-dot" style={{ backgroundColor: cat.color }} aria-hidden="true"></span>
+              <span className="pass-sys-text">SYS // BLPR-{ticketNumber}</span>
+            </div>
+            <span className="pass-timing-tag">CALIBRATED IN 90s</span>
+            <span className="pass-cipher-code" aria-hidden="true">FESTI-DECIMAL-3T</span>
           </div>
-        </div>
-      </div>
 
-      {/* Ticket Body: Subtitle Pillars, Title, Description */}
-      <div className="ticket-body">
-        <div className="ticket-pillars-tag">{cat.subtitle}</div>
-        <h4 className="ticket-title">{cat.title}</h4>
-        <p className="ticket-description">{cat.categoryDescription}</p>
-      </div>
+          <h4 className="pass-title">{cat.title}</h4>
 
-      {/* Realistic Perforated Tear Line with Left & Right Cutout Notches */}
-      <div className="ticket-perforation-wrapper" aria-hidden="true">
-        <span className="ticket-notch ticket-notch-left"></span>
-        <div className="ticket-tear-line"></div>
-        <span className="ticket-notch ticket-notch-right"></span>
-      </div>
+          <div className="pass-pillars-chips">
+            {pillarChips.map((chip, chipIdx) => (
+              <span key={chipIdx} className="pass-pillar-badge">{chip}</span>
+            ))}
+          </div>
 
-      {/* Ticket Stub Footer: Verified Stamp + "Explore the blueprint" CTA Button */}
-      <div className="ticket-stub-footer">
-        <div className="ticket-stamp-badge">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            <polyline points="9 12 11 14 15 10"></polyline>
-          </svg>
-          <span>OFFICIAL PASS</span>
+          <p className="pass-description">{cat.categoryDescription}</p>
         </div>
 
-        <div className="ticket-cta-btn" role="presentation">
-          <span className="ticket-cta-text">Explore the blueprint</span>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="ticket-arrow">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
+        {/* Vertical Perforation Divider with Top & Bottom Punch Notches */}
+        <div className="pass-perforation-divider" aria-hidden="true">
+          <span className="pass-notch pass-notch-top"></span>
+          <div className="pass-tear-vertical"></div>
+          <span className="pass-notch pass-notch-bottom"></span>
+        </div>
+
+        {/* Right Stub Section: Futuristic Barcode + Explore CTA */}
+        <div className="pass-stub-section">
+          <div className="pass-barcode-cluster" aria-hidden="true">
+            <div className="pass-barcode-lines">
+              <span style={{ width: '2px', height: '22px' }}></span>
+              <span style={{ width: '4px', height: '22px' }}></span>
+              <span style={{ width: '1px', height: '22px' }}></span>
+              <span style={{ width: '3px', height: '22px' }}></span>
+              <span style={{ width: '5px', height: '22px' }}></span>
+              <span style={{ width: '2px', height: '22px' }}></span>
+              <span style={{ width: '1px', height: '22px' }}></span>
+              <span style={{ width: '4px', height: '22px' }}></span>
+              <span style={{ width: '2px', height: '22px' }}></span>
+            </div>
+            <span className="pass-auth-code">AUTH-0{ticketNumber}</span>
+          </div>
+
+          <div className="pass-cta-wrap">
+            <div className="pass-action-btn" role="presentation">
+              <span className="pass-action-label">Explore the blueprint</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="pass-arrow-icon">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
     </div>
