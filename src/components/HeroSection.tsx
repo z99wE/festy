@@ -96,7 +96,7 @@ export function HeroSection({
           margin: '0 auto 16px auto',
         }}
       >
-        <span>✨ Autonomous GenAI Celebration &amp; Event Planning Assistant</span>
+        <span>Autonomous GenAI Celebration &amp; Event Planning Assistant</span>
       </div>
 
       <h1 id="hero-title" className="hero-title">
