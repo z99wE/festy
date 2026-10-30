@@ -196,6 +196,9 @@ export class FestiSecurityGuard {
     clean = clean.replace(/cf_tok_[a-zA-Z0-9_-]{20,}/g, '[REDACTED_TOKEN]');
     clean = clean.replace(/You are Festi, the cheerful, energetic, and deeply knowledgeable Festi AI event architect.*/gi, '');
 
+    // Neutralize any hallucinated code blocks (python, bash, scripts)
+    clean = clean.replace(/```(?:[a-zA-Z]*\n)?[\s\S]*?```/g, '');
+
     return clean
       .replace(/\*\*(.*?)\*\*/g, '$1')
       .replace(/\*(.*?)\*/g, '$1')

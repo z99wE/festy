@@ -75,7 +75,7 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
       {
         id: 'initial-greeting',
         sender: 'festi',
-        text: 'Namaste! I am Festi, your Celebration Architect. I compose itemized budgets, generate minute-by-minute schedules, and safeguard your event contracts. What are we celebrating?',
+        text: 'Hola! I am Festi, your Celebration Architect. I compose itemized budgets, generate minute-by-minute schedules, and safeguard your event contracts. What are we celebrating?',
         time: 'Just now',
         agentsEngaged: ['BudgetArchitectAgent', 'LogisticsOrchestratorAgent'],
         budgetArtifact: initPlan.budgetArtifact,

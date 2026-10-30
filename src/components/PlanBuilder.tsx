@@ -119,9 +119,9 @@ export const PlanBuilder: React.FC<PlanBuilderProps> = ({
     setAiResponse('');
 
     const eventName = planningContext ? planningContext.name : activeOccasion;
-    const systemPrompt = `You are Festi, the Event Architect for Festiya. Generate a practical, highly-structured event plan for "${eventName}".
+    const systemPrompt = `You are Festi, the Celebration Architect. Generate a practical, highly-structured event plan for "${eventName}".
 Parameters: ${guestCount} guests, budget of ${currency}${budgetAmount.toLocaleString()}.
-Use concise bullet points, specific timelines, and actionable vendor negotiation tips. Avoid fluff.`;
+Use concise bullet points, specific timelines, and actionable vendor negotiation tips. Never output Python code, code blocks, or technical programming scripts. Stay strictly focused on celebration planning.`;
 
     try {
       const res = await aiOrchestrator.generateCompletion(

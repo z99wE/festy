@@ -83,7 +83,7 @@ function buildWeddingResponse(): string {
 }
 
 function buildIntroResponse(): string {
-  return `Welcome to Festi AI! I'm Festi, your autonomous celebration architect.\n\n` +
+  return `Hola! Welcome to Festi AI! I'm Festi, your Celebration Architect.\n\n` +
     `Here is how I can build your next event:\n` +
     `• 3-Tier Budget Synthesizer: Dial in exact cost allocations and discover ways to save 20% on vendors.\n` +
     `• Day-of Run-of-Show Generator: Minute-by-minute cues for seamless pacing from load-in to egress.\n` +
