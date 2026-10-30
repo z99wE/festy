@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Bot, X, ShieldCheck } from 'lucide-react';
+import { X, ShieldCheck } from 'lucide-react';
 import { MultiAgentEngine } from '../services/multiAgentEngine';
 import { MultiLLMOrchestrator } from '../services/aiOrchestrator';
 import type { LLMMessage } from '../services/aiOrchestrator';
@@ -195,58 +195,88 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
   const currentMascot = MASCOT_FRAMES[mascotFrame];
 
   return (
-    <div className="festi-chatbot-container" role="region" aria-label="Celebration Architect Assistant">
+    <>
       {!isOpen && (
-        <button aria-label="Open Festi Celebration Architect Chat"
-          className="festi-chat-fab"
-          onClick={() => setIsOpen(true)}
-        >
-          <div className="festi-fab-mascot">
-            <span className="festi-fab-badge">AI</span>
-            <Bot size={22} className="festi-fab-icon" />
+        <div className="festi-companion-container" role="region" aria-label="Celebration Architect Assistant">
+          <div
+            className="festi-speech-bubble"
+            onClick={() => setIsOpen(true)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setIsOpen(true);
+              }
+            }}
+            aria-label="Ask Festi AI Celebration Architect"
+          >
+            <span>Ask Festi AI</span>
+            <span aria-hidden="true">✨</span>
           </div>
-          <span className="festi-fab-label">Chat with Festi</span>
-        </button>
+          <button
+            type="button"
+            aria-label="Open Festi AI Event Architect Chat"
+            className="festi-mascot-btn"
+            onClick={() => setIsOpen(true)}
+          >
+            <div className="festi-avatar-frame">
+              <img
+                src={currentMascot.src}
+                alt={currentMascot.alt}
+                width={105}
+                height={105}
+                className="festi-dancing-img"
+              />
+            </div>
+            <div className="festi-avatar-shadow" aria-hidden="true" />
+          </button>
+        </div>
       )}
 
       {isOpen && (
-        <div className="festi-chat-panel">
+        <div className="festi-chat-modal" role="dialog" aria-modal="true" aria-label="Festi AI Event Architect">
           <div className="festi-chat-header">
-            <div className="festi-chat-header-info">
-              <div className="festi-avatar-disc" aria-hidden="true">
+            <div className="festi-chat-header-brand">
+              <div className="festi-header-mascot-wrap" aria-hidden="true">
                 <img
                   src={currentMascot.src}
                   alt={currentMascot.alt}
-                  width={28}
-                  height={28}
-                  className="festi-avatar-art"
+                  width={32}
+                  height={32}
+                  className="festi-header-mascot-img"
                 />
               </div>
               <div>
-                <div className="festi-header-name">
+                <div className="festi-header-title">
                   <span>Festi</span>
-                  <span className="festi-header-pill">Multi-Agent Swarm</span>
+                  <span className="festi-domain-tag" style={{ marginLeft: '8px' }}>Multi-Agent</span>
                 </div>
-                <div className="festi-header-status">Celebration Architect • Online</div>
+                <div className="festi-header-subtitle">
+                  <span className="festi-online-dot" aria-hidden="true"></span>
+                  <span>Celebration Architect • Online</span>
+                </div>
               </div>
             </div>
 
-            <div className="festi-chat-header-actions">
-              <button aria-label="Toggle Security Drills"
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <button
+                aria-label="Toggle Security Drills"
                 type="button"
-                className={'festi-header-btn ' + (showDrills ? 'active' : '')}
+                className={'festi-header-shield-btn ' + (showDrills ? 'active' : '')}
                 onClick={() => setShowDrills(!showDrills)}
                 title="Security & Resilience Drills"
               >
                 <ShieldCheck size={16} />
                 <span>Drills</span>
               </button>
-              <button aria-label="Close Festi Chat"
+              <button
+                aria-label="Close Festi Chat"
                 type="button"
-                className="festi-header-btn"
+                className="festi-chat-close-btn"
                 onClick={() => setIsOpen(false)}
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
           </div>
@@ -268,6 +298,6 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
           )}
         </div>
       )}
-    </div>
+    </>
   );
 };

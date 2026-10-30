@@ -248,11 +248,9 @@ export function App() {
       </Suspense>
 
       {/* Floating Animated Festi AI Mascot & Chatbot */}
-      <LazyMount placeholderHeight={0} idleDelayMs={3000}>
-        <Suspense fallback={null}>
-          <FestiChatbot />
-        </Suspense>
-      </LazyMount>
+      <Suspense fallback={null}>
+        <FestiChatbot />
+      </Suspense>
 
       {/* Edge Tenant Sign In / Sign Up Modal */}
       <Suspense fallback={null}>

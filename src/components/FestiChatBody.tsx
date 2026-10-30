@@ -31,20 +31,19 @@ export const FestiChatBody: React.FC<FestiChatBodyProps> = ({
 }) => {
   return (
     <>
-      <div className="festi-chat-body" role="log" aria-live="polite">
+      <div className="festi-chat-messages" role="log" aria-live="polite">
         <div className="festi-quick-starters">
-          <span className="starters-label">Explore celebration intelligence:</span>
-          <div className="starters-scroll">
-            {activeStarterList.map((starter, idx) => (
-              <button key={idx} aria-label={'Ask Festi: ' + starter}
-                type="button"
-                className="starter-chip"
-                onClick={() => onSendMessage(starter)}
-              >
-                {starter}
-              </button>
-            ))}
-          </div>
+          {activeStarterList.map((starter, idx) => (
+            <button
+              key={idx}
+              aria-label={'Ask Festi: ' + starter}
+              type="button"
+              className="festi-starter-chip"
+              onClick={() => onSendMessage(starter)}
+            >
+              {starter}
+            </button>
+          ))}
         </div>
 
         {messages.map((m) => (
@@ -67,7 +66,7 @@ export const FestiChatBody: React.FC<FestiChatBodyProps> = ({
         <div ref={messagesEndRef} />
       </div>
 
-      <form className="festi-chat-input-bar" onSubmit={onInputSubmit}>
+      <form className="festi-chat-input-area" onSubmit={onInputSubmit}>
         <input
           id="festi-chat-input-field"
           aria-label="Chat input"
@@ -75,12 +74,13 @@ export const FestiChatBody: React.FC<FestiChatBodyProps> = ({
           placeholder="Ask about budget, timeline, contracts..."
           value={inputVal}
           onChange={onInputChange}
-          className="festi-chat-input"
+          className="festi-input-field"
           disabled={isTyping}
         />
-        <button aria-label="Send message"
+        <button
+          aria-label="Send message"
           type="submit"
-          className="festi-chat-send-btn"
+          className="festi-send-btn"
           disabled={!inputVal.trim() || isTyping}
         >
           <Send size={16} />
