@@ -1,0 +1,16 @@
+{
+  "flags": {
+    "FEATURE_CELEBRATION_GLOBE": {
+      "enabled": true,
+      "description": "Interactive 3D celebration world globe"
+    },
+    "FEATURE_ECONOMICS_ABACUS": {
+      "enabled": true,
+      "description": "Event economics abacus and currency converter"
+    },
+    "FEATURE_FESTI_AI_PLANNER": {
+      "enabled": true,
+      "description": "Festi autonomous celebration copilot and day-of planner"
+    }
+  }
+}
