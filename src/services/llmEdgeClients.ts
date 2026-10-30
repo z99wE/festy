@@ -103,7 +103,7 @@ export async function callCloudflareWorkersAI(
     };
     const resp = await fetch(url, reqInit);
 
-    if (!resp.ok) throw new Error('Cloudflare AI HTTP ' + resp.status);
+    if (!resp.ok) throw new Error('Edge AI HTTP ' + resp.status);
     const data = (await resp.json()) as { result?: { response?: string } };
     const resText = data.result && data.result.response;
     if (!resText) throw new Error('Invalid response structure');

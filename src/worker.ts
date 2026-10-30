@@ -115,7 +115,7 @@ function buildMessages(body: AiRequestBody): MessageItem[] {
 async function executeModelRun(env: Env, messages: MessageItem[]): Promise<Response> {
   if (!env.AI) {
     return new Response(
-      JSON.stringify({ error: 'Workers AI binding not available', fallbackNeeded: true }),
+      JSON.stringify({ error: 'Edge AI binding not available', fallbackNeeded: true }),
       { status: 503, headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' } }
     );
   }
