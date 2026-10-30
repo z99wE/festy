@@ -137,20 +137,76 @@ const CategoryGridCard: React.FC<CategoryGridCardProps> = ({ cat, idx, isActive,
     onSelect(idx, cat.id);
   };
 
+  const ticketNumber = String(idx + 1).padStart(2, '0');
+
   return (
     <div
-      className={`category-card ${isActive ? 'active-highlight' : ''}`}
+      className={`category-card ticket-card ${isActive ? 'active-highlight' : ''}`}
       role="button"
       tabIndex={0}
-      aria-label={`Select ${cat.title} and launch blueprint`}
+      aria-label={`Select ${cat.title} and explore blueprint pass`}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
+      style={{ '--ticket-color': cat.color } as React.CSSProperties}
     >
-      <h4>{cat.title}</h4>
-      <p>{cat.categoryDescription}</p>
+      {/* Ticket Top Header: Access Tier Badge + Serial + Animated Barcode */}
+      <div className="ticket-header">
+        <div
+          className="ticket-badge-pill"
+          style={{
+            color: cat.color,
+            borderColor: `${cat.color}44`,
+            backgroundColor: `${cat.color}14`,
+          }}
+        >
+          <span className="ticket-badge-dot" style={{ backgroundColor: cat.color }} aria-hidden="true"></span>
+          <span>ADMIT ONE • PASS</span>
+        </div>
+        <div className="ticket-serial-barcode">
+          <span className="ticket-serial">№ BLPR-{ticketNumber}</span>
+          <div className="ticket-mini-barcode" aria-hidden="true">
+            <span style={{ height: '14px', width: '2px' }}></span>
+            <span style={{ height: '14px', width: '4px' }}></span>
+            <span style={{ height: '14px', width: '1px' }}></span>
+            <span style={{ height: '14px', width: '3px' }}></span>
+            <span style={{ height: '14px', width: '2px' }}></span>
+            <span style={{ height: '14px', width: '4px' }}></span>
+            <span style={{ height: '14px', width: '1px' }}></span>
+          </div>
+        </div>
+      </div>
 
-      <div className="category-card-cta">
-        <span>Explore Plan Blueprint</span>
+      {/* Ticket Body: Subtitle Pillars, Title, Description */}
+      <div className="ticket-body">
+        <div className="ticket-pillars-tag">{cat.subtitle}</div>
+        <h4 className="ticket-title">{cat.title}</h4>
+        <p className="ticket-description">{cat.categoryDescription}</p>
+      </div>
+
+      {/* Realistic Perforated Tear Line with Left & Right Cutout Notches */}
+      <div className="ticket-perforation-wrapper" aria-hidden="true">
+        <span className="ticket-notch ticket-notch-left"></span>
+        <div className="ticket-tear-line"></div>
+        <span className="ticket-notch ticket-notch-right"></span>
+      </div>
+
+      {/* Ticket Stub Footer: Verified Stamp + "Explore the blueprint" CTA Button */}
+      <div className="ticket-stub-footer">
+        <div className="ticket-stamp-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <polyline points="9 12 11 14 15 10"></polyline>
+          </svg>
+          <span>OFFICIAL PASS</span>
+        </div>
+
+        <div className="ticket-cta-btn" role="presentation">
+          <span className="ticket-cta-text">Explore the blueprint</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="ticket-arrow">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </div>
       </div>
     </div>
   );
@@ -227,12 +283,22 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
               <p className="active-category-desc">{currentItem.categoryDescription}</p>
             </div>
 
-            <button aria-label={'Build ' + currentItem.title + ' Blueprint'}
+            <button
+              aria-label={'Explore ' + currentItem.title + ' Blueprint'}
               type="button"
               className="btn btn-primary active-category-cta"
               onClick={() => handleLaunchPlan(currentItem.id)}
+              style={{
+                background: 'linear-gradient(135deg, var(--bubblegum-purple-blue, #5b42f3) 0%, #7952f5 100%)',
+                borderColor: 'var(--bubblegum-purple-blue, #5b42f3)',
+                boxShadow: '0 4px 16px rgba(91, 66, 243, 0.35)',
+              }}
             >
-              <span>Build {currentItem.title} Blueprint</span>
+              <span>Explore the blueprint</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ marginLeft: '6px' }}>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
             </button>
           </div>
         </div>
