@@ -309,7 +309,7 @@ export function CelebrationGlobeCanvas({
         style={{ width: '100%', height: '440px', cursor: 'grab' }}
       />
 
-      <div className="globe-labels-overlay" aria-hidden="true">
+      <div className="globe-labels-overlay">
         {labelCoords.map((label) => (
           <GlobePinBadge
             key={label.id}

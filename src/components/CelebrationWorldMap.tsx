@@ -176,7 +176,7 @@ export const CelebrationWorldMap: React.FC<CelebrationWorldMapProps> = ({
         </div>
 
         <div className="celebration-filter-bar">
-          <div className="region-pills" role="tablist" aria-label="Filter by region">
+          <div className="region-pills" role="group" aria-label="Filter by region">
             {REGIONS.map((r) => (
               <button key={r} aria-label={'Filter by region: ' + r}
                 type="button"

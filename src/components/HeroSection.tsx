@@ -74,7 +74,7 @@ export function HeroSection({
 }: HeroSectionProps) {
   return (
     <div className="hero-masthead-flow">
-      <div className="hero-masthead-centerpiece" aria-label="Festiya Interactive 3D Mascot Logo">
+      <div className="hero-masthead-centerpiece" role="region" aria-label="Festiya Interactive 3D Mascot Logo">
         <Suspense fallback={<HeroLogoFallback />}>
           <OrbitableHeroLogoComponent reducedMotion={reducedMotion} soundEnabled={soundEnabled} />
         </Suspense>
@@ -89,13 +89,12 @@ export function HeroSection({
           padding: '6px 16px',
           borderRadius: '999px',
           background: 'rgba(91, 66, 243, 0.08)',
-          border: '1px solid rgba(91, 66, 243, 0.2)',
-          color: 'var(--bubblegum-purple-blue, #5b42f3)',
-          fontWeight: 600,
+          border: '1px solid rgba(49, 46, 129, 0.25)',
+          color: '#312e81',
+          fontWeight: 700,
           fontSize: '0.875rem',
           margin: '0 auto 16px auto',
         }}
-        aria-label="Autonomous GenAI Celebration and Event Planning Assistant"
       >
         <span>✨ Autonomous GenAI Celebration &amp; Event Planning Assistant</span>
       </div>

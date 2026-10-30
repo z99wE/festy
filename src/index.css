@@ -1166,7 +1166,7 @@ img {
   font-weight: 800;
   padding: 2px 6px;
   background: rgba(255, 107, 74, 0.14);
-  color: var(--coral-pop, #ff6b4a);
+  color: #9A3412;
   border-radius: 5px;
   letter-spacing: 0.04em;
 }
@@ -1257,7 +1257,11 @@ img {
 .chip-cost {
   font-size: 10.5px;
   font-weight: 700;
-  color: var(--coral-pop, #ff6b4a);
+  color: #9A3412;
+}
+
+.destination-chip.active .chip-cost {
+  color: #3730A3;
 }
 
 .dossier-image-hero {
@@ -1626,8 +1630,8 @@ img {
   gap: 4px;
   font-size: 12px;
   font-weight: 700;
-  color: var(--orange-600, #EA580C);
-  background: rgba(255, 94, 30, 0.1);
+  color: #9A3412;
+  background: rgba(255, 94, 30, 0.12);
   padding: 3px 10px;
   border-radius: var(--radius-full);
 }
@@ -1697,7 +1701,7 @@ img {
 }
 
 .spec-val.highlight-gold {
-  color: var(--orange-600, #EA580C);
+  color: #9A3412;
 }
 
 .dossier-logistics-box {
@@ -5624,8 +5628,8 @@ img {
 }
 
 .demo-results-grid.pending {
-  opacity: 0.55;
-  filter: blur(1px);
+  opacity: 0.85;
+  filter: blur(0.5px);
 }
 
 .demo-results-grid.visible {
@@ -5666,13 +5670,17 @@ img {
 .demo-card-title {
   font-size: 15px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #0F172A;
   margin: 0;
 }
 
 .demo-card-sub {
   font-size: 12px;
-  color: var(--text-muted);
+  color: #334155;
+}
+
+.demo-card-sub strong {
+  color: #0F172A;
 }
 
 .demo-budget-breakdown {
@@ -5695,12 +5703,12 @@ img {
 }
 
 .budget-cat-name {
-  color: var(--text-primary);
+  color: #0F172A;
 }
 
 .budget-cat-amount {
   font-family: var(--font-mono);
-  color: var(--orange-600);
+  color: #9A3412;
   font-weight: 700;
 }
 
@@ -5736,7 +5744,7 @@ img {
   gap: 10px;
   font-size: 13px;
   line-height: 18px;
-  color: var(--text-primary);
+  color: #0F172A;
   font-weight: 500;
 }
 
@@ -5747,7 +5755,7 @@ img {
 }
 
 .demo-task-bullet {
-  color: var(--accent-primary, #FF5E1E);
+  color: #C2410C;
   font-weight: 800;
   margin-right: 8px;
   font-size: 15px;
@@ -7527,7 +7535,7 @@ img {
   font-weight: 800;
   padding: 3px 10px;
   background: rgba(255, 107, 74, 0.12);
-  color: var(--coral-pop, #ff6b4a);
+  color: #9A3412;
   border-radius: var(--radius-full, 9999px);
 }
 
@@ -7605,7 +7613,7 @@ img {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--coral-pop, #ff6b4a);
+  color: #9A3412;
 }
 
 .abacus-intel-text {

@@ -115,15 +115,16 @@ const BudgetRow: React.FC<{ item: BudgetItem; showResults: boolean }> = ({ item,
 
 export const LiveInteractiveDemo: React.FC = () => {
   const [activeScenarioIdx, setActiveScenarioIdx] = useState(0);
-  const [typedText, setTypedText] = useState('');
-  const [isTyping, setIsTyping] = useState(true);
+  const [typedText, setTypedText] = useState(SCENARIOS[0].prompt);
+  const [isTyping, setIsTyping] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [showResults, setShowResults] = useState(false);
+  const [showResults, setShowResults] = useState(true);
 
   const scenario = SCENARIOS[activeScenarioIdx];
 
-  // Auto-typing simulation effect
+  // Auto-typing simulation effect when user switches scenarios
   useEffect(() => {
+    if (!isTyping) return;
     let timeout: ReturnType<typeof setTimeout>;
     const targetText = scenario.prompt;
     let charIndex = 0;
@@ -136,23 +137,23 @@ export const LiveInteractiveDemo: React.FC = () => {
     const onDoneTyping = () => {
       setIsTyping(false);
       setIsProcessing(true);
-      timeout = setTimeout(onFinish, 500);
+      timeout = setTimeout(onFinish, 400);
     };
 
     const typeChar = () => {
       if (charIndex < targetText.length) {
         setTypedText(targetText.slice(0, charIndex + 1));
         charIndex++;
-        timeout = setTimeout(typeChar, 24 + Math.random() * 18);
+        timeout = setTimeout(typeChar, 20 + Math.random() * 15);
         return;
       }
       onDoneTyping();
     };
 
-    timeout = setTimeout(typeChar, 200);
+    timeout = setTimeout(typeChar, 100);
 
     return () => clearTimeout(timeout);
-  }, [scenario.prompt]);
+  }, [scenario.prompt, isTyping]);
 
   const handleSelectScenario = (idx: number) => {
     if (idx === activeScenarioIdx) return;

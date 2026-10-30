@@ -93,13 +93,14 @@
     <!-- Preload critical hero LCP image immediately so browser discovers it without waiting for JS bundle -->
     <link rel="preload" as="image" href="/festiya-logo.webp" type="image/webp" fetchpriority="high" />
 
-    <!-- Approved Soft Sans-Serif Typography: Plus Jakarta Sans & Outfit (Streamlined Non-render-blocking) -->
+    <!-- Approved Soft Sans-Serif Typography: Plus Jakarta Sans & Outfit (Zero-CLS font optimization) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link rel="preload" href="https://fonts.gstatic.com/s/outfit/v15/QGYvz_MVcBeNP4NJtEtqUYLknw.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700&display=optional">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700&display=optional" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700&display=optional" rel="stylesheet">
     </noscript>
   </head>
   <body>

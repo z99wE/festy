@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { playPopSound } from '../utils/audio';
 
@@ -66,31 +66,37 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
   soundEnabled = false,
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const [is3DReady, setIs3DReady] = useState(false);
 
   useEffect(() => {
-    const container = mountRef.current;
-    if (!container) return;
+    let canceled = false;
+    let cleanupFn: (() => void) | undefined;
 
-    let { width, height } = getViewportSize(container.clientWidth);
+    const setupScene = () => {
+      if (canceled) return;
+      const container = mountRef.current;
+      if (!container) return;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(32, width / height, 0.1, 100);
-    updateCameraDistance(camera, width, height);
+      let { width, height } = getViewportSize(container.clientWidth);
 
-    const renderer = new THREE.WebGLRenderer({
-      alpha: true,
-      antialias: true,
-      powerPreference: 'high-performance',
-    });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
-    renderer.domElement.style.display = 'block';
-    renderer.domElement.style.width = '100%';
-    renderer.domElement.style.height = '100%';
-    container.innerHTML = '';
-    container.appendChild(renderer.domElement);
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(32, width / height, 0.1, 100);
+      updateCameraDistance(camera, width, height);
+
+      const renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+        powerPreference: 'high-performance',
+      });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.25;
+      renderer.domElement.style.display = 'block';
+      renderer.domElement.style.width = '100%';
+      renderer.domElement.style.height = '100%';
+      container.innerHTML = '';
+      container.appendChild(renderer.domElement);
 
     const ambientLight = new THREE.AmbientLight(0xfff5ea, 2.0);
     scene.add(ambientLight);
@@ -131,6 +137,9 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
         const mesh = new THREE.Mesh(planeGeo, material);
         orbitGroup.add(mesh);
         renderer.render(scene, camera);
+        if (!canceled) {
+          setIs3DReady(true);
+        }
       },
       undefined,
       (err) => {
@@ -252,7 +261,7 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     const observer = new IntersectionObserver(onIntersect, { threshold: 0.05 });
     observer.observe(container);
 
-    return () => {
+    cleanupFn = () => {
       observer.disconnect();
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
@@ -286,7 +295,26 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       }
       renderer.dispose();
     };
-  }, [reducedMotion, soundEnabled]);
+  };
+
+  let idleId: number | undefined;
+  let timerId: ReturnType<typeof setTimeout> | undefined;
+
+  if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+    idleId = (window as unknown as { requestIdleCallback: (cb: () => void, opts: { timeout: number }) => number }).requestIdleCallback(setupScene, { timeout: 350 });
+  } else {
+    timerId = setTimeout(setupScene, 120);
+  }
+
+  return () => {
+    canceled = true;
+    if (idleId && typeof window !== 'undefined' && 'cancelIdleCallback' in window) {
+      (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleId);
+    }
+    if (timerId) clearTimeout(timerId);
+    if (cleanupFn) cleanupFn();
+  };
+}, [reducedMotion, soundEnabled]);
 
   return (
     <div
@@ -305,6 +333,25 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
         overflow: 'visible',
       }}
     >
+      <img
+        src="/festiya-logo.webp"
+        alt="Festiya 3D Mascot Logo"
+        width={639}
+        height={240}
+        fetchPriority="high"
+        className="festiya-masthead-img"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          margin: 'auto',
+          maxWidth: '100%',
+          maxHeight: '100%',
+          objectFit: 'contain',
+          opacity: is3DReady ? 0 : 1,
+          transition: 'opacity 0.4s ease',
+          pointerEvents: 'none',
+        }}
+      />
       <div
         ref={mountRef}
         style={{
@@ -315,6 +362,8 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
           justifyContent: 'center',
           userSelect: 'none',
           overflow: 'visible',
+          opacity: is3DReady ? 1 : 0,
+          transition: 'opacity 0.4s ease',
         }}
       />
     </div>
