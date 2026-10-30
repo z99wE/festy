@@ -83,12 +83,12 @@ function buildWeddingResponse(): string {
 }
 
 function buildIntroResponse(): string {
-  return `Welcome to Festi AI! 🎉 I'm Festi, your autonomous celebration architect.\n\n` +
+  return `Welcome to Festi AI! I'm Festi, your autonomous celebration architect.\n\n` +
     `Here is how I can build your next event:\n` +
-    `• 📊 3-Tier Budget Synthesizer: Dial in exact cost allocations and discover ways to save 20% on vendors.\n` +
-    `• ⏱️ Day-of Run-of-Show Generator: Minute-by-minute cues for seamless pacing from load-in to egress.\n` +
-    `• 📝 Vendor Negotiation Scripts: The exact questions to ask caterers, venues, and DJs to avoid $1,000s in hidden fees.\n` +
-    `• 💡 Sensory Decor & Themes: Lighting, music BPM arcs, and immersive guest experiences.\n\n` +
+    `• 3-Tier Budget Synthesizer: Dial in exact cost allocations and discover ways to save 20% on vendors.\n` +
+    `• Day-of Run-of-Show Generator: Minute-by-minute cues for seamless pacing from load-in to egress.\n` +
+    `• Vendor Negotiation Scripts: The exact questions to ask caterers, venues, and DJs to avoid thousands in hidden fees.\n` +
+    `• Sensory Decor & Themes: Lighting, music BPM arcs, and immersive guest experiences.\n\n` +
     `Try asking me: "Plan a 40th birthday for 40 guests on a $4,000 budget" or "Give me a run-of-show schedule for a wedding"!`;
 }
 

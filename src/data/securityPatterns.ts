@@ -90,14 +90,14 @@ export const OFF_TOPIC_RED_FLAGS = [
 ];
 
 export const FESTI_DOMAIN_DEFLECTION = 
-  "I am Festi, your Festi AI event architect! 🎉 I specialize exclusively in celebration blueprints, " +
+  "I am Festi, your Festi AI event architect. I specialize exclusively in celebration blueprints, " +
   "event budgets, vendor negotiation questions, run-of-show timelines, and party logistics. " +
   "I don't answer general programming, academic homework, or topics outside event planning, " +
   "but I would love to help you architect an unforgettable celebration, wedding, birthday, dinner, or trip! " +
   "What event are we planning today?";
 
 export const FESTI_SECURITY_DEFLECTION = 
-  "I am Festi, your Festi AI event architect! 🛡️🎉 For your safety and event tranquility, " +
+  "I am Festi, your Festi AI event architect. For your safety and event tranquility, " +
   "I operate strictly within verified celebration planning guidelines. " +
   "System overrides, meta-prompt extractions, and persona alterations are safely neutralized. " +
   "How can I help you architect your event budget, schedule, or theme today?";

@@ -212,7 +212,6 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
             aria-label="Ask Festi AI Celebration Architect"
           >
             <span>Ask Festi AI</span>
-            <span aria-hidden="true">✨</span>
           </div>
           <button
             type="button"
