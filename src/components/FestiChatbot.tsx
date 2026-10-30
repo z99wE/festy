@@ -65,6 +65,7 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
   const [isTyping, setIsTyping] = useState(false);
   const [showDrills, setShowDrills] = useState(false);
   const [mascotFrame, setMascotFrame] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     const defaultOccasion = propOccasionTitle || 'Celebration';
@@ -89,11 +90,20 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
   const handleSendRef = useRef<(queryText?: string) => Promise<void>>(() => Promise.resolve());
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    MASCOT_FRAMES.forEach((frame) => {
+      const img = new Image();
+      img.src = frame.src;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (isHovered || isOpen) return;
     const timer = setInterval(() => {
       setMascotFrame((prev) => (prev + 1) % MASCOT_FRAMES.length);
-    }, 3500);
+    }, 140);
     return () => clearInterval(timer);
-  }, []);
+  }, [isHovered, isOpen]);
 
   useEffect(() => {
     const handleOpenChat = (e: Event) => {
@@ -197,7 +207,13 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
   return (
     <>
       {!isOpen && (
-        <div className="festi-companion-container" role="region" aria-label="Celebration Architect Assistant">
+        <div
+          className="festi-companion-container"
+          role="region"
+          aria-label="Celebration Architect Assistant"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           <div
             className="festi-speech-bubble"
             onClick={() => setIsOpen(true)}

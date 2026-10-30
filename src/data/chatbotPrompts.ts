@@ -1,9 +1,13 @@
 export const FESTI_FRAMES = [
-  { id: 1, src: '/mascots/pink-dancing.webp', alt: 'Festiya AI Event Architect - Fluffy Pink Plush Mascot Dancing for Wedding and Party Planning' },
-  { id: 2, src: '/mascots/yellow-dance.webp', alt: 'Festiya AI Event Architect - Cheerful Fluffy Yellow Dance Mascot Celebrating Birthday Milestones' },
-  { id: 3, src: '/mascots/blue-jumping.webp', alt: 'Festiya AI Event Architect - Cheerful Blue Fuzzy Mascot Jumping for Music Festival Logistics' },
-  { id: 4, src: '/mascots/bubble-mint.webp', alt: 'Festiya AI Event Architect - Bubble Mint Plush Mascot Assisting with Corporate Gala Budgets' },
-  { id: 5, src: '/mascots/dancing-sticker.webp', alt: 'Festiya AI Event Architect - 3D Holographic Dancing Mascot Sticker for Celebration Planning' },
+  { id: 1, src: '/mascots/yellow-dance.webp', alt: 'Festiya AI Event Architect - Cheerful Yellow Mascot Dancing' },
+  { id: 2, src: '/mascots/yellow-dance-blink.webp', alt: 'Festiya AI Event Architect - Yellow Mascot Dancing Blink' },
+  { id: 3, src: '/mascots/pink-dancing.webp', alt: 'Festiya AI Event Architect - Pink Plush Mascot Dancing' },
+  { id: 4, src: '/mascots/pink-dancing-blink.webp', alt: 'Festiya AI Event Architect - Pink Mascot Dancing Blink' },
+  { id: 5, src: '/mascots/blue-jumping.webp', alt: 'Festiya AI Event Architect - Blue Mascot Jumping' },
+  { id: 6, src: '/mascots/blue-jumping-blink.webp', alt: 'Festiya AI Event Architect - Blue Mascot Jumping Blink' },
+  { id: 7, src: '/mascots/bubble-mint.webp', alt: 'Festiya AI Event Architect - Bubble Mint Mascot Celebrating' },
+  { id: 8, src: '/mascots/bubble-mint-blink.webp', alt: 'Festiya AI Event Architect - Mint Mascot Celebrating Blink' },
+  { id: 9, src: '/mascots/dancing-sticker.webp', alt: 'Festiya AI Event Architect - 3D Dancing Mascot Sticker' },
 ];
 
 export const QUICK_STARTERS = [

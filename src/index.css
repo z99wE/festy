@@ -4172,38 +4172,18 @@ img {
   height: 100%;
   object-fit: contain;
   filter: drop-shadow(0px 8px 14px rgba(0, 0, 0, 0.25));
-  animation: festiSquashBounce 0.38s cubic-bezier(0.28, 0.84, 0.42, 1) infinite alternate;
   user-select: none;
   transform: translateZ(0);
-}
-
-.festi-companion-container:hover .festi-dancing-img,
-.festi-companion-container.paused .festi-dancing-img {
-  animation-play-state: paused !important;
-}
-
-@keyframes festiSquashBounce {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-12px); }
+  transition: transform 0.15s ease;
 }
 
 .festi-avatar-shadow {
   width: 52px;
   height: 8px;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.22);
   border-radius: 50%;
   margin-top: -6px;
-  animation: festiShadowPulse 0.38s cubic-bezier(0.28, 0.84, 0.42, 1) infinite alternate;
-}
-
-.festi-companion-container:hover .festi-avatar-shadow,
-.festi-companion-container.paused .festi-avatar-shadow {
-  animation-play-state: paused !important;
-}
-
-@keyframes festiShadowPulse {
-  0% { transform: scale(1); opacity: 0.28; }
-  100% { transform: scale(0.72); opacity: 0.15; }
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 /* Chat Modal Drawer */
