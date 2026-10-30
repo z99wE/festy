@@ -218,8 +218,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const currentItem = CAROUSEL_ITEMS[activeIndex] || CAROUSEL_ITEMS[0];
-
   const handleLaunchPlan = (occasionId: string) => {
     onSelectCategory(occasionId);
     if (onNavigateToPlanner) {
@@ -274,32 +272,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
                 }
               }}
             />
-          </div>
-
-          {/* Active Category Information Card & Launch Bar */}
-          <div className="carousel-active-details">
-            <div className="active-details-text">
-              <h3 className="active-category-title">{currentItem.title}</h3>
-              <p className="active-category-desc">{currentItem.categoryDescription}</p>
-            </div>
-
-            <button
-              aria-label={'Explore ' + currentItem.title + ' Blueprint'}
-              type="button"
-              className="btn btn-primary active-category-cta"
-              onClick={() => handleLaunchPlan(currentItem.id)}
-              style={{
-                background: 'linear-gradient(135deg, var(--bubblegum-purple-blue, #5b42f3) 0%, #7952f5 100%)',
-                borderColor: 'var(--bubblegum-purple-blue, #5b42f3)',
-                boxShadow: '0 4px 16px rgba(91, 66, 243, 0.35)',
-              }}
-            >
-              <span>Explore the blueprint</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ marginLeft: '6px' }}>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </button>
           </div>
         </div>
 
