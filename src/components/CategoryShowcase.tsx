@@ -270,7 +270,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
               radius={18}
               squeeze={0.2}
               focusOnClick
-              captions
+              captions={false}
               autoplay
               interval={4.5}
               onChange={(idx) => setActiveIndex(idx)}

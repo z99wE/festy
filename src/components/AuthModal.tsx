@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Mail, Lock, User, Building, ShieldCheck, ArrowRight, LogIn, CheckCircle } from 'lucide-react';
+import { validateRegistrationEmail } from '../utils/disposableEmail';
 
 export interface AuthUser {
   id: string;
@@ -42,6 +43,7 @@ function createDemoUser(): AuthUser {
 
 function safePersistUser(user: AuthUser): void {
   try {
+    localStorage.setItem('festiya_cf_session_v1', JSON.stringify(user));
     localStorage.setItem('festiya_auth_user', JSON.stringify(user));
   } catch (err) {
     console.warn('Could not persist auth to localStorage', err);
@@ -87,8 +89,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       return;
     }
 
-    if (!email.trim() || !email.includes('@')) {
-      setErrorMsg('Please enter a valid email address');
+    const emailValidation = validateRegistrationEmail(email);
+    if (!emailValidation.valid) {
+      setErrorMsg(emailValidation.error || 'Please enter a valid email address');
       setLoading(false);
       return;
     }

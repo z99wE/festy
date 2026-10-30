@@ -35,7 +35,7 @@ export function App() {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => {
     if (typeof window === 'undefined') return null;
     try {
-      const stored = localStorage.getItem('festiya_auth_user');
+      const stored = localStorage.getItem('festiya_cf_session_v1') || localStorage.getItem('festiya_auth_user');
       return stored ? JSON.parse(stored) : null;
     } catch (e) {
       console.warn('Could not load user session', e);
@@ -144,6 +144,7 @@ export function App() {
   const handleSignOut = () => {
     setCurrentUser(null);
     try {
+      localStorage.removeItem('festiya_cf_session_v1');
       localStorage.removeItem('festiya_auth_user');
     } catch (e) {
       console.warn(e);

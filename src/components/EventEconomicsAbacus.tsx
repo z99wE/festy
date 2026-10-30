@@ -1,12 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import {
-  DollarSign,
-  MapPin,
-  Users,
-  Sparkles,
-  Camera,
-  Info,
-} from 'lucide-react';
 import { SUPPORTED_CURRENCIES, useLiveRates } from '../utils/currency';
 import { REGIONAL_MARKETS } from '../data/marketEconomicsData';
 import type { RegionalMarketProfile } from '../data/marketEconomicsData';
@@ -151,7 +143,6 @@ export const EventEconomicsAbacus: React.FC<{
         <div className="abacus-control-panel">
           <div className="abacus-control-group">
             <label className="abacus-control-label" htmlFor="locality-select">
-              <MapPin size={16} className="abacus-icon" />
               <span>Event Destination Locality</span>
             </label>
             <select
@@ -171,7 +162,6 @@ export const EventEconomicsAbacus: React.FC<{
           <div className="abacus-control-group">
             <div className="abacus-slider-header">
               <label className="abacus-control-label" htmlFor="guest-slider">
-                <Users size={16} className="abacus-icon" />
                 <span>Guest Count</span>
               </label>
               <span className="abacus-count-pill">{guestCount} Guests</span>
@@ -196,7 +186,6 @@ export const EventEconomicsAbacus: React.FC<{
 
           <div className="abacus-control-group">
             <label className="abacus-control-label">
-              <Sparkles size={16} className="abacus-icon" />
               <span>Production Tier</span>
             </label>
             <div className="abacus-tier-toggle-row">
@@ -230,7 +219,6 @@ export const EventEconomicsAbacus: React.FC<{
           <div className="abacus-control-group">
             <div className="abacus-slider-header">
               <label className="abacus-control-label" htmlFor="currency-select">
-                <DollarSign size={16} className="abacus-icon" />
                 <span>Display Valuation In Currency</span>
               </label>
               <span className="abacus-rate-indicator">
@@ -261,13 +249,11 @@ export const EventEconomicsAbacus: React.FC<{
 
           <div className="abacus-regional-intel">
             <div className="abacus-intel-header">
-              <Info size={15} style={{ color: 'var(--coral-pop, #ff6b4a)' }} />
               <span className="abacus-intel-title">Regional Labor & Vendor Reality</span>
             </div>
             <p className="abacus-intel-text">{currentMarket.marketInsight}</p>
             
             <div className="abacus-intel-photo-callout">
-              <Camera size={14} style={{ color: '#059669', flexShrink: 0 }} />
               <span>{currentMarket.photoInsight}</span>
             </div>
 

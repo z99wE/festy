@@ -1,11 +1,5 @@
 import React from 'react';
 import {
-  Camera,
-  Utensils,
-  Building,
-  Music,
-  Palette,
-  ShieldCheck,
   ArrowRight,
   CheckCircle2,
 } from 'lucide-react';
@@ -37,8 +31,6 @@ export interface AbacusRailsPanelProps {
 interface RailConfig {
   id: string;
   title: string;
-  icon: React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>;
-  iconClass: string;
   valueKey: keyof Omit<AbacusDisplayCalculations, 'total' | 'perGuest'>;
   legend: [string, string, string];
 }
@@ -47,48 +39,36 @@ const RAILS: RailConfig[] = [
   {
     id: 'photo',
     title: 'Photography & Cinematography',
-    icon: Camera,
-    iconClass: 'photo',
     valueKey: 'photo',
     legend: ['Solo Shooter', 'Dual Crew', 'Cinema & Drone'],
   },
   {
     id: 'catering',
     title: 'Catering, Bar & Hospitality',
-    icon: Utensils,
-    iconClass: 'catering',
     valueKey: 'catering',
     legend: ['Buffet / Cocktail', 'Plated 3-Course', 'Live Chef Stations & Top-Shelf'],
   },
   {
     id: 'venue',
     title: 'Venue Hire & Structural Staging',
-    icon: Building,
-    iconClass: 'venue',
     valueKey: 'venue',
     legend: ['Hall / Loft', 'Private Estate / Garden', 'Full Historic Buyout'],
   },
   {
     id: 'entertainment',
     title: 'Acoustics, Sound & Entertainment',
-    icon: Music,
-    iconClass: 'entertainment',
     valueKey: 'entertainment',
     legend: ['Curated DJ & PA', 'Live Quartet / Trio', 'Headline Band & Show Lighting'],
   },
   {
     id: 'decor',
     title: 'Floral, Scenography & Custom Decor',
-    icon: Palette,
-    iconClass: 'decor',
     valueKey: 'decor',
     legend: ['Minimalist Greenery', 'Floral Centerpieces', 'Full Immersive Fabrication'],
   },
   {
     id: 'logistics',
     title: 'Permits, Sound Escrow & Contingency',
-    icon: ShieldCheck,
-    iconClass: 'logistics',
     valueKey: 'logistics',
     legend: ['Standard Escrow (5%)', 'Permits & Insurance (10%)', 'Full Safety Buffer (18%)'],
   },
@@ -148,13 +128,10 @@ const AbacusRailItem: React.FC<AbacusRailItemProps> = ({
   formatAmount,
   onBeadChange,
 }) => {
-  const Icon = rail.icon;
-
   return (
     <div className="abacus-rail-item">
       <div className="abacus-rail-meta">
         <div className="abacus-rail-name-group">
-          <Icon size={16} className={`abacus-pillar-icon ${rail.iconClass}`} />
           <span className="abacus-pillar-title">{rail.title}</span>
         </div>
         <div className="abacus-rail-valuation">

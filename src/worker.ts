@@ -139,6 +139,20 @@ export default {
     if (url.pathname === '/api/ai') {
       return handleAiRequest(request, env);
     }
+    if (url.pathname === '/api/auth/session') {
+      if (request.method === 'OPTIONS') {
+        return new Response(null, { headers: CORS_HEADERS });
+      }
+      return new Response(
+        JSON.stringify({
+          authenticated: true,
+          scope: 'festiya.viktorechakraborty.workers.dev',
+          edgeTenant: 'festiya-isolated-v1',
+          timestamp: new Date().toISOString(),
+        }),
+        { headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' } }
+      );
+    }
     return env.ASSETS.fetch(request);
   },
 };
