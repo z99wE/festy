@@ -37,31 +37,60 @@ export async function callGroq(
   const timeoutMs = config.requestTimeoutMs || 9000;
   const timer = setTimeout(() => controller.abort(), timeoutMs);
 
+  const candidateModels = [
+    'llama-3.3-70b-versatile',
+    'qwen/qwen3.8-27b',
+    'openai/gpt-oss-120b',
+    'openai/gpt-oss-20b',
+  ];
+
   try {
-    const payload = {
-      model: 'llama-3.3-70b-versatile',
-      messages,
-      max_tokens: 1024,
-      temperature: 0.7,
-    };
     const reqHeaders = {
       Authorization: 'Bearer ' + (config.groqApiKey || ''),
       'Content-Type': 'application/json',
     };
-    const reqInit = {
-      method: 'POST',
-      headers: reqHeaders,
-      body: JSON.stringify(payload),
-      signal: controller.signal,
-    };
-    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', reqInit);
 
-    if (!resp.ok) throw new Error('Groq HTTP ' + resp.status);
-    const data = (await resp.json()) as ChatApiResponse;
-    const choices = data.choices;
-    const content = choices && choices[0] && choices[0].message && choices[0].message.content;
-    if (!content) throw new Error('Empty response from Groq');
-    return content;
+    let lastError: Error | null = null;
+
+    for (const model of candidateModels) {
+      try {
+        const payload = {
+          model,
+          messages,
+          max_tokens: 1024,
+          temperature: 0.7,
+        };
+        const reqInit = {
+          method: 'POST',
+          headers: reqHeaders,
+          body: JSON.stringify(payload),
+          signal: controller.signal,
+        };
+        const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', reqInit);
+
+        if (resp.status === 404 || resp.status === 400) {
+          const errData = (await resp.json().catch(() => ({}))) as { error?: { code?: string; message?: string } };
+          if (errData.error?.code === 'model_not_found' || errData.error?.message?.includes('does not exist')) {
+            lastError = new Error(errData.error.message);
+            continue;
+          }
+          throw new Error('Groq HTTP ' + resp.status + ': ' + (errData.error?.message || 'Bad Request'));
+        }
+
+        if (!resp.ok) throw new Error('Groq HTTP ' + resp.status);
+        const data = (await resp.json()) as ChatApiResponse & { choices?: Array<{ message?: { reasoning?: string } }> };
+        const choices = data.choices;
+        const msg = choices && choices[0] && choices[0].message;
+        const content = msg?.content || msg?.reasoning;
+        if (!content) throw new Error('Empty response from Groq');
+        return content;
+      } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') throw err;
+        lastError = err instanceof Error ? err : new Error(String(err));
+      }
+    }
+
+    throw lastError || new Error('Groq all candidate models exhausted');
   } finally {
     clearTimeout(timer);
   }
