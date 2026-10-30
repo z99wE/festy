@@ -280,13 +280,6 @@ export const FestiMessageBubble: React.FC<FestiMessageBubbleProps> = ({
           </div>
         )}
 
-        {m.agentsEngaged && m.agentsEngaged.length > 0 && (
-          <div className="festi-agents-trail">
-            <span className="festi-trail-title">Agents active:</span>
-            <span className="festi-trail-names">{m.agentsEngaged.join(' • ')}</span>
-          </div>
-        )}
-
         <div className="festi-msg-text">
           {renderMessageText(m.text)}
         </div>
@@ -343,11 +336,6 @@ export const FestiMessageBubble: React.FC<FestiMessageBubbleProps> = ({
 
         <div className="festi-msg-footer">
           <span className="festi-msg-time">{m.time}</span>
-          {m.modelUsed && (
-            <span className="festi-msg-provider">
-              via {m.modelUsed.replace('provider-', '').toUpperCase()}
-            </span>
-          )}
         </div>
       </div>
     </div>

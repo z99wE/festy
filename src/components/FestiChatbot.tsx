@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { X, ShieldCheck } from 'lucide-react';
+import { X, ShieldCheck, Maximize2, Minimize2 } from 'lucide-react';
 import { MultiAgentEngine } from '../services/multiAgentEngine';
 import { MultiLLMOrchestrator } from '../services/aiOrchestrator';
 import type { LLMMessage } from '../services/aiOrchestrator';
@@ -66,6 +66,7 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
   const [showDrills, setShowDrills] = useState(false);
   const [mascotFrame, setMascotFrame] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
 
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     const defaultOccasion = propOccasionTitle || 'Celebration';
@@ -74,7 +75,7 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
       {
         id: 'initial-greeting',
         sender: 'festi',
-        text: 'Namaste! I am Festi, your multi-agent Celebration Architect. I compose budgets with 0% drift, generate minute-by-minute schedules, and safeguard your event contracts. What are we celebrating?',
+        text: 'Namaste! I am Festi, your Celebration Architect. I compose itemized budgets, generate minute-by-minute schedules, and safeguard your event contracts. What are we celebrating?',
         time: 'Just now',
         agentsEngaged: ['BudgetArchitectAgent', 'LogisticsOrchestratorAgent'],
         budgetArtifact: initPlan.budgetArtifact,
@@ -250,7 +251,7 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
       )}
 
       {isOpen && (
-        <div className="festi-chat-modal" role="dialog" aria-modal="true" aria-label="Festi AI Event Architect">
+        <div className={'festi-chat-modal ' + (isMaximized ? 'maximized' : '')} role="dialog" aria-modal="true" aria-label="Festi AI Event Architect">
           <div className="festi-chat-header">
             <div className="festi-chat-header-brand">
               <div className="festi-header-mascot-wrap" aria-hidden="true">
@@ -265,7 +266,6 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
               <div>
                 <div className="festi-header-title">
                   <span>Festi</span>
-                  <span className="festi-domain-tag" style={{ marginLeft: '8px' }}>Multi-Agent</span>
                 </div>
                 <div className="festi-header-subtitle">
                   <span className="festi-online-dot" aria-hidden="true"></span>
@@ -284,6 +284,15 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
               >
                 <ShieldCheck size={16} />
                 <span>Drills</span>
+              </button>
+              <button
+                aria-label={isMaximized ? "Restore Chat Window size" : "Maximize Chat Window"}
+                type="button"
+                className={'festi-chat-maximize-btn ' + (isMaximized ? 'active' : '')}
+                onClick={() => setIsMaximized(!isMaximized)}
+                title={isMaximized ? "Restore size" : "Maximize size"}
+              >
+                {isMaximized ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
               </button>
               <button
                 aria-label="Close Festi Chat"

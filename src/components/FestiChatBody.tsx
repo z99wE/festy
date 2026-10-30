@@ -59,7 +59,7 @@ export const FestiChatBody: React.FC<FestiChatBodyProps> = ({
           <div className="festi-typing-indicator" role="status" aria-label="Festi is planning">
             <div className="festi-typing-bubble">
               <RefreshCw size={14} className="festi-spin-icon" />
-              <span>Orchestrating celebration intelligence across agents...</span>
+              <span>Planning your celebration details...</span>
             </div>
           </div>
         )}

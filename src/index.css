@@ -4204,6 +4204,36 @@ img {
   z-index: 10000;
   overflow: hidden;
   animation: festiModalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1), height 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.festi-chat-modal.maximized {
+  width: 880px;
+  max-width: calc(100vw - 36px);
+  height: calc(100vh - 60px);
+  max-height: 860px;
+}
+
+.festi-chat-maximize-btn {
+  background: var(--bg-surface);
+  border: 1.5px solid #3D1E06;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-primary);
+  box-shadow: 2px 2px 0px #3D1E06;
+  transition: all 0.1s ease;
+}
+
+.festi-chat-maximize-btn:hover,
+.festi-chat-maximize-btn.active {
+  background: #ffe17c;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #3D1E06;
 }
 
 @keyframes festiModalSlideUp {
