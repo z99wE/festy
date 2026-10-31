@@ -10,7 +10,7 @@
 [![Vite](https://img.shields.io/badge/Vite-8.3-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tests Passing](https://img.shields.io/badge/Tests-114%2F114%20Passing-brightgreen?style=for-the-badge&logo=node.js&logoColor=white)](https://github.com/z99wE/festy)
 [![Code Quality 100](https://img.shields.io/badge/Code%20Quality-100%2F100%20Verified-brightgreen?style=for-the-badge)](https://github.com/z99wE/festy)
-[![Lighthouse 100](https://img.shields.io/badge/Lighthouse-100%2F100%20Verified-brightgreen?style=for-the-badge&logo=googlechrome&logoColor=white)](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Ffestiya.viktorechakraborty.workers.dev)
+[![Lighthouse 100](https://img.shields.io/badge/Lighthouse-100%2F100%20Verified-brightgreen?style=for-the-badge&logo=googlechrome&logoColor=white)](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Ffestiya.festiya.workers.dev)
 [![WCAG 2.2 AA](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-10B981?style=for-the-badge)](https://festiya.festiya.workers.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
