@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, CheckCircle, X, ChevronUp, Sparkles, ShieldCheck } from 'lucide-react';
+import { Mail, CheckCircle, X, ChevronUp } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { playPopSound } from '../utils/audio';
 import { validateRegistrationEmail } from '../utils/disposableEmail';
@@ -165,17 +165,12 @@ export const NewsletterMascotWidget: React.FC<NewsletterMascotWidgetProps> = ({
 
         {/* Card Header & Content */}
         <div className="mascot-newsletter-content">
-          <div className="mascot-newsletter-badge">
-            <Sparkles size={13} color="#ff5e1e" />
-            <span>Festiya VIP Insider</span>
-          </div>
-
           <h3 className="mascot-newsletter-title">
             {isSubscribed
               ? 'You’re on the Guestlist!'
               : currentUser
               ? `Hey ${currentUser.name.split(' ')[0]}!`
-              : 'Join the Celebration Drop'}
+              : 'Become a VIP Insider'}
           </h3>
 
           <p className="mascot-newsletter-desc">
@@ -190,7 +185,7 @@ export const NewsletterMascotWidget: React.FC<NewsletterMascotWidgetProps> = ({
           {isSubscribed ? (
             <div className="mascot-newsletter-confirmed">
               <CheckCircle size={18} color="#059669" />
-              <span>Edge Verified • Newsletter Active</span>
+              <span>Newsletter Active</span>
             </div>
           ) : (
             <form onSubmit={handleSubscribe} className="mascot-newsletter-form">
@@ -221,17 +216,12 @@ export const NewsletterMascotWidget: React.FC<NewsletterMascotWidgetProps> = ({
 
               <button
                 type="submit"
-                aria-label="Subscribe to Festiya Newsletter on Cloudflare Edge"
+                aria-label="Subscribe to Festiya Newsletter"
                 className="mascot-newsletter-btn"
                 disabled={loading}
               >
-                {loading ? 'Subscribing on Edge...' : currentUser ? 'Subscribe My Workspace' : 'Subscribe Free'}
+                {loading ? 'Subscribing...' : currentUser ? 'Subscribe My Workspace' : 'Subscribe Free'}
               </button>
-
-              <div className="mascot-newsletter-edge-seal">
-                <ShieldCheck size={12} color="#059669" />
-                <span>Cloudflare Edge • Zero Spam Guarantee</span>
-              </div>
             </form>
           )}
         </div>
