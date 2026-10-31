@@ -528,7 +528,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 ```bash
 npm test
 ```
-Executes all 34 automated unit and invariant tests across 10 test suites (`festiya.test.js`, `security.test.js`, `multiAgent.test.js`, `currency.test.js`, and `abacus.test.js`) in ~100ms.
+Executes all 114 automated unit and invariant tests across 34 test suites (`festiya.test.js`, `security.test.js`, `multiAgent.test.js`, `currency.test.js`, and `abacus.test.js`) in ~100ms.
 
 ### 6. Build and Typecheck
 ```bash
