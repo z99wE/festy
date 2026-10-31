@@ -337,15 +337,34 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
 
   let idleId: number | undefined;
   let timerId: ReturnType<typeof setTimeout> | undefined;
+  let sceneStarted = false;
+
+  const triggerSetup = () => {
+    if (sceneStarted || canceled) return;
+    sceneStarted = true;
+    setupScene();
+  };
+
+  const container = mountRef.current;
+  const wrapper = container?.parentElement;
+
+  if (wrapper) {
+    wrapper.addEventListener('pointerenter', triggerSetup, { once: true, passive: true });
+    wrapper.addEventListener('touchstart', triggerSetup, { once: true, passive: true });
+  }
 
   if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-    idleId = (window as unknown as { requestIdleCallback: (cb: () => void, opts: { timeout: number }) => number }).requestIdleCallback(setupScene, { timeout: 1500 });
+    idleId = (window as unknown as { requestIdleCallback: (cb: () => void, opts: { timeout: number }) => number }).requestIdleCallback(triggerSetup, { timeout: 4500 });
   } else {
-    timerId = setTimeout(setupScene, 800);
+    timerId = setTimeout(triggerSetup, 3800);
   }
 
   return () => {
     canceled = true;
+    if (wrapper) {
+      wrapper.removeEventListener('pointerenter', triggerSetup);
+      wrapper.removeEventListener('touchstart', triggerSetup);
+    }
     if (idleId && typeof window !== 'undefined' && 'cancelIdleCallback' in window) {
       (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleId);
     }
