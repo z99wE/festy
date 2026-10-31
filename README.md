@@ -3,18 +3,18 @@
 > **Turn Every Vision Into an Unforgettable Celebration.**  
 > Transform any event concept into an editable, decimal-accurate 3-tier budget (Conservative, Realistic, Luxury), minute-by-minute day-of timeline, contract fee safeguards, and game-theoretic negotiation protocols in under 90 seconds — with zero spreadsheet dread.
 
-[![Production Status](https://img.shields.io/badge/Status-Live%20Production-success?style=for-the-badge&logo=cloudflare&logoColor=white)](https://festiya.viktorechakraborty.workers.dev)
-[![Cloudflare Workers](https://img.shields.io/badge/Deploy-Cloudflare%20Workers-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://festiya.viktorechakraborty.workers.dev)
+[![Production Status](https://img.shields.io/badge/Status-Live%20Production-success?style=for-the-badge&logo=cloudflare&logoColor=white)](https://festiya.festiya.workers.dev)
+[![Cloudflare Workers](https://img.shields.io/badge/Deploy-Cloudflare%20Workers-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://festiya.festiya.workers.dev)
 [![React 19](https://img.shields.io/badge/React-19.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9%2B-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-8.3-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tests Passing](https://img.shields.io/badge/Tests-114%2F114%20Passing-brightgreen?style=for-the-badge&logo=node.js&logoColor=white)](https://github.com/z99wE/festy)
 [![Code Quality 100](https://img.shields.io/badge/Code%20Quality-100%2F100%20Verified-brightgreen?style=for-the-badge)](https://github.com/z99wE/festy)
 [![Lighthouse 100](https://img.shields.io/badge/Lighthouse-100%2F100%20Verified-brightgreen?style=for-the-badge&logo=googlechrome&logoColor=white)](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Ffestiya.viktorechakraborty.workers.dev)
-[![WCAG 2.2 AA](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-10B981?style=for-the-badge)](https://festiya.viktorechakraborty.workers.dev)
+[![WCAG 2.2 AA](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-10B981?style=for-the-badge)](https://festiya.festiya.workers.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
-🌐 **Live Production Application:** [https://festiya.viktorechakraborty.workers.dev](https://festiya.viktorechakraborty.workers.dev)  
+🌐 **Live Production Application:** [https://festiya.festiya.workers.dev](https://festiya.festiya.workers.dev)  
 📦 **Official GitHub Repository:** [https://github.com/z99wE/festy](https://github.com/z99wE/festy)  
 🌿 **Repository Strategy:** **Single-Branch Repository (`main`)**
 
@@ -590,7 +590,7 @@ npx -y wrangler deploy
 ```
 
 The live application is accessible globally at:  
-👉 **[https://festiya.viktorechakraborty.workers.dev](https://festiya.viktorechakraborty.workers.dev)**
+👉 **[https://festiya.festiya.workers.dev](https://festiya.festiya.workers.dev)**
 
 ---
 
