@@ -32,17 +32,6 @@ function createAuthUser(mode: 'login' | 'signup', name: string, email: string, w
   };
 }
 
-function createDemoUser(): AuthUser {
-  return {
-    id: 'usr_demo_host',
-    name: 'Alex Rivera',
-    email: ['alex', 'festiya.demo'].join('@'),
-    workspaceName: 'Rivera Celebrations & Studio',
-    token: `cf_tok_demo_${Date.now()}`,
-    createdAt: new Date().toISOString(),
-  };
-}
-
 function safePersistUser(user: AuthUser): void {
   try {
     localStorage.setItem('festiya_cf_session_v1', JSON.stringify(user));
@@ -332,17 +321,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
   };
 
-  const handleDemoLogin = () => {
-    setLoading(true);
-    setTimeout(() => {
-      const demoUser = createDemoUser();
-      safePersistUser(demoUser);
-      setLoading(false);
-      onAuthSuccess(demoUser);
-      onClose();
-    }, 400);
-  };
-
   return (
     <div className="auth-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
       <div className="auth-modal-card" ref={cardRef}>
@@ -601,11 +579,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           )}
 
           {/* Edge Security Badge */}
-          <div className="auth-security-badge">
-            <ShieldCheck size={15} color="#059669" />
-            <span>Cloudflare Edge Tenant Isolation • Zero Data Leakage</span>
-          </div>
-
           {/* Submit Button */}
           <button
             type="submit"
@@ -647,24 +620,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </button>
         </form>
 
-        {/* Demo Fast Login Option (Only in login/signup modes) */}
-        {mode !== 'forgot' && (
-          <>
-            <div className="auth-demo-divider">
-              <span>or test immediately</span>
-            </div>
-
-            <button
-              type="button"
-              aria-label="Instant 1-Click Demo Login as Alex Rivera"
-              className="auth-demo-btn"
-              onClick={handleDemoLogin}
-              disabled={loading}
-            >
-              Instant 1-Click Demo Login (Alex Rivera)
-            </button>
-          </>
-        )}
       </div>
     </div>
   );
