@@ -64,28 +64,16 @@ const BudgetRow: React.FC<{ cat: BudgetItem; amount: number; currency: string }>
 const TaskRow: React.FC<{ task: TaskItem; onToggle: (id: string) => void }> = ({ task, onToggle }) => {
   const badgeClass = task.priority === 'critical' ? 'sunshine' : task.priority === 'high' ? 'sunset' : 'mint';
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      onToggle(task.id);
-    }
-  };
-
   return (
     <li
       className={'task-row ' + (task.completed ? 'completed' : '')}
-      role="button"
-      tabIndex={0}
-      aria-pressed={task.completed}
-      onClick={() => onToggle(task.id)}
-      onKeyDown={handleKeyDown}
     >
       <input
         type="checkbox"
         id={'task-checkbox-' + task.id}
         aria-label={'Mark task "' + task.title + '" as complete'}
         checked={task.completed}
-        onChange={() => {}}
+        onChange={() => onToggle(task.id)}
         className="task-checkbox"
       />
       <div className="task-content">
@@ -177,7 +165,7 @@ export const PlanTabPanes: React.FC<PlanTabPanesProps> = ({
 }) => {
   if (activeTab === 'budget') {
     return (
-      <div className="tab-pane active" aria-labelledby="tab-budget">
+      <div className="tab-pane active" role="tabpanel" id="tabpanel-budget" aria-labelledby="tab-budget" tabIndex={0}>
         <table className="budget-table">
           <thead>
             <tr>
@@ -200,7 +188,7 @@ export const PlanTabPanes: React.FC<PlanTabPanesProps> = ({
 
   if (activeTab === 'tasks') {
     return (
-      <div className="tab-pane active" aria-labelledby="tab-tasks">
+      <div className="tab-pane active" role="tabpanel" id="tabpanel-tasks" aria-labelledby="tab-tasks" tabIndex={0}>
         <ul className="tasks-list" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
           {tasks.map((task) => (
             <TaskRow key={task.id} task={task} onToggle={onToggleTask} />
@@ -212,7 +200,7 @@ export const PlanTabPanes: React.FC<PlanTabPanesProps> = ({
 
   if (activeTab === 'vendors') {
     return (
-      <div className="tab-pane active" aria-labelledby="tab-vendors">
+      <div className="tab-pane active" role="tabpanel" id="tabpanel-vendors" aria-labelledby="tab-vendors" tabIndex={0}>
         <div className="vendor-matrix-grid">
           {vendorCategories.map((vc, idx) => (
             <VendorCard key={idx} vc={vc} />
@@ -224,7 +212,7 @@ export const PlanTabPanes: React.FC<PlanTabPanesProps> = ({
 
   if (activeTab === 'ideas') {
     return (
-      <div className="tab-pane active" aria-labelledby="tab-ideas">
+      <div className="tab-pane active" role="tabpanel" id="tabpanel-ideas" aria-labelledby="tab-ideas" tabIndex={0}>
         <div className="ideas-grid">
           {ideas.map((idea, idx) => (
             <IdeaCard key={idx} idea={idea} />
@@ -236,7 +224,7 @@ export const PlanTabPanes: React.FC<PlanTabPanesProps> = ({
 
   if (activeTab === 'risks') {
     return (
-      <div className="tab-pane active" aria-labelledby="tab-risks">
+      <div className="tab-pane active" role="tabpanel" id="tabpanel-risks" aria-labelledby="tab-risks" tabIndex={0}>
         <div className="risks-grid">
           {risks.map((item, idx) => (
             <RiskCard key={idx} item={item} />

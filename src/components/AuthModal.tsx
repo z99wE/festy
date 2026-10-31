@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, Mail, Lock, User, Building, ShieldCheck, ArrowRight, LogIn, CheckCircle, KeyRound, ArrowLeft } from 'lucide-react';
 import { validateRegistrationEmail } from '../utils/disposableEmail';
 
@@ -71,8 +71,53 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
+  const cardRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
+
   const [prevOpen, setPrevOpen] = useState(isOpen);
   const [prevInitialMode, setPrevInitialMode] = useState(initialMode);
+
+  // Move focus into the dialog when it opens; restore to trigger when it closes
+  useEffect(() => {
+    if (isOpen) {
+      triggerRef.current = document.activeElement as HTMLElement;
+      // Focus the first focusable element inside the card
+      setTimeout(() => {
+        const first = cardRef.current?.querySelector<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        first?.focus();
+      }, 50);
+    } else if (triggerRef.current) {
+      triggerRef.current.focus();
+      triggerRef.current = null;
+    }
+  }, [isOpen]);
+
+  // Focus trap — keep Tab/Shift+Tab cycling inside the modal
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleTabTrap = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+      const card = cardRef.current;
+      if (!card) return;
+      const focusable = Array.from(
+        card.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((el) => !el.closest('[hidden]'));
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
+    window.addEventListener('keydown', handleTabTrap);
+    return () => window.removeEventListener('keydown', handleTabTrap);
+  }, [isOpen]);
 
   if (isOpen !== prevOpen || initialMode !== prevInitialMode) {
     setPrevOpen(isOpen);
@@ -300,7 +345,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   return (
     <div className="auth-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
-      <div className="auth-modal-card">
+      <div className="auth-modal-card" ref={cardRef}>
         {/* Close Button */}
         <button
           type="button"
@@ -396,13 +441,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         {/* Error / Success Notifications */}
         {errorMsg && (
-          <div className="auth-alert error">
+          <div className="auth-alert error" role="alert" aria-live="assertive">
             <span>{errorMsg}</span>
           </div>
         )}
 
         {successMsg && (
-          <div className="auth-alert success">
+          <div className="auth-alert success" role="status" aria-live="polite">
             <CheckCircle size={16} />
             <span>{successMsg}</span>
           </div>

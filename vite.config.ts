@@ -59,12 +59,18 @@ function inlineCriticalCssPlugin(): Plugin {
           }
         )
 
-        // 3. Inject inline critical CSS immediately after <head>
+        // 3. Inject inline critical CSS right after the charset declaration so
+        //    the charset still appears within the first 1024 bytes of the document.
         if (criticalCss) {
+          const styleTag = `<style id="festiya-critical">${criticalCss}</style>`
           transformed = transformed.replace(
-            '<head>',
-            `<head>\n  <style id="festiya-critical">${criticalCss}</style>`
+            /(<meta charset="[^"]+"\s*\/?>)/i,
+            `$1\n  ${styleTag}`
           )
+          // Fallback for documents that declare the charset elsewhere.
+          if (!transformed.includes('id="festiya-critical"')) {
+            transformed = transformed.replace('<head>', `<head>\n  ${styleTag}`)
+          }
         }
 
         return transformed
@@ -91,9 +97,6 @@ export default defineConfig({
             id.includes('node_modules/scheduler')
           ) {
             return 'vendor-react'
-          }
-          if (id.includes('node_modules/lucide-react')) {
-            return 'vendor-lucide'
           }
         },
       },

@@ -170,7 +170,7 @@ const CategoryGridCard: React.FC<CategoryGridCardProps> = ({ cat, idx, isActive,
             <span className="pass-cipher-code" aria-hidden="true">FESTI-DECIMAL-3T</span>
           </div>
 
-          <h4 className="pass-title">{cat.title}</h4>
+          <h3 className="pass-title">{cat.title}</h3>
 
           <div className="pass-pillars-chips">
             {pillarChips.map((chip, chipIdx) => (

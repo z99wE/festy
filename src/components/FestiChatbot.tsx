@@ -88,6 +88,49 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const handleSendRef = useRef<(queryText?: string) => Promise<void>>(() => Promise.resolve());
+  const chatModalRef = useRef<HTMLDivElement>(null);
+  const chatTriggerRef = useRef<HTMLElement | null>(null);
+
+  // Focus management: move focus into dialog on open, restore on close
+  useEffect(() => {
+    if (isOpen) {
+      chatTriggerRef.current = document.activeElement as HTMLElement;
+      setTimeout(() => {
+        const first = chatModalRef.current?.querySelector<HTMLElement>(
+          'button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        first?.focus();
+      }, 50);
+    } else if (chatTriggerRef.current) {
+      chatTriggerRef.current.focus();
+      chatTriggerRef.current = null;
+    }
+  }, [isOpen]);
+
+  // Focus trap — keep Tab cycling inside the chat dialog
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleTabTrap = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+      const modal = chatModalRef.current;
+      if (!modal) return;
+      const focusable = Array.from(
+        modal.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
+    window.addEventListener('keydown', handleTabTrap);
+    return () => window.removeEventListener('keydown', handleTabTrap);
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen) return undefined;
@@ -260,7 +303,7 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
       )}
 
       {isOpen && (
-        <div className={'festi-chat-modal ' + (isMaximized ? 'maximized' : '')} role="dialog" aria-modal="true" aria-label="Festi AI Event Architect">
+        <div className={'festi-chat-modal ' + (isMaximized ? 'maximized' : '')} role="dialog" aria-modal="true" aria-label="Festi AI Event Architect" ref={chatModalRef}>
           <div className="festi-chat-header">
             <div className="festi-chat-header-brand">
               <div className="festi-header-mascot-wrap" aria-hidden="true">

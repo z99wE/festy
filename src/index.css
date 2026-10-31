@@ -46,7 +46,7 @@
   --text-primary: #5b42f3;     /* Signature brand bubblegum purple-blue */
   --text-secondary: #4338ca;   /* Deep brand royal indigo for readable paragraphs */
   --text-muted: #3730a3;       /* High-contrast brand purple-blue for subtitles & metadata (WCAG AA 9.4:1) */
-  --text-faint: #818cf8;       /* Soft brand lavender-blue for faint hints */
+  --text-faint: #4f46e5;       /* Indigo-600 for faint hints (WCAG AA 5.2:1 on surface) */       /* Soft brand lavender-blue for faint hints */
   --text-inverse: #FFFFFF;
 
   /* Borders (Full border around cards, never single sided) */
@@ -626,7 +626,7 @@ img {
   align-items: center;
   text-align: center;
   width: 100%;
-  max-width: 980px;
+  max-width: 1040px;
   margin: 0 auto;
   position: relative;
   z-index: 2;
@@ -635,7 +635,7 @@ img {
 /* 1. Top Masthead 3D Logo Centerpiece */
 .hero-masthead-centerpiece {
   width: 100%;
-  max-width: 940px;
+  max-width: 1020px;
   margin: 0 auto var(--space-200);
   display: flex;
   justify-content: center;
@@ -647,8 +647,8 @@ img {
 .festiya-masthead-img {
   width: 100%;
   height: auto;
-  max-width: 780px;
-  max-height: 320px;
+  max-width: 940px;
+  max-height: 400px;
   aspect-ratio: 639 / 240;
   object-fit: contain;
   display: block;
@@ -683,7 +683,7 @@ img {
 
 /* Only permitted text gradient per Rule B5 */
 .hero-title .highlight-orange {
-  background: linear-gradient(90deg, var(--orange-500) 0%, var(--orange-600) 100%);
+  background: linear-gradient(90deg, var(--orange-600) 0%, var(--orange-700) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline;
@@ -3597,7 +3597,7 @@ img {
 
 @media (max-width: 960px) {
   .hero-masthead-centerpiece {
-    max-width: 680px;
+    max-width: 700px;
     width: 100%;
     margin-bottom: var(--space-150, 12px);
   }
@@ -6714,10 +6714,10 @@ img {
 .orbitable-hero-wrapper {
   position: relative;
   width: 100%;
-  max-width: 940px;
+  max-width: 1020px;
   min-height: 260px;
-  max-height: 420px;
-  aspect-ratio: 940 / 400;
+  max-height: 440px;
+  aspect-ratio: 1020 / 432;
   margin: 0 auto;
   display: flex;
   align-items: center;

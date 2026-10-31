@@ -4,6 +4,7 @@ import { detectUserRegion } from './utils/currency';
 import { playCelebrationSound } from './utils/audio';
 import { type EventPlanningContext } from './data/globalCelebrations';
 import { LazyMount } from './components/LazyMount';
+import { DeferredMount } from './components/DeferredMount';
 import { FooterSection } from './components/FooterSection';
 import { HomeTabView } from './components/HomeTabView';
 
@@ -243,35 +244,38 @@ export function App() {
         onSelectOccasion={(occ) => setActiveOccasion(occ)}
       />
 
-      {/* Playful 3D Alive Peeking Mascot (randomized, max 3 per session, side & upside-down peek) */}
-      <Suspense fallback={null}>
-        <PeekingMascot />
-      </Suspense>
+      {/* Floating chrome is deferred so its chunks stay off the critical path */}
+      <DeferredMount>
+        {/* Playful 3D Alive Peeking Mascot (randomized, max 3 per session, side & upside-down peek) */}
+        <Suspense fallback={null}>
+          <PeekingMascot />
+        </Suspense>
 
-      {/* Floating Animated Festi AI Mascot & Chatbot */}
-      <Suspense fallback={null}>
-        <FestiChatbot />
-      </Suspense>
+        {/* Floating Animated Festi AI Mascot & Chatbot */}
+        <Suspense fallback={null}>
+          <FestiChatbot />
+        </Suspense>
 
-      {/* Playful Bottom-Left Mascot Holding Newsletter Upwards */}
-      <Suspense fallback={null}>
-        <NewsletterMascotWidget
-          currentUser={currentUser}
-          soundEnabled={soundEnabled}
-        />
-      </Suspense>
+        {/* Playful Bottom-Left Mascot Holding Newsletter Upwards */}
+        <Suspense fallback={null}>
+          <NewsletterMascotWidget
+            currentUser={currentUser}
+            soundEnabled={soundEnabled}
+          />
+        </Suspense>
 
-      {/* Edge Tenant Sign In / Sign Up Modal */}
-      <Suspense fallback={null}>
-        <AuthModal
-          isOpen={authModalOpen}
-          onClose={() => setAuthModalOpen(false)}
-          onAuthSuccess={(user) => {
-            setCurrentUser(user);
-          }}
-          initialMode={authMode}
-        />
-      </Suspense>
+        {/* Edge Tenant Sign In / Sign Up Modal */}
+        <Suspense fallback={null}>
+          <AuthModal
+            isOpen={authModalOpen}
+            onClose={() => setAuthModalOpen(false)}
+            onAuthSuccess={(user) => {
+              setCurrentUser(user);
+            }}
+            initialMode={authMode}
+          />
+        </Suspense>
+      </DeferredMount>
     </div>
   );
 }

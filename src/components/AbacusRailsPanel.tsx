@@ -99,6 +99,7 @@ const AbacusBeadButton: React.FC<AbacusBeadButtonProps> = ({
     <button
       type="button"
       aria-label={label}
+      aria-pressed={currentWeight === level}
       className={className}
       onClick={onClick}
     >

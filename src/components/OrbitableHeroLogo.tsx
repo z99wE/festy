@@ -11,9 +11,9 @@ const TARGET_W = 6.0;
 const TARGET_H = (6.0 * 768) / 2046; // ~2.252
 
 function getViewportSize(clientWidth: number): { width: number; height: number } {
-  const w = Math.min(clientWidth || 940, 940);
-  const naturalH = Math.round(w * (400 / 940));
-  const h = Math.min(420, Math.max(260, naturalH));
+  const w = Math.min(clientWidth || 1020, 1020);
+  const naturalH = Math.round(w * (432 / 1020));
+  const h = Math.min(440, Math.max(260, naturalH));
   return { width: w, height: h };
 }
 
@@ -379,10 +379,10 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       style={{
         position: 'relative',
         width: '100%',
-        maxWidth: '940px',
-        aspectRatio: '940 / 400',
+        maxWidth: '1020px',
+        aspectRatio: '1020 / 432',
         minHeight: '260px',
-        maxHeight: '420px',
+        maxHeight: '440px',
         margin: '0 auto',
         display: 'flex',
         alignItems: 'center',

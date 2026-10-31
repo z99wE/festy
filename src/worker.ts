@@ -29,7 +29,7 @@ const SECURITY_HEADERS: Record<string, string> = {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: blob: https://images.unsplash.com https://flagcdn.com",
-    "connect-src 'self' https://festiya.festiya.workers.dev https://generativelanguage.googleapis.com https://api.groq.com https://api.anthropic.com https://api.openai.com",
+    "connect-src 'self' https://festiya.festiya.workers.dev https://open.er-api.com https://generativelanguage.googleapis.com https://api.groq.com https://api.anthropic.com https://api.openai.com",
     "object-src 'none'",
     "base-uri 'self'",
     "frame-ancestors 'none'",

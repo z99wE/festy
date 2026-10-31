@@ -265,10 +265,15 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
               </p>
             </div>
 
-            <nav className="plan-tabs-row" aria-label="Plan Sections">
+            <nav className="plan-tabs-row" aria-label="Plan Sections" role="tablist">
               <button
                 type="button"
+                role="tab"
+                id="tab-budget"
                 aria-label="Budget Blueprint tab"
+                aria-selected={activeTab === 'budget'}
+                aria-controls="tabpanel-budget"
+                tabIndex={activeTab === 'budget' ? 0 : -1}
                 className={`plan-tab-btn ${activeTab === 'budget' ? 'active' : ''}`}
                 onClick={() => handleSelectTab('budget')}
               >
@@ -276,7 +281,12 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
               </button>
               <button
                 type="button"
+                role="tab"
+                id="tab-tasks"
                 aria-label="Tasks and Milestones tab"
+                aria-selected={activeTab === 'tasks'}
+                aria-controls="tabpanel-tasks"
+                tabIndex={activeTab === 'tasks' ? 0 : -1}
                 className={`plan-tab-btn ${activeTab === 'tasks' ? 'active' : ''}`}
                 onClick={() => handleSelectTab('tasks')}
               >
@@ -284,7 +294,12 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
               </button>
               <button
                 type="button"
+                role="tab"
+                id="tab-vendors"
                 aria-label="Vendor Questions tab"
+                aria-selected={activeTab === 'vendors'}
+                aria-controls="tabpanel-vendors"
+                tabIndex={activeTab === 'vendors' ? 0 : -1}
                 className={`plan-tab-btn ${activeTab === 'vendors' ? 'active' : ''}`}
                 onClick={() => handleSelectTab('vendors')}
               >
@@ -292,7 +307,12 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
               </button>
               <button
                 type="button"
+                role="tab"
+                id="tab-ideas"
                 aria-label="Creative Ideas tab"
+                aria-selected={activeTab === 'ideas'}
+                aria-controls="tabpanel-ideas"
+                tabIndex={activeTab === 'ideas' ? 0 : -1}
                 className={`plan-tab-btn ${activeTab === 'ideas' ? 'active' : ''}`}
                 onClick={() => handleSelectTab('ideas')}
               >
@@ -300,7 +320,12 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
               </button>
               <button
                 type="button"
+                role="tab"
+                id="tab-risks"
                 aria-label="Risks and Safeguards tab"
+                aria-selected={activeTab === 'risks'}
+                aria-controls="tabpanel-risks"
+                tabIndex={activeTab === 'risks' ? 0 : -1}
                 className={`plan-tab-btn ${activeTab === 'risks' ? 'active' : ''}`}
                 onClick={() => handleSelectTab('risks')}
               >

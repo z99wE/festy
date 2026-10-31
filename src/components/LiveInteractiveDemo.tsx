@@ -220,8 +220,8 @@ export const LiveInteractiveDemo: React.FC = () => {
 
           {/* Processing Status Banner */}
           {isProcessing && (
-            <div className="demo-processing-banner">
-              <div className="demo-spinner" />
+            <div className="demo-processing-banner" role="status" aria-live="polite" aria-label="Analyzing event data">
+              <div className="demo-spinner" aria-hidden="true" />
               <span>Analyzing venue benchmarks and allocating 3-tier budget...</span>
             </div>
           )}

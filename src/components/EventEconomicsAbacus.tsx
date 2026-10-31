@@ -185,13 +185,14 @@ export const EventEconomicsAbacus: React.FC<{
           </div>
 
           <div className="abacus-control-group">
-            <label className="abacus-control-label">
+            <div className="abacus-control-label" role="group" aria-label="Production Tier">
               <span>Production Tier</span>
-            </label>
+            </div>
             <div className="abacus-tier-toggle-row">
               <button
                 type="button"
                 aria-label="Select Pragmatic Base tier"
+                aria-pressed={selectedTier === 'pragmatic'}
                 className={`abacus-tier-btn ${selectedTier === 'pragmatic' ? 'active' : ''}`}
                 onClick={() => setSelectedTier('pragmatic')}
               >
@@ -200,6 +201,7 @@ export const EventEconomicsAbacus: React.FC<{
               <button
                 type="button"
                 aria-label="Select Curated Premium tier"
+                aria-pressed={selectedTier === 'curated'}
                 className={`abacus-tier-btn ${selectedTier === 'curated' ? 'active' : ''}`}
                 onClick={() => setSelectedTier('curated')}
               >
@@ -208,6 +210,7 @@ export const EventEconomicsAbacus: React.FC<{
               <button
                 type="button"
                 aria-label="Select Opulent Showcase tier"
+                aria-pressed={selectedTier === 'opulent'}
                 className={`abacus-tier-btn ${selectedTier === 'opulent' ? 'active' : ''}`}
                 onClick={() => setSelectedTier('opulent')}
               >

@@ -89,7 +89,7 @@ export function HomeTabView({
           />
 
           <div style={{ marginTop: '36px', marginBottom: '40px' }}>
-            <LazyMount placeholderHeight="420px" rootMargin="350px">
+            <LazyMount placeholderHeight="420px" rootMargin="120px" idleDelayMs={6000}>
               <Suspense fallback={<div style={{ minHeight: '380px' }} />}>
                 <CelebrationWorldMap
                   reducedMotion={reducedMotion}

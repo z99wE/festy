@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { playPopSound } from '../utils/audio';
 
@@ -108,19 +108,46 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSelectTab,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   // Close mobile menu on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && mobileMenuOpen) {
         setMobileMenuOpen(false);
+        hamburgerRef.current?.focus();
+      }
+      // Focus trap inside mobile menu
+      if (e.key === 'Tab' && mobileMenuOpen) {
+        const menu = mobileMenuRef.current;
+        if (!menu) return;
+        const focusable = Array.from(
+          menu.querySelectorAll<HTMLElement>('button:not([disabled]), a, input, [tabindex]:not([tabindex="-1"])')
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+          if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [mobileMenuOpen]);
 
-  // Lock body scroll when mobile menu is open
+  // Focus first item when mobile menu opens
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      setTimeout(() => {
+        const first = mobileMenuRef.current?.querySelector<HTMLElement>('button, a, [tabindex]:not([tabindex="-1"])');
+        first?.focus();
+      }, 50);
+    }
+  }, [mobileMenuOpen]);
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -269,6 +296,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Mobile Hamburger Morph Button */}
             <button
+              ref={hamburgerRef}
               type="button"
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={mobileMenuOpen}
@@ -284,7 +312,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Screen-filling Overlay Mobile Menu with Staggered Link Reveals */}
       {mobileMenuOpen && (
-        <div className="mobile-menu-overlay" role="dialog" aria-modal="true" aria-label="Mobile Navigation Menu">
+        <div className="mobile-menu-overlay" role="dialog" aria-modal="true" aria-label="Mobile Navigation Menu" ref={mobileMenuRef}>
           <div className="mobile-menu-inner">
             <div className="mobile-links-list">
               <button
