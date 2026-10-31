@@ -58,13 +58,6 @@ export const PeekingMascot: React.FC = () => {
   const lastColorRef = useRef<MascotColor | null>(null);
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  // Preload all high-res blink frames on mount
-  useEffect(() => {
-    COLOR_KEYS.forEach((col) => {
-      const img = new Image();
-      img.src = MASCOTS[col].blinkSrc;
-    });
-  }, []);
 
   // Natural periodic blinking while mascot is actively peeking
   useEffect(() => {

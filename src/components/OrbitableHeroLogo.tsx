@@ -139,6 +139,7 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
         renderer.render(scene, camera);
         if (!canceled) {
           setIs3DReady(true);
+          wakeUpAnimation(45);
         }
       },
       undefined,
@@ -148,6 +149,8 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     );
 
     let isDragging = false;
+    let isHovering = false;
+    let settleFrames = 45;
     let prevPointerX = 0;
     let prevPointerY = 0;
     let currentRotY = 0;
@@ -168,6 +171,14 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
     dom.style.cursor = 'grab';
     dom.style.touchAction = 'none';
 
+    const wakeUpAnimation = (frames = 60) => {
+      settleFrames = Math.max(settleFrames, frames);
+      if (isVisible && !animationFrameId) {
+        clock.start();
+        animationFrameId = requestAnimationFrame(animate);
+      }
+    };
+
     const onPointerDown = (e: MouseEvent | TouchEvent) => {
       isDragging = true;
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
@@ -178,6 +189,7 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       inertia.velocityX = 0;
       dom.style.cursor = 'grabbing';
       playPopSound(soundEnabled);
+      wakeUpAnimation(90);
     };
 
     const onPointerMove = (e: MouseEvent | TouchEvent) => {
@@ -199,14 +211,28 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
 
       prevPointerX = clientX;
       prevPointerY = clientY;
+      wakeUpAnimation(60);
     };
 
     const onPointerUp = () => {
       isDragging = false;
       dom.style.cursor = 'grab';
+      wakeUpAnimation(45);
+    };
+
+    const onMouseEnter = () => {
+      isHovering = true;
+      wakeUpAnimation(60);
+    };
+
+    const onMouseLeave = () => {
+      isHovering = false;
+      wakeUpAnimation(45);
     };
 
     dom.addEventListener('mousedown', onPointerDown);
+    dom.addEventListener('mouseenter', onMouseEnter);
+    dom.addEventListener('mouseleave', onMouseLeave);
     window.addEventListener('mousemove', onPointerMove);
     window.addEventListener('mouseup', onPointerUp);
 
@@ -220,6 +246,7 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       updateCameraDistance(camera, newW, newH);
       renderer.setSize(newW, newH);
       renderer.render(scene, camera);
+      wakeUpAnimation(20);
     };
     window.addEventListener('resize', handleResize);
 
@@ -229,7 +256,6 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
         return;
       }
 
-      animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
       if (isDragging) {
@@ -245,12 +271,22 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       orbitGroup.rotation.x = currentRotX;
 
       renderer.render(scene, camera);
+
+      if (!isDragging && !isHovering) {
+        settleFrames--;
+      }
+
+      if (isDragging || isHovering || settleFrames > 0) {
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        animationFrameId = 0;
+      }
     };
 
     const onIntersect = (entries: IntersectionObserverEntry[]) => {
       const entry = entries[0];
       isVisible = Boolean(entry?.isIntersecting);
-      if (isVisible && !animationFrameId) {
+      if (isVisible && !animationFrameId && (isDragging || isHovering || settleFrames > 0)) {
         animationFrameId = requestAnimationFrame(animate);
       } else if (!isVisible && animationFrameId) {
         cancelAnimationFrame(animationFrameId);
@@ -266,6 +302,8 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
       dom.removeEventListener('mousedown', onPointerDown);
+      dom.removeEventListener('mouseenter', onMouseEnter);
+      dom.removeEventListener('mouseleave', onMouseLeave);
       window.removeEventListener('mousemove', onPointerMove);
       window.removeEventListener('mouseup', onPointerUp);
       dom.removeEventListener('touchstart', onPointerDown);
@@ -301,9 +339,9 @@ export const OrbitableHeroLogo: React.FC<OrbitableHeroLogoProps> = ({
   let timerId: ReturnType<typeof setTimeout> | undefined;
 
   if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-    idleId = (window as unknown as { requestIdleCallback: (cb: () => void, opts: { timeout: number }) => number }).requestIdleCallback(setupScene, { timeout: 350 });
+    idleId = (window as unknown as { requestIdleCallback: (cb: () => void, opts: { timeout: number }) => number }).requestIdleCallback(setupScene, { timeout: 1500 });
   } else {
-    timerId = setTimeout(setupScene, 120);
+    timerId = setTimeout(setupScene, 800);
   }
 
   return () => {

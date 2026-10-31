@@ -3,7 +3,7 @@ import { X, ShieldCheck, Maximize2, Minimize2 } from 'lucide-react';
 import { MultiAgentEngine } from '../services/multiAgentEngine';
 import { MultiLLMOrchestrator } from '../services/aiOrchestrator';
 import type { LLMMessage } from '../services/aiOrchestrator';
-import { FESTI_SYSTEM_PROMPT, MASCOT_FRAMES, FESTI_STARTERS } from '../data/chatbotPrompts';
+import { FESTI_SYSTEM_PROMPT, FESTI_STARTERS } from '../data/chatbotPrompts';
 import type { ChatMessage } from './FestiMessageBubble';
 import { FestiDrillsView } from './FestiDrillsView';
 import { FestiChatBody } from './FestiChatBody';
@@ -64,8 +64,7 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
   const [inputVal, setInputVal] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showDrills, setShowDrills] = useState(false);
-  const [mascotFrame, setMascotFrame] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
+  const [isBlinking, setIsBlinking] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
 
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
@@ -91,20 +90,29 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
   const handleSendRef = useRef<(queryText?: string) => Promise<void>>(() => Promise.resolve());
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    MASCOT_FRAMES.forEach((frame) => {
-      const img = new Image();
-      img.src = frame.src;
-    });
-  }, []);
+    if (isOpen) return undefined;
+    let blinkTimer: ReturnType<typeof setTimeout>;
+    let resetTimer: ReturnType<typeof setTimeout>;
 
-  useEffect(() => {
-    if (isHovered || isOpen) return;
-    const timer = setInterval(() => {
-      setMascotFrame((prev) => (prev + 1) % MASCOT_FRAMES.length);
-    }, 140);
-    return () => clearInterval(timer);
-  }, [isHovered, isOpen]);
+    const triggerBlink = () => {
+      setIsBlinking(true);
+      resetTimer = setTimeout(() => {
+        setIsBlinking(false);
+        scheduleNext();
+      }, 180);
+    };
+
+    const scheduleNext = () => {
+      blinkTimer = setTimeout(triggerBlink, 4500 + Math.random() * 2000);
+    };
+
+    scheduleNext();
+
+    return () => {
+      clearTimeout(blinkTimer);
+      clearTimeout(resetTimer);
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     const handleOpenChat = (e: Event) => {
@@ -203,7 +211,10 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
     handleSend();
   };
 
-  const currentMascot = MASCOT_FRAMES[mascotFrame];
+  const currentMascot = {
+    src: isBlinking ? '/mascots/pink-dancing-blink.webp' : '/mascots/pink-dancing.webp',
+    alt: 'Festiya AI Event Architect - Pink Plush Mascot Dancing',
+  };
 
   return (
     <>
@@ -212,8 +223,6 @@ export const FestiChatbot: React.FC<FestiChatbotProps> = ({
           className="festi-companion-container"
           role="region"
           aria-label="Celebration Architect Assistant"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
         >
           <div
             className="festi-speech-bubble"

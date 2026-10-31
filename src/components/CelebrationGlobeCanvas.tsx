@@ -30,16 +30,18 @@ function projectHotspotCoordinates(
   camera: THREE.PerspectiveCamera,
   globeGroup: THREE.Group,
   container: HTMLDivElement,
-  globeRadius: number
+  globeRadius: number,
+  activePinId?: string
 ): ProjectedLabel[] {
   const cWidth = container.clientWidth;
   const cHeight = container.clientHeight;
   const camDir = new THREE.Vector3(0, 0, 1).applyQuaternion(camera.quaternion);
 
-  return WORLD_CELEBRATION_PINS.map((pin) => {
+  const candidates = WORLD_CELEBRATION_PINS.map((pin) => {
     const localPos = latLonToVector3(pin.lat, pin.lon, globeRadius + 2.5);
     const worldPos = localPos.clone().applyMatrix4(globeGroup.matrixWorld);
-    const isFront = worldPos.clone().normalize().dot(camDir) > 0.15;
+    const facingDot = worldPos.clone().normalize().dot(camDir);
+    const isFront = facingDot > 0.18;
 
     const proj = worldPos.project(camera);
     const screenX = ((proj.x + 1) / 2) * cWidth;
@@ -53,9 +55,72 @@ function projectHotspotCoordinates(
       color: pin.color,
       x: screenX,
       y: screenY,
-      visible: isFront,
+      facingDot,
+      isFront,
+      isActive: pin.id === activePinId,
     };
   });
+
+  candidates.sort((a, b) => {
+    if (a.isActive) return -1;
+    if (b.isActive) return 1;
+    return b.facingDot - a.facingDot;
+  });
+
+  const placed: { x: number; y: number }[] = [];
+  const results: ProjectedLabel[] = [];
+
+  for (const c of candidates) {
+    if (!c.isFront) {
+      results.push({
+        id: c.id,
+        name: c.name,
+        location: c.location,
+        flag: c.flag,
+        color: c.color,
+        x: c.x,
+        y: c.y,
+        visible: false,
+      });
+      continue;
+    }
+
+    let collides = false;
+    for (const p of placed) {
+      const dist = Math.hypot(c.x - p.x, c.y - p.y);
+      if (dist < 52) {
+        collides = true;
+        break;
+      }
+    }
+
+    if (!collides || c.isActive) {
+      placed.push({ x: c.x, y: c.y });
+      results.push({
+        id: c.id,
+        name: c.name,
+        location: c.location,
+        flag: c.flag,
+        color: c.color,
+        x: c.x,
+        y: c.y,
+        visible: true,
+      });
+    } else {
+      results.push({
+        id: c.id,
+        name: c.name,
+        location: c.location,
+        flag: c.flag,
+        color: c.color,
+        x: c.x,
+        y: c.y,
+        visible: false,
+      });
+    }
+  }
+
+  return results;
 }
 
 function updateGlobeRotation(
@@ -150,6 +215,11 @@ export function CelebrationGlobeCanvas({
   const prevMouseRef = useRef({ x: 0, y: 0 });
   const rotVelocityRef = useRef({ x: 0, y: 0 });
   const [labelCoords, setLabelCoords] = useState<ProjectedLabel[]>([]);
+  const activePinIdRef = useRef(activePinId);
+
+  useEffect(() => {
+    activePinIdRef.current = activePinId;
+  }, [activePinId]);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -230,6 +300,7 @@ export function CelebrationGlobeCanvas({
 
     let animId = 0;
     let lastTime = performance.now();
+    let lastCoordUpdateTime = 0;
 
     const animate = (time: number) => {
       animId = requestAnimationFrame(animate);
@@ -240,8 +311,17 @@ export function CelebrationGlobeCanvas({
       globeGroup.rotation.x = Math.max(-0.65, Math.min(0.65, globeGroup.rotation.x));
       renderer.render(scene, camera);
 
-      const newCoords = projectHotspotCoordinates(camera, globeGroup, container, globeRadius);
-      setLabelCoords(newCoords);
+      if (time - lastCoordUpdateTime > 50) {
+        lastCoordUpdateTime = time;
+        const newCoords = projectHotspotCoordinates(
+          camera,
+          globeGroup,
+          container,
+          globeRadius,
+          activePinIdRef.current
+        );
+        setLabelCoords(newCoords);
+      }
     };
 
     animId = requestAnimationFrame(animate);
