@@ -15,6 +15,7 @@ const FAQSection = lazy(() => import('./components/FAQSection').then((m) => ({ d
 const GlobalFestivalFooterShowcase = lazy(() => import('./components/GlobalFestivalFooterShowcase').then((m) => ({ default: m.GlobalFestivalFooterShowcase })));
 const PeekingMascot = lazy(() => import('./components/PeekingMascot').then((m) => ({ default: m.PeekingMascot })));
 const FestiChatbot = lazy(() => import('./components/FestiChatbot').then((m) => ({ default: m.FestiChatbot })));
+const NewsletterMascotWidget = lazy(() => import('./components/NewsletterMascotWidget').then((m) => ({ default: m.NewsletterMascotWidget })));
 
 export function App() {
   const [activeOccasion, setActiveOccasion] = useState('birthday');
@@ -43,7 +44,7 @@ export function App() {
     }
   });
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
+  const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('signup');
 
   // Listen to prefers-reduced-motion media query changes
   useEffect(() => {
@@ -250,6 +251,14 @@ export function App() {
       {/* Floating Animated Festi AI Mascot & Chatbot */}
       <Suspense fallback={null}>
         <FestiChatbot />
+      </Suspense>
+
+      {/* Playful Bottom-Left Mascot Holding Newsletter Upwards */}
+      <Suspense fallback={null}>
+        <NewsletterMascotWidget
+          currentUser={currentUser}
+          soundEnabled={soundEnabled}
+        />
       </Suspense>
 
       {/* Edge Tenant Sign In / Sign Up Modal */}

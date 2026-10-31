@@ -8007,3 +8007,371 @@ img {
   color: var(--text-primary);
 }
 
+/* ==========================================================================
+   Auth Modal - Forgot Password & Password Recovery Styles
+   ========================================================================== */
+.auth-forgot-trigger-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #ff5e1e;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.auth-forgot-trigger-link:hover {
+  color: #e04a0e;
+}
+
+.auth-forgot-breadcrumb {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+.auth-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: #FFEAD9;
+  border: 1.5px solid #3D1E06;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  box-shadow: 1.5px 1.5px 0px #3D1E06;
+  transition: transform 0.1s ease;
+}
+
+.auth-back-link:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 0.5px 0.5px 0px #3D1E06;
+}
+
+.auth-forgot-pill {
+  font-size: 11px;
+  font-weight: 800;
+  background: #E8F4FD;
+  border: 1.5px solid #0284c7;
+  color: #0369a1;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.auth-token-verified-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: #d8fbf0;
+  border: 1.5px solid #059669;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #047857;
+}
+
+.auth-token-verified-badge code {
+  font-family: ui-monospace, monospace;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   Bottom-Left Mascot Holding Newsletter Upwards Widget
+   ========================================================================== */
+.mascot-newsletter-container {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 990;
+  font-family: inherit;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Minimized Floating Pill */
+.mascot-newsletter-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFDF9;
+  border: 2px solid #3D1E06;
+  border-radius: 30px;
+  padding: 5px 12px 5px 6px;
+  box-shadow: 4px 4px 0px #3D1E06;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mascot-newsletter-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 5px 5px 0px #3D1E06;
+  background: #FFF8EE;
+}
+
+.mascot-pill-avatar {
+  border-radius: 50%;
+  object-fit: contain;
+  background: #FFEAD9;
+  border: 1.5px solid #3D1E06;
+}
+
+.mascot-pill-label {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.mascot-pill-chevron {
+  color: var(--text-secondary);
+}
+
+/* Expanded Card Structure */
+.mascot-holding-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 280px;
+  animation: mascotCardEnter 0.25s ease-out;
+}
+
+@keyframes mascotCardEnter {
+  0% { opacity: 0; transform: translateY(12px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.mascot-newsletter-content {
+  width: 100%;
+  background: #FFFDF9;
+  border: 2.5px solid #3D1E06;
+  border-radius: 16px;
+  box-shadow: 6px 6px 0px #3D1E06;
+  padding: 16px 16px 14px;
+  position: relative;
+  z-index: 2;
+}
+
+.mascot-newsletter-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid #3D1E06;
+  border-radius: 6px;
+  background: #FFEAD9;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: transform 0.1s ease;
+}
+
+.mascot-newsletter-close:hover {
+  background: #FFD4BF;
+  transform: scale(1.05);
+}
+
+.mascot-newsletter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #FFF1E6;
+  border: 1.5px solid #ff5e1e;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #ff5e1e;
+  margin-bottom: 6px;
+}
+
+.mascot-newsletter-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+  line-height: 1.25;
+}
+
+.mascot-newsletter-desc {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  line-height: 1.35;
+  margin: 0 0 10px;
+}
+
+.mascot-newsletter-confirmed {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #d8fbf0;
+  border: 1.5px solid #059669;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #047857;
+}
+
+.mascot-newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mascot-newsletter-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.mascot-newsletter-input-icon {
+  position: absolute;
+  left: 10px;
+  color: #8b5cf6;
+  pointer-events: none;
+}
+
+.mascot-newsletter-input {
+  width: 100%;
+  padding: 7px 10px 7px 32px;
+  font-size: 12px;
+  font-family: inherit;
+  border: 2px solid #3D1E06;
+  border-radius: 8px;
+  background: #FFFDF9;
+  color: var(--text-primary);
+}
+
+.mascot-newsletter-input:focus {
+  outline: none;
+  border-color: #ff5e1e;
+}
+
+.mascot-newsletter-btn {
+  width: 100%;
+  padding: 8px;
+  background: #ff5e1e;
+  color: #FFFDF9;
+  border: 2px solid #3D1E06;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 12px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px #3D1E06;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.mascot-newsletter-btn:hover {
+  background: #e04a0e;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #3D1E06;
+}
+
+.mascot-newsletter-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.mascot-newsletter-edge-seal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #059669;
+  margin-top: 2px;
+}
+
+.mascot-newsletter-alert {
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.mascot-newsletter-alert.error {
+  background: #ffe3e8;
+  border: 1px solid #ff4d6d;
+  color: #bd3700;
+}
+
+.mascot-newsletter-alert.success {
+  background: #d8fbf0;
+  border: 1px solid #06d6a0;
+  color: #059669;
+}
+
+/* Pedestal Mascot Positioned Directly Holding the Card */
+.mascot-holding-pedestal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -14px;
+  z-index: 1;
+}
+
+.mascot-hands-supporting {
+  position: absolute;
+  top: 10px;
+  width: 50px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 3;
+}
+
+.mascot-hand {
+  width: 12px;
+  height: 8px;
+  background: #ffd64f;
+  border: 1.5px solid #3D1E06;
+  border-radius: 4px;
+  box-shadow: 1px 1px 0px #3D1E06;
+}
+
+.mascot-character-holding {
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(61, 30, 6, 0.18));
+  animation: mascotHoldingBob 3.2s ease-in-out infinite;
+}
+
+@keyframes mascotHoldingBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot-character-holding {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .mascot-newsletter-container {
+    left: 12px;
+    bottom: 12px;
+  }
+  .mascot-holding-card {
+    width: 240px;
+  }
+  .mascot-newsletter-content {
+    padding: 12px;
+  }
+}
+
+
