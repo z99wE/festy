@@ -96,24 +96,24 @@ Festiya deploys a coordinated **Multi-Agent Execution Swarm** (`src/services/mul
 
 ```mermaid
 flowchart TD
-    UserQuery["User Natural Language Concept\ne.g., 'Plan an 80-guest wedding reception with $12,000 budget'"] --> Orchestrator["Chief Swarm Orchestrator\nParameter & Intent Extraction"]
-    
+    UserQuery["User Natural Language Concept\neg. Plan an 80-guest wedding with 12000 budget"] --> Orchestrator["Chief Swarm Orchestrator\nParameter and Intent Extraction"]
+
     subgraph MultiAgentSwarm ["Festiya Autonomous Multi-Agent Swarm Engine"]
-        Orchestrator --> Agent1["1. Financial Synthesizer Agent\n• 3-Tier Allocation (Conservative / Realistic / Luxury)\n• Decimal-accurate IEEE-754 arithmetic\n• Dynamic per-guest metrics & margin safeguards"]
-        Orchestrator --> Agent2["2. Logistics & Run-of-Show Architect\n• Chronological milestone sequencing\n• 30-to-45-minute vendor load-in buffer zones\n• Minute-by-minute day-of execution blocks"]
-        Orchestrator --> Agent3["3. Contract Safeguard Agent\n• Hidden fee, power drop & corkage detection\n• Overtime multiplier audits\n• Direct vendor verification scripts"]
-        Orchestrator --> Agent4["4. Experience & Sensory Agent\n• Atmosphere & lighting progression\n• Acoustic tempo & playlist transition curves\n• Signature communal emotional touchpoints"]
-        Orchestrator --> Agent5["5. Game-Theoretic Bargaining Agent\n• BATNA Walk-Away Anchors\n• Pareto Value Exchange Matrix\n• Savage Minimax Regret Risk Modeling"]
+        Orchestrator --> Agent1["1. Financial Synthesizer Agent\n3-Tier Allocation: Conservative, Realistic, Luxury\nDecimal-accurate arithmetic\nPer-guest metrics and margin safeguards"]
+        Orchestrator --> Agent2["2. Logistics and Run-of-Show Architect\nChronological milestone sequencing\n30-to-45-minute vendor load-in buffers\nMinute-by-minute day-of execution blocks"]
+        Orchestrator --> Agent3["3. Contract Safeguard Agent\nHidden fee and corkage detection\nOvertime multiplier audits\nDirect vendor verification scripts"]
+        Orchestrator --> Agent4["4. Experience and Sensory Agent\nAtmosphere and lighting progression\nAcoustic tempo and playlist curves\nSignature communal emotional touchpoints"]
+        Orchestrator --> Agent5["5. Game-Theoretic Bargaining Agent\nBATNA Walk-Away Anchors\nPareto Value Exchange Matrix\nSavage Minimax Regret Risk Modeling"]
     end
-    
+
     Agent1 --> Synthesizer["Multi-Agent Synthesis Engine"]
     Agent2 --> Synthesizer
     Agent3 --> Synthesizer
     Agent4 --> Synthesizer
     Agent5 --> Synthesizer
-    
-    Synthesizer --> BlueprintArtifact["Consolidated Event Blueprint Artifact\n(3-Tier Matrix + Run of Show + Safeguards + Game Theory)"]
-    BlueprintArtifact --> Workspace["1-Click Active Workspace Import\n(PlanBuilder, Abacus & World Calendar Sync)"]
+
+    Synthesizer --> BlueprintArtifact["Consolidated Event Blueprint Artifact\n3-Tier Matrix + Run of Show + Safeguards + Game Theory"]
+    BlueprintArtifact --> Workspace["1-Click Active Workspace Import\nPlanBuilder, Abacus and World Calendar Sync"]
 ```
 
 ### Agent Responsibilities & Deliverables
@@ -149,18 +149,18 @@ Instead of relying on a single provider that can suffer rate limits (HTTP 429), 
 
 ```mermaid
 flowchart TD
-    Prompt["User Event Planning Prompt\n(e.g., 'Plan a 50-guest rooftop engagement')"] --> Guard["FestiSecurityGuard\nAdversarial Sanitization Gate"]
-    
-    subgraph MultiLLMCascade ["Cascading Resilience Engine & Circuit Breakers"]
-        Guard -->|Clean Request| Tier1["Tier 1: Edge AI (Primary)\nWorkers AI Llama 3.3 70B\n• 0ms cold-start • No key required • Sub-second edge"]
-        Tier1 -.->|Quota Limit / Timeout (9s) / Outage| Tier2["Tier 2: Google Gemini 2.5 Flash\n`gemini-2.5-flash`\n• High throughput • Multimodal synthesis"]
-        Tier2 -.->|Fail / 429| Tier3["Tier 3: Groq High-Speed Inference\n`qwen/qwen3.8-27b` / `llama-3.3-70b` / `gpt-oss-120b`\n• 14ms response • Auto-model catalog detection"]
-        Tier3 -.->|Fail / 429| Tier4["Tier 4: OpenAI Engine\n`gpt-4o-mini`\n• High reasoning precision • Strict formatting"]
-        Tier4 -.->|Fail / 429| Tier5["Tier 5: Anthropic Claude\n`claude-3-5-haiku-20241022`\n• Nuanced cultural and hospitality insights"]
-        Tier5 -.->|All APIs Offline| Tier6["Tier 6: Deterministic Swarm Engine\n100% Offline • 0ms Latency\n• Mathematical IEEE-754 3-tier allocations • Schema guaranteed"]
+    Prompt["User Event Planning Prompt\neg. Plan a 50-guest rooftop engagement"] --> Guard["FestiSecurityGuard\nAdversarial Sanitization Gate"]
+
+    subgraph MultiLLMCascade ["Cascading Resilience Engine and Circuit Breakers"]
+        Guard -->|Clean Request| Tier1["Tier 1: Edge AI Primary\nWorkers AI Llama 3.3 70B\n0ms cold-start, no key required, sub-second edge"]
+        Tier1 -.->|Quota Limit or Timeout 9s or Outage| Tier2["Tier 2: Google Gemini 2.5 Flash\ngemini-2.5-flash\nHigh throughput, multimodal synthesis"]
+        Tier2 -.->|Fail or 429| Tier3["Tier 3: Groq High-Speed Inference\nqwen3.8-27b, llama-3.3-70b, gpt-oss-120b\n14ms response, auto-model catalog detection"]
+        Tier3 -.->|Fail or 429| Tier4["Tier 4: OpenAI Engine\ngpt-4o-mini\nHigh reasoning precision, strict formatting"]
+        Tier4 -.->|Fail or 429| Tier5["Tier 5: Anthropic Claude\nclaude-3-5-haiku-20241022\nNuanced cultural and hospitality insights"]
+        Tier5 -.->|All APIs Offline| Tier6["Tier 6: Deterministic Swarm Engine\n100% Offline, 0ms Latency\nIEEE-754 3-tier allocations, schema guaranteed"]
     end
-    
-    Tier1 --> Response["Structured Event Blueprint &\nInteractive Chat Cards"]
+
+    Tier1 --> Response["Structured Event Blueprint\nand Interactive Chat Cards"]
     Tier2 --> Response
     Tier3 --> Response
     Tier4 --> Response
@@ -201,8 +201,8 @@ Festiya replaces generic conversational platitudes with three established mathem
 ```mermaid
 graph LR
     subgraph DecisionScience ["Festiya Game-Theoretic Framework"]
-        A["1. Nash Bargaining & BATNA\n• Walk-Away Benchmark\n• Reservation Ceiling"] --- B["2. Pareto Value Exchange\n• Low Host Cost Concession\n• High Value Vendor Extract"]
-        B --- C["3. Savage Minimax Regret\n• Worst-Case Scenarios\n• Regret Minimization Rule"]
+        A["1. Nash Bargaining and BATNA\nWalk-Away Benchmark\nReservation Ceiling"] --- B["2. Pareto Value Exchange\nLow Host Cost Concession\nHigh Value Vendor Extract"]
+        B --- C["3. Savage Minimax Regret\nWorst-Case Scenarios\nRegret Minimization Rule"]
     end
 ```
 
@@ -254,10 +254,10 @@ The **Event Economics Abacus** (`src/components/EventEconomicsAbacus.tsx` & `Aba
 
 ```mermaid
 graph TD
-    Market[Select Global Destination Market\ne.g., Kyoto, Rio, Venice, Goa, Sonoma] --> PPP[Forex & PPP Engine\nCached 6h Rates + Regional Multiplier]
-    PPP --> Rails[Interactive Allocation Rails\n1. Photography • 2. Catering • 3. Venue\n4. Entertainment • 5. Decor • 6. Logistics]
-    Rails --> LiveCalc[Dynamic Bead Recalculation\nPer-Guest Benchmark + Local Currency Equivalent]
-    LiveCalc --> Sync[1-Click Sync to Event Workspace]
+    Market["Select Global Destination Market\neg. Kyoto, Rio, Venice, Goa, Sonoma"] --> PPP["Forex and PPP Engine\nCached 6h Rates + Regional Multiplier"]
+    PPP --> Rails["Interactive Allocation Rails\n1. Photography  2. Catering  3. Venue\n4. Entertainment  5. Decor  6. Logistics"]
+    Rails --> LiveCalc["Dynamic Bead Recalculation\nPer-Guest Benchmark + Local Currency Equivalent"]
+    LiveCalc --> Sync["1-Click Sync to Event Workspace"]
 ```
 
 - **Interactive Expense Allocation Rails**: Adjust beads (levels 1–5) across 6 core event pillars:
@@ -277,34 +277,34 @@ Festiya is built on a **Cloudflare-First** serverless architecture, delivering s
 
 ```mermaid
 flowchart TD
-    Client([Browser Client]) -->|HTTPS / Anycast Edge| CF_Edge[Cloudflare Edge Global CDN]
-    
-    subgraph Cloudflare Global Network
-        CF_Edge --> Worker[Cloudflare Worker Engine: worker.ts]
-        Worker --> SecurityHeaders[HSTS, CSP, COOP & Frame-Options]
-        Worker --> EdgeAuth[Edge Session Manager]
-        Worker --> StaticAssets[Static Asset Storage: dist/]
+    Client([Browser Client]) -->|HTTPS Anycast Edge| CF_Edge[Cloudflare Edge Global CDN]
+
+    subgraph CloudflareNetwork ["Cloudflare Global Network"]
+        CF_Edge --> Worker["Cloudflare Worker Engine: worker.ts"]
+        Worker --> SecurityHeaders["HSTS, CSP, COOP and Frame-Options"]
+        Worker --> EdgeAuth["Edge Session Manager"]
+        Worker --> StaticAssets["Static Asset Storage: dist/"]
     end
 
-    subgraph Client Application [React 19 + TypeScript 5.9 + Vite 8.3]
-        StaticAssets --> AppRoot[App.tsx State Root]
-        AppRoot --> HeroSec[Tactile Hero & LCP Mascot]
-        AppRoot --> CarouselSec[FlexCarousel: 60 FPS WebGL Engine]
-        AppRoot --> AbacusSec[Event Economics Abacus & PPP Engine]
-        AppRoot --> WorldMapSec[Celebration Globe & Long Weekend Hub]
-        AppRoot --> PlannerSec[3-Tier Decimal PlanBuilder]
-        AppRoot --> ChatbotSec[Festi Multi-Agent AI Chatbot]
+    subgraph ClientApp ["React 19 + TypeScript 5.9 + Vite 8.3"]
+        StaticAssets --> AppRoot["App.tsx State Root"]
+        AppRoot --> HeroSec["Tactile Hero and LCP Mascot"]
+        AppRoot --> CarouselSec["FlexCarousel: 60 FPS WebGL Engine"]
+        AppRoot --> AbacusSec["Event Economics Abacus and PPP Engine"]
+        AppRoot --> WorldMapSec["Celebration Globe and Long Weekend Hub"]
+        AppRoot --> PlannerSec["3-Tier Decimal PlanBuilder"]
+        AppRoot --> ChatbotSec["Festi Multi-Agent AI Chatbot"]
     end
 
-    subgraph MultiLLMCascade [Multi-LLM Cascading Orchestrator: aiOrchestrator.ts]
-        ChatbotSec --> Guard[FestiSecurityGuard\nAdversarial Filter]
+    subgraph MultiLLMCascade ["Multi-LLM Cascading Orchestrator: aiOrchestrator.ts"]
+        ChatbotSec --> Guard["FestiSecurityGuard\nAdversarial Filter"]
         Guard -->|Clean Prompt| Cascade{Resilient Cascading Chain}
-        Cascade -->|Tier 1| CF_AI[Cloudflare Workers AI\n@cf/meta/llama-3.3-70b-instruct]
-        CF_AI -.->|Fail / Timeout / 429| Gemini[Google Gemini 2.5 Flash]
-        Gemini -.->|Fail / Timeout / 429| Groq[Groq LLaMA 3.3 70B]
-        Groq -.->|Fail / Timeout / 429| OpenAI[OpenAI GPT-4o-mini]
-        OpenAI -.->|Fail / Timeout / 429| Claude[Anthropic Claude 3.5 Haiku]
-        Claude -.->|Fail / Offline| Deterministic[Deterministic Swarm Engine\n0ms Latency • 100% Accuracy]
+        Cascade -->|Tier 1| CF_AI["Cloudflare Workers AI\nllama-3.3-70b-instruct"]
+        CF_AI -.->|Fail or Timeout or 429| Gemini["Google Gemini 2.5 Flash"]
+        Gemini -.->|Fail or Timeout or 429| Groq["Groq LLaMA 3.3 70B"]
+        Groq -.->|Fail or Timeout or 429| OpenAI["OpenAI GPT-4o-mini"]
+        OpenAI -.->|Fail or Timeout or 429| Claude["Anthropic Claude 3.5 Haiku"]
+        Claude -.->|Fail or Offline| Deterministic["Deterministic Swarm Engine\n0ms Latency, 100% Accuracy"]
     end
 ```
 
