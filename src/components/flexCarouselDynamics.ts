@@ -1,4 +1,5 @@
 import { clamp01, easeInOut } from '../data/flexCarouselPresets';
+import type { CarouselSettings } from '../data/flexCarouselPresets';
 import type { CarouselMetrics, CarouselSlot } from './flexCarouselSlots';
 import type { CardInstance } from './flexCarouselRenderPass';
 import type { PointerState } from './flexCarouselEvents';
@@ -15,7 +16,7 @@ export interface LensDynamicsResult {
 
 export function updateLensDynamics(
   lens: { x: number; y: number; vx: number; vy: number; ready: boolean },
-  s: any,
+  s: CarouselSettings,
   pointer: PointerState,
   focusTarget: number,
   width: number,

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './FlexCarousel.css';
-import type { FlexCarouselItem } from '../data/flexCarouselPresets';
+import type { FlexCarouselItem, CarouselSettings } from '../data/flexCarouselPresets';
 import {
   DEFAULT_ITEMS,
   BEND_PRESETS
@@ -71,12 +71,12 @@ export const FlexCarousel: React.FC<Partial<FlexCarouselProps>> = (props) => {
   } = props;
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const settingsRef = useRef<any>(null);
+  const settingsRef = useRef<CarouselSettings | null>(null);
   const itemsRef = useRef(items);
-  const engineRef = useRef<any>(null);
+  const engineRef = useRef<ReturnType<typeof initFlexCarousel> | null>(null);
   const callbacksRef = useRef<{
-    onChange: ((index: number, item: any) => void) | undefined;
-    onSelect: ((index: number, item: any) => void) | undefined;
+    onChange: ((index: number, item: FlexCarouselItem) => void) | undefined;
+    onSelect: ((index: number, item: FlexCarouselItem) => void) | undefined;
   }>({ onChange, onSelect });
 
   const [active, setActive] = useState(0);
@@ -84,7 +84,9 @@ export const FlexCarousel: React.FC<Partial<FlexCarouselProps>> = (props) => {
   const [, setFocusOpen] = useState(false);
 
   const base = BEND_PRESETS[preset] ? BEND_PRESETS[preset] : BEND_PRESETS.liquid;
-  const pick = (value: any, key: keyof typeof base) => (value === undefined ? base[key] : value);
+  // pick: returns the prop value if defined, else the preset default. Cast needed because base values are typed per-key.
+  const pick = <K extends keyof typeof base>(value: (typeof base)[K] | undefined, key: K): (typeof base)[K] =>
+    (value === undefined ? base[key] : value) as (typeof base)[K];
 
   const list = items && items.length > 0 ? items : DEFAULT_ITEMS;
   const itemsKey = list.map(item => item.src).join('|');
@@ -152,7 +154,7 @@ export const FlexCarousel: React.FC<Partial<FlexCarouselProps>> = (props) => {
     <div
       ref={containerRef}
       className={`flex-carousel ${className}`.trim()}
-      style={{ ...style, ['--flex-carousel-half' as any]: halfHeightStyle }}
+      style={{ ...style, ['--flex-carousel-half' as string]: halfHeightStyle }}
       role="region"
       aria-roledescription="carousel"
       aria-label="Image carousel"

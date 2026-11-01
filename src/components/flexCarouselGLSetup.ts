@@ -1,15 +1,19 @@
 import { Program, Mesh, Triangle, Plane, Texture, RenderTarget } from 'ogl';
+import type { OGLRenderingContext } from 'ogl';
 import { cardVertex, cardFragment, lensVertex, fixedLensFragment } from './flexCarouselShaders';
+
+/** Typed lens uniform map — mirrors the uniforms set in initGLResources. */
+export type LensUniforms = Record<string, { value: unknown }>;
 
 export interface GLResources {
   cardProgram: Program;
   cardMesh: Mesh;
   target: RenderTarget;
-  lensUniforms: any;
+  lensUniforms: LensUniforms;
   lensMesh: Mesh;
 }
 
-export function initGLResources(gl: any): GLResources {
+export function initGLResources(gl: OGLRenderingContext): GLResources {
   const cardProgram = new Program(gl, {
     vertex: cardVertex,
     fragment: cardFragment,

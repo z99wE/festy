@@ -1,5 +1,6 @@
 import { Texture } from 'ogl';
-import type { FlexCarouselItem } from '../data/flexCarouselPresets';
+import type { OGLRenderingContext } from 'ogl';
+import type { FlexCarouselItem, CarouselSettings } from '../data/flexCarouselPresets';
 import { FIT_ASPECT, clamp01, easeInOut, easeOut, easeOutQuint } from '../data/flexCarouselPresets';
 
 export interface CarouselSlot {
@@ -58,7 +59,7 @@ function computeImageAverageColor(image: HTMLImageElement): [number, number, num
 }
 
 export function createSlot(
-  gl: any,
+  gl: OGLRenderingContext,
   item: FlexCarouselItem,
   index: number,
   anisotropy: number,
@@ -112,7 +113,7 @@ export function createSlot(
   return slot;
 }
 
-export function calculateMetrics(slots: CarouselSlot[], s: any, height: number): CarouselMetrics {
+export function calculateMetrics(slots: CarouselSlot[], s: CarouselSettings, height: number): CarouselMetrics {
   const cardH = Math.max(24, s.cardHeight * height);
   const fixed = FIT_ASPECT[s.fit];
   const widths = slots.map(slot => (fixed ? fixed : slot.aspect) * cardH);

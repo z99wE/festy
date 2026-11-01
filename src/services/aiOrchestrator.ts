@@ -44,11 +44,20 @@ export interface LLMConfig {
   requestTimeoutMs: number | undefined;
 }
 
+/** Number of consecutive failures before a circuit breaker trips open. */
+const CIRCUIT_BREAKER_FAILURE_THRESHOLD = 3;
+
+/** Milliseconds a tripped circuit breaker stays open before allowing a retry. */
+const CIRCUIT_BREAKER_COOL_DOWN_MS = 60_000;
+
+/** Default request timeout in milliseconds applied to every provider call. */
+const DEFAULT_REQUEST_TIMEOUT_MS = 9_000;
+
 class CircuitBreaker {
   private failures = 0;
   private lastFailureTime = 0;
-  private readonly threshold = 3;
-  private readonly coolDownMs = 60000;
+  private readonly threshold = CIRCUIT_BREAKER_FAILURE_THRESHOLD;
+  private readonly coolDownMs = CIRCUIT_BREAKER_COOL_DOWN_MS;
 
   recordSuccess(): void {
     this.failures = 0;
@@ -103,16 +112,16 @@ function resolveEnvKey(customVal: string | undefined, viteVal: string | undefine
 function getRuntimeEnv(): Record<string, string | undefined> {
   const result: Record<string, string | undefined> = {};
   try {
-    const pEnv = (globalThis as any).process.env;
+    const pEnv = (globalThis as typeof globalThis & { process?: { env?: Record<string, string | undefined> } }).process?.env;
     if (pEnv) Object.assign(result, pEnv);
   } catch {
-    // browser sandbox
+    // browser sandbox — process is not available
   }
   try {
-    const vEnv = (import.meta as any).env;
+    const vEnv = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
     if (vEnv) Object.assign(result, vEnv);
   } catch {
-    // node runtime
+    // node runtime — import.meta.env is not available
   }
   return result;
 }
@@ -122,7 +131,7 @@ function buildProviderPipeline(
   messages: LLMMessage[],
   systemPrompt: string | undefined
 ): ProviderPipelineStep[] {
-  const timeout = config.requestTimeoutMs || 9000;
+  const timeout = config.requestTimeoutMs || DEFAULT_REQUEST_TIMEOUT_MS;
   return [
     {
       name: 'Edge AI (Llama 3.3 70B)',
@@ -221,7 +230,7 @@ export class MultiLLMOrchestrator {
       groqApiKey: resolveEnvKey(customConfig.groqApiKey, env.VITE_GROQ_API_KEY, env.GROQ_API_KEY),
       openaiApiKey: resolveEnvKey(customConfig.openaiApiKey, env.VITE_OPENAI_API_KEY, env.OPENAI_API_KEY),
       anthropicApiKey: resolveEnvKey(customConfig.anthropicApiKey, env.VITE_ANTHROPIC_API_KEY, env.ANTHROPIC_API_KEY),
-      requestTimeoutMs: customConfig.requestTimeoutMs || 9000,
+      requestTimeoutMs: customConfig.requestTimeoutMs || DEFAULT_REQUEST_TIMEOUT_MS,
     };
   }
 

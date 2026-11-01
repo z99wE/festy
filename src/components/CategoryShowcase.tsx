@@ -2,6 +2,20 @@ import React, { useState } from 'react';
 
 import { FlexCarousel, type FlexCarouselItem } from './FlexCarousel';
 
+// ─── Extracted style constants ────────────────────────────────────────────────
+
+const sectionHeaderStyle: React.CSSProperties = { textAlign: 'center', maxWidth: '820px', margin: '0 auto 28px' };
+const logoWrapStyle: React.CSSProperties = { marginBottom: '14px' };
+const logoImgStyle: React.CSSProperties = {
+  height: '42px',
+  width: 'auto',
+  display: 'inline-block',
+  filter: 'drop-shadow(0 4px 12px rgba(255, 94, 30, 0.16))',
+};
+const headingColorStyle: React.CSSProperties = { color: 'var(--bubblegum-purple-blue, #5b42f3)' };
+const carouselContainerStyle: React.CSSProperties = { width: '100%', height: '540px', position: 'relative' };
+const categoryGridStyle: React.CSSProperties = { marginTop: '40px' };
+
 interface CategoryShowcaseProps {
   onSelectCategory: (occasionId: string) => void;
   onNavigateToPlanner?: () => void;
@@ -239,17 +253,17 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
   return (
     <section className="categories-section" id="categories" aria-labelledby="categories-heading">
       <div className="content-wrapper">
-        <div className="section-header" style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 28px' }}>
-          <div className="tab-hero-logo" style={{ marginBottom: '14px' }}>
+        <div className="section-header" style={sectionHeaderStyle}>
+          <div className="tab-hero-logo" style={logoWrapStyle}>
             <img
               src="/festiya-logo.webp"
               alt="Festiya Logo"
               width={130}
               height={48}
-              style={{ height: '42px', width: 'auto', display: 'inline-block', filter: 'drop-shadow(0 4px 12px rgba(255, 94, 30, 0.16))' }}
+              style={logoImgStyle}
             />
           </div>
-          <h2 id="categories-heading" className="section-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
+          <h2 id="categories-heading" className="section-title" style={headingColorStyle}>
             Battle-Tested Event Blueprints Engineered for Operational Calm
           </h2>
 
@@ -260,7 +274,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
 
         {/* Dynamic 3D FlexCarousel from React Bits */}
         <div className="carousel-viewport-wrapper">
-          <div className="carousel-canvas-container" style={{ width: '100%', height: '540px', position: 'relative' }}>
+          <div className="carousel-canvas-container" style={carouselContainerStyle}>
             <FlexCarousel
               items={CAROUSEL_ITEMS}
               preset="liquid"
@@ -284,7 +298,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
         </div>
 
         {/* Complete Blueprint Content Card Grid (All 12 Events Clickable) */}
-        <div className="category-grid" style={{ marginTop: '40px' }}>
+        <div className="category-grid" style={categoryGridStyle}>
           {CAROUSEL_ITEMS.map((cat, idx) => (
             <CategoryGridCard
               key={idx}

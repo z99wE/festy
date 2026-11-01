@@ -1,5 +1,8 @@
 import { wrap, clamp01 } from '../data/flexCarouselPresets';
+import type { CarouselSettings } from '../data/flexCarouselPresets';
+import type { OGLRenderingContext, Program, Mesh, Renderer, RenderTarget } from 'ogl';
 import type { CarouselSlot, CarouselMetrics, IntroEffectsResult } from './flexCarouselSlots';
+import type { LensUniforms } from './flexCarouselGLSetup';
 
 export interface CardInstance {
   index: number;
@@ -10,11 +13,11 @@ export interface CardInstance {
 }
 
 export interface RenderCardSceneParams {
-  gl: any;
-  renderer: any;
-  target: any;
-  cardProgram: any;
-  cardMesh: any;
+  gl: OGLRenderingContext;
+  renderer: Renderer;
+  target: RenderTarget;
+  cardProgram: Program;
+  cardMesh: Mesh;
   width: number;
   height: number;
   dpr: number;
@@ -33,13 +36,13 @@ export interface RenderCardSceneParams {
 }
 
 export interface RenderLensParams {
-  renderer: any;
-  lensUniforms: any;
-  lensMesh: any;
+  renderer: Renderer;
+  lensUniforms: LensUniforms;
+  lensMesh: Mesh;
   width: number;
   height: number;
   dpr: number;
-  s: any;
+  s: CarouselSettings;
   lensX: number;
   lensY: number;
   halfW: number;
@@ -84,7 +87,8 @@ export function renderCardsScene(p: RenderCardSceneParams): CardInstance[] {
   const homeY = p.height / 2;
   const n = p.slots.length;
   const shrink = 1 - clamp01(p.squeeze) * p.energy;
-  const draws: any[] = [];
+  interface DrawCall { i: number; rel: number; x: number; y: number; cw: number; ch: number; alpha: number }
+  const draws: DrawCall[] = [];
 
   for (let i = 0; i < n; i++) {
     const w = p.m.widths[i];

@@ -1,4 +1,5 @@
 import { wrap, INTRO_DURATION } from '../data/flexCarouselPresets';
+import type { CarouselSettings, CarouselIntroState } from '../data/flexCarouselPresets';
 import type { CarouselMetrics, CarouselSlot } from './flexCarouselSlots';
 
 export function nearestSlot(m: CarouselMetrics, at: number): number {
@@ -91,7 +92,7 @@ export function updateDeformSpring(
   return { deform: nextDeform, deformVel: nextVel, animating };
 }
 
-export function updateLensPosition(lens: any, aimX: number, aimY: number, dt: number): boolean {
+export function updateLensPosition(lens: { x: number; y: number; vx: number; vy: number }, aimX: number, aimY: number, dt: number): boolean {
   const lensK = 110;
   const lensC = 2 * Math.sqrt(lensK) * 0.8;
   lens.vx += (lensK * (aimX - lens.x) - lensC * lens.vx) * dt;
@@ -101,7 +102,7 @@ export function updateLensPosition(lens: any, aimX: number, aimY: number, dt: nu
   return Math.abs(aimX - lens.x) + Math.abs(aimY - lens.y) > 0.2 || Math.abs(lens.vx) + Math.abs(lens.vy) > 0.5;
 }
 
-export function updateFocusSpring(focus: any, dt: number): boolean {
+export function updateFocusSpring(focus: { t: number; v: number; target: number }, dt: number): boolean {
   const focusStiffness = 64;
   focus.v += (focusStiffness * (focus.target - focus.t) - 2 * Math.sqrt(focusStiffness) * focus.v) * dt;
   focus.t += focus.v * dt;
@@ -114,8 +115,8 @@ export function updateFocusSpring(focus: any, dt: number): boolean {
 }
 
 export function advanceIntro(
-  introState: any,
-  s: any,
+  introState: CarouselIntroState,
+  s: CarouselSettings,
   dt: number,
   now: number,
   slots: CarouselSlot[],
@@ -146,7 +147,7 @@ export function advanceIntro(
 }
 
 export function canTriggerAutoplay(
-  s: any,
+  s: CarouselSettings,
   reducedMotion: boolean,
   introDone: boolean,
   focusTarget: number,

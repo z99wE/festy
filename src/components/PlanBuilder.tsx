@@ -16,6 +16,22 @@ import { PlanControlsCard } from './PlanControlsCard';
 import { PlanContextBanner } from './PlanContextBanner';
 import { PlanTabPanes } from './PlanTabPanes';
 
+// ─── Extracted style constants ────────────────────────────────────────────────
+
+const sectionHeaderStyle: React.CSSProperties = { margin: '0 auto 28px' };
+const logoWrapStyle: React.CSSProperties = { marginBottom: '14px' };
+const logoImgStyle: React.CSSProperties = {
+  height: '42px',
+  width: 'auto',
+  display: 'inline-block',
+  filter: 'drop-shadow(0 4px 12px rgba(255, 94, 30, 0.16))',
+};
+const headingColorStyle: React.CSSProperties = { color: 'var(--bubblegum-purple-blue, #5b42f3)' };
+const dashboardGridStyle: React.CSSProperties = { marginTop: '28px' };
+const liveUpdateLabelStyle: React.CSSProperties = { fontSize: '0.85rem', color: 'var(--text-muted)' };
+const planCardTitleStyle: React.CSSProperties = { fontSize: '1.75rem', color: 'var(--text-primary)' };
+const planCardTitleWrapStyle: React.CSSProperties = { marginBottom: '6px' };
+
 interface PlanBuilderProps {
   activeOccasion: string;
   onOccasionChange: (occasion: string) => void;
@@ -177,17 +193,17 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
   return (
     <section className="plan-builder-section" id="interactive-planner" aria-labelledby="planner-heading">
       <div className="content-wrapper">
-        <div className="section-header" style={{ margin: '0 auto 28px' }}>
-          <div className="tab-hero-logo" style={{ marginBottom: '14px' }}>
+        <div className="section-header" style={sectionHeaderStyle}>
+          <div className="tab-hero-logo" style={logoWrapStyle}>
             <img
               src="/festiya-logo.webp"
               alt="Festiya Logo"
               width={130}
               height={48}
-              style={{ height: '42px', width: 'auto', display: 'inline-block', filter: 'drop-shadow(0 4px 12px rgba(255, 94, 30, 0.16))' }}
+              style={logoImgStyle}
             />
           </div>
-          <h2 id="planner-heading" className="section-title" style={{ color: 'var(--bubblegum-purple-blue, #5b42f3)' }}>
+          <h2 id="planner-heading" className="section-title" style={headingColorStyle}>
             Planner & AI Cost Simulator
           </h2>
           <p className="section-subtitle">
@@ -219,7 +235,7 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
           budgetAmount={budgetAmount}
         />
 
-        <div className="planner-dashboard-grid" style={{ marginTop: '28px' }}>
+        <div className="planner-dashboard-grid" style={dashboardGridStyle}>
           <PlanControlsCard
             activeOccasion={activeOccasion}
             onSelectOccasion={handleSelectOccasion}
@@ -238,10 +254,10 @@ Use concise bullet points, specific timelines, and actionable vendor negotiation
           <main className="live-plan-card" aria-label="Structured Event Plan Output">
             <div className="plan-card-hero-header">
               <div>
-                <div style={{ marginBottom: '6px' }}>
-                  <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Updated live with Festi AI modeling</span>
+                <div style={planCardTitleWrapStyle}>
+                  <span style={liveUpdateLabelStyle}>Updated live with Festi AI modeling</span>
                 </div>
-                <h3 style={{ fontSize: '1.75rem', color: 'var(--text-primary)' }}>
+                <h3 style={planCardTitleStyle}>
                   {activeOccasionName}
                 </h3>
               </div>

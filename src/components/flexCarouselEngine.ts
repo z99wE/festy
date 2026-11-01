@@ -1,5 +1,5 @@
 import { Renderer } from 'ogl';
-import type { FlexCarouselItem } from '../data/flexCarouselPresets';
+import type { FlexCarouselItem, CarouselSettings, CarouselIntroState } from '../data/flexCarouselPresets';
 import { PIXEL_BUDGET } from '../data/flexCarouselPresets';
 import { initGLResources } from './flexCarouselGLSetup';
 import type { CarouselSlot, CarouselMetrics } from './flexCarouselSlots';
@@ -35,8 +35,8 @@ import {
 
 export interface FlexCarouselEngineOptions {
   container: HTMLDivElement;
-  settingsRef: { current: any };
-  callbacksRef: { current: { onChange: ((index: number, item: any) => void) | undefined; onSelect: ((index: number, item: any) => void) | undefined } };
+  settingsRef: { current: CarouselSettings | null };
+  callbacksRef: { current: { onChange: ((index: number, item: FlexCarouselItem) => void) | undefined; onSelect: ((index: number, item: FlexCarouselItem) => void) | undefined } };
   setActive: (index: number) => void;
   setRevealed: (revealed: boolean) => void;
   setFocusOpen: (open: boolean) => void;
@@ -115,7 +115,7 @@ export function initFlexCarousel(options: FlexCarouselEngineOptions) {
     touch: false,
     samples: []
   };
-  const introState = { kind: 'none', t: 0, running: false, done: false, readyAt: 0 };
+  const introState: CarouselIntroState = { kind: 'none', t: 0, running: false, done: false, readyAt: 0 };
   const focus = { index: -1, pending: -1, t: 0, v: 0, target: 0 };
   let instances: CardInstance[] = [];
 
@@ -354,7 +354,7 @@ export function initFlexCarousel(options: FlexCarouselEngineOptions) {
     getMode: () => mode,
     setMode: (m: string) => { mode = m; },
     getSettings: () => settingsRef.current,
-    getMetrics: (s: any) => calculateMetrics(slots, s, height),
+    getMetrics: (s: CarouselSettings) => calculateMetrics(slots, s, height),
     getInstances: () => instances,
     getActiveIndex: () => activeIndex,
     getItems: () => slots.map(slot => slot.item),
@@ -380,7 +380,7 @@ export function initFlexCarousel(options: FlexCarouselEngineOptions) {
     },
     snapPoint,
     setHasFocus: (focused: boolean) => { hasFocus = focused; },
-    onSelectCallback: (idx: number, item: any) => {
+    onSelectCallback: (idx: number, item: FlexCarouselItem) => {
       if (callbacksRef.current.onSelect) callbacksRef.current.onSelect(idx, item);
     }
   };

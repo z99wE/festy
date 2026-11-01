@@ -107,6 +107,44 @@ const OCCASION_MATCHERS = [
 
 const CURRENCY_SYMBOLS = ['A$', '€', '£', '₹'];
 
+// ─── Budget calculation constants (named to eliminate magic numbers) ──────────
+
+/** Default guest count when none can be parsed from the prompt. */
+const DEFAULT_GUEST_COUNT = 60;
+
+/** Maximum plausible guest count before the parser rejects the value. */
+const MAX_GUEST_COUNT = 5_000;
+
+/** Minimum dollar amount that counts as a valid explicit budget statement. */
+const MIN_EXPLICIT_BUDGET = 200;
+
+/** Per-guest cost multiplier used when no explicit budget is provided. */
+const DEFAULT_PER_GUEST_MULTIPLIER = 65;
+
+/** Per-guest multiplier for weddings (higher baseline cost). */
+const WEDDING_PER_GUEST_MULTIPLIER = 120;
+
+/** Per-guest multiplier for executive retreats. */
+const RETREAT_PER_GUEST_MULTIPLIER = 95;
+
+/** Absolute minimum budget floor regardless of guest count. */
+const MIN_BUDGET_FLOOR = 2_500;
+
+/** Conservative tier: 78 % of the target budget. */
+const CONSERVATIVE_TIER_RATIO = 0.78;
+
+/** Luxury tier: 138 % of the target budget. */
+const LUXURY_TIER_RATIO = 1.38;
+
+/** Game-theory reservation ceiling: 82 % of budget to preserve tactical reserve. */
+const RESERVATION_CEILING_RATIO = 0.82;
+
+/** No-show sunk cost recovery ratio used in Minimax scenario modelling. */
+const NO_SHOW_RECOVERY_RATIO = 0.08;
+
+/** Minimum character length for an LLM response to be considered non-empty. */
+const MIN_LLM_RESPONSE_LENGTH = 20;
+
 const DEFAULT_BUDGET_WEIGHTS = [
   { cat: 'Venue & Facilities', pct: 0.30, note: 'Primary space hire, basic lighting & setup' },
   { cat: 'Food & Refreshments', pct: 0.36, note: 'Plated/stations, cocktail bar & staffing' },
@@ -134,9 +172,9 @@ const BUDGET_WEIGHT_MAP: Record<string, Array<{ cat: string; pct: number; note: 
 
 function parseGuestCount(prompt: string): number {
   const match = prompt.match(/(\d+)\s*(guests?|people|attendees|pax|friends|members)/i) || prompt.match(/(for|with)\s*(\d+)/i);
-  if (!match) return 60;
+  if (!match) return DEFAULT_GUEST_COUNT;
   const num = parseInt(match[1] || match[2], 10);
-  return (num > 0 && num <= 5000) ? num : 60;
+  return (num > 0 && num <= MAX_GUEST_COUNT) ? num : DEFAULT_GUEST_COUNT;
 }
 
 function parseBudgetAmount(prompt: string, guestCount: number, occasionId: string): number {
@@ -144,11 +182,14 @@ function parseBudgetAmount(prompt: string, guestCount: number, occasionId: strin
   if (match) {
     const raw = (match[2] || match[1]).replace(/,/g, '');
     const num = parseInt(raw, 10);
-    if (num >= 200) return num;
+    if (num >= MIN_EXPLICIT_BUDGET) return num;
   }
-  const multipliers: Record<string, number> = { wedding: 120, retreat: 95 };
-  const mult = multipliers[occasionId] || 65;
-  return Math.max(2500, guestCount * mult);
+  const multipliers: Record<string, number> = {
+    wedding: WEDDING_PER_GUEST_MULTIPLIER,
+    retreat: RETREAT_PER_GUEST_MULTIPLIER,
+  };
+  const mult = multipliers[occasionId] ?? DEFAULT_PER_GUEST_MULTIPLIER;
+  return Math.max(MIN_BUDGET_FLOOR, guestCount * mult);
 }
 
 function parseLocation(prompt: string): string {
@@ -157,6 +198,10 @@ function parseLocation(prompt: string): string {
 }
 
 export class MultiAgentEngine {
+  /**
+   * Extracts structured event parameters (occasion, guest count, budget, currency,
+   * location, and query-intent flags) from a free-text user prompt.
+   */
   static extractParams(prompt: string): ExtractedEventParams {
     const text = prompt.toLowerCase();
     const matched = OCCASION_MATCHERS.find((m) => m.regex.test(text));
@@ -186,12 +231,16 @@ export class MultiAgentEngine {
     };
   }
 
+  /**
+   * Produces a decimal-safe three-tier budget artifact (Conservative, Realistic,
+   * Luxury) with per-occasion category weight maps and per-guest unit economics.
+   */
   static synthesizeBudget(params: ExtractedEventParams): AgentBudgetArtifact {
     const total = params.budgetAmount;
     const guests = Math.max(1, params.guestCount);
     const costPerGuest = Math.round(total / guests);
-    const conservative = Math.round(total * 0.78);
-    const luxury = Math.round(total * 1.38);
+    const conservative = Math.round(total * CONSERVATIVE_TIER_RATIO);
+    const luxury = Math.round(total * LUXURY_TIER_RATIO);
 
     const weights = BUDGET_WEIGHT_MAP[params.occasionId] || DEFAULT_BUDGET_WEIGHTS;
 
@@ -212,6 +261,10 @@ export class MultiAgentEngine {
     };
   }
 
+  /**
+   * Generates a chronological run-of-show timeline with vendor load-in windows,
+   * soundcheck blocks, and post-event load-out sign-off milestones.
+   */
   static synthesizeTimeline(params: ExtractedEventParams): AgentTimelineArtifact {
     const items: AgentTimelineItem[] = [
       { time: 'T - 4 Hours', title: 'Vendor Load-In & Power Drops', detail: 'Catering vehicles arrive, main power distribution lines tested, venue manager sign-off.' },
@@ -229,6 +282,11 @@ export class MultiAgentEngine {
     };
   }
 
+  /**
+   * Builds occasion-specific contract verification questions targeting hidden
+   * surcharge categories: overtime multipliers, admin fees, external-vendor
+   * penalties, and (for weddings) corkage and cake-cutting fees.
+   */
   static synthesizeContractSafeguards(params: ExtractedEventParams): AgentContractArtifact {
     const safeguards: AgentContractItem[] = [
       {
@@ -259,10 +317,15 @@ export class MultiAgentEngine {
     return { safeguards };
   }
 
+  /**
+   * Applies Nash Bargaining (BATNA anchors), Pareto-optimal value-exchange pairs,
+   * and Savage Minimax Regret scenarios to the event's budget and occasion type,
+   * returning a structured game-theory negotiation artifact.
+   */
   static synthesizeGameTheory(params: ExtractedEventParams): AgentGameTheoryArtifact {
     const total = params.budgetAmount;
     const currency = params.currency;
-    const reservationCeiling = Math.round(total * 0.82);
+    const reservationCeiling = Math.round(total * RESERVATION_CEILING_RATIO);
 
     const paretoTradeoffs: ParetoTradeoff[] = [
       {
@@ -287,7 +350,7 @@ export class MultiAgentEngine {
         riskScenario: 'Late guest drop-out (12-18% no-show rate after RSVP lock)',
         naiveReaction: 'Pay for empty contracted covers at full price.',
         minimaxOptimalStrategy: 'Contract an addendum converting unserved covers into late-night savory stations or top-shelf spirit upgrades.',
-        estimatedProtectedMargin: `Recovers ~${currency}${Math.round(total * 0.08).toLocaleString()} in otherwise sunk F&B spend.`,
+        estimatedProtectedMargin: `Recovers ~${currency}${Math.round(total * NO_SHOW_RECOVERY_RATIO).toLocaleString()} in otherwise sunk F&B spend.`,
       },
       {
         riskScenario: 'Sudden overtime trigger (event runs 25 minutes past midnight curfew)',
@@ -305,6 +368,14 @@ export class MultiAgentEngine {
     };
   }
 
+  /**
+   * Orchestrates the full multi-agent swarm for a given user prompt. Dispatches
+   * only the agents relevant to the detected query intent, merges their artifacts
+   * with the optional LLM response text, and returns a consolidated plan result.
+   *
+   * @param prompt     Raw user input describing the event.
+   * @param llmResponseText  Optional pre-generated LLM text to use as the summary.
+   */
   static executeSwarm(prompt: string, llmResponseText?: string): MultiAgentPlanResult {
     const params = this.extractParams(prompt);
     const agentsEngaged: string[] = ['Chief Orchestrator Agent'];
@@ -337,7 +408,7 @@ export class MultiAgentEngine {
       gameTheoryArtifact = this.synthesizeGameTheory(params);
     }
 
-    const summary = llmResponseText && llmResponseText.length > 20
+    const summary = llmResponseText && llmResponseText.length > MIN_LLM_RESPONSE_LENGTH
       ? llmResponseText
       : `I have orchestrated a complete ${params.occasionTitle} blueprint tailored for ${params.guestCount} guests with a target budget of ${params.currency}${params.budgetAmount.toLocaleString()}. Review the synthesized allocations, chronological milestones, and contract safeguards below, then apply directly to your active event workspace.`;
 

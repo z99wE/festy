@@ -3,6 +3,9 @@ import {
   handlePointerMove,
   handlePointerUp,
 } from './flexCarouselPointerEvents';
+import type { CarouselMetrics } from './flexCarouselSlots';
+import type { CardInstance } from './flexCarouselRenderPass';
+import type { FlexCarouselItem, CarouselSettings } from '../data/flexCarouselPresets';
 
 export { handlePointerDown, handlePointerMove, handlePointerUp };
 
@@ -31,11 +34,11 @@ export interface CarouselEngineContext {
   setGoal: (g: number) => void;
   getMode: () => string;
   setMode: (m: string) => void;
-  getSettings: () => any;
-  getMetrics: (s: any) => any;
-  getInstances: () => any[];
+  getSettings: () => CarouselSettings | null;
+  getMetrics: (s: CarouselSettings) => CarouselMetrics;
+  getInstances: () => CardInstance[];
   getActiveIndex: () => number;
-  getItems: () => any[];
+  getItems: () => FlexCarouselItem[];
   getSlotsLength: () => number;
   setInteractedAt: (t: number) => void;
   setWheelAt: (t: number) => void;
@@ -44,11 +47,11 @@ export interface CarouselEngineContext {
   skipIntro: () => void;
   closeFocus: () => boolean;
   openFocus: (idx: number) => void;
-  step: (m: any, delta: number) => void;
-  goTo: (m: any, idx: number) => void;
-  snapPoint: (m: any, at: number) => number;
+  step: (m: CarouselMetrics, delta: number) => void;
+  goTo: (m: CarouselMetrics, idx: number) => void;
+  snapPoint: (m: CarouselMetrics, at: number) => number;
   setHasFocus: (focused: boolean) => void;
-  onSelectCallback: ((index: number, item: any) => void) | undefined;
+  onSelectCallback: ((index: number, item: FlexCarouselItem) => void) | undefined;
 }
 
 export function handleWheelEvent(e: WheelEvent, ctx: CarouselEngineContext) {

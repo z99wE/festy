@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { X, ShieldCheck, Maximize2, Minimize2 } from 'lucide-react';
 import { MultiAgentEngine } from '../services/multiAgentEngine';
+import type { MultiAgentPlanResult } from '../services/multiAgentEngine';
 import { MultiLLMOrchestrator } from '../services/aiOrchestrator';
-import type { LLMMessage } from '../services/aiOrchestrator';
+import type { LLMMessage, OrchestrationResult } from '../services/aiOrchestrator';
 import { FESTI_SYSTEM_PROMPT, FESTI_STARTERS } from '../data/chatbotPrompts';
 import type { ChatMessage } from './FestiMessageBubble';
 import { FestiDrillsView } from './FestiDrillsView';
@@ -26,7 +27,7 @@ export interface FestiChatbotProps {
 
 const aiOrchestrator = new MultiLLMOrchestrator();
 
-function createFestiMessage(plan: any, res?: any): ChatMessage {
+function createFestiMessage(plan: MultiAgentPlanResult, res?: OrchestrationResult): ChatMessage {
   const suggestions = res && res.threatNeutralized
     ? ['Help me plan a birthday party', 'How to budget a wedding?', 'What questions should I ask my caterer?']
     : ['3-Tier budget breakdown for 80 guests', 'Minute-by-minute day-of schedule', 'Game-theoretic vendor bargaining strategy'];

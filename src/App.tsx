@@ -149,7 +149,7 @@ export function App() {
       localStorage.removeItem('festiya_cf_session_v1');
       localStorage.removeItem('festiya_auth_user');
     } catch (e) {
-      console.warn(e);
+      console.warn('Could not clear auth session from localStorage', e);
     }
   };
 

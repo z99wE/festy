@@ -3,7 +3,45 @@ export interface FlexCarouselItem {
   alt?: string;
   title?: string;
   subtitle?: string;
-  [key: string]: any;
+  id?: string;
+  color?: string;
+  categoryDescription?: string;
+  /** @internal Extended by CategoryShowcase — arbitrary carousel item metadata. */
+  [key: string]: unknown;
+}
+
+/** All resolved settings for a FlexCarousel instance. */
+export interface CarouselSettings {
+  cardHeight: number;
+  gap: number;
+  radius: number;
+  squeeze: number;
+  fit: string;
+  intro: string;
+  interval: number;
+  lensWidth: number;
+  lensHeight: number;
+  tilt: number;
+  roundness: number;
+  reach: number;
+  bend: number;
+  dispersion: number;
+  followCursor: boolean;
+  captureWheel: boolean;
+  focusOnClick: boolean;
+  autoplay: boolean;
+  liquid: number;
+  curl: string;
+  [key: string]: unknown;
+}
+
+/** Intro animation progress state. */
+export interface CarouselIntroState {
+  running: boolean;
+  done: boolean;
+  readyAt: number;
+  kind: string;
+  t: number;
 }
 
 const photo = (id: string) => `https://images.unsplash.com/${id}?w=1200&q=80&auto=format&fit=max`;

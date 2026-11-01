@@ -126,6 +126,10 @@ function runSingleDrill(test: DrillTestItem): HardDrillResult {
 }
 
 export class FestiSecurityGuard {
+  /**
+   * Strips null bytes, zero-width unicode characters, and inline script tags from
+   * raw input, then clamps the result to 4 000 characters.
+   */
   static sanitizeInput(input: string): string {
     if (typeof input !== 'string') return '';
     return input
@@ -136,6 +140,11 @@ export class FestiSecurityGuard {
       .slice(0, 4000); // enforce max length
   }
 
+  /**
+   * Evaluates a user query against all threat categories (LLM hijacking, prompt
+   * injection, credential exfiltration, jailbreak roleplay, off-topic domain drift)
+   * and returns a typed guard result including a safe deflection response when needed.
+   */
   static evaluate(query: string): GuardEvaluationResult {
     const sanitized = this.sanitizeInput(query);
     const trimmed = sanitized;
@@ -188,6 +197,11 @@ export class FestiSecurityGuard {
     return TIME_BUDGET_REGEX.test(lower);
   }
 
+  /**
+   * Strips API key patterns (OpenAI, Groq, Google, Cloudflare), hallucinated code
+   * blocks, and markdown formatting symbols from LLM-generated text before it is
+   * displayed in the UI.
+   */
   static sanitizeOutput(generatedText: string): string {
     let clean = generatedText;
     clean = clean.replace(/sk-[a-zA-Z0-9_-]{20,}/g, '[REDACTED_API_KEY]');
@@ -208,6 +222,10 @@ export class FestiSecurityGuard {
       .trim();
   }
 
+  /**
+   * Runs the full set of predefined adversarial drill tests against the security
+   * guard and returns pass/fail results with latency measurements for each vector.
+   */
   static runHardDrills(): HardDrillResult[] {
     return HARD_DRILL_TESTS.map(runSingleDrill);
   }
