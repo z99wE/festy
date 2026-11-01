@@ -82,9 +82,18 @@ function inlineCriticalCssPlugin(): Plugin {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), inlineCriticalCssPlugin()],
+  // Replace console.warn/error with no-ops in the production bundle.
+  // All console.warn calls in src/ are in catch blocks with independent fallback
+  // logic — removing the log statements has no effect on runtime behaviour.
+  define: {
+    'console.warn': '(()=>{})',
+    'console.error': '(()=>{})',
+    'console.log': '(()=>{})',
+  },
   build: {
     // Minify CSS aggressively
     cssMinify: true,
+    minify: true,
     rollupOptions: {
       output: {
         manualChunks(id: string) {
